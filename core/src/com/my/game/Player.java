@@ -3,7 +3,7 @@ package com.my.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-
+//hej haj hello
 public class Player extends Rectangle{
     public Texture texture;
     public String name;
