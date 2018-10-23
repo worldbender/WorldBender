@@ -28,8 +28,8 @@ public class Game extends ApplicationAdapter {
     DatagramSocket clientSocket;
     InetAddress IPAddress;
 
-    MessageReceiver r;
-    MessageSender s;
+    PacketReceiver r;
+    PacketSender s;
     Thread rt;
     Thread st;
 
@@ -41,8 +41,8 @@ public class Game extends ApplicationAdapter {
         } catch (SocketException e) {
             e.printStackTrace();
         }
-        this.r = new MessageReceiver(socket);
-        this.s = new MessageSender(socket, host);
+        this.r = new PacketReceiver(socket);
+        this.s = new PacketSender(socket, host);
         this.rt = new Thread(r);
         this.st = new Thread(s);
         rt.start();
@@ -155,107 +155,4 @@ public class Game extends ApplicationAdapter {
         }
     }
 
-}
-
-class MessageSender implements Runnable {
-    public final static int PORT = 7331;
-    private DatagramSocket sock;
-    private String hostname;
-
-    MessageSender(DatagramSocket s, String h) {
-        sock = s;
-        hostname = h;
-    }
-
-    public void sendMessage(String s) throws Exception {
-        byte buf[] = s.getBytes();
-        InetAddress address = InetAddress.getByName(hostname);
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, PORT);
-        sock.send(packet);
-    }
-
-
-    public void run() {
-        boolean connected = false;
-        do {
-            try {
-                sendMessage("GREETINGS");
-                connected = true;
-            } catch (Exception e) {
-
-            }
-        } while (!connected);
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            try {
-                while (!in.ready()) {
-                    Thread.sleep(100);
-                }
-                sendMessage(in.readLine());
-            } catch (Exception e) {
-                System.err.println(e);
-            }
-        }
-    }
-}
-
-class MessageReceiver implements Runnable {
-    DatagramSocket sock;
-    byte buf[];
-    Array<Player> players = new Array<Player>();
-
-    MessageReceiver(DatagramSocket s) {
-        sock = s;
-        buf = new byte[1024];
-    }
-
-    public void newPlayer(String name){
-        Player p = new Player(name, 0, 0);
-        players.add(p);
-    }
-
-    public Array<Player> getPlayers(){
-        /*for(Player p : players){
-            System.out.println(p);
-        }*/
-        return players;
-    }
-
-    public void setPlayers(String received){
-        String[] splitedArray = received.split(":");
-        Player p = new Player(splitedArray[0],splitedArray[1], splitedArray[2]);
-        players.add(p);
-    }
-
-    public void setPlayersPositions(String received){
-        String[] splitedArray = received.split(":");
-        for(Player d : players){
-            if(d.getName().equals(splitedArray[0])){
-                d.setPosition(Float.parseFloat(splitedArray[1]), Float.parseFloat(splitedArray[2]));
-            }
-        }
-    }
-
-    public void run() {
-        while (true) {
-            try {
-                DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                sock.receive(packet);
-                String received = new String(packet.getData(), 0, packet.getLength());
-                System.out.println(received);
-                if (received.substring(0, 10).equals("New player")) {
-                    String[] splitedArray = received.split(":");
-                    newPlayer(splitedArray[1]);
-                }
-                if (received.substring(0, 7).equals("Nplayer")) {
-                    setPlayers(received);
-                }
-                if (received.substring(0, 6).equals("player")) {
-                    setPlayersPositions(received);
-                }
-            } catch (Exception e) {
-                System.err.println(e);
-            }
-        }
-    }
 }

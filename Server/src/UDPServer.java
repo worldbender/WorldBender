@@ -1,7 +1,7 @@
-package com.my.game;
-
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -12,14 +12,10 @@ class UDPServer extends Thread
     private final static int BUFFER = 1024;
 
     private DatagramSocket socket;
-    //private ArrayList<InetAddress> clientAddresses;
-    //private ArrayList<Integer> clientPorts;
     private ArrayList<Client> existingClients;
     private HashSet<String> existingClientIds;
     public UDPServer() throws IOException {
         socket = new DatagramSocket(PORT);
-        //clientAddresses = new ArrayList();
-        //clientPorts = new ArrayList();
         existingClients = new ArrayList();
         existingClientIds = new HashSet();
     }
