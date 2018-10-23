@@ -7,7 +7,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 class PacketSender implements Runnable {
-    public final static int PORT = 7331;
+    private final static int PORT = 7331;
     private DatagramSocket sock;
     private String hostname;
 
@@ -31,7 +31,7 @@ class PacketSender implements Runnable {
                 sendMessage("GREETINGS");
                 connected = true;
             } catch (Exception e) {
-
+                System.err.println(e);
             }
         } while (!connected);
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));

@@ -63,8 +63,6 @@ class UDPServer extends Thread
                     Client c = new Client(clientAddress, clientPort, id, "player"+existingClients.size());
                     existingClientIds.add( id );
                     existingClients.add( c );
-                    //clientPorts.add( clientPort );
-                    //clientAddresses.add(clientAddress);
                     byte[] data = ("Server: Connected").getBytes();
                     packet = new DatagramPacket(data, data.length, clientAddress, clientPort);
                     socket.send(packet);

@@ -7,16 +7,16 @@ import java.net.DatagramSocket;
 
 
 class PacketReceiver implements Runnable {
-    DatagramSocket sock;
-    byte buf[];
-    Array<Player> players = new Array<Player>();
+    private DatagramSocket sock;
+    private byte buf[];
+    private Array<Player> players = new Array<Player>();
 
     PacketReceiver(DatagramSocket s) {
         sock = s;
         buf = new byte[1024];
     }
 
-    public void newPlayer(String name) {
+    private void newPlayer(String name) {
         Player p = new Player(name, 0, 0);
         players.add(p);
     }
@@ -25,17 +25,17 @@ class PacketReceiver implements Runnable {
         return players;
     }
 
-    public void setPlayers(String received) {
+    private void setPlayers(String received) {
         String[] splitedArray = received.split(":");
         Player p = new Player(splitedArray[0], splitedArray[1], splitedArray[2]);
         players.add(p);
     }
 
-    public void setPlayersPositions(String received) {
+    private void setPlayersPositions(String received) {
         String[] splitedArray = received.split(":");
         for (Player d : players) {
             if (d.getName().equals(splitedArray[0])) {
-                //d.setPosition(Float.parseFloat(splitedArray[1]), Float.parseFloat(splitedArray[2]));
+                d.setPosition(Float.parseFloat(splitedArray[1]), Float.parseFloat(splitedArray[2]));
             }
         }
     }

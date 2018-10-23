@@ -2,19 +2,16 @@ package com.my.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-import com.sun.deploy.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.*;
-import java.util.concurrent.Callable;
 
 public class Game extends ApplicationAdapter {
 
@@ -24,36 +21,22 @@ public class Game extends ApplicationAdapter {
     private OrthographicCamera camera;
     private SpriteBatch batch;
 
-    BufferedReader inFromUser;
-    DatagramSocket clientSocket;
+    Connection connection;
+    /*DatagramSocket clientSocket;
     InetAddress IPAddress;
 
     PacketReceiver r;
     PacketSender s;
     Thread rt;
-    Thread st;
+    Thread st;*/
 
     public Game() {
-        String host = "localhost";
-        DatagramSocket socket = null;
-        try {
-            socket = new DatagramSocket();
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-        this.r = new PacketReceiver(socket);
-        this.s = new PacketSender(socket, host);
-        this.rt = new Thread(r);
-        this.st = new Thread(s);
-        rt.start();
-        st.start();
+        connection = new Connection();
     }
 
     @Override
     public void create() {
-        this.inFromUser =
-                new BufferedReader(new InputStreamReader(System.in));
-        this.clientSocket = null;
+        /*this.clientSocket = null;
         try {
             clientSocket = new DatagramSocket();
         } catch (SocketException e) {
@@ -64,8 +47,8 @@ public class Game extends ApplicationAdapter {
             IPAddress = InetAddress.getByName("localhost");
         } catch (UnknownHostException e) {
             e.printStackTrace();
-        }
-
+        }*/
+        connection.createConnection();
 
         loadData();
         init();
@@ -105,10 +88,8 @@ public class Game extends ApplicationAdapter {
 
     private void update() {
         handleInput();
-        //System.out.println("Update");
-        Array<Player> p = this.r.getPlayers();
+        Array<Player> p = this.connection.r.getPlayers();
         if(players.size<p.size){
-            //System.out.println("New player!");
             players = p;
         }
         //camera.update();
@@ -120,7 +101,7 @@ public class Game extends ApplicationAdapter {
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Keys.A)) {
             try {
-                this.s.sendMessage("A");
+                this.connection.s.sendMessage("A");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -128,7 +109,7 @@ public class Game extends ApplicationAdapter {
         }
         if (Gdx.input.isKeyPressed(Keys.D)) {
             try {
-                this.s.sendMessage("D");
+                this.connection.s.sendMessage("D");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -137,7 +118,7 @@ public class Game extends ApplicationAdapter {
         }
         if (Gdx.input.isKeyPressed(Keys.W)) {
             try {
-                this.s.sendMessage("W");
+                this.connection.s.sendMessage("W");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -146,7 +127,7 @@ public class Game extends ApplicationAdapter {
         }
         if (Gdx.input.isKeyPressed(Keys.S)) {
             try {
-                this.s.sendMessage("S");
+                this.connection.s.sendMessage("S");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -154,5 +135,4 @@ public class Game extends ApplicationAdapter {
             player.y -= 300 * Gdx.graphics.getDeltaTime();
         }
     }
-
 }
