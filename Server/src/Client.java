@@ -1,14 +1,12 @@
-package com.my.game;
-
 import java.net.*;
 
 public class Client {
-    InetAddress clientAddress;
-    Integer clientPort;
-    String id;
-    String name;
-    int x=0;
-    int y=0;
+    private InetAddress clientAddress;
+    private Integer clientPort;
+    private String id;
+    private String name;
+    private int x=0;
+    private int y=0;
 
     public Client(InetAddress clientAddress, Integer clientPort, String id, String name){
         this.clientAddress = clientAddress;

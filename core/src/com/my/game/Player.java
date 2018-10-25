@@ -5,13 +5,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Player extends Rectangle{
-    public Texture texture;
-    public String name;
+    Texture texture;
+    private String name;
     boolean currentPlayer = false;
-
-    public boolean isCurrentPlayer(){
-        return currentPlayer;
-    }
 
     public Player(Texture texture, boolean currentPlayer){
         this.texture = texture;
@@ -37,6 +33,10 @@ public class Player extends Rectangle{
 
     public void draw(SpriteBatch batch){
         batch.draw(this.texture, x, y);
+    }
+
+    public boolean isCurrentPlayer(){
+        return currentPlayer;
     }
 
     public String getName(){
