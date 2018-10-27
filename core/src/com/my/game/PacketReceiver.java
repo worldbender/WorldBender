@@ -6,7 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 
-class PacketReceiver implements Runnable {
+public class PacketReceiver implements Runnable {
     private DatagramSocket sock;
     private byte buf[];
     private Array<Player> players = new Array<Player>();

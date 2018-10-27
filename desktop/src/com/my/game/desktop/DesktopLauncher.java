@@ -7,6 +7,7 @@ import com.my.game.WBGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
 		config.title = WBGame.GAME_NAME;
 		config.width = WBGame.WIDTH;
 		config.height = WBGame.HEIGHT;

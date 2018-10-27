@@ -6,7 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-class PacketSender implements Runnable {
+public class PacketSender implements Runnable {
     private final static int PORT = 7331;
     private DatagramSocket sock;
     private String hostname;

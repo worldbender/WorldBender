@@ -2,29 +2,27 @@ package com.my.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class Player extends Rectangle{
-    Texture texture;
+public class Player extends Image {
+    public Texture texture;
     private String name;
     boolean currentPlayer = false;
 
     public Player(Texture texture, boolean currentPlayer){
+        super(texture);
         this.texture = texture;
-        this.height = texture.getHeight();
-        this.width = texture.getWidth();
+        this.setSize(texture.getWidth(), texture.getHeight());
         this.currentPlayer = currentPlayer;
     }
     public Player(String name, String x, String y){
         this.name = name.substring(1, 8);
-        this.x=Integer.parseInt(x);
-        this.y=Integer.parseInt(y);
+        this.setPosition(Float.parseFloat(x), Float.parseFloat(y));
     }
 
     public Player(String name, int x, int y){
         this.name = name;
-        this.x=x;
-        this.y=y;
+        this.setPosition((float)x, (float)y);
     }
 
     public Player(){
@@ -32,7 +30,7 @@ public class Player extends Rectangle{
     }
 
     public void draw(SpriteBatch batch){
-        batch.draw(this.texture, x, y);
+        batch.draw(this.texture, this.getX(), this.getY());
     }
 
     public boolean isCurrentPlayer(){

@@ -9,8 +9,8 @@ public class Connection {
     DatagramSocket clientSocket;
     InetAddress IPAddress;
 
-    PacketReceiver r;
-    PacketSender s;
+    public PacketReceiver r;
+    public PacketSender s;
     Thread rt;
     Thread st;
 
