@@ -3,7 +3,7 @@ package com.my.game;
 /**
  * Created by lucyna on 28.10.18.
  */
-public class Opponet {
+public class Opponent {
 
     public String name = "Monster";
     private int xPos = 0;
