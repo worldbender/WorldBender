@@ -1,32 +1,33 @@
-package com.my.game;
+package screens;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
-public class Game extends ApplicationAdapter {
+import com.my.game.Connection;
+import com.my.game.Player;
+import com.my.game.WBGame;
+
+public class GameplayScreen extends AbstractScreen{
 
     private Texture playerTexture;
     private Player player;
     private Array<Player> players;
-    private OrthographicCamera camera;
-    private SpriteBatch batch;
 
-    Connection connection;
+    public Connection connection;
 
-    public Game() {
+    public GameplayScreen(WBGame game) {
+        super(game);
         connection = new Connection();
+        create();
     }
 
-    @Override
     public void create() {
         connection.createConnection();
-
         loadData();
         init();
     }
@@ -36,31 +37,31 @@ public class Game extends ApplicationAdapter {
     }
 
     private void init() {
-        batch = new SpriteBatch();
-        camera = new OrthographicCamera(480, 600);
+        camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
 
         player = new Player(playerTexture, true);
         players = new Array<Player>();
     }
 
     @Override
-    public void render() {
+    public void render(float delta) {
+        super.render(delta);
         update();
 
         Gdx.gl.glClearColor(1, 1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.begin();
-        batch.setProjectionMatrix(camera.combined);
+        spriteBatch.begin();
+        spriteBatch.setProjectionMatrix(camera.combined);
 
-        player.draw(batch);
+        player.draw(spriteBatch);
 
         for (int i=0; i < players.size; i++) {
             players.get(i).texture = playerTexture;
-            players.get(i).draw(batch);
+            players.get(i).draw(spriteBatch);
         }
 
-        batch.end();
+        spriteBatch.end();
     }
 
     private void update() {
@@ -76,40 +77,40 @@ public class Game extends ApplicationAdapter {
     }
 
     private void handleInput() {
-        if (Gdx.input.isKeyPressed(Keys.A)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             try {
                 this.connection.s.sendMessage("A");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            player.x -= 300 * Gdx.graphics.getDeltaTime();
+            player.setX(player.getX() - (300 * Gdx.graphics.getDeltaTime()));
         }
-        if (Gdx.input.isKeyPressed(Keys.D)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             try {
                 this.connection.s.sendMessage("D");
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            player.x += 300 * Gdx.graphics.getDeltaTime();
+            player.setX(player.getX() + (300 * Gdx.graphics.getDeltaTime()));
         }
-        if (Gdx.input.isKeyPressed(Keys.W)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             try {
                 this.connection.s.sendMessage("W");
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            player.y += 300 * Gdx.graphics.getDeltaTime();
+            player.setY(player.getY() + (300 * Gdx.graphics.getDeltaTime()));
         }
-        if (Gdx.input.isKeyPressed(Keys.S)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             try {
                 this.connection.s.sendMessage("S");
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            player.y -= 300 * Gdx.graphics.getDeltaTime();
+            player.setY(player.getY() - (300 * Gdx.graphics.getDeltaTime()));
         }
     }
 }
