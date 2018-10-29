@@ -43,10 +43,9 @@ class UDPServer extends Thread
                 }
 
                 if (!existingClientIds.contains(id)) {
-                    for (int i=0; i < existingClients.size(); i++) {
-                        Client current = existingClients.get(i);
-                        InetAddress cl = current.getAddress();
-                        int cp = current.getPort();
+                    for(Client client : existingClients){
+                        InetAddress cl = client.getAddress();
+                        int cp = client.getPort();
                         byte[] data = ("New player:player" + existingClients.size()).getBytes();
                         packet = new DatagramPacket(data, data.length, cl, cp);
                         socket.send(packet);
@@ -93,7 +92,7 @@ class UDPServer extends Thread
     }
 
     public static void main(String args[]) throws Exception {
-        UDPServer s = new UDPServer();
-        s.start();
+        UDPServer server = new UDPServer();
+        server.start();
     }
 }

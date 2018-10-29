@@ -12,6 +12,8 @@ public class DesktopLauncher {
 		config.width = WBGame.WIDTH;
 		config.height = WBGame.HEIGHT;
 		config.resizable = false;
+		config.fullscreen = true;
+		config.forceExit = true;
 
 		new LwjglApplication(new WBGame(), config);
 	}

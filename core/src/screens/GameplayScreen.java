@@ -5,11 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 
 import com.my.game.Connection;
-import com.my.game.Player;
+import com.my.game.Player.Player;
 import com.my.game.WBGame;
 
 public class GameplayScreen extends AbstractScreen{
@@ -17,8 +19,16 @@ public class GameplayScreen extends AbstractScreen{
     private Texture playerTexture;
     private Player player;
     private Array<Player> players;
-
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer render;
     public Connection connection;
+
+    @Override
+    public void show(){
+        map = new TmxMapLoader().load("maps/map2.tmx");
+        render = new OrthogonalTiledMapRenderer(map);
+
+    }
 
     public GameplayScreen(WBGame game) {
         super(game);
@@ -38,8 +48,9 @@ public class GameplayScreen extends AbstractScreen{
 
     private void init() {
         camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
-
+        camera.translate(960,600);
         player = new Player(playerTexture, true);
+        player.setPosition(500,500);
         players = new Array<Player>();
     }
 
@@ -50,7 +61,8 @@ public class GameplayScreen extends AbstractScreen{
 
         Gdx.gl.glClearColor(1, 1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        render.setView(camera);
+        render.render();
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(camera.combined);
 
@@ -111,6 +123,10 @@ public class GameplayScreen extends AbstractScreen{
             }
 
             player.setY(player.getY() - (300 * Gdx.graphics.getDeltaTime()));
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+            //TODO send message about player has left the game
+            Gdx.app.exit();
         }
     }
 }

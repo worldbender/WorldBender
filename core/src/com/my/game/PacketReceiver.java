@@ -1,6 +1,7 @@
 package com.my.game;
 
 import com.badlogic.gdx.utils.Array;
+import com.my.game.Player.Player;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -35,7 +36,7 @@ public class PacketReceiver implements Runnable {
         String[] splitedArray = received.split(":");
         for (Player d : players) {
             if (d.getName().equals(splitedArray[0])) {
-                d.setPosition(Float.parseFloat(splitedArray[1]), Float.parseFloat(splitedArray[2]));
+                d.setPosition(Integer.parseInt(splitedArray[1]), Integer.parseInt(splitedArray[2]));
             }
         }
     }

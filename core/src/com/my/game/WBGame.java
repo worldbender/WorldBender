@@ -2,14 +2,20 @@ package com.my.game;
 
 import com.badlogic.gdx.Game;
 import screens.SplashScreen;
+import java.awt.*;
 
 public class WBGame extends Game {
 
     public final static String GAME_NAME = "World Bender";
-    public final static int WIDTH = 480;
-    public final static int HEIGHT = 600;
+    public static int WIDTH;
+    public static int HEIGHT;
 
     private boolean paused;
+    public WBGame(){
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        WIDTH = screenSize.width;
+        HEIGHT = screenSize.height;
+    }
 
     @Override
     public void create () {
