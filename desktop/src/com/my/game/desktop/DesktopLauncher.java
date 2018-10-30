@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		config.title = WBGame.GAME_NAME;
 		config.width = WBGame.WIDTH;
 		config.height = WBGame.HEIGHT;
-		config.resizable = false;
+		config.resizable = true;
 		config.fullscreen = false;
 		config.forceExit = true;
 
