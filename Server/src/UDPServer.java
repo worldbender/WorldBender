@@ -71,6 +71,8 @@ class UDPServer extends Thread
     private void initNewPlayer(String id, DatagramPacket packet){
 
         sendPackage("Server: Connected", packet.getAddress(), packet.getPort());
+        User user2 = new User(packet.getAddress(), packet.getPort(), id, "player"+ existingUsers.size());
+        existingUsers.put(id, user2);
 
         for(User user : existingUsers.values()){
             sendPackage("newPlayer:player" + existingUsers.size(), user.getAddress(), user.getPort());
@@ -81,9 +83,6 @@ class UDPServer extends Thread
 
             sendPackage(message, packet.getAddress(), packet.getPort());
         }
-
-        User user = new User(packet.getAddress(), packet.getPort(), id, "player"+ existingUsers.size());
-        existingUsers.put(id, user);
     }
 
     private void sendPackage(String message, InetAddress clientAddress, int clientPort){

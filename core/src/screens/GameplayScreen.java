@@ -17,7 +17,7 @@ import com.my.game.WBGame;
 public class GameplayScreen extends AbstractScreen{
 
     private Texture playerTexture;
-    private Player player;
+    //private Player player;
     private Array<Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
@@ -49,9 +49,10 @@ public class GameplayScreen extends AbstractScreen{
     private void init() {
         camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
         camera.translate(960,600);
-        player = new Player(playerTexture, true);
+        Player player = new Player(playerTexture, true);
         player.setPosition(500,500);
         players = new Array<Player>();
+        players.add(player);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class GameplayScreen extends AbstractScreen{
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(camera.combined);
 
-        player.draw(spriteBatch);
+        //player.draw(spriteBatch);
 
         for (int i=0; i < players.size; i++) {
             players.get(i).texture = playerTexture;
@@ -95,7 +96,6 @@ public class GameplayScreen extends AbstractScreen{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            player.setX(player.getX() - (300 * Gdx.graphics.getDeltaTime()));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             try {
@@ -103,8 +103,6 @@ public class GameplayScreen extends AbstractScreen{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            player.setX(player.getX() + (300 * Gdx.graphics.getDeltaTime()));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             try {
@@ -113,7 +111,6 @@ public class GameplayScreen extends AbstractScreen{
                 e.printStackTrace();
             }
 
-            player.setY(player.getY() + (300 * Gdx.graphics.getDeltaTime()));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             try {
@@ -121,8 +118,6 @@ public class GameplayScreen extends AbstractScreen{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            player.setY(player.getY() - (300 * Gdx.graphics.getDeltaTime()));
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             //TODO send message about player has left the game

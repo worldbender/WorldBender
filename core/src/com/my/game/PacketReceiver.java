@@ -8,12 +8,12 @@ import java.net.DatagramSocket;
 
 
 public class PacketReceiver implements Runnable {
-    private DatagramSocket sock;
+    private DatagramSocket socket;
     private byte buf[];
     private Array<Player> players = new Array<Player>();
 
-    PacketReceiver(DatagramSocket s) {
-        sock = s;
+    PacketReceiver(DatagramSocket socket) {
+        this.socket = socket;
         buf = new byte[1024];
     }
 
@@ -45,7 +45,7 @@ public class PacketReceiver implements Runnable {
         while (true) {
             try {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                sock.receive(packet);
+                socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
                 System.out.println(received);
                 String[] splitedArray = received.split(":");
