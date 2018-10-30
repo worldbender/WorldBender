@@ -4,20 +4,21 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 class UDPServer extends Thread
 {
     public final static int PORT = 7331;
     private final static int BUFFER = 1024;
-
     private DatagramSocket socket;
-    private ArrayList<Client> existingClients;
-    private HashSet<String> existingClientIds;
+    private ArrayList<Room> rooms;
+    private Map<String, User> existingUsers;
+
     public UDPServer() throws IOException {
         socket = new DatagramSocket(PORT);
-        existingClients = new ArrayList();
-        existingClientIds = new HashSet();
+        existingUsers = new HashMap<>();
+        rooms = new ArrayList();
     }
 
     public void run() {
@@ -28,40 +29,31 @@ class UDPServer extends Thread
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
 
-                String content = new String(buf, buf.length);
+                String content = new String(buf);
 
                 InetAddress clientAddress = packet.getAddress();
                 int clientPort = packet.getPort();
 
                 String id = clientAddress.toString() + "," + clientPort;
-                Client currentClient = null;
 
-                for(Client d : existingClients){
-                    if(d.getAddress() == clientAddress && d.getPort()== clientPort){
-                        currentClient = d;
-                    }
-                }
-
-                if (!existingClientIds.contains(id)) {
-                    for(Client client : existingClients){
-                        InetAddress cl = client.getAddress();
-                        int cp = client.getPort();
-                        byte[] data = ("New player:player" + existingClients.size()).getBytes();
+                if(!existingUsers.containsKey(id)){
+                    for(User user : existingUsers.values()){
+                        InetAddress cl = user.getAddress();
+                        int cp = user.getPort();
+                        byte[] data = ("newPlayer:player" + existingUsers.size()).getBytes();
                         packet = new DatagramPacket(data, data.length, cl, cp);
                         socket.send(packet);
-                    }
+                }
 
 
-                    for (int i=0; i < existingClients.size(); i++) {
-                        Client current = existingClients.get(i);
-                        byte[] data2 = ("N"+current.getName() + ":" + current.getX() + ":" + current.getY()).getBytes();
+                    for (User current : existingUsers.values()) {
+                        byte[] data2 = ("init:"+current.getName() + ":" + current.player.getX() + ":" + current.player.getY()).getBytes();
                         packet = new DatagramPacket(data2, data2.length, clientAddress, clientPort);
                         socket.send(packet);
                     }
 
-                    Client c = new Client(clientAddress, clientPort, id, "player"+existingClients.size());
-                    existingClientIds.add( id );
-                    existingClients.add( c );
+                    User user = new User(clientAddress, clientPort, id, "player"+ existingUsers.size());
+                    existingUsers.put(id, user);
                     byte[] data = ("Server: Connected").getBytes();
                     packet = new DatagramPacket(data, data.length, clientAddress, clientPort);
                     socket.send(packet);
@@ -69,22 +61,17 @@ class UDPServer extends Thread
 
                 System.out.println(id + ":" + content);
 
+                User currentUser = existingUsers.get(id);
+                currentUser.player.setPosition(content);
+                byte[] data = ("updatePosition:"+currentUser.getName() + ":" + currentUser.player.getX()+ ":"+ currentUser.player.getY()).getBytes();
 
-                for(Client d : existingClients){
-                    if(d.getAddress().equals(clientAddress) && d.getPort()== clientPort){
-                        currentClient = d;
-                    }
-                }
-                currentClient.setPosition(content);
-                byte[] data = (currentClient.getName() + ":" +currentClient.getX()+ ":"+currentClient.getY()).getBytes();
-
-                for (int i=0; i < existingClients.size(); i++) {
-                    Client current = existingClients.get(i);
+                for (User current : existingUsers.values()) {
                     InetAddress cl = current.getAddress();
                     int cp = current.getPort();
                     packet = new DatagramPacket(data, data.length, cl, cp);
                     socket.send(packet);
                 }
+
             } catch(Exception e) {
                 System.err.println(e);
             }

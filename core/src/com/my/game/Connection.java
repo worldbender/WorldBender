@@ -9,10 +9,10 @@ public class Connection {
     DatagramSocket clientSocket;
     InetAddress IPAddress;
 
-    public PacketReceiver r;
-    public PacketSender s;
-    Thread rt;
-    Thread st;
+    public PacketReceiver receiver;
+    public PacketSender sender;
+    Thread receiverThread;
+    Thread senderThread;
 
     public Connection(){
         String host = "localhost";
@@ -22,12 +22,12 @@ public class Connection {
         } catch (SocketException e) {
             e.printStackTrace();
         }
-        this.r = new PacketReceiver(socket);
-        this.s = new PacketSender(socket, host);
-        this.rt = new Thread(r);
-        this.st = new Thread(s);
-        rt.start();
-        st.start();
+        this.receiver = new PacketReceiver(socket);
+        this.sender = new PacketSender(socket, host);
+        this.receiverThread = new Thread(receiver);
+        this.senderThread = new Thread(sender);
+        receiverThread.start();
+        senderThread.start();
     }
 
     public void createConnection() {
@@ -41,6 +41,7 @@ public class Connection {
         try {
             IPAddress = InetAddress.getByName("localhost");
         } catch (UnknownHostException e) {
+            e.printStackTrace();
             e.printStackTrace();
         }
     }

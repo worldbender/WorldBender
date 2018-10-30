@@ -12,7 +12,7 @@ public class Player extends APlayer {
         this.currentPlayer = currentPlayer;
     }
     public Player(String name, String x, String y){
-        this.name = name.substring(1, 8);
+        this.name = name;
         this.setPosition(Integer.parseInt(x), Integer.parseInt(y));
     }
 

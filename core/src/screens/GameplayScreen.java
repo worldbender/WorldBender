@@ -78,7 +78,7 @@ public class GameplayScreen extends AbstractScreen{
 
     private void update() {
         handleInput();
-        Array<Player> p = this.connection.r.getPlayers();
+        Array<Player> p = this.connection.receiver.getPlayers();
         if(players.size<p.size){
             players = p;
         }
@@ -91,7 +91,7 @@ public class GameplayScreen extends AbstractScreen{
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             try {
-                this.connection.s.sendMessage("A");
+                this.connection.sender.sendMessage("A");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -99,7 +99,7 @@ public class GameplayScreen extends AbstractScreen{
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             try {
-                this.connection.s.sendMessage("D");
+                this.connection.sender.sendMessage("D");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -108,7 +108,7 @@ public class GameplayScreen extends AbstractScreen{
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             try {
-                this.connection.s.sendMessage("W");
+                this.connection.sender.sendMessage("W");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -117,7 +117,7 @@ public class GameplayScreen extends AbstractScreen{
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             try {
-                this.connection.s.sendMessage("S");
+                this.connection.sender.sendMessage("S");
             } catch (Exception e) {
                 e.printStackTrace();
             }
