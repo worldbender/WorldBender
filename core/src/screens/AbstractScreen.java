@@ -16,6 +16,8 @@ public abstract class AbstractScreen implements Screen {
     protected Stage stage;
     protected OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
+    protected int screenShiftX = 500;
+    protected int screenShiftY = 500;
 
     public AbstractScreen(WBGame game){
         this.game = game;

@@ -1,6 +1,7 @@
 package screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,7 +26,7 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public void show(){
-        map = new TmxMapLoader().load("maps/map2.tmx");
+        map = new TmxMapLoader().load("maps/map1.tmx");
         render = new OrthogonalTiledMapRenderer(map);
 
     }
@@ -56,6 +57,7 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public void render(float delta) {
+
         super.render(delta);
         update();
 
@@ -65,7 +67,7 @@ public class GameplayScreen extends AbstractScreen{
         render.render();
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(camera.combined);
-
+        System.out.println(screenShiftX);
         player.draw(spriteBatch);
 
         for (int i=0; i < players.size; i++) {
@@ -89,13 +91,21 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void handleInput() {
+        int numerOfXTiles = map.getProperties().get("width", Integer.class);
+        int numerOfYTiles = map.getProperties().get("height", Integer.class);
+        int mapWidth = numerOfXTiles * 32;
+        int mapHeight = numerOfYTiles * 32;
+        int shiftX = (int)(300 * Gdx.graphics.getDeltaTime());
+        int shiftY = (int)(300 * Gdx.graphics.getDeltaTime());
+
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             try {
                 this.connection.s.sendMessage("A");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            player.setX(player.getX() - (300 * Gdx.graphics.getDeltaTime()));
+            player.setX(player.getX() - shiftX);
+            screenShiftX -= shiftX;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             try {
@@ -104,7 +114,8 @@ public class GameplayScreen extends AbstractScreen{
                 e.printStackTrace();
             }
 
-            player.setX(player.getX() + (300 * Gdx.graphics.getDeltaTime()));
+            player.setX(player.getX() + shiftX);
+            screenShiftX += shiftX;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             try {
@@ -113,7 +124,8 @@ public class GameplayScreen extends AbstractScreen{
                 e.printStackTrace();
             }
 
-            player.setY(player.getY() + (300 * Gdx.graphics.getDeltaTime()));
+            player.setY(player.getY() + shiftY);
+            screenShiftY += shiftY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             try {
@@ -122,11 +134,35 @@ public class GameplayScreen extends AbstractScreen{
                 e.printStackTrace();
             }
 
-            player.setY(player.getY() - (300 * Gdx.graphics.getDeltaTime()));
+            player.setY(player.getY() - shiftY);
+            screenShiftY -= shiftY;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             //TODO send message about player has left the game
             Gdx.app.exit();
         }
+        if(Gdx.input.isKeyPressed(Input.Keys.F11)){
+            //TODO Toggle fullscreen
+        }
+        if(screenShiftX > 1300 && screenShiftX < mapWidth - 400){
+            camera.translate(shiftX,0);
+            screenShiftX -= shiftX;
+
+        }
+        if(screenShiftX < 300 && screenShiftX > 0){
+            camera.translate(-shiftX,0);
+            screenShiftX += shiftX;
+
+        }
+        if(screenShiftY < 200){
+            camera.translate(0,-shiftY);
+            screenShiftY += shiftY;
+
+        }
+        if(screenShiftY > 700){
+            camera.translate(0,shiftY);
+            screenShiftY -= shiftY;
+        }
+        camera.update();
     }
 }

@@ -5,8 +5,9 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.my.game.WBGame;
 
 public class DesktopLauncher {
+	static LwjglApplicationConfiguration config;
 	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config = new LwjglApplicationConfiguration();
 
 		config.title = WBGame.GAME_NAME;
 		config.width = WBGame.WIDTH;
@@ -16,5 +17,8 @@ public class DesktopLauncher {
 		config.forceExit = true;
 
 		new LwjglApplication(new WBGame(), config);
+	}
+	public static void toggleFullscreen(){
+		config.fullscreen = !config.fullscreen;
 	}
 }
