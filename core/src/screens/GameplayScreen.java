@@ -17,7 +17,7 @@ import com.my.game.WBGame;
 public class GameplayScreen extends AbstractScreen{
 
     private Texture playerTexture;
-    private Player player;
+    //private Player player;
     private Array<Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
@@ -49,9 +49,10 @@ public class GameplayScreen extends AbstractScreen{
     private void init() {
         camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
         camera.translate(960,600);
-        player = new Player(playerTexture, true);
+        Player player = new Player(playerTexture, true);
         player.setPosition(500,500);
         players = new Array<Player>();
+        players.add(player);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class GameplayScreen extends AbstractScreen{
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(camera.combined);
 
-        player.draw(spriteBatch);
+        //player.draw(spriteBatch);
 
         for (int i=0; i < players.size; i++) {
             players.get(i).texture = playerTexture;
@@ -78,7 +79,7 @@ public class GameplayScreen extends AbstractScreen{
 
     private void update() {
         handleInput();
-        Array<Player> p = this.connection.r.getPlayers();
+        Array<Player> p = this.connection.receiver.getPlayers();
         if(players.size<p.size){
             players = p;
         }
@@ -91,38 +92,32 @@ public class GameplayScreen extends AbstractScreen{
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             try {
-                this.connection.s.sendMessage("A");
+                this.connection.sender.sendMessage("A");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            player.setX(player.getX() - (300 * Gdx.graphics.getDeltaTime()));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             try {
-                this.connection.s.sendMessage("D");
+                this.connection.sender.sendMessage("D");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            player.setX(player.getX() + (300 * Gdx.graphics.getDeltaTime()));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             try {
-                this.connection.s.sendMessage("W");
+                this.connection.sender.sendMessage("W");
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            player.setY(player.getY() + (300 * Gdx.graphics.getDeltaTime()));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             try {
-                this.connection.s.sendMessage("S");
+                this.connection.sender.sendMessage("S");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            player.setY(player.getY() - (300 * Gdx.graphics.getDeltaTime()));
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             //TODO send message about player has left the game
