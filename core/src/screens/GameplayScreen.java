@@ -98,8 +98,8 @@ public class GameplayScreen extends AbstractScreen{
         int numerOfYTiles = map.getProperties().get("height", Integer.class);
         int mapWidth = numerOfXTiles * 32;
         int mapHeight = numerOfYTiles * 32;
-        int shiftX = (int)(300 * Gdx.graphics.getDeltaTime());
-        int shiftY = (int)(300 * Gdx.graphics.getDeltaTime());
+        int shiftX = 5;
+        int shiftY = 5;
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             try {
