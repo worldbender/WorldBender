@@ -162,5 +162,9 @@ public class GameplayScreen extends AbstractScreen{
             mapPositionY += shiftX;
         }
         camera.update();
+        if(Gdx.input.isKeyPressed(Input.Keys.M)){
+            MusicPlayer.initMusic("sounds/meow.mp3");
+            MusicPlayer.playStaticMusic();
+        }
     }
 }
