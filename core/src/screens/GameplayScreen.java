@@ -14,11 +14,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.my.game.Connection;
 import com.my.game.Player.Player;
 import com.my.game.WBGame;
+import com.my.game.music.MusicPlayer;
 
 public class GameplayScreen extends AbstractScreen{
 
     private Texture playerTexture;
-    private Player player;
     private Array<Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
@@ -26,7 +26,7 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public void show(){
-        map = new TmxMapLoader().load("maps/map1.tmx");
+        map = new TmxMapLoader().load("maps/map2.tmx");
         render = new OrthogonalTiledMapRenderer(map);
 
     }
@@ -41,6 +41,8 @@ public class GameplayScreen extends AbstractScreen{
         connection.createConnection();
         loadData();
         init();
+        MusicPlayer musicPlayer = new MusicPlayer();
+        musicPlayer.playMusic();
     }
 
     private void loadData() {
@@ -49,10 +51,11 @@ public class GameplayScreen extends AbstractScreen{
 
     private void init() {
         camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
-        camera.translate(960,600);
-        player = new Player(playerTexture, true);
+        camera.translate(960,540);
+        Player player = new Player(playerTexture, true);
         player.setPosition(500,500);
         players = new Array<Player>();
+        players.add(player);
     }
 
     @Override
@@ -67,8 +70,8 @@ public class GameplayScreen extends AbstractScreen{
         render.render();
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(camera.combined);
-        System.out.println(screenShiftX);
-        player.draw(spriteBatch);
+
+        //player.draw(spriteBatch);
 
         for (int i=0; i < players.size; i++) {
             players.get(i).texture = playerTexture;
@@ -80,7 +83,7 @@ public class GameplayScreen extends AbstractScreen{
 
     private void update() {
         handleInput();
-        Array<Player> p = this.connection.r.getPlayers();
+        Array<Player> p = this.connection.receiver.getPlayers();
         if(players.size<p.size){
             players = p;
         }
@@ -100,41 +103,35 @@ public class GameplayScreen extends AbstractScreen{
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             try {
-                this.connection.s.sendMessage("A");
+                this.connection.sender.sendMessage("A");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            player.setX(player.getX() - shiftX);
             screenShiftX -= shiftX;
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             try {
-                this.connection.s.sendMessage("D");
+                this.connection.sender.sendMessage("D");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            player.setX(player.getX() + shiftX);
             screenShiftX += shiftX;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             try {
-                this.connection.s.sendMessage("W");
+                this.connection.sender.sendMessage("W");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            player.setY(player.getY() + shiftY);
             screenShiftY += shiftY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             try {
-                this.connection.s.sendMessage("S");
+                this.connection.sender.sendMessage("S");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            player.setY(player.getY() - shiftY);
             screenShiftY -= shiftY;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
@@ -144,24 +141,25 @@ public class GameplayScreen extends AbstractScreen{
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){
             //TODO Toggle fullscreen
         }
-        if(screenShiftX > 1300 && screenShiftX < mapWidth - 400){
+        if(screenShiftX > 1300 && mapPositionX < mapWidth - WBGame.WIDTH - 5){
             camera.translate(shiftX,0);
             screenShiftX -= shiftX;
-
+            mapPositionX += shiftX;
         }
-        if(screenShiftX < 300 && screenShiftX > 0){
+        if(screenShiftX < 300 && mapPositionX > 5){
             camera.translate(-shiftX,0);
             screenShiftX += shiftX;
-
+            mapPositionX -= shiftX;
         }
-        if(screenShiftY < 200){
+        if(screenShiftY < 200 && mapPositionY > 5){
             camera.translate(0,-shiftY);
             screenShiftY += shiftY;
-
+            mapPositionY -= shiftX;
         }
-        if(screenShiftY > 700){
+        if(screenShiftY > 700 && mapPositionY < mapHeight - WBGame.HEIGHT - 5){
             camera.translate(0,shiftY);
             screenShiftY -= shiftY;
+            mapPositionY += shiftX;
         }
         camera.update();
     }

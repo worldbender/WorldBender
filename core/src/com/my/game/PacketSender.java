@@ -8,19 +8,19 @@ import java.net.InetAddress;
 
 public class PacketSender implements Runnable {
     private final static int PORT = 7331;
-    private DatagramSocket sock;
+    private DatagramSocket socket;
     private String hostname;
 
-    PacketSender(DatagramSocket s, String h) {
-        sock = s;
-        hostname = h;
+    PacketSender(DatagramSocket socket, String hostname) {
+        this.socket = socket;
+        this.hostname = hostname;
     }
 
     public void sendMessage(String s) throws Exception {
         byte buf[] = s.getBytes();
         InetAddress address = InetAddress.getByName(hostname);
         DatagramPacket packet = new DatagramPacket(buf, buf.length, address, PORT);
-        sock.send(packet);
+        socket.send(packet);
     }
 
 
@@ -32,6 +32,7 @@ public class PacketSender implements Runnable {
                 connected = true;
             } catch (Exception e) {
                 System.err.println(e);
+                e.printStackTrace();
             }
         } while (!connected);
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -43,6 +44,7 @@ public class PacketSender implements Runnable {
                 sendMessage(in.readLine());
             } catch (Exception e) {
                 System.err.println(e);
+                e.printStackTrace();
             }
         }
     }

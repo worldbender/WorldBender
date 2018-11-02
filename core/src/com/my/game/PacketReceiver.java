@@ -8,12 +8,12 @@ import java.net.DatagramSocket;
 
 
 public class PacketReceiver implements Runnable {
-    private DatagramSocket sock;
+    private DatagramSocket socket;
     private byte buf[];
     private Array<Player> players = new Array<Player>();
 
-    PacketReceiver(DatagramSocket s) {
-        sock = s;
+    PacketReceiver(DatagramSocket socket) {
+        this.socket = socket;
         buf = new byte[1024];
     }
 
@@ -28,15 +28,15 @@ public class PacketReceiver implements Runnable {
 
     private void setPlayers(String received) {
         String[] splitedArray = received.split(":");
-        Player p = new Player(splitedArray[0], splitedArray[1], splitedArray[2]);
+        Player p = new Player(splitedArray[1], splitedArray[2], splitedArray[3]);
         players.add(p);
     }
 
     private void setPlayersPositions(String received) {
         String[] splitedArray = received.split(":");
         for (Player d : players) {
-            if (d.getName().equals(splitedArray[0])) {
-                d.setPosition(Integer.parseInt(splitedArray[1]), Integer.parseInt(splitedArray[2]));
+            if (d.getName().equals(splitedArray[1])) {
+                d.setPosition(Integer.parseInt(splitedArray[2]), Integer.parseInt(splitedArray[3]));
             }
         }
     }
@@ -45,21 +45,23 @@ public class PacketReceiver implements Runnable {
         while (true) {
             try {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                sock.receive(packet);
+                socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
                 System.out.println(received);
-                if (received.substring(0, 10).equals("New player")) {
-                    String[] splitedArray = received.split(":");
+                String[] splitedArray = received.split(":");
+
+                if (splitedArray[0].equals("newPlayer")) {
                     newPlayer(splitedArray[1]);
                 }
-                if (received.substring(0, 7).equals("Nplayer")) {
+                if (splitedArray[0].equals("init")) {
                     setPlayers(received);
                 }
-                if (received.substring(0, 6).equals("player")) {
+                if (splitedArray[0].equals("updatePosition")) {
                     setPlayersPositions(received);
                 }
             } catch (Exception e) {
                 System.err.println(e);
+                e.printStackTrace();
             }
         }
     }
