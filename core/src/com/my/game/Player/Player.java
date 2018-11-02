@@ -2,16 +2,7 @@ package com.my.game.Player;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-<<<<<<< HEAD:core/src/com/my/game/Player.java
-import com.badlogic.gdx.math.Rectangle;
-//hej haj hello
-public class Player extends Rectangle{
-    public Texture texture;
-    public String name;
-    boolean currentPlayer = false;
-=======
 
->>>>>>> ba79ff86d823b64219ec83eb79317e650c275b87:core/src/com/my/game/Player/Player.java
 
 public class Player extends APlayer {
 
