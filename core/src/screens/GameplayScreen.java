@@ -1,6 +1,7 @@
 package screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,11 +14,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.my.game.Connection;
 import com.my.game.Player.Player;
 import com.my.game.WBGame;
+import com.my.game.music.MusicPlayer;
 
 public class GameplayScreen extends AbstractScreen{
 
     private Texture playerTexture;
-    //private Player player;
     private Array<Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
@@ -40,6 +41,8 @@ public class GameplayScreen extends AbstractScreen{
         connection.createConnection();
         loadData();
         init();
+        MusicPlayer musicPlayer = new MusicPlayer();
+        musicPlayer.playMusic();
     }
 
     private void loadData() {
@@ -48,7 +51,7 @@ public class GameplayScreen extends AbstractScreen{
 
     private void init() {
         camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
-        camera.translate(960,600);
+        camera.translate(960,540);
         Player player = new Player(playerTexture, true);
         player.setPosition(500,500);
         players = new Array<Player>();
@@ -57,6 +60,7 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public void render(float delta) {
+
         super.render(delta);
         update();
 
@@ -90,12 +94,21 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void handleInput() {
+        int numerOfXTiles = map.getProperties().get("width", Integer.class);
+        int numerOfYTiles = map.getProperties().get("height", Integer.class);
+        int mapWidth = numerOfXTiles * 32;
+        int mapHeight = numerOfYTiles * 32;
+        int shiftX = 5;
+        int shiftY = 5;
+
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             try {
                 this.connection.sender.sendMessage("A");
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            screenShiftX -= shiftX;
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             try {
@@ -103,6 +116,7 @@ public class GameplayScreen extends AbstractScreen{
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            screenShiftX += shiftX;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             try {
@@ -110,7 +124,7 @@ public class GameplayScreen extends AbstractScreen{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            screenShiftY += shiftY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             try {
@@ -118,10 +132,39 @@ public class GameplayScreen extends AbstractScreen{
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            screenShiftY -= shiftY;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             //TODO send message about player has left the game
             Gdx.app.exit();
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.F11)){
+            //TODO Toggle fullscreen
+        }
+        if(screenShiftX > 1300 && mapPositionX < mapWidth - WBGame.WIDTH - 5){
+            camera.translate(shiftX,0);
+            screenShiftX -= shiftX;
+            mapPositionX += shiftX;
+        }
+        if(screenShiftX < 300 && mapPositionX > 5){
+            camera.translate(-shiftX,0);
+            screenShiftX += shiftX;
+            mapPositionX -= shiftX;
+        }
+        if(screenShiftY < 200 && mapPositionY > 5){
+            camera.translate(0,-shiftY);
+            screenShiftY += shiftY;
+            mapPositionY -= shiftX;
+        }
+        if(screenShiftY > 700 && mapPositionY < mapHeight - WBGame.HEIGHT - 5){
+            camera.translate(0,shiftY);
+            screenShiftY -= shiftY;
+            mapPositionY += shiftX;
+        }
+        camera.update();
+        if(Gdx.input.isKeyPressed(Input.Keys.M)){
+            MusicPlayer.initMusic("sounds/meow.mp3");
+            MusicPlayer.playStaticMusic();
         }
     }
 }
