@@ -4,21 +4,20 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
-class UDPServer extends Thread
-{
-    public final static int PORT = 7331;
+public class UDPServer extends Thread {
+    private final static int PORT = 7331;
     private final static int BUFFER = 1024;
     private DatagramSocket socket;
-    private ArrayList<Room> rooms;
+    //private ArrayList<Room> rooms;
     private Map<String, User> existingUsers;
 
     public UDPServer() throws IOException {
         socket = new DatagramSocket(PORT);
-        existingUsers = new HashMap<>();
-        rooms = new ArrayList();
+
+        this.existingUsers = ExistingUsers.getInstance();
+        //rooms = new ArrayList();
     }
 
     public void run() {
@@ -38,22 +37,19 @@ class UDPServer extends Thread
 
                 System.out.println(id + ":" + content);
 
-                if(!existingUsers.containsKey(id)){
+                /*if(!existingUsers.containsKey(id)){
                     initNewPlayer(id, packet);
-                }
-                else{
+                }*/
+                //else{
                     String[] splitedArray = content.split(":");
                     switch (splitedArray[0]) {
-                        //case "updatePosition": break;
+                        case "greetings": initNewPlayer(id, packet); break;
                         default:
                             updatePlayerPosition(id, content);
-
-
                     }
-                }
+                //}
 
             } catch(Exception e) {
-                System.err.println(e);
                 e.printStackTrace();
             }
         }
@@ -65,18 +61,28 @@ class UDPServer extends Thread
         String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.player.getX()+ ":"+ currentUser.player.getY();
 
         for (User current : existingUsers.values()) {
-            sendPackage(message, current.getAddress(), current.getPort());
+            sendPackage(message, current.getAddress(), current.getUdpPort());
+        }
+    }
+
+    private void updatePlayerPosition(String id){
+        User currentUser = existingUsers.get(id);
+        String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.player.getX()+ ":"+ currentUser.player.getY();
+
+        for (User current : existingUsers.values()) {
+            sendPackage(message, current.getAddress(), current.getUdpPort());
         }
     }
 
     private void initNewPlayer(String id, DatagramPacket packet){
 
         sendPackage("Server: Connected", packet.getAddress(), packet.getPort());
-        User user2 = new User(packet.getAddress(), packet.getPort(), id, "player"+ existingUsers.size());
-        existingUsers.put(id, user2);
+        /*User user2 = new User(packet.getAddress(), packet.getPort(), id, "player"+ existingUsers.size());
+        existingUsers.put(id, user2);*/
 
         for(User user : existingUsers.values()){
-            sendPackage("newPlayer:player" + existingUsers.size(), user.getAddress(), user.getPort());
+            sendPackage("newPlayer:player" + (existingUsers.size()-1), user.getAddress(), user.getUdpPort());
+            updatePlayerPosition(id);
         }
 
         for (User current : existingUsers.values()) {
@@ -86,7 +92,7 @@ class UDPServer extends Thread
         }
     }
 
-    private void sendPackage(String message, InetAddress clientAddress, int clientPort){
+    public void sendPackage(String message, InetAddress clientAddress, int clientPort){
         DatagramPacket packet;
         byte[] data = message.getBytes();
         packet = new DatagramPacket(data, data.length, clientAddress, clientPort);
@@ -95,10 +101,5 @@ class UDPServer extends Thread
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String args[]) throws Exception {
-        UDPServer server = new UDPServer();
-        server.start();
     }
 }

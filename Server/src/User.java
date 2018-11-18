@@ -2,18 +2,21 @@ import java.net.*;
 
 public class User {
     private InetAddress userAddress;
-    private Integer userPort;
+    private Integer userUdpPort;
+    private Integer userTcpPort;
     private String id;
-    private String connectionStatus;
+    private boolean connection = false;
     public Player player;
     private String name;
 
-    public User(InetAddress userAddress, Integer userPort, String id, String name){
+    public User(InetAddress userAddress, Integer userTcpPort, Integer userUdpPort, String id, String name){
         this.userAddress = userAddress;
-        this.userPort = userPort;
+        this.userTcpPort = userTcpPort;
+        this.userUdpPort = userUdpPort;
         this.id = id;
         this.name = name;
         this.player = new Player();
+        this.connection = true;
     }
 
     public String getId(){
@@ -24,12 +27,20 @@ public class User {
         return this.userAddress;
     }
 
-    public Integer getPort(){
-        return this.userPort;
+    public Integer getUdpPort(){
+        return this.userUdpPort;
+    }
+
+    public Integer getTcpPort(){
+        return this.userTcpPort;
     }
 
     public String getName(){
         return this.name;
+    }
+
+    public void setConnection(boolean status){
+        this.connection = status;
     }
 
 

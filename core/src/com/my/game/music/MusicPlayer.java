@@ -17,7 +17,7 @@ public class MusicPlayer {
         music = Gdx.audio.newMusic(Gdx.files.internal(pathToMusic));
     }
     public void playMusic(){
-        music.play();
+        //music.play();
     }
     public void setVolume(float volume){
         music.setVolume(volume);

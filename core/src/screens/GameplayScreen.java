@@ -1,7 +1,6 @@
 package screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,15 +10,18 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
-import com.my.game.Connection;
+import com.my.game.Connection.Connection;
 import com.my.game.Player.Player;
+import com.my.game.Player.PlayerList;
 import com.my.game.WBGame;
 import com.my.game.music.MusicPlayer;
+
+import java.util.List;
 
 public class GameplayScreen extends AbstractScreen{
 
     private Texture playerTexture;
-    private Array<Player> players;
+    private static List<Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
     public Connection connection;
@@ -54,8 +56,8 @@ public class GameplayScreen extends AbstractScreen{
         camera.translate(960,540);
         Player player = new Player(playerTexture, true);
         player.setPosition(500,500);
-        players = new Array<Player>();
-        players.add(player);
+        players = PlayerList.getInstance();
+        //players.add(player);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class GameplayScreen extends AbstractScreen{
 
         //player.draw(spriteBatch);
 
-        for (int i=0; i < players.size; i++) {
+        for (int i=0; i < players.size(); i++) {
             players.get(i).texture = playerTexture;
             players.get(i).draw(spriteBatch);
         }
@@ -83,10 +85,10 @@ public class GameplayScreen extends AbstractScreen{
 
     private void update() {
         handleInput();
-        Array<Player> p = this.connection.receiver.getPlayers();
-        if(players.size<p.size){
+        /*Array<Player> p = this.connection.receiver.getPlayers();
+        if(players.size()<p.size){
             players = p;
-        }
+        }*/
         //camera.update();
         //camera.position.set(player.x + player.width / 2,
         //        player.y + 300, 0);
@@ -136,6 +138,7 @@ public class GameplayScreen extends AbstractScreen{
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             //TODO send message about player has left the game
+            connection.tcp.sendMessage("dc");
             Gdx.app.exit();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){

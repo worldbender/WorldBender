@@ -1,20 +1,23 @@
-package com.my.game;
+package com.my.game.Connection;
 
 import com.badlogic.gdx.utils.Array;
 import com.my.game.Player.Player;
+import com.my.game.Player.PlayerList;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.List;
 
 
 public class PacketReceiver implements Runnable {
     private DatagramSocket socket;
     private byte buf[];
-    private Array<Player> players = new Array<Player>();
+    private static List<Player> players;
 
     PacketReceiver(DatagramSocket socket) {
         this.socket = socket;
         buf = new byte[1024];
+        players = PlayerList.getInstance();
     }
 
     private void newPlayer(String name) {
@@ -22,19 +25,23 @@ public class PacketReceiver implements Runnable {
         players.add(p);
     }
 
-    public Array<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
     private void setPlayers(String received) {
         String[] splitedArray = received.split(":");
         Player p = new Player(splitedArray[1], splitedArray[2], splitedArray[3]);
+
         players.add(p);
     }
 
     private void setPlayersPositions(String received) {
         String[] splitedArray = received.split(":");
         for (Player d : players) {
+                System.out.println("NULL");
+            System.out.println(d);
+            System.out.println(d.getName());
             if (d.getName().equals(splitedArray[1])) {
                 d.setPosition(Integer.parseInt(splitedArray[2]), Integer.parseInt(splitedArray[3]));
             }
@@ -60,7 +67,6 @@ public class PacketReceiver implements Runnable {
                     setPlayersPositions(received);
                 }
             } catch (Exception e) {
-                System.err.println(e);
                 e.printStackTrace();
             }
         }

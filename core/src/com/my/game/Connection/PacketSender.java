@@ -1,10 +1,12 @@
-package com.my.game;
+package com.my.game.Connection;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class PacketSender implements Runnable {
     private final static int PORT = 7331;
@@ -16,25 +18,32 @@ public class PacketSender implements Runnable {
         this.hostname = hostname;
     }
 
-    public void sendMessage(String s) throws Exception {
+    public void sendMessage(String s) {
         byte buf[] = s.getBytes();
-        InetAddress address = InetAddress.getByName(hostname);
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, PORT);
-        socket.send(packet);
+        InetAddress address;
+        try {
+            address = InetAddress.getByName(hostname);
+            DatagramPacket packet = new DatagramPacket(buf, buf.length, address, PORT);
+            socket.send(packet);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
     public void run() {
-        boolean connected = false;
+        /*boolean connected = false;
         do {
             try {
-                sendMessage("GREETINGS");
+                sendMessage("greetings:me");
                 connected = true;
             } catch (Exception e) {
                 System.err.println(e);
                 e.printStackTrace();
             }
-        } while (!connected);
+        } while (!connected);*/
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             try {
