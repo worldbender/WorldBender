@@ -4,7 +4,6 @@ import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
 import java.io.*;
 import java.net.Socket;
-import java.util.List;
 import java.util.Map;
 
 public class TCPConnection extends Thread {

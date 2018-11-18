@@ -133,7 +133,6 @@ public class GameplayScreen extends AbstractScreen{
             screenShiftY -= shiftY;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-            //TODO send message about player has left the game
             Gdx.app.exit();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){

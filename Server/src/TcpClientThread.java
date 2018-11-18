@@ -52,11 +52,6 @@ public class TcpClientThread extends Thread{
         String[] splitedArray = message.split(":");
         switch (splitedArray[0]) {
             case "udpPort": newPlayer(splitedArray[1]); break;
-            /*case "dc": existingUsers.get(user.getId()).setConnection(false);
-                for (User current : existingUsers.values()) {
-                    current.thread.sendMessage("dc:"+user.getId());
-                }*/
-           // break;
         }
 
         System.out.println("echo: " + message);

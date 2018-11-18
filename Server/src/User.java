@@ -65,12 +65,12 @@ public class User {
         this.name = name;
     }
 
-    public void setConnection(boolean status){
-        this.connection = status;
-    }
-
     public boolean getConnection(){
         return this.connection;
+    }
+
+    public void setConnection(boolean status){
+        this.connection = status;
     }
 
 }

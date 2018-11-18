@@ -2,10 +2,10 @@ class Server {
 
     public static void main(String args[]) throws Exception {
 
-        TCPServer tcpServer = new TCPServer();
+        TcpServer tcpServer = new TcpServer();
         tcpServer.start();
 
-        UDPServer udpServer = new UDPServer();
+        UdpServer udpServer = new UdpServer();
         udpServer.start();
 
     }

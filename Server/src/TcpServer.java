@@ -2,14 +2,13 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.util.Map;
 
-public class TCPServer extends Thread{
+public class TcpServer extends Thread{
 
     private final static int PORT = 10008;
     private ServerSocket serverSocket;
-    private Map<String, User> existingUsers;
 
-    public TCPServer(){
-        existingUsers = ExistingUsers.getInstance();
+    public TcpServer(){
+
     }
 
     public void run()
