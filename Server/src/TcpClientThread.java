@@ -13,6 +13,7 @@ public class TcpClientThread extends Thread{
     public User user;
 
     public TcpClientThread(Socket clientSocket) {
+        this.user = new User();
         this.existingUsers = ExistingUsers.getInstance();
         this.clientSocket = clientSocket;
         try {
@@ -36,6 +37,9 @@ public class TcpClientThread extends Thread{
             clientSocket.close();
         } catch (IOException e) {
             existingUsers.get(user.getId()).setConnection(false);
+            for (User current : existingUsers.values()) {
+                current.thread.sendMessage("dc:"+user.getName());
+            }
             System.out.println("Rozłączono");
         }
     }
@@ -48,6 +52,11 @@ public class TcpClientThread extends Thread{
         String[] splitedArray = message.split(":");
         switch (splitedArray[0]) {
             case "udpPort": newPlayer(splitedArray[1]); break;
+            /*case "dc": existingUsers.get(user.getId()).setConnection(false);
+                for (User current : existingUsers.values()) {
+                    current.thread.sendMessage("dc:"+user.getId());
+                }*/
+           // break;
         }
 
         System.out.println("echo: " + message);
@@ -55,7 +64,12 @@ public class TcpClientThread extends Thread{
 
     public void newPlayer(String udpPort){
         String id = clientSocket.getInetAddress().toString() + "," + udpPort;
-        this.user = new User(clientSocket.getInetAddress(),clientSocket.getPort(),Integer.valueOf(udpPort), id, "player"+ existingUsers.size());
+        this.user.setAddress(clientSocket.getInetAddress());
+        this.user.setTcpPort(clientSocket.getPort());
+        this.user.setUdpPort(Integer.valueOf(udpPort));
+        this.user.setId(id);
+        this.user.setName("player"+ existingUsers.size());
         existingUsers.put(id, this.user);
+        existingUsers.get(user.getId()).thread = this;
     }
 }

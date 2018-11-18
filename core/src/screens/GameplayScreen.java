@@ -17,11 +17,12 @@ import com.my.game.WBGame;
 import com.my.game.music.MusicPlayer;
 
 import java.util.List;
+import java.util.Map;
 
 public class GameplayScreen extends AbstractScreen{
 
     private Texture playerTexture;
-    private static List<Player> players;
+    private static Map<String, Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
     public Connection connection;
@@ -75,20 +76,15 @@ public class GameplayScreen extends AbstractScreen{
 
         //player.draw(spriteBatch);
 
-        for (int i=0; i < players.size(); i++) {
-            players.get(i).texture = playerTexture;
-            players.get(i).draw(spriteBatch);
+        for(Player player : players.values()){
+            player.texture = playerTexture;
+            player.draw(spriteBatch);
         }
-
         spriteBatch.end();
     }
 
     private void update() {
         handleInput();
-        /*Array<Player> p = this.connection.receiver.getPlayers();
-        if(players.size()<p.size){
-            players = p;
-        }*/
         //camera.update();
         //camera.position.set(player.x + player.width / 2,
         //        player.y + 300, 0);
@@ -138,7 +134,6 @@ public class GameplayScreen extends AbstractScreen{
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             //TODO send message about player has left the game
-            connection.tcp.sendMessage("dc");
             Gdx.app.exit();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){

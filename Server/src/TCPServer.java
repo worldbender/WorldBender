@@ -1,17 +1,15 @@
 import java.io.*;
 import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class TCPServer extends Thread{
 
     private final static int PORT = 10008;
     private ServerSocket serverSocket;
-    private ArrayList<TcpClientThread> clientList;
+    private Map<String, User> existingUsers;
 
     public TCPServer(){
-        clientList = new ArrayList<>();
+        existingUsers = ExistingUsers.getInstance();
     }
 
     public void run()
@@ -21,7 +19,6 @@ public class TCPServer extends Thread{
             while (true) {
                 TcpClientThread client = new TcpClientThread (serverSocket.accept());
                 client.start();
-                clientList.add(client);
             }
         }
         catch (IOException e) {
@@ -37,11 +34,5 @@ public class TCPServer extends Thread{
                 e.printStackTrace();
             }
         }*/
-    }
-
-    public void sendMessageToAll(){
-        for(TcpClientThread client: clientList){
-            client.sendMessage("dc:"+client.user.getName());
-        }
     }
 }

@@ -1,22 +1,15 @@
 package com.my.game.Player;
 
-import com.badlogic.gdx.utils.Array;
-
-import java.util.ArrayList;
-import java.util.Collections;
-
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PlayerList {
-    private static List<Player> players; //= //new HashMap<>();
-            //Collections.synchronizedList(new ArrayList());
+    private static Map<String, Player> players;
 
     private PlayerList(){ }
 
-    public static final List getInstance(){
+    public static final Map getInstance(){
         if(players == null){
-            players = Collections.synchronizedList(new ArrayList<Player>());
+            players = Collections.synchronizedMap(new HashMap<>());
         }
         return players;
     }

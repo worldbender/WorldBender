@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -37,18 +36,11 @@ public class UDPServer extends Thread {
 
                 System.out.println(id + ":" + content);
 
-                /*if(!existingUsers.containsKey(id)){
-                    initNewPlayer(id, packet);
-                }*/
-                //else{
-                    String[] splitedArray = content.split(":");
-                    switch (splitedArray[0]) {
-                        case "greetings": initNewPlayer(id, packet); break;
-                        default:
-                            updatePlayerPosition(id, content);
-                    }
-                //}
-
+                String[] splitedArray = content.split(":");
+                switch (splitedArray[0]) {
+                    case "greetings": initNewPlayer(id, packet); break;
+                    default: updatePlayerPosition(id, content);
+                }
             } catch(Exception e) {
                 e.printStackTrace();
             }
@@ -61,7 +53,8 @@ public class UDPServer extends Thread {
         String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.player.getX()+ ":"+ currentUser.player.getY();
 
         for (User current : existingUsers.values()) {
-            sendPackage(message, current.getAddress(), current.getUdpPort());
+            if(current.getConnection())
+                sendPackage(message, current.getAddress(), current.getUdpPort());
         }
     }
 
@@ -70,7 +63,8 @@ public class UDPServer extends Thread {
         String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.player.getX()+ ":"+ currentUser.player.getY();
 
         for (User current : existingUsers.values()) {
-            sendPackage(message, current.getAddress(), current.getUdpPort());
+            if(current.getConnection())
+                sendPackage(message, current.getAddress(), current.getUdpPort());
         }
     }
 
@@ -87,8 +81,8 @@ public class UDPServer extends Thread {
 
         for (User current : existingUsers.values()) {
             String message = "init:"+current.getName() + ":" + current.player.getX() + ":" + current.player.getY();
-
-            sendPackage(message, packet.getAddress(), packet.getPort());
+            if(current.getConnection())
+                sendPackage(message, packet.getAddress(), packet.getPort());
         }
     }
 

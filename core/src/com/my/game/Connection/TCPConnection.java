@@ -2,10 +2,10 @@ package com.my.game.Connection;
 
 import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
+import java.util.Map;
 
 public class TCPConnection extends Thread {
     private final int PORT = 10008;
@@ -13,7 +13,7 @@ public class TCPConnection extends Thread {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
-    private static List<Player> players;
+    private static Map<String, Player> players;
 
     public TCPConnection() throws IOException {
         socket = new Socket(serverHostname, PORT);
@@ -40,9 +40,9 @@ public class TCPConnection extends Thread {
 
     public void readMessage(String message){
         String[] splitedArray = message.split(":");
-        /*switch (splitedArray[0]) {
-            //case "dc": players.remove(); break;
-        }*/
+        switch (splitedArray[0]) {
+            case "dc": players.remove(splitedArray[1]); break;
+        }
         System.out.println("echo: " + message);
     }
 

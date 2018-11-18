@@ -34,16 +34,6 @@ public class PacketSender implements Runnable {
 
 
     public void run() {
-        /*boolean connected = false;
-        do {
-            try {
-                sendMessage("greetings:me");
-                connected = true;
-            } catch (Exception e) {
-                System.err.println(e);
-                e.printStackTrace();
-            }
-        } while (!connected);*/
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             try {
