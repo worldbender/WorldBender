@@ -136,7 +136,7 @@ public class GameplayScreen extends AbstractScreen{
             game.changeScreen(WBGame.MENU);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){
-            //TODO Toggle fullscreen
+            game.switchScreenMode();
         }
         if(screenShiftX > 1300 && mapPositionX < mapWidth - WBGame.WIDTH - 5){
             camera.translate(shiftX,0);

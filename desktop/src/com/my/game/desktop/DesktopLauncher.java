@@ -14,12 +14,12 @@ public class DesktopLauncher {
 		config.height = WBGame.HEIGHT;
 
 		config.resizable = true;
-		config.fullscreen = false;
+		config.fullscreen = true;
 		config.forceExit = true;
 
 		new LwjglApplication(new WBGame(), config);
 	}
-	public static void toggleFullscreen(){
-		config.fullscreen = !config.fullscreen;
-	}
+//	public static void toggleFullscreen(){
+//		config.fullscreen = !config.fullscreen;
+//	}
 }

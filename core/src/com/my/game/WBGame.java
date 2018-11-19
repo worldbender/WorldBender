@@ -1,6 +1,8 @@
 package com.my.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import screens.SplashScreen;
 import screens.MenuScreen;
 import screens.GameplayScreen;
@@ -51,5 +53,14 @@ public class WBGame extends Game {
                 this.setScreen(gameplayScreen);
                 break;
         }
+    }
+
+    public void switchScreenMode(){
+        Boolean fullScreen = Gdx.graphics.isFullscreen();
+        Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
+        if (fullScreen == true)
+            Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
+        else
+            Gdx.graphics.setFullscreenMode(currentMode);
     }
 }
