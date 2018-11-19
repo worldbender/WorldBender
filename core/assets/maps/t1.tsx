@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.2" tiledversion="1.2.1" name="t1" tilewidth="32" tileheight="32" tilecount="256" columns="16">
  <image source="mountain_landscape.png" width="512" height="512"/>
+ <tile id="116">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="117">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
  <tile id="132">
   <properties>
    <property name="blocked" value=""/>
   </properties>
+ </tile>
+ <tile id="133">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+  <objectgroup draworder="index">
+   <object id="1" x="0.363636" y="0">
+    <polyline points="0,0 12.5455,3.63636 13.6364,14 7.45455,22.1818 -0.545455,24.1818"/>
+   </object>
+  </objectgroup>
  </tile>
  <tile id="192">
   <properties>

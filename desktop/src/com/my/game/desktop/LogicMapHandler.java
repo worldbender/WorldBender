@@ -37,7 +37,7 @@ public class LogicMapHandler {
      * Function creates logic map. It reads map matrix from tmx file and creates a proper block depending on properties of tile.
      */
     public void constructLogicMap() {
-        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) (this.getMap().getLayers().get(0));
+        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) (this.getMap().getLayers().get("CollisionLayer"));
         for (int xTileIndex = 0; xTileIndex < this.getNumerOfXTiles(); xTileIndex++) {
             for (int yTileIndex = 0; yTileIndex < this.getNumerOfYTiles(); yTileIndex++) {
                 if (collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("blocked")) {
