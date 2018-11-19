@@ -39,8 +39,8 @@ public class TCPConnection extends Thread {
 
     public void readMessage(String message){
         String[] splitedArray = message.split(":");
-        switch (splitedArray[0]) {
-            case "dc": players.remove(splitedArray[1]); break;
+        if ("dc".equals(splitedArray[0])) {
+            players.remove(splitedArray[1]);
         }
         System.out.println("echo: " + message);
     }

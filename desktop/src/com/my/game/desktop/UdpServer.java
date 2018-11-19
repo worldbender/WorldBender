@@ -1,3 +1,5 @@
+package com.my.game.desktop;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -11,12 +13,13 @@ public class UdpServer extends Thread {
     private DatagramSocket socket;
     //private ArrayList<Room> rooms;
     private Map<String, User> existingUsers;
-
+    private LogicMapHandler logicMapHandler;
     public UdpServer() throws IOException {
         socket = new DatagramSocket(PORT);
 
         this.existingUsers = ExistingUsers.getInstance();
         //rooms = new ArrayList();
+        logicMapHandler = new LogicMapHandler();
     }
 
     public void run() {
@@ -37,9 +40,10 @@ public class UdpServer extends Thread {
                 System.out.println(id + ":" + content);
 
                 String[] splitedArray = content.split(":");
-                switch (splitedArray[0]) {
-                    case "greetings": initNewPlayer(id, packet); break;
-                    default: updatePlayerPosition(id, content);
+                if ("greetings".equals(splitedArray[0])) {
+                    initNewPlayer(id, packet);
+                } else {
+                    updatePlayerPosition(id, content);
                 }
             } catch(Exception e) {
                 e.printStackTrace();
@@ -49,7 +53,7 @@ public class UdpServer extends Thread {
 
     private void updatePlayerPosition(String id, String content){
         User currentUser = existingUsers.get(id);
-        currentUser.player.setPosition(content);
+        currentUser.player.setPosition(content, logicMapHandler);
         String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.player.getX()+ ":"+ currentUser.player.getY();
 
         for (User current : existingUsers.values()) {

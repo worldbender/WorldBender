@@ -1,3 +1,5 @@
+package com.my.game.desktop;
+
 import java.util.ArrayList;
 
 public class Room {

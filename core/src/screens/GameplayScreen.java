@@ -29,7 +29,7 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public void show(){
-        map = new TmxMapLoader().load("maps/map2.tmx");
+        map = new TmxMapLoader().load("maps/t9.tmx");
         render = new OrthogonalTiledMapRenderer(map);
 
     }
@@ -54,7 +54,7 @@ public class GameplayScreen extends AbstractScreen{
 
     private void init() {
         camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
-        camera.translate(960,540);
+        camera.translate(WBGame.WIDTH/2,WBGame.HEIGHT/2);
         Player player = new Player(playerTexture, true);
         player.setPosition(500,500);
         players = PlayerList.getInstance();
