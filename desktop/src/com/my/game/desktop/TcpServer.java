@@ -1,6 +1,8 @@
+package com.my.game.desktop;
+
+
 import java.io.*;
 import java.net.ServerSocket;
-import java.util.Map;
 
 public class TcpServer extends Thread{
 

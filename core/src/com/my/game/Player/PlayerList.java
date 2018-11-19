@@ -9,7 +9,7 @@ public class PlayerList {
 
     public static final Map getInstance(){
         if(players == null){
-            players = Collections.synchronizedMap(new HashMap<>());
+            players = Collections.synchronizedMap(new HashMap());
         }
         return players;
     }

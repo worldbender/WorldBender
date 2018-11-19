@@ -1,3 +1,6 @@
+package com.my.game.desktop;
+
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -50,8 +53,8 @@ public class TcpClientThread extends Thread{
 
     public void readMessage(String message){
         String[] splitedArray = message.split(":");
-        switch (splitedArray[0]) {
-            case "udpPort": newPlayer(splitedArray[1]); break;
+        if ("udpPort".equals(splitedArray[0])) {
+            newPlayer(splitedArray[1]);
         }
 
         System.out.println("echo: " + message);
