@@ -133,7 +133,7 @@ public class GameplayScreen extends AbstractScreen{
             screenShiftY -= shiftY;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-            Gdx.app.exit();
+            game.changeScreen(WBGame.MENU);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){
             //TODO Toggle fullscreen
