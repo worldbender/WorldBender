@@ -16,7 +16,7 @@ public class SplashScreen extends AbstractScreen{
         Timer.schedule(new Task() {
             @Override
             public void run() {
-                game.setScreen(new GameplayScreen(game));
+                game.setScreen(new MenuScreen(game));
             }
         }, 2);
     }
