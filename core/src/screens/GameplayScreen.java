@@ -2,11 +2,14 @@ package screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
@@ -56,14 +59,12 @@ public class GameplayScreen extends AbstractScreen{
         camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
         camera.translate(WBGame.WIDTH/2,WBGame.HEIGHT/2);
         Player player = new Player(playerTexture, true);
-        player.setPosition(500,500);
         players = PlayerList.getInstance();
-        //players.add(player);
     }
 
     @Override
     public void render(float delta) {
-
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
         super.render(delta);
         update();
 
@@ -71,6 +72,14 @@ public class GameplayScreen extends AbstractScreen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         render.setView(camera);
         render.render();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+        if(WBGame.IS_DEBUG_VERSION){
+            for(Player player : players.values()){
+                shapeRenderer.rect((float)player.getX(), (float)player.getY() , 56, 56);
+            }
+        }
+        shapeRenderer.end();
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(camera.combined);
 
@@ -80,7 +89,9 @@ public class GameplayScreen extends AbstractScreen{
             player.texture = playerTexture;
             player.draw(spriteBatch);
         }
+
         spriteBatch.end();
+
     }
 
     private void update() {
@@ -105,7 +116,7 @@ public class GameplayScreen extends AbstractScreen{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            screenShiftX -= shiftX;
+           // screenShiftX -= shiftX;
 
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
@@ -114,7 +125,7 @@ public class GameplayScreen extends AbstractScreen{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            screenShiftX += shiftX;
+           // screenShiftX += shiftX;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             try {
@@ -122,7 +133,7 @@ public class GameplayScreen extends AbstractScreen{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            screenShiftY += shiftY;
+          //  screenShiftY += shiftY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             try {
@@ -130,7 +141,7 @@ public class GameplayScreen extends AbstractScreen{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            screenShiftY -= shiftY;
+          //  screenShiftY -= shiftY;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             game.changeScreen(WBGame.MENU);
@@ -138,7 +149,7 @@ public class GameplayScreen extends AbstractScreen{
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){
             game.switchScreenMode();
         }
-        if(screenShiftX > 1300 && mapPositionX < mapWidth - WBGame.WIDTH - 5){
+       /* if(screenShiftX > 1300 && mapPositionX < mapWidth - WBGame.WIDTH - 5){
             camera.translate(shiftX,0);
             screenShiftX -= shiftX;
             mapPositionX += shiftX;
@@ -157,7 +168,7 @@ public class GameplayScreen extends AbstractScreen{
             camera.translate(0,shiftY);
             screenShiftY -= shiftY;
             mapPositionY += shiftX;
-        }
+        }*/
         camera.update();
         if(Gdx.input.isKeyPressed(Input.Keys.M)){
             MusicPlayer.initMusic("sounds/meow.mp3");

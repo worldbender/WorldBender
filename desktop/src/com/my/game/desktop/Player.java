@@ -1,12 +1,20 @@
 package com.my.game.desktop;
 
 import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class Player {
 
     private int x=500;
     private int y=500;
     private int hp=10;
+    private int width = 56;
+    private int height = 56;
+    public Rectangle getBounds(){
+        return new Rectangle(this.x, this.y, this.width, this.height);
+    }
 
     public int getX(){
         return this.x;
@@ -15,51 +23,78 @@ public class Player {
     public int getY(){
         return this.y;
     }
-    public boolean isRectangleCollides(Rectangle rec, LogicMapHandler map){
+    public boolean isRectangleCollidesWithMap(Rectangle rec, LogicMapHandler map){
         boolean result = false;
-        int objTileX = ((int)rec.getX()/32) - 1 ;
-        objTileX = objTileX < 0 ? 0 : objTileX;
-        int objTileY = ((int)rec.getY()/32) - 1;
-        objTileY = objTileY < 0 ? 0 : objTileY;
-        for(int x = objTileX; x < objTileX + 3; x++){
-            for(int y = objTileY; y < objTileY + 3; y++){
-                System.out.print(x + " " + y);
-                System.out.println(map.getCertainTileByPoint(x * 32, y *32).getType());
-                if(map.getCertainTileByPoint(x * 32, y *32).getType() == "Solid"){
+        ABlock currentBlock;
+        int startObjTileX = ((int)rec.getX()/32) - 3;
+        startObjTileX = startObjTileX < 0 ? 0 : startObjTileX;
 
-                    if(rec.intersects(map.getCertainTileByPoint(x * 32, y * 32).getRectangle())){
+        int endObjTileX = ((int)rec.getX()/32) + (int)Math.ceil(this.width/32) + 3;
+        endObjTileX = endObjTileX > 100 ? 100 : endObjTileX;
+
+        int startObjTileY = ((int)rec.getY()/32) - 3;
+        startObjTileY = startObjTileY < 0 ? 0 : startObjTileY;
+
+        int endObjTileY = ((int)rec.getY()/32) + ((int)Math.ceil(this.height/32)) + 3;
+        endObjTileY = endObjTileY > 100 ? 100 : endObjTileY;
+
+        for(int x = startObjTileX; x < endObjTileX; x++){
+            for(int y = startObjTileY; y < endObjTileY; y++){
+                currentBlock = map.getCertainTileByTileXY(x,y);
+                if(currentBlock.getType() == "Solid"){
+                    if(rec.intersects(currentBlock.getRectangle())){
                         result = true;
                     }
                 }
             }
         }
-
         return result;
     }
 
-    public void setPosition(String content, LogicMapHandler map){
+    public boolean isRectangleCollidesWithPlayers(Rectangle rec, ArrayList<Player> players){
+        boolean result = false;
+        for(Player player : players){
+            if(rec.intersects(player.getBounds())){
+                result = true;
+            }
+        }
+        return result;
+    }
+    public boolean isPlayersCollidesWithEnything(Rectangle rec, LogicMapHandler map, ArrayList<Player> players){
+        return isRectangleCollidesWithMap(rec, map) ||
+                isRectangleCollidesWithPlayers(rec, players);
+    }
+    public void setPosition(String content, LogicMapHandler map, Map<String, User> users){
         char letter = content.charAt(0);
+        Rectangle playersNewBoundsRectangle;
+        ArrayList<Player> players = new ArrayList<Player>();
+        System.out.println(map.getCertainTileByPoint(64,64).getType());
+        for(User user : users.values()){
+            if(user.player != this){
+                players.add(user.player);
+            }
+        }
         if(letter=='A'){
-            Rectangle rec = new Rectangle(this.x - 5, this.y + 28, 56, 56);
-            if(!isRectangleCollides(rec, map)){
+            playersNewBoundsRectangle = new Rectangle(this.x - 5, this.y, this.width, this.height);
+            if(!isPlayersCollidesWithEnything(playersNewBoundsRectangle, map, players)){
                 this.x-=5;
             }
         }
         else if(letter=='D'){
-            Rectangle rec = new Rectangle(this.x + 5, this.y+ 28, 56, 56);
-            if(!isRectangleCollides(rec, map)){
+            playersNewBoundsRectangle = new Rectangle(this.x + 5, this.y, this.width, this.height);
+            if(!isPlayersCollidesWithEnything(playersNewBoundsRectangle, map, players)){
                 this.x+=5;
             }
         }
         else if(letter=='W'){
-            Rectangle rec = new Rectangle(this.x, this.y + 5+ 28, 56, 56);
-            if(!isRectangleCollides(rec, map)){
+            playersNewBoundsRectangle = new Rectangle(this.x, this.y + 5, this.width, this.height);
+            if(!isPlayersCollidesWithEnything(playersNewBoundsRectangle, map, players)){
                 this.y+=5;
             }
         }
         else if(letter=='S'){
-            Rectangle rec = new Rectangle(this.x, this.y - 5+ 28, 56, 56);
-            if(!isRectangleCollides(rec, map)){
+            playersNewBoundsRectangle = new Rectangle(this.x, this.y - 5, this.width, this.height);
+            if(!isPlayersCollidesWithEnything(playersNewBoundsRectangle, map, players)){
                 this.y-=5;
             }
         }

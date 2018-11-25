@@ -8,11 +8,13 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 public class LogicMapHandler {
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
+    private final int mapWidth = 100;
+    private final int mapHeight = 100;
     private final int tileWidth = 32;
     private final int tileHeight = 32;
     private final String BASE_PATH_TO_MAP = "maps/";
     private final String MAP_FILE_FORMAT = ".tmx";
-    private ABlock[][] logicMap = new ABlock[100][100];
+    private ABlock[][] logicMap = new ABlock[mapWidth][mapHeight];
 
     public LogicMapHandler() {
         map = new TmxMapLoader().load("maps/t9.tmx");
@@ -32,7 +34,6 @@ public class LogicMapHandler {
         constructLogicMap();
     }
 
-
     /**
      * Function creates logic map. It reads map matrix from tmx file and creates a proper block depending on properties of tile.
      */
@@ -42,16 +43,15 @@ public class LogicMapHandler {
             for (int yTileIndex = 0; yTileIndex < this.getNumerOfYTiles(); yTileIndex++) {
                 if (collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("blocked")) {
                     logicMap[xTileIndex][yTileIndex] = new SolidBlock(
-                            xTileIndex * this.tileWidth,
-                            (yTileIndex * this.tileHeight) + this.tileHeight,
+                            (xTileIndex * this.tileWidth),
+                            (yTileIndex * this.tileHeight),
                             this.tileWidth,
                             this.tileHeight
                     );
-                    System.out.println(xTileIndex + "  " + yTileIndex + " " + logicMap[xTileIndex][yTileIndex].rectangle.x + " " + logicMap[xTileIndex][yTileIndex].rectangle.y);
                 } else {
                     logicMap[xTileIndex][yTileIndex] = new SoftBlock(
-                            xTileIndex * this.tileWidth,
-                            (yTileIndex * this.tileHeight) + this.tileHeight,
+                            (xTileIndex * this.tileWidth),
+                            (yTileIndex * this.tileHeight),
                             this.tileWidth,
                             this.tileHeight
                     );
@@ -67,14 +67,20 @@ public class LogicMapHandler {
      */
     public ABlock getCertainTileByPoint(int x, int y) {
         ABlock resultBlock;
-        int indexOfBlockInMapMatrixX = x / tileWidth;
-        int indexOfBlockInMapMatrixY = y / tileHeight;
-//        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) (this.getMap().getLayers().get(0));
-//        Iterator iter = collisionLayer.getCell(indexOfBlockInMapMatrixX, indexOfBlockInMapMatrixY).getTile().getProperties().getKeys();
-//        while (iter.hasNext()) {
-//            System.out.println(iter.next().toString());
-//        }
+        int indexOfBlockInMapMatrixX = (int)Math.floor(((double)x / (double)tileWidth));
+        int indexOfBlockInMapMatrixY = (int)Math.floor(((double)y / (double)tileHeight));
         resultBlock = logicMap[indexOfBlockInMapMatrixX][indexOfBlockInMapMatrixY];
+        return resultBlock;
+    }
+
+    /**
+     * @param x X Tile number form left down point
+     * @param y Y Tile number form left down point
+     * @return Returns block on given position.
+     */
+    public ABlock getCertainTileByTileXY(int x, int y) {
+        ABlock resultBlock;
+        resultBlock = logicMap[x][y];
         return resultBlock;
     }
 
