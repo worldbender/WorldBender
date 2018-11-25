@@ -25,7 +25,7 @@ public class TcpServer extends Thread{
         catch (IOException e) {
             e.printStackTrace();
         }
-        /*finally
+        finally
         {
             try {
                 serverSocket.close();
@@ -34,6 +34,6 @@ public class TcpServer extends Thread{
             {
                 e.printStackTrace();
             }
-        }*/
+        }
     }
 }

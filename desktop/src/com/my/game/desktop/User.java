@@ -1,25 +1,22 @@
 package com.my.game.desktop;
 
-
-
-
 import java.net.*;
 
 public class User {
     private InetAddress userAddress;
     private Integer userUdpPort;
     private Integer userTcpPort;
-    private String id;
+    private String connectionId;
     private boolean connection;
-    public Player player;
+    private Player player;
     private String name;
-    public TcpClientThread thread;
+    private TcpClientThread thread;
 
-    public User(InetAddress userAddress, Integer userTcpPort, Integer userUdpPort, String id, String name){
+    public User(InetAddress userAddress, Integer userTcpPort, Integer userUdpPort, String connectionId, String name){
         this.userAddress = userAddress;
         this.userTcpPort = userTcpPort;
         this.userUdpPort = userUdpPort;
-        this.id = id;
+        this.connectionId = connectionId;
         this.name = name;
         this.player = new Player();
         this.connection = true;
@@ -30,12 +27,12 @@ public class User {
         this.connection = true;
     }
 
-    public String getId(){
-        return this.id;
+    public String getConnectionId(){
+        return this.connectionId;
     }
 
-    public void setId(String id){
-        this.id = id;
+    public void setConnectionId(String connectionId){
+        this.connectionId = connectionId;
     }
 
     public InetAddress getAddress(){
@@ -62,6 +59,14 @@ public class User {
         this.userTcpPort = userTcpPort;
     }
 
+    public Player getPlayer(){
+        return this.player;
+    }
+
+    public void setPlayer(Player player){
+        this.player=player;
+    }
+
     public String getName(){
         return this.name;
     }
@@ -76,6 +81,14 @@ public class User {
 
     public void setConnection(boolean status){
         this.connection = status;
+    }
+
+    public TcpClientThread getThread(){
+        return this.thread;
+    }
+
+    public void setThread(TcpClientThread thread){
+        this.thread = thread;
     }
 
 }

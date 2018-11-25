@@ -7,16 +7,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import com.my.game.Connection.Connection;
 import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
 import com.my.game.WBGame;
 import com.my.game.music.MusicPlayer;
-
-import java.util.List;
 import java.util.Map;
 
 public class GameplayScreen extends AbstractScreen{
@@ -26,6 +22,7 @@ public class GameplayScreen extends AbstractScreen{
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
     public Connection connection;
+    boolean connectionStatus;
 
     @Override
     public void show(){
@@ -41,7 +38,13 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     public void create() {
-        connection.createConnection();
+        try{
+            connection.createConnection();
+            connectionStatus = true;
+        }catch(Exception e){
+            System.out.println("Nie nawiązano połączenia");
+            connectionStatus = false;
+        }
         loadData();
         init();
         MusicPlayer musicPlayer = new MusicPlayer();
@@ -58,29 +61,38 @@ public class GameplayScreen extends AbstractScreen{
         Player player = new Player(playerTexture, true);
         player.setPosition(500,500);
         players = PlayerList.getInstance();
-        //players.add(player);
     }
 
     @Override
     public void render(float delta) {
-
-        super.render(delta);
-        update();
-
-        Gdx.gl.glClearColor(1, 1, 1, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        render.setView(camera);
-        render.render();
-        spriteBatch.begin();
-        spriteBatch.setProjectionMatrix(camera.combined);
-
-        //player.draw(spriteBatch);
-
-        for(Player player : players.values()){
-            player.texture = playerTexture;
-            player.draw(spriteBatch);
+        if(!connectionStatus){
+            game.changeScreen(WBGame.MENU);
+            try{
+                connection.createConnection();
+                connectionStatus = true;
+                game.changeScreen(WBGame.PLAY);
+            }catch(Exception e){
+                System.out.println("Nie nawiązano połączenia");
+            }
         }
-        spriteBatch.end();
+        else{
+            super.render(delta);
+            update();
+
+            Gdx.gl.glClearColor(1, 1, 1, 0);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            render.setView(camera);
+            render.render();
+            spriteBatch.begin();
+            spriteBatch.setProjectionMatrix(camera.combined);
+
+            for(Player player : players.values()){
+                player.texture = playerTexture;
+                player.draw(spriteBatch);
+            }
+            spriteBatch.end();
+        }
+
     }
 
     private void update() {
