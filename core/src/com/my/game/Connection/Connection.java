@@ -1,10 +1,13 @@
 package com.my.game.Connection;
 
+import com.my.game.WBGame;
+
 import java.io.IOException;
 import java.net.*;
 
 public class Connection {
-    private String hostName = "localhost";
+    InetAddress IPAddress;
+    private String hostName = WBGame.SERVER_ADRESS;
     private DatagramSocket socket;
     public TCPConnection tcp;
     public PacketReceiver receiver;
@@ -19,6 +22,12 @@ public class Connection {
         } catch (SocketException e) {
             e.printStackTrace();
         }
+        try {
+            IPAddress = InetAddress.getByName(WBGame.SERVER_ADRESS);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void createConnection() throws IOException {

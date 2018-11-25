@@ -2,6 +2,8 @@ package com.my.game.Connection;
 
 import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
+import com.my.game.WBGame;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Map;

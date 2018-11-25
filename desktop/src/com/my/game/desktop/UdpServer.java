@@ -16,7 +16,6 @@ public class UdpServer extends Thread {
     private List<Room> rooms;
     private Map<String, User> existingUsers;
     private LogicMapHandler logicMapHandler;
-
     public UdpServer() throws IOException {
         this.socket = new DatagramSocket(PORT);
         this.existingUsers = ExistingUsers.getInstance();
@@ -40,7 +39,8 @@ public class UdpServer extends Thread {
 
     private void updatePlayerPosition(String id, String content){
         User currentUser = existingUsers.get(id);
-        currentUser.getPlayer().setPosition(content, logicMapHandler);
+
+        currentUser.getPlayer().setPosition(content, logicMapHandler, existingUsers);
         String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.getPlayer().getX()+ ":"+ currentUser.getPlayer().getY();
 
         for (User current : existingUsers.values()) {
