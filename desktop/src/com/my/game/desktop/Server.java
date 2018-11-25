@@ -9,15 +9,15 @@ class Server extends Game {
     }
     @Override
     public void create() {
-        TcpServer tcpServer = new TcpServer();
-        tcpServer.start();
-
-        UdpServer udpServer = null;
+        TcpServer tcpServer;
+        UdpServer udpServer;
         try {
             udpServer = new UdpServer();
+            tcpServer = new TcpServer();
+            tcpServer.start();
+            udpServer.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Porty zajęte, prawdopodobnie serwer już jest włączony!");
         }
-        udpServer.start();
     }
 }

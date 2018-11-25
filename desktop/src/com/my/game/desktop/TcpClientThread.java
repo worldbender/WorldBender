@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 import java.util.Map;
 
 public class TcpClientThread extends Thread{
@@ -13,11 +14,13 @@ public class TcpClientThread extends Thread{
     private PrintWriter out;
     private BufferedReader in;
     private Map<String, User> existingUsers;
+    private List<Room> rooms;
     public User user;
 
     public TcpClientThread(Socket clientSocket) {
         this.user = new User();
         this.existingUsers = ExistingUsers.getInstance();
+        this.rooms = RoomList.getInstance();
         this.clientSocket = clientSocket;
         try {
             out = new PrintWriter(clientSocket.getOutputStream(),true);
@@ -39,9 +42,9 @@ public class TcpClientThread extends Thread{
             in.close();
             clientSocket.close();
         } catch (IOException e) {
-            existingUsers.get(user.getId()).setConnection(false);
+            existingUsers.get(user.getConnectionId()).setConnection(false);
             for (User current : existingUsers.values()) {
-                current.thread.sendMessage("dc:"+user.getName());
+                current.getThread().sendMessage("dc:"+user.getName());
             }
             System.out.println("Rozłączono");
         }
@@ -65,9 +68,9 @@ public class TcpClientThread extends Thread{
         this.user.setAddress(clientSocket.getInetAddress());
         this.user.setTcpPort(clientSocket.getPort());
         this.user.setUdpPort(Integer.valueOf(udpPort));
-        this.user.setId(id);
+        this.user.setConnectionId(id);
         this.user.setName("player"+ existingUsers.size());
         existingUsers.put(id, this.user);
-        existingUsers.get(user.getId()).thread = this;
+        existingUsers.get(user.getConnectionId()).setThread(this);
     }
 }

@@ -68,10 +68,10 @@ public class Player {
         char letter = content.charAt(0);
         Rectangle playersNewBoundsRectangle;
         ArrayList<Player> players = new ArrayList<Player>();
-        System.out.println(map.getCertainTileByPoint(64,64).getType());
+
         for(User user : users.values()){
-            if(user.player != this){
-                players.add(user.player);
+            if(user.getPlayer() != this){
+                players.add(user.getPlayer());
             }
         }
         if(letter=='A'){

@@ -10,14 +10,15 @@ import java.util.Map;
 
 public class TCPConnection extends Thread {
     private final int PORT = 10008;
-    private String serverHostname = WBGame.SERVER_ADRESS;
+    private String hostname;
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
     private static Map<String, Player> players;
 
-    public TCPConnection() throws IOException {
-        socket = new Socket(serverHostname, PORT);
+    public TCPConnection(String hostName) throws IOException {
+        this.hostname = hostName;
+        socket = new Socket(hostname, PORT);
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         players = PlayerList.getInstance();

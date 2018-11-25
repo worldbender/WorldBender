@@ -9,17 +9,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.physics.box2d.Shape;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import com.my.game.Connection.Connection;
 import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
 import com.my.game.WBGame;
 import com.my.game.music.MusicPlayer;
-
-import java.util.List;
 import java.util.Map;
 
 public class GameplayScreen extends AbstractScreen{
@@ -29,6 +24,7 @@ public class GameplayScreen extends AbstractScreen{
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
     public Connection connection;
+    boolean connectionStatus;
 
     @Override
     public void show(){
@@ -44,7 +40,13 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     public void create() {
-        connection.createConnection();
+        try{
+            connection.createConnection();
+            connectionStatus = true;
+        }catch(Exception e){
+            System.out.println("Nie nawiązano połączenia");
+            connectionStatus = false;
+        }
         loadData();
         init();
         MusicPlayer musicPlayer = new MusicPlayer();
@@ -64,34 +66,45 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public void render(float delta) {
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
-        super.render(delta);
-        update();
-
-        Gdx.gl.glClearColor(1, 1, 1, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        render.setView(camera);
-        render.render();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        if(WBGame.IS_DEBUG_VERSION){
-            for(Player player : players.values()){
-                shapeRenderer.rect((float)player.getX(), (float)player.getY() , 56, 56);
+        if(!connectionStatus){
+            game.changeScreen(WBGame.MENU);
+            try{
+                connection.createConnection();
+                connectionStatus = true;
+                game.changeScreen(WBGame.PLAY);
+            }catch(Exception e){
+                System.out.println("Nie nawiązano połączenia");
             }
         }
-        shapeRenderer.end();
-        spriteBatch.begin();
-        spriteBatch.setProjectionMatrix(camera.combined);
+        else{
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+            super.render(delta);
+            update();
 
-        //player.draw(spriteBatch);
+            Gdx.gl.glClearColor(1, 1, 1, 0);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            render.setView(camera);
+            render.render();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.RED);
+            if(WBGame.IS_DEBUG_VERSION){
+                for(Player player : players.values()){
+                    shapeRenderer.rect((float)player.getX(), (float)player.getY() , 56, 56);
+                }
+            }
+            shapeRenderer.end();
+            spriteBatch.begin();
+            spriteBatch.setProjectionMatrix(camera.combined);
 
-        for(Player player : players.values()){
-            player.texture = playerTexture;
-            player.draw(spriteBatch);
+            //player.draw(spriteBatch);
+
+            for(Player player : players.values()){
+                player.texture = playerTexture;
+                player.draw(spriteBatch);
+            }
+
+            spriteBatch.end();
         }
-
-        spriteBatch.end();
-
     }
 
     private void update() {
