@@ -6,20 +6,22 @@ public class ABullet {
     private float angle;
     private int id;
     private int range;
-
+    private String type;
+    private double bulletSpeed = 1;
     protected ABullet(int x, int y, float angle){
         this.x = x;
         this.y = y;
         this.angle = angle;
     }
     public void update(double deltaTime){
-        this.setX((int)(Math.cos(angle * deltaTime) + this.getX()));
-        this.setY((int)(Math.sin(angle * deltaTime) + this.getY()));
+        this.setX(this.getX());
+        this.setY(this.getY() + 5);
         if(this.getRange() > 0){
-            this.setRange(this.getRange() - (int)deltaTime);
+            this.setRange(this.getRange() - 5);
         } else{
             BulletList.removeBullet(this);
         }
+        //TODO Add real logic that bases on angle
     }
 
     public float getAngle() {
@@ -60,5 +62,13 @@ public class ABullet {
 
     public void setRange(int range) {
         this.range = range;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

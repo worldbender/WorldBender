@@ -8,6 +8,8 @@ public class ABullet {
     private int y;
     private int width;
     private int height;
+    private int id;
+    private float angle;
     private Texture texture;
     public void draw(SpriteBatch spriteBatch){
         spriteBatch.draw(this.texture, x, y);
@@ -16,6 +18,7 @@ public class ABullet {
         this.setX(x);
         this.setY(y);
     }
+
 
     public void setX(int x) {
         this.x = x;
@@ -46,5 +49,21 @@ public class ABullet {
     }
     public Texture getTexture(){
         return this.texture;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public float getAngle() {
+        return angle;
+    }
+
+    public void setAngle(float angle) {
+        this.angle = angle;
     }
 }

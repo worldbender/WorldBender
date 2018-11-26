@@ -1,5 +1,8 @@
 package com.my.game.Connection;
 
+import com.my.game.Bullets.ABullet;
+import com.my.game.Bullets.BulletFabric;
+import com.my.game.Bullets.BulletList;
 import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
 import java.net.DatagramPacket;
@@ -42,6 +45,13 @@ public class PacketReceiver implements Runnable {
             }
         }
     }
+    private void setBulletsPositions(String date){
+        String[] splitedDate = date.split(":");
+        int bulletId = Integer.parseInt(splitedDate[1]);
+        int bulletX = Integer.parseInt(splitedDate[2]);
+        int bulletY = Integer.parseInt(splitedDate[3]);
+        BulletList.setBulletPosition(bulletId, bulletX, bulletY);
+    }
 
     public void run() {
         while (true) {
@@ -62,10 +72,11 @@ public class PacketReceiver implements Runnable {
                     setPlayersPositions(received);
                 }
                 if (splitedArray[0].equals("updateBulletPosition")) {
-                    //TODO Update bullet
+                    setBulletsPositions(received);
                 }
-                if (splitedArray[0].equals("createBulletPosition")) {
-                    //TODO Create bullet
+                if (splitedArray[0].equals("createBullet")) {
+                    ABullet newBullet = BulletFabric.createBullet(splitedArray[1],Integer.parseInt(splitedArray[2]), Float.parseFloat(splitedArray[3]));
+                    BulletList.addBullet(newBullet);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

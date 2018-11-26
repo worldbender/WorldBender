@@ -81,7 +81,11 @@ public class UdpServer extends Thread {
         String angle = splitedContent[2];
         ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getX(), currentUser.getPlayer().getY(), Float.parseFloat(angle));
         BulletList.addBullet(newBullet);
-        updateBulletsPosition();
+        String message = "createBullet:" + newBullet.getType() + ":" + newBullet.getId() + ":" + newBullet.getAngle();
+        for(User user : existingUsers.values()){
+            if(user.getConnection())
+                sendPackage(message, user.getAddress(), user.getUdpPort());
+        }
     }
 
     private void initNewPlayer(String id, DatagramPacket packet){
