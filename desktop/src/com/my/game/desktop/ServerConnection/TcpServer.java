@@ -1,5 +1,7 @@
-package com.my.game.desktop;
+package com.my.game.desktop.ServerConnection;
 
+
+import com.my.game.desktop.ServerConnection.TcpClientThread;
 
 import java.io.*;
 import java.net.ServerSocket;

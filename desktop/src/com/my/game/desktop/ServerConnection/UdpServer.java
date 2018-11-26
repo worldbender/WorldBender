@@ -1,4 +1,9 @@
-package com.my.game.desktop;
+package com.my.game.desktop.ServerConnection;
+
+import com.my.game.desktop.*;
+import com.my.game.desktop.Bullets.ABullet;
+import com.my.game.desktop.Bullets.BulletFabric;
+import com.my.game.desktop.Bullets.BulletList;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -58,6 +63,26 @@ public class UdpServer extends Thread {
                 sendPackage(message, current.getAddress(), current.getUdpPort());
         }
     }
+    private void updateBulletsPosition(){
+        String message;
+        for (User current : existingUsers.values()) {
+            for(ABullet bullet : BulletList.getBullets()){
+                bullet.update(5.0);
+                message = "updateBulletPosition:"+bullet.getId() + ":" + bullet.getX()+ ":"+ bullet.getY();
+                if(current.getConnection())
+                    sendPackage(message, current.getAddress(), current.getUdpPort());
+            }
+        }
+    }
+    private void createBullet(String id, String content){
+        User currentUser = existingUsers.get(id);
+        String[] splitedContent = content.split(":");
+        String bulletType = splitedContent[1];
+        String angle = splitedContent[2];
+        ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getX(), currentUser.getPlayer().getY(), Float.parseFloat(angle));
+        BulletList.addBullet(newBullet);
+        updateBulletsPosition();
+    }
 
     private void initNewPlayer(String id, DatagramPacket packet){
         sendPackage("Server: Connected", packet.getAddress(), packet.getPort());
@@ -94,8 +119,12 @@ public class UdpServer extends Thread {
         String[] splitedArray = content.split(":");
         if ("greetings".equals(splitedArray[0])) {
             initNewPlayer(id, packet);
-        } else {
+        }else if("createBullet".equals(splitedArray[0])){
+            createBullet(id, content);
+        }
+        else {
             updatePlayerPosition(id, content);
+            updateBulletsPosition();
         }
     }
 }

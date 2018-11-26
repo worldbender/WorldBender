@@ -156,6 +156,34 @@ public class GameplayScreen extends AbstractScreen{
             }
           //  screenShiftY -= shiftY;
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI/2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI/2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI/2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI/2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             game.changeScreen(WBGame.MENU);
         }

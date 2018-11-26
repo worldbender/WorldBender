@@ -61,6 +61,12 @@ public class PacketReceiver implements Runnable {
                 if (splitedArray[0].equals("updatePosition")) {
                     setPlayersPositions(received);
                 }
+                if (splitedArray[0].equals("updateBulletPosition")) {
+                    //TODO Update bullet
+                }
+                if (splitedArray[0].equals("createBulletPosition")) {
+                    //TODO Create bullet
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
