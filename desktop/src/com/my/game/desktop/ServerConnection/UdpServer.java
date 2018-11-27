@@ -127,6 +127,17 @@ public class UdpServer extends Thread {
         }
         createOpponent();
     }
+    private void informCliensAboutDeadBullets(){
+        String message;
+        for(ABullet bullet : BulletList.getDeadBullets()){
+            message = "deleteBullet:" + bullet.getId();
+            for (User current : existingUsers.values()) {
+                if(current.getConnection())
+                    sendPackage(message, current.getAddress(), current.getUdpPort());
+            }
+        }
+        BulletList.flushDeadBullets();
+    }
 
     public void sendPackage(String message, InetAddress clientAddress, int clientPort){
         DatagramPacket packet;
@@ -155,6 +166,7 @@ public class UdpServer extends Thread {
             updatePlayerPosition(id, content);
             updateBulletsPosition();
             updateOpponentsPosition();
+            informCliensAboutDeadBullets();
         }
     }
 }

@@ -95,6 +95,9 @@ public class PacketReceiver implements Runnable {
                     AOpponent newOpponent = OpponentFabric.createOpponent(splitedArray[1],Integer.parseInt(splitedArray[2]));
                     OpponentList.addOpponent(newOpponent);
                 }
+                if (splitedArray[0].equals("deleteBullet")) {
+                    BulletList.removeBulletById(Integer.parseInt(splitedArray[1]));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

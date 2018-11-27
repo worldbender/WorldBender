@@ -25,6 +25,7 @@ public class ABullet {
             this.setRange(this.getRange() - (int)shift);
         } else{
             BulletList.removeBullet(this);
+            BulletList.addDeadBulletsTrashList(this);
         }
     }
 

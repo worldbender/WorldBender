@@ -26,4 +26,11 @@ public class BulletList {
             }
         }
     }
+    public static void removeBulletById(int id){
+        for(ABullet bullet : bullets){
+            if(bullet.getId() == id){
+                bullets.remove(bullet);
+            }
+        }
+    }
 }
