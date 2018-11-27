@@ -24,32 +24,8 @@ public class Player {
     public int getY(){
         return this.y;
     }
-    public boolean isRectangleCollidesWithMap(Rectangle rec, LogicMapHandler map){
-        boolean result = false;
-        ABlock currentBlock;
-        int startObjTileX = ((int)rec.getX()/32) - 3;
-        startObjTileX = startObjTileX < 0 ? 0 : startObjTileX;
-
-        int endObjTileX = ((int)rec.getX()/32) + (int)Math.ceil(this.width/32) + 3;
-        endObjTileX = endObjTileX > 100 ? 100 : endObjTileX;
-
-        int startObjTileY = ((int)rec.getY()/32) - 3;
-        startObjTileY = startObjTileY < 0 ? 0 : startObjTileY;
-
-        int endObjTileY = ((int)rec.getY()/32) + ((int)Math.ceil(this.height/32)) + 3;
-        endObjTileY = endObjTileY > 100 ? 100 : endObjTileY;
-
-        for(int x = startObjTileX; x < endObjTileX; x++){
-            for(int y = startObjTileY; y < endObjTileY; y++){
-                currentBlock = map.getCertainTileByTileXY(x,y);
-                if(currentBlock.getType() == "Solid"){
-                    if(rec.intersects(currentBlock.getRectangle())){
-                        result = true;
-                    }
-                }
-            }
-        }
-        return result;
+    public boolean isPlayerCollidesWithMap(Rectangle rec, LogicMapHandler map){
+        return map.isRectangleCollidesWithMap(rec);
     }
 
     public boolean isRectangleCollidesWithPlayers(Rectangle rec, ArrayList<Player> players){
@@ -62,7 +38,7 @@ public class Player {
         return result;
     }
     public boolean isPlayersCollidesWithEnything(Rectangle rec, LogicMapHandler map, ArrayList<Player> players){
-        return isRectangleCollidesWithMap(rec, map) ||
+        return isPlayerCollidesWithMap(rec, map) ||
                 isRectangleCollidesWithPlayers(rec, players);
     }
     public void setPosition(String content, LogicMapHandler map, Map<String, User> users){

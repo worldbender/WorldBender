@@ -69,7 +69,7 @@ public class UdpServer extends Thread {
         String message;
         for (User current : existingUsers.values()) {
             for(ABullet bullet : BulletList.getBullets()){
-                bullet.update(5.0);
+                bullet.update(5.0, logicMapHandler);
                 message = "updateBulletPosition:"+bullet.getId() + ":" + bullet.getX()+ ":"+ bullet.getY();
                 if(current.getConnection())
                     sendPackage(message, current.getAddress(), current.getUdpPort());
@@ -127,7 +127,7 @@ public class UdpServer extends Thread {
         }
         createOpponent();
     }
-    private void informCliensAboutDeadBullets(){
+    private void informClientsAboutDeadBullets(){
         String message;
         for(ABullet bullet : BulletList.getDeadBullets()){
             message = "deleteBullet:" + bullet.getId();
@@ -137,6 +137,17 @@ public class UdpServer extends Thread {
             }
         }
         BulletList.flushDeadBullets();
+    }
+    private void informClientsAboutDeadOpponents(){
+        String message;
+        for(AOpponent opponent : OpponentList.getDeadOpponents()){
+            message = "deleteOpponent:" + opponent.getId();
+            for (User current : existingUsers.values()) {
+                if(current.getConnection())
+                    sendPackage(message, current.getAddress(), current.getUdpPort());
+            }
+        }
+        OpponentList.flushDeadOpponents();
     }
 
     public void sendPackage(String message, InetAddress clientAddress, int clientPort){
@@ -166,7 +177,8 @@ public class UdpServer extends Thread {
             updatePlayerPosition(id, content);
             updateBulletsPosition();
             updateOpponentsPosition();
-            informCliensAboutDeadBullets();
+            informClientsAboutDeadBullets();
+            informClientsAboutDeadOpponents();
         }
     }
 }

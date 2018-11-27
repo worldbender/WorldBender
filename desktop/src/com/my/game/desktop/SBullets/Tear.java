@@ -5,5 +5,6 @@ public class Tear extends ABullet {
         super(x, y, angle);
         this.setRange(500);
         this.setType("Tear");
+        this.setAttack(10);
     }
 }

@@ -8,6 +8,8 @@ import com.my.game.desktop.SBlocks.ABlock;
 import com.my.game.desktop.SBlocks.SoftBlock;
 import com.my.game.desktop.SBlocks.SolidBlock;
 
+import java.awt.*;
+
 public class LogicMapHandler {
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
@@ -61,6 +63,33 @@ public class LogicMapHandler {
                 }
             }
         }
+    }
+    public boolean isRectangleCollidesWithMap(Rectangle rec){
+        boolean result = false;
+        ABlock currentBlock;
+        int startObjTileX = ((int)rec.getX()/32) - 3;
+        startObjTileX = startObjTileX < 0 ? 0 : startObjTileX;
+
+        int endObjTileX = ((int)rec.getX()/32) + (int)Math.ceil(rec.width/32) + 3;
+        endObjTileX = endObjTileX > 100 ? 100 : endObjTileX;
+
+        int startObjTileY = ((int)rec.getY()/32) - 3;
+        startObjTileY = startObjTileY < 0 ? 0 : startObjTileY;
+
+        int endObjTileY = ((int)rec.getY()/32) + ((int)Math.ceil(rec.height/32)) + 3;
+        endObjTileY = endObjTileY > 100 ? 100 : endObjTileY;
+
+        for(int x = startObjTileX; x < endObjTileX; x++){
+            for(int y = startObjTileY; y < endObjTileY; y++){
+                currentBlock = this.getCertainTileByTileXY(x,y);
+                if(currentBlock.getType() == "Solid"){
+                    if(rec.intersects(currentBlock.getRectangle())){
+                        result = true;
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     /**

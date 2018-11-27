@@ -26,4 +26,11 @@ public class OpponentList {
     public static List<AOpponent> getOpponents(){
         return opponents;
     }
+    public static void removeOpponentById(int id){
+        for(AOpponent opponent : opponents){
+            if(opponent.getId() == id){
+                opponents.remove(opponent);
+            }
+        }
+    }
 }

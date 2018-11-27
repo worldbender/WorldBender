@@ -98,6 +98,9 @@ public class PacketReceiver implements Runnable {
                 if (splitedArray[0].equals("deleteBullet")) {
                     BulletList.removeBulletById(Integer.parseInt(splitedArray[1]));
                 }
+                if (splitedArray[0].equals("deleteOpponent")) {
+                    OpponentList.removeOpponentById(Integer.parseInt(splitedArray[1]));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
