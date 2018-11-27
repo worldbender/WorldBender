@@ -1,4 +1,4 @@
-package com.my.game.Bullets;
+package com.my.game.CBullets;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

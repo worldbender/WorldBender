@@ -10,8 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.my.game.Bullets.ABullet;
-import com.my.game.Bullets.BulletList;
+import com.my.game.CBullets.ABullet;
+import com.my.game.CBullets.BulletList;
 import com.my.game.Connection.Connection;
 import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
@@ -166,14 +166,14 @@ public class GameplayScreen extends AbstractScreen{
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             try {
-                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI/2);
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             try {
-                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI/2);
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)0);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -187,7 +187,7 @@ public class GameplayScreen extends AbstractScreen{
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             try {
-                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI/2);
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)3 * Math.PI/2);
             } catch (Exception e) {
                 e.printStackTrace();
             }

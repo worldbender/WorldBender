@@ -1,6 +1,4 @@
-package com.my.game.Bullets;
-
-import com.badlogic.gdx.graphics.Texture;
+package com.my.game.CBullets;
 
 public class Tear extends ABullet{
     public Tear(int id, float angle){

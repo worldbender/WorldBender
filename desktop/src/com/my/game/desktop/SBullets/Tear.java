@@ -1,4 +1,4 @@
-package com.my.game.desktop.Bullets;
+package com.my.game.desktop.SBullets;
 
 public class Tear extends ABullet {
     public Tear(int x, int y, float angle) {

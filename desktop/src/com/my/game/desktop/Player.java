@@ -1,6 +1,6 @@
 package com.my.game.desktop;
 
-import com.my.game.desktop.Blocks.ABlock;
+import com.my.game.desktop.SBlocks.ABlock;
 
 import java.awt.*;
 import java.util.ArrayList;

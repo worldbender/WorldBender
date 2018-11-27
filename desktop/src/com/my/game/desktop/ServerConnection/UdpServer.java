@@ -1,15 +1,17 @@
 package com.my.game.desktop.ServerConnection;
 
 import com.my.game.desktop.*;
-import com.my.game.desktop.Bullets.ABullet;
-import com.my.game.desktop.Bullets.BulletFabric;
-import com.my.game.desktop.Bullets.BulletList;
+import com.my.game.desktop.SBullets.ABullet;
+import com.my.game.desktop.SBullets.BulletFabric;
+import com.my.game.desktop.SBullets.BulletList;
+import com.my.game.desktop.SOpponents.AOpponent;
+import com.my.game.desktop.SOpponents.OpponentFabric;
+import com.my.game.desktop.SOpponents.OpponentList;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +87,28 @@ public class UdpServer extends Thread {
         for(User user : existingUsers.values()){
             if(user.getConnection())
                 sendPackage(message, user.getAddress(), user.getUdpPort());
+        }
+    }
+    private void createOpponent(){
+        String opponentType = "Schopenheuer";
+        AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);
+        OpponentList.addOpponent(newOpponent);
+        String message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
+        for(User user : existingUsers.values()){
+            if(user.getConnection())
+                sendPackage(message, user.getAddress(), user.getUdpPort());
+        }
+    }
+
+    private void updateOpponentsPosition(){
+        String message;
+        for (User current : existingUsers.values()) {
+            for(AOpponent opponent : OpponentList.getOpponents()){
+                opponent.update(5.0);
+                message = "updateOpponentPosition:"+opponent.getId() + ":" + opponent.getX()+ ":"+ opponent.getY();
+                if(current.getConnection())
+                    sendPackage(message, current.getAddress(), current.getUdpPort());
+            }
         }
     }
 

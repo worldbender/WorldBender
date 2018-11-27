@@ -1,8 +1,8 @@
 package com.my.game.Connection;
 
-import com.my.game.Bullets.ABullet;
-import com.my.game.Bullets.BulletFabric;
-import com.my.game.Bullets.BulletList;
+import com.my.game.CBullets.ABullet;
+import com.my.game.CBullets.BulletFabric;
+import com.my.game.CBullets.BulletList;
 import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
 import java.net.DatagramPacket;

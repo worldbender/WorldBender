@@ -1,6 +1,4 @@
-package com.my.game.desktop.Blocks;
-
-import com.my.game.desktop.Blocks.ABlock;
+package com.my.game.desktop.SBlocks;
 
 public class SolidBlock extends ABlock {
     public SolidBlock(int x1, int y1, int width, int height) {

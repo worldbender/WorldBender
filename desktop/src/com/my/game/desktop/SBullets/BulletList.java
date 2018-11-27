@@ -1,4 +1,4 @@
-package com.my.game.desktop.Bullets;
+package com.my.game.desktop.SBullets;
 
 import java.util.ArrayList;
 import java.util.Collections;

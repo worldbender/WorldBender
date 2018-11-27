@@ -1,7 +1,5 @@
-package com.my.game.Bullets;
+package com.my.game.CBullets;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

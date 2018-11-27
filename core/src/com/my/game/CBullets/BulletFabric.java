@@ -1,4 +1,4 @@
-package com.my.game.Bullets;
+package com.my.game.CBullets;
 
 public class BulletFabric {
     public static ABullet createBullet(String bulletType, int id, float angle){

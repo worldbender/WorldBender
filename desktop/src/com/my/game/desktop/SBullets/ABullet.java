@@ -1,4 +1,4 @@
-package com.my.game.desktop.Bullets;
+package com.my.game.desktop.SBullets;
 
 public class ABullet {
     private int x;
@@ -14,14 +14,18 @@ public class ABullet {
         this.angle = angle;
     }
     public void update(double deltaTime){
-        this.setX(this.getX());
-        this.setY(this.getY() + 5);
+        this.setX(this.getX() + (int)(deltaTime * Math.cos(angle) * bulletSpeed));
+        this.setY(this.getY() + (int)(deltaTime * Math.sin(angle) * bulletSpeed));
+        double shift;
         if(this.getRange() > 0){
-            this.setRange(this.getRange() - 5);
+            shift = Math.sqrt((
+                    deltaTime * Math.cos(angle) * bulletSpeed) * (deltaTime * Math.cos(angle) * bulletSpeed) +
+                    (deltaTime * Math.sin(angle) * bulletSpeed) *(deltaTime * Math.sin(angle) * bulletSpeed)
+            );
+            this.setRange(this.getRange() - (int)shift);
         } else{
             BulletList.removeBullet(this);
         }
-        //TODO Add real logic that bases on angle
     }
 
     public float getAngle() {
