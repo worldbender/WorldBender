@@ -1,6 +1,7 @@
 package com.my.game.COpponents;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * Created by lucyna on 02.11.18.
@@ -17,6 +18,12 @@ public abstract class AOpponent{
     private int id;
     private Texture texture;
 
+    protected AOpponent(int id){
+        this.id = id;
+    }
+    public void draw(SpriteBatch spriteBatch){
+        spriteBatch.draw(this.texture, getX(), getY());
+    }
 
     public boolean isAlive() {
         return alive;

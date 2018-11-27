@@ -125,6 +125,7 @@ public class UdpServer extends Thread {
             if(current.getConnection())
                 sendPackage(message, packet.getAddress(), packet.getPort());
         }
+        createOpponent();
     }
 
     public void sendPackage(String message, InetAddress clientAddress, int clientPort){
@@ -153,6 +154,7 @@ public class UdpServer extends Thread {
         else {
             updatePlayerPosition(id, content);
             updateBulletsPosition();
+            updateOpponentsPosition();
         }
     }
 }

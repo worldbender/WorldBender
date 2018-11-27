@@ -1,8 +1,10 @@
 package com.my.game.desktop.SOpponents;
 
+import java.util.Random;
+
 public class AOpponent {
-    private int x;
-    private int y;
+    private int x = 200;
+    private int y = 200;
     private int id;
     private String type;
 
@@ -10,7 +12,9 @@ public class AOpponent {
     }
 
     public void update(double deltaTime){
-
+        Random generator = new Random();
+        this.setX(this.getX() + generator.nextInt()%10);
+        this.setY(this.getY() + generator.nextInt()%10);
     }
 
     public int getX() {
