@@ -1,4 +1,4 @@
-package com.my.game.desktop;
+package com.my.game.desktop.SBlocks;
 
 import java.awt.*;
 

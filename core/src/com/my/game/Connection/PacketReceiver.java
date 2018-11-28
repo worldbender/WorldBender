@@ -1,5 +1,11 @@
 package com.my.game.Connection;
 
+import com.my.game.CBullets.ABullet;
+import com.my.game.CBullets.BulletFabric;
+import com.my.game.CBullets.BulletList;
+import com.my.game.COpponents.AOpponent;
+import com.my.game.COpponents.OpponentFabric;
+import com.my.game.COpponents.OpponentList;
 import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
 import java.net.DatagramPacket;
@@ -42,6 +48,20 @@ public class PacketReceiver implements Runnable {
             }
         }
     }
+    private void setBulletsPositions(String date){
+        String[] splitedDate = date.split(":");
+        int bulletId = Integer.parseInt(splitedDate[1]);
+        int bulletX = Integer.parseInt(splitedDate[2]);
+        int bulletY = Integer.parseInt(splitedDate[3]);
+        BulletList.setBulletPosition(bulletId, bulletX, bulletY);
+    }
+    private void setOpponentsPosition(String date){
+        String[] splitedDate = date.split(":");
+        int opponentId = Integer.parseInt(splitedDate[1]);
+        int opponentX = Integer.parseInt(splitedDate[2]);
+        int opponentY = Integer.parseInt(splitedDate[3]);
+        OpponentList.setOpponentPosition(opponentId, opponentX, opponentY);
+    }
 
     public void run() {
         while (true) {
@@ -60,6 +80,26 @@ public class PacketReceiver implements Runnable {
                 }
                 if (splitedArray[0].equals("updatePosition")) {
                     setPlayersPositions(received);
+                }
+                if (splitedArray[0].equals("updateBulletPosition")) {
+                    setBulletsPositions(received);
+                }
+                if (splitedArray[0].equals("createBullet")) {
+                    ABullet newBullet = BulletFabric.createBullet(splitedArray[1],Integer.parseInt(splitedArray[2]), Float.parseFloat(splitedArray[3]));
+                    BulletList.addBullet(newBullet);
+                }
+                if (splitedArray[0].equals("updateOpponentPosition")) {
+                    setOpponentsPosition(received);
+                }
+                if (splitedArray[0].equals("createOpponent")) {
+                    AOpponent newOpponent = OpponentFabric.createOpponent(splitedArray[1],Integer.parseInt(splitedArray[2]));
+                    OpponentList.addOpponent(newOpponent);
+                }
+                if (splitedArray[0].equals("deleteBullet")) {
+                    BulletList.removeBulletById(Integer.parseInt(splitedArray[1]));
+                }
+                if (splitedArray[0].equals("deleteOpponent")) {
+                    OpponentList.removeOpponentById(Integer.parseInt(splitedArray[1]));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

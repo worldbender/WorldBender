@@ -10,6 +10,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.my.game.CBullets.ABullet;
+import com.my.game.CBullets.BulletList;
+import com.my.game.COpponents.AOpponent;
+import com.my.game.COpponents.OpponentList;
 import com.my.game.Connection.Connection;
 import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
@@ -20,6 +24,8 @@ import java.util.Map;
 public class GameplayScreen extends AbstractScreen{
 
     private Texture playerTexture;
+    private Texture bulletTexture;
+    private Texture opponentTexture;
     private static Map<String, Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
@@ -55,6 +61,8 @@ public class GameplayScreen extends AbstractScreen{
 
     private void loadData() {
         playerTexture = new Texture("cat.png");
+        bulletTexture = new Texture("granat.png");
+        opponentTexture = new Texture("schopen.png");
     }
 
     private void init() {
@@ -101,6 +109,14 @@ public class GameplayScreen extends AbstractScreen{
             for(Player player : players.values()){
                 player.texture = playerTexture;
                 player.draw(spriteBatch);
+            }
+            for(ABullet bullet : BulletList.getBullets()){
+                bullet.setTexture(bulletTexture);
+                bullet.draw(spriteBatch);
+            }
+            for(AOpponent opponent : OpponentList.getOpponents()){
+                opponent.setTexture(opponentTexture);
+                opponent.draw(spriteBatch);
             }
 
             spriteBatch.end();
@@ -155,6 +171,34 @@ public class GameplayScreen extends AbstractScreen{
                 e.printStackTrace();
             }
           //  screenShiftY -= shiftY;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI/2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)3 * Math.PI/2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             game.changeScreen(WBGame.MENU);

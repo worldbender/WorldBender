@@ -1,5 +1,7 @@
 package com.my.game.desktop;
 
+import com.my.game.desktop.ServerConnection.TcpClientThread;
+
 import java.net.*;
 
 public class User {

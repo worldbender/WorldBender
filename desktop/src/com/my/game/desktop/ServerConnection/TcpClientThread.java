@@ -1,5 +1,10 @@
-package com.my.game.desktop;
+package com.my.game.desktop.ServerConnection;
 
+
+import com.my.game.desktop.ExistingUsers;
+import com.my.game.desktop.Room;
+import com.my.game.desktop.RoomList;
+import com.my.game.desktop.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;

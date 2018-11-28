@@ -1,6 +1,4 @@
-package com.my.game.desktop;
-
-import java.awt.*;
+package com.my.game.desktop.SBlocks;
 
 public class SolidBlock extends ABlock {
     public SolidBlock(int x1, int y1, int width, int height) {

@@ -1,6 +1,9 @@
 package com.my.game.desktop;
 
 import com.badlogic.gdx.Game;
+import com.my.game.desktop.ServerConnection.TcpServer;
+import com.my.game.desktop.ServerConnection.UdpServer;
+
 import java.io.IOException;
 
 class Server extends Game {
