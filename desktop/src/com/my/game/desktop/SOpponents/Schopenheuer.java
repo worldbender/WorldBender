@@ -6,6 +6,6 @@ public class Schopenheuer extends AOpponent{
         this.setType("Schopenheuer");
         this.setWidth(502);
         this.setHeight(538);
-        this.setHp(200);
+        this.setHp(2500);
     }
 }

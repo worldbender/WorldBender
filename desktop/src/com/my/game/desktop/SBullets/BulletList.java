@@ -1,12 +1,12 @@
 package com.my.game.desktop.SBullets;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BulletList {
-    private static List<ABullet> bullets = Collections.synchronizedList(new ArrayList<ABullet>());
-    private static List<ABullet> deadBullets = Collections.synchronizedList(new ArrayList<ABullet>());
+    private static CopyOnWriteArrayList<ABullet> bullets = new CopyOnWriteArrayList<ABullet>();
+    private static CopyOnWriteArrayList<ABullet> deadBullets = new CopyOnWriteArrayList<ABullet>();
+
     public static int id = 0;
     private BulletList(){
 

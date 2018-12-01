@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -29,20 +30,31 @@ public class GameplayScreen extends AbstractScreen{
     private static Map<String, Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
-    public Connection connection;
+    private Connection connection;
     boolean connectionStatus;
-
+    public static Player currentPlayer;
+    private int numerOfXTiles;
+    private int numerOfYTiles;
+    private int tileWidth;
+    private int tileHeight;
+    private int mapWidth;
+    private int mapHeight;
     @Override
     public void show(){
         map = new TmxMapLoader().load("maps/t9.tmx");
         render = new OrthogonalTiledMapRenderer(map);
-
+        this.numerOfXTiles = map.getProperties().get("width", Integer.class);
+        this.numerOfYTiles = map.getProperties().get("height", Integer.class);
+        this.tileWidth = map.getProperties().get("tilewidth", Integer.class);
+        this.tileHeight = map.getProperties().get("tileheight", Integer.class);
+        this.mapWidth = numerOfXTiles * tileWidth;
+        this.mapHeight = numerOfYTiles * tileHeight;
     }
 
     public GameplayScreen(WBGame game) {
         super(game);
         connection = new Connection();
-        create();
+        this.create();
     }
 
     public void create() {
@@ -53,8 +65,8 @@ public class GameplayScreen extends AbstractScreen{
             System.out.println("Nie nawiązano połączenia");
             connectionStatus = false;
         }
-        loadData();
-        init();
+        this.loadData();
+        this.init();
         MusicPlayer musicPlayer = new MusicPlayer();
         musicPlayer.playMusic();
     }
@@ -68,7 +80,6 @@ public class GameplayScreen extends AbstractScreen{
     private void init() {
         camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
         camera.translate(WBGame.WIDTH/2,WBGame.HEIGHT/2);
-        Player player = new Player(playerTexture, true);
         players = PlayerList.getInstance();
     }
 
@@ -85,92 +96,89 @@ public class GameplayScreen extends AbstractScreen{
             }
         }
         else{
-            ShapeRenderer shapeRenderer = new ShapeRenderer();
             super.render(delta);
-            update();
+            this.update();
 
             Gdx.gl.glClearColor(1, 1, 1, 0);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             render.setView(camera);
             render.render();
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(Color.RED);
-            if(WBGame.IS_DEBUG_VERSION){
-                for(Player player : players.values()){
-                    shapeRenderer.rect((float)player.getX(), (float)player.getY() , 56, 56);
-                }
-            }
-            shapeRenderer.end();
+            this.handleMapShift();
             spriteBatch.begin();
             spriteBatch.setProjectionMatrix(camera.combined);
-
-            //player.draw(spriteBatch);
-
-            for(Player player : players.values()){
-                player.texture = playerTexture;
-                player.draw(spriteBatch);
-            }
-            for(ABullet bullet : BulletList.getBullets()){
-                bullet.setTexture(bulletTexture);
-                bullet.draw(spriteBatch);
-            }
-            for(AOpponent opponent : OpponentList.getOpponents()){
-                opponent.setTexture(opponentTexture);
-                opponent.draw(spriteBatch);
-            }
-
+            this.drawAllMovableObjects(spriteBatch);
             spriteBatch.end();
+        }
+    }
+
+    private void drawAllMovableObjects(SpriteBatch spriteBatch){
+        for(Player player : players.values()){
+            player.texture = playerTexture;
+            player.draw(spriteBatch);
+        }
+        for(ABullet bullet : BulletList.getBullets()){
+            bullet.setTexture(bulletTexture);
+            bullet.draw(spriteBatch);
+        }
+        for(AOpponent opponent : OpponentList.getOpponents()){
+            opponent.setTexture(opponentTexture);
+            opponent.draw(spriteBatch);
         }
     }
 
     private void update() {
         handleInput();
-        //camera.update();
-        //camera.position.set(player.x + player.width / 2,
-        //        player.y + 300, 0);
+    }
 
+    private boolean shouldScreenShiftX(){
+        return currentPlayer.getX() >= WBGame.WIDTH/2 && currentPlayer.getX() < (this.mapWidth - WBGame.WIDTH/2);
+    }
+    private boolean shouldScreenShiftY(){
+        return currentPlayer.getY() >= WBGame.HEIGHT/2 && currentPlayer.getY() < (this.mapHeight - WBGame.HEIGHT/2);
+    }
+
+    private void handleMapShift(){
+
+        if(this.shouldScreenShiftX()){
+            camera.position.x = (float)currentPlayer.getX();
+        }
+        if(this.shouldScreenShiftY()){
+            camera.position.y = (float)currentPlayer.getY();
+        }
+    }
+
+    private void sendMessageToServer(String message){
+        try {
+            this.connection.sender.sendMessage(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleInput() {
-        int numerOfXTiles = map.getProperties().get("width", Integer.class);
-        int numerOfYTiles = map.getProperties().get("height", Integer.class);
-        int mapWidth = numerOfXTiles * 32;
-        int mapHeight = numerOfYTiles * 32;
-        int shiftX = 5;
-        int shiftY = 5;
-
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            try {
-                this.connection.sender.sendMessage("A");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-           // screenShiftX -= shiftX;
-
+            this.sendMessageToServer("A");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            try {
-                this.connection.sender.sendMessage("D");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-           // screenShiftX += shiftX;
+            this.sendMessageToServer("D");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            try {
-                this.connection.sender.sendMessage("W");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-          //  screenShiftY += shiftY;
+            this.sendMessageToServer("W");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            try {
-                this.connection.sender.sendMessage("S");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-          //  screenShiftY -= shiftY;
+            this.sendMessageToServer("S");
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            this.sendMessageToServer("createBullet:Tear:"+(float)Math.PI);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            this.sendMessageToServer("createBullet:Tear:"+(float)0);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            this.sendMessageToServer("createBullet:Tear:"+(float)Math.PI/2);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            this.sendMessageToServer("createBullet:Tear:"+(float)3 * Math.PI/2);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             try {
@@ -206,26 +214,6 @@ public class GameplayScreen extends AbstractScreen{
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){
             game.switchScreenMode();
         }
-       /* if(screenShiftX > 1300 && mapPositionX < mapWidth - WBGame.WIDTH - 5){
-            camera.translate(shiftX,0);
-            screenShiftX -= shiftX;
-            mapPositionX += shiftX;
-        }
-        if(screenShiftX < 300 && mapPositionX > 5){
-            camera.translate(-shiftX,0);
-            screenShiftX += shiftX;
-            mapPositionX -= shiftX;
-        }
-        if(screenShiftY < 200 && mapPositionY > 5){
-            camera.translate(0,-shiftY);
-            screenShiftY += shiftY;
-            mapPositionY -= shiftX;
-        }
-        if(screenShiftY > 700 && mapPositionY < mapHeight - WBGame.HEIGHT - 5){
-            camera.translate(0,shiftY);
-            screenShiftY -= shiftY;
-            mapPositionY += shiftX;
-        }*/
         camera.update();
         if(Gdx.input.isKeyPressed(Input.Keys.M)){
             MusicPlayer.initMusic("sounds/meow.mp3");

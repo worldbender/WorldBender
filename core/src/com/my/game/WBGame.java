@@ -22,13 +22,17 @@ public class WBGame extends Game {
     public final static String GAME_NAME = "World Bender";
     public static int WIDTH;
     public static int HEIGHT;
+    public static int RES_WIDTH;
+    public static int RES_HEIGHT;
 
     private boolean paused;
 
     public WBGame(){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        WIDTH = screenSize.width;
-        HEIGHT = screenSize.height;
+        RES_WIDTH = screenSize.width;
+        RES_HEIGHT = screenSize.height;
+        WIDTH = 1600;
+        HEIGHT = 900;
     }
 
     @Override
