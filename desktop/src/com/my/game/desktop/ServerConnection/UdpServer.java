@@ -1,5 +1,6 @@
 package com.my.game.desktop.ServerConnection;
 
+import com.my.game.Connection.PacketSender;
 import com.my.game.desktop.*;
 import com.my.game.desktop.SBullets.ABullet;
 import com.my.game.desktop.SBullets.BulletFabric;
@@ -23,11 +24,16 @@ public class UdpServer extends Thread {
     private List<Room> rooms;
     private Map<String, User> existingUsers;
     private LogicMapHandler logicMapHandler;
+    private Thread senderThread;
+    private UdpSender sender;
     public UdpServer() throws IOException {
         this.socket = new DatagramSocket(PORT);
         this.existingUsers = ExistingUsers.getInstance();
         this.rooms = RoomList.getInstance();
         logicMapHandler = new LogicMapHandler();
+        sender = new UdpSender(socket);
+        senderThread = new Thread(sender);
+        senderThread.start();
     }
 
     public void run() {
@@ -48,33 +54,33 @@ public class UdpServer extends Thread {
         User currentUser = existingUsers.get(id);
 
         currentUser.getPlayer().setPosition(content, logicMapHandler, existingUsers);
-        String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.getPlayer().getX()+ ":"+ currentUser.getPlayer().getY();
+        //String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.getPlayer().getX()+ ":"+ currentUser.getPlayer().getY();
 
-        for (User current : existingUsers.values()) {
-            if(current.getConnection())
-                sendPackage(message, current.getAddress(), current.getUdpPort());
-        }
+        //for (User current : existingUsers.values()) {
+            //if(current.getConnection())
+                //sendPackage(message, current.getAddress(), current.getUdpPort());
+        //}
     }
 
     private void updatePlayerPosition(String id){
-        User currentUser = existingUsers.get(id);
-        String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.getPlayer().getX()+ ":"+ currentUser.getPlayer().getY();
+        //User currentUser = existingUsers.get(id);
+        //String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.getPlayer().getX()+ ":"+ currentUser.getPlayer().getY();
 
-        for (User current : existingUsers.values()) {
-            if(current.getConnection())
-                sendPackage(message, current.getAddress(), current.getUdpPort());
-        }
+        //for (User current : existingUsers.values()) {
+            //if(current.getConnection())
+                //sendPackage(message, current.getAddress(), current.getUdpPort());
+        //}
     }
     private void updateBulletsPosition(){
-        String message;
-        for (User current : existingUsers.values()) {
-            for(ABullet bullet : BulletList.getBullets()){
-                bullet.update(5.0, logicMapHandler);
-                message = "updateBulletPosition:"+bullet.getId() + ":" + bullet.getX()+ ":"+ bullet.getY();
-                if(current.getConnection())
-                    sendPackage(message, current.getAddress(), current.getUdpPort());
-            }
-        }
+        //String message;
+        //for (User current : existingUsers.values()) {
+            //for(ABullet bullet : BulletList.getBullets()){
+                //bullet.update(5.0, logicMapHandler);
+                //message = "updateBulletPosition:"+bullet.getId() + ":" + bullet.getX()+ ":"+ bullet.getY();
+                //if(current.getConnection())
+                    //sendPackage(message, current.getAddress(), current.getUdpPort());
+            //}
+        //}
     }
     private void createBullet(String id, String content){
         User currentUser = existingUsers.get(id);
@@ -105,9 +111,9 @@ public class UdpServer extends Thread {
         for (User current : existingUsers.values()) {
             for(AOpponent opponent : OpponentList.getOpponents()){
                 opponent.update(5.0);
-                message = "updateOpponentPosition:"+opponent.getId() + ":" + opponent.getX()+ ":"+ opponent.getY();
-                if(current.getConnection())
-                    sendPackage(message, current.getAddress(), current.getUdpPort());
+                //message = "updateOpponentPosition:"+opponent.getId() + ":" + opponent.getX()+ ":"+ opponent.getY();
+                //if(current.getConnection())
+                    //sendPackage(message, current.getAddress(), current.getUdpPort());
             }
         }
     }
@@ -132,8 +138,8 @@ public class UdpServer extends Thread {
         for(ABullet bullet : BulletList.getDeadBullets()){
             message = "deleteBullet:" + bullet.getId();
             for (User current : existingUsers.values()) {
-                if(current.getConnection())
-                    sendPackage(message, current.getAddress(), current.getUdpPort());
+                //if(current.getConnection())
+                    //sendPackage(message, current.getAddress(), current.getUdpPort());
             }
         }
         BulletList.flushDeadBullets();
@@ -143,8 +149,8 @@ public class UdpServer extends Thread {
         for(AOpponent opponent : OpponentList.getDeadOpponents()){
             message = "deleteOpponent:" + opponent.getId();
             for (User current : existingUsers.values()) {
-                if(current.getConnection())
-                    sendPackage(message, current.getAddress(), current.getUdpPort());
+                //if(current.getConnection())
+                    //sendPackage(message, current.getAddress(), current.getUdpPort());
             }
         }
         OpponentList.flushDeadOpponents();
@@ -175,10 +181,10 @@ public class UdpServer extends Thread {
         }
         else {
             updatePlayerPosition(id, content);
-            updateBulletsPosition();
-            updateOpponentsPosition();
-            informClientsAboutDeadBullets();
-            informClientsAboutDeadOpponents();
+            //updateBulletsPosition();
+            //updateOpponentsPosition();
+            //informClientsAboutDeadBullets();
+            //informClientsAboutDeadOpponents();
         }
     }
 }
