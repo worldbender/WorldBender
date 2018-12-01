@@ -8,6 +8,8 @@ import com.my.game.COpponents.OpponentFabric;
 import com.my.game.COpponents.OpponentList;
 import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
+import screens.GameplayScreen;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.Map;
@@ -36,16 +38,18 @@ public class PacketReceiver implements Runnable {
     private void setPlayers(String received) {
         String[] splitedArray = received.split(":");
         Player p = new Player(splitedArray[1], splitedArray[2], splitedArray[3]);
-
+        p.setCurrentPlayer(true);
+        GameplayScreen.currentPlayer = p;
         players.put(splitedArray[1],p);
     }
 
     private void setPlayersPositions(String received) {
         String[] splitedArray = received.split(":");
-        for (Player d : players.values()) {
-            if (d.getName().equals(splitedArray[1])) {
-                d.setPosition(Integer.parseInt(splitedArray[2]), Integer.parseInt(splitedArray[3]));
+        for (Player player : players.values()) {
+            if (player.getName().equals(splitedArray[1])) {
+                player.setPosition(Integer.parseInt(splitedArray[2]), Integer.parseInt(splitedArray[3]));
             }
+
         }
     }
     private void setBulletsPositions(String date){

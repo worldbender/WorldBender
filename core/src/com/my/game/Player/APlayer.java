@@ -6,7 +6,7 @@ import java.awt.*;
 public abstract class APlayer extends Rectangle {
     public Texture texture;
     protected String name;
-    boolean currentPlayer = false;
+    protected boolean currentPlayer = false;
     public APlayer(){
 
     }
@@ -40,5 +40,13 @@ public abstract class APlayer extends Rectangle {
     }
     public void setY(double y){
         super.y = (int)y;
+    }
+
+    public boolean isCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(boolean currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 }
