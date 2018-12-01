@@ -107,7 +107,6 @@ public class GameplayScreen extends AbstractScreen{
             spriteBatch.begin();
             spriteBatch.setProjectionMatrix(camera.combined);
             this.drawAllMovableObjects(spriteBatch);
-
             spriteBatch.end();
         }
     }
@@ -180,6 +179,34 @@ public class GameplayScreen extends AbstractScreen{
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             this.sendMessageToServer("createBullet:Tear:"+(float)3 * Math.PI/2);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI/2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            try {
+                this.connection.sender.sendMessage("createBullet:Tear:"+(float)3 * Math.PI/2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             game.changeScreen(WBGame.MENU);
