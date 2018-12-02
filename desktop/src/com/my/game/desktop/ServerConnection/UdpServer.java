@@ -1,6 +1,5 @@
 package com.my.game.desktop.ServerConnection;
 
-import com.my.game.Connection.PacketSender;
 import com.my.game.desktop.*;
 import com.my.game.desktop.SBullets.ABullet;
 import com.my.game.desktop.SBullets.BulletFabric;
@@ -52,36 +51,10 @@ public class UdpServer extends Thread {
 
     private void updatePlayerPosition(String id, String content){
         User currentUser = existingUsers.get(id);
-
         currentUser.getPlayer().setPosition(content, logicMapHandler, existingUsers);
-        //String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.getPlayer().getX()+ ":"+ currentUser.getPlayer().getY();
-
-        //for (User current : existingUsers.values()) {
-            //if(current.getConnection())
-                //sendPackage(message, current.getAddress(), current.getUdpPort());
-        //}
     }
 
-    private void updatePlayerPosition(String id){
-        //User currentUser = existingUsers.get(id);
-        //String message = "updatePosition:"+currentUser.getName() + ":" + currentUser.getPlayer().getX()+ ":"+ currentUser.getPlayer().getY();
 
-        //for (User current : existingUsers.values()) {
-            //if(current.getConnection())
-                //sendPackage(message, current.getAddress(), current.getUdpPort());
-        //}
-    }
-    private void updateBulletsPosition(){
-        //String message;
-        //for (User current : existingUsers.values()) {
-            //for(ABullet bullet : BulletList.getBullets()){
-                //bullet.update(5.0, logicMapHandler);
-                //message = "updateBulletPosition:"+bullet.getId() + ":" + bullet.getX()+ ":"+ bullet.getY();
-                //if(current.getConnection())
-                    //sendPackage(message, current.getAddress(), current.getUdpPort());
-            //}
-        //}
-    }
     private void createBullet(String id, String content){
         User currentUser = existingUsers.get(id);
         String[] splitedContent = content.split(":");
@@ -106,24 +79,11 @@ public class UdpServer extends Thread {
         }
     }
 
-    private void updateOpponentsPosition(){
-        String message;
-        for (User current : existingUsers.values()) {
-            for(AOpponent opponent : OpponentList.getOpponents()){
-                opponent.update(5.0);
-                //message = "updateOpponentPosition:"+opponent.getId() + ":" + opponent.getX()+ ":"+ opponent.getY();
-                //if(current.getConnection())
-                    //sendPackage(message, current.getAddress(), current.getUdpPort());
-            }
-        }
-    }
-
     private void initNewPlayer(String id, DatagramPacket packet){
         sendPackage("Server: Connected", packet.getAddress(), packet.getPort());
 
         for(User user : existingUsers.values()){
             sendPackage("newPlayer:player" + (existingUsers.size()-1), user.getAddress(), user.getUdpPort());
-            updatePlayerPosition(id);
         }
 
         for (User current : existingUsers.values()) {
@@ -132,28 +92,6 @@ public class UdpServer extends Thread {
                 sendPackage(message, packet.getAddress(), packet.getPort());
         }
         createOpponent();
-    }
-    private void informClientsAboutDeadBullets(){
-        String message;
-        for(ABullet bullet : BulletList.getDeadBullets()){
-            message = "deleteBullet:" + bullet.getId();
-            for (User current : existingUsers.values()) {
-                //if(current.getConnection())
-                    //sendPackage(message, current.getAddress(), current.getUdpPort());
-            }
-        }
-        BulletList.flushDeadBullets();
-    }
-    private void informClientsAboutDeadOpponents(){
-        String message;
-        for(AOpponent opponent : OpponentList.getDeadOpponents()){
-            message = "deleteOpponent:" + opponent.getId();
-            for (User current : existingUsers.values()) {
-                //if(current.getConnection())
-                    //sendPackage(message, current.getAddress(), current.getUdpPort());
-            }
-        }
-        OpponentList.flushDeadOpponents();
     }
 
     public void sendPackage(String message, InetAddress clientAddress, int clientPort){
@@ -181,10 +119,6 @@ public class UdpServer extends Thread {
         }
         else {
             updatePlayerPosition(id, content);
-            //updateBulletsPosition();
-            //updateOpponentsPosition();
-            //informClientsAboutDeadBullets();
-            //informClientsAboutDeadOpponents();
         }
     }
 }
