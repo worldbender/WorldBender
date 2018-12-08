@@ -2,6 +2,7 @@ package com.my.game.Connection;
 
 import com.my.game.Player.Player;
 import com.my.game.Player.PlayerList;
+import com.my.game.Prosperites;
 import com.my.game.WBGame;
 
 import java.io.*;
@@ -9,7 +10,7 @@ import java.net.Socket;
 import java.util.Map;
 
 public class TCPConnection extends Thread {
-    private final int PORT = 10008;
+    private final int PORT = Integer.parseInt(Prosperites.loadConfigFile("PortTcp"));
     private String hostname;
     private Socket socket;
     private PrintWriter out;
