@@ -11,8 +11,9 @@ import java.util.Properties;
  */
 public class Prosperites {
 
-    public static void createConfigFile() {
+    private static final String PATH = "../../config.properties";
 
+    public static void createConfigFile() {
         Properties prop = new Properties();
         FileOutputStream output = null;
         try {
@@ -20,7 +21,7 @@ public class Prosperites {
             prop.put("PortTcp", "10008");
             prop.put("PortUdp", "7331");
 
-            output = new FileOutputStream("config.properties");
+            output = new FileOutputStream(PATH);
             prop.store(output, "program settings");
         } catch (Exception io) {
             io.printStackTrace();
@@ -40,7 +41,7 @@ public class Prosperites {
         Properties prop = new Properties();
         FileInputStream input = null;
         try {
-            input = new FileInputStream("config.properties");
+            input = new FileInputStream(PATH);
             prop.load(input);
         } catch (IOException io) {
             io.printStackTrace();
@@ -61,7 +62,7 @@ public class Prosperites {
         Properties prop = new Properties();
         FileInputStream input = null;
         try {
-            input  = new FileInputStream("config.properties");
+            input  = new FileInputStream(PATH);
             prop.load(input);
 
             Enumeration<?> e = prop.propertyNames();

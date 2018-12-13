@@ -8,7 +8,6 @@ import com.my.game.WBGame;
 public class DesktopLauncher {
 	static LwjglApplicationConfiguration config;
 	public static void main (String[] arg) {
-		Prosperites.createConfigFile();
 
 		config = new LwjglApplicationConfiguration();
 
