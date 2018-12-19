@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class DesktopLauncher {
 	static LwjglApplicationConfiguration config;
 	public static void main (String[] arg) {
+
 		config = new LwjglApplicationConfiguration();
 
 		config.title = WBGame.GAME_NAME;
