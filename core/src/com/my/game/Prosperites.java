@@ -11,7 +11,7 @@ import java.util.Properties;
  */
 public class Prosperites {
 
-    private static final String PATH = "../../config.properties";
+    private static final String PATH = "config.properties";
 
     public static void createConfigFile() {
         Properties prop = new Properties();
