@@ -64,7 +64,7 @@ public class WBGame extends Game {
     public void switchScreenMode(){
         Boolean fullScreen = Gdx.graphics.isFullscreen();
         Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
-        if (fullScreen == true)
+        if (fullScreen)
             Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
         else
             Gdx.graphics.setFullscreenMode(currentMode);
