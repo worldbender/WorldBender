@@ -48,6 +48,7 @@ public class PacketReceiver implements Runnable {
         for (Player player : players.values()) {
             if (player.getName().equals(splitedArray[1])) {
                 player.setPosition(Integer.parseInt(splitedArray[2]), Integer.parseInt(splitedArray[3]));
+                player.setHp(Integer.parseInt(splitedArray[4]));
             }
 
         }

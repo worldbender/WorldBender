@@ -7,6 +7,7 @@ public abstract class APlayer extends Rectangle {
     public Texture texture;
     protected String name;
     protected boolean currentPlayer = false;
+    private int hp;
     public APlayer(){
 
     }
@@ -48,5 +49,13 @@ public abstract class APlayer extends Rectangle {
 
     public void setCurrentPlayer(boolean currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 }
