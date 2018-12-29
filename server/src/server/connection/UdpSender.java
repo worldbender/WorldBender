@@ -65,7 +65,7 @@ public class UdpSender implements Runnable{
     public void sendPlayerPositionPackage(){
         for (User current : existingUsers.values()) {
             for (User u : existingUsers.values()) {
-                String message = "updatePosition:"+u.getName() + ":" + u.getPlayer().getX()+ ":"+ u.getPlayer().getY();
+                String message = "updatePosition:"+u.getName() + ":" + u.getPlayer().getX()+ ":"+ u.getPlayer().getY() + ":" + u.getPlayer().getHp();
                 if(current.getConnection())
                     sendPackage(message, current.getAddress(), current.getUdpPort());
             }

@@ -1,11 +1,14 @@
 package com.my.game.player;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
 public class Player extends APlayer {
-
+    public static double maxHp = 10;
     public Player(Texture texture, boolean currentPlayer){
         super();
         this.texture = texture;
@@ -29,6 +32,22 @@ public class Player extends APlayer {
     }
     public void draw(SpriteBatch batch){
         batch.draw(this.texture, (int)this.getX(), (int)this.getY());
+    }
+
+    public void drawHp(SpriteBatch batch){
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        batch.end();
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect((int)this.getX() - 10, (int)this.getY(), 10, (float)(30 * (this.getHp()/Player.maxHp)));
+        shapeRenderer.end();
+        batch.begin();
+    }
+
+    public void drawName(SpriteBatch batch){
+        BitmapFont font = new BitmapFont();
+        font.draw(batch, this.getName(), (int)this.getX(), (int)this.getY() + this.texture.getHeight() + font.getCapHeight());
     }
 
     public boolean isCurrentPlayer(){
