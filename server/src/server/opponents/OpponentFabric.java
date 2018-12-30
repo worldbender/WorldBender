@@ -7,6 +7,9 @@ public class OpponentFabric {
             case "Schopenheuer":
                 resultOpponent = new Schopenheuer();
                 break;
+            case "Nietzsche":
+                resultOpponent = new Nietzsche();
+                break;
         }
         return resultOpponent;
     }

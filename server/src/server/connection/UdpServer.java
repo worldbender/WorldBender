@@ -69,10 +69,18 @@ public class UdpServer extends Thread {
         }
     }
     private void createOpponent(){
-        String opponentType = "Schopenheuer";
+        String opponentType = "Nietzsche";
         AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);
         OpponentList.addOpponent(newOpponent);
         String message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
+        for(User user : existingUsers.values()){
+            if(user.getConnection())
+                sendPackage(message, user.getAddress(), user.getUdpPort());
+        }
+        opponentType = "Schopenheuer";
+        newOpponent = OpponentFabric.createOpponent(opponentType);
+        OpponentList.addOpponent(newOpponent);
+        message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
         for(User user : existingUsers.values()){
             if(user.getConnection())
                 sendPackage(message, user.getAddress(), user.getUdpPort());

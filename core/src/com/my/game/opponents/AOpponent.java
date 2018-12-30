@@ -16,14 +16,11 @@ public abstract class AOpponent{
     private int attack = 0;
     private int movement = 0;
     private int id;
-    private Texture texture;
 
     protected AOpponent(int id){
         this.id = id;
     }
-    public void draw(SpriteBatch spriteBatch){
-        spriteBatch.draw(this.texture, getX(), getY());
-    }
+    public abstract void draw(SpriteBatch spriteBatch);
 
     public boolean isAlive() {
         return alive;
@@ -55,14 +52,6 @@ public abstract class AOpponent{
 
     public void setMovement(int movement) {
         this.movement = movement;
-    }
-
-    public Texture getTexture() {
-        return texture;
-    }
-
-    public void setTexture(Texture texture) {
-        this.texture = texture;
     }
 
     public int getId() {

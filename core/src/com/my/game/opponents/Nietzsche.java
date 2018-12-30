@@ -3,14 +3,13 @@ package com.my.game.opponents;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Schopenheuer extends AOpponent {
+public class Nietzsche extends AOpponent {
     public static Texture texture;
-    public Schopenheuer(int id){
+    public Nietzsche(int id){
         super(id);
     }
-
     @Override
     public void draw(SpriteBatch spriteBatch) {
-        spriteBatch.draw(Schopenheuer.texture, this.getX(), this.getY());
+        spriteBatch.draw(Nietzsche.texture, this.getX(), this.getY());
     }
 }

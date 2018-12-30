@@ -1,7 +1,9 @@
 package com.my.game.bullets;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class ABullet {
     private int x;
@@ -12,7 +14,19 @@ public class ABullet {
     private float angle;
     private Texture texture;
     public void draw(SpriteBatch spriteBatch){
-        spriteBatch.draw(this.texture, x, y);
+        float angle = ((this.getAngle() - (float)(Math.PI/2))*(float)(180f/Math.PI)) ;
+        spriteBatch.draw(
+                new TextureRegion(this.texture),
+                x,
+                y,
+                this.texture.getWidth()/2f,
+                this.texture.getHeight()/2f,
+                this.texture.getWidth(),
+                this.texture.getHeight(),
+                1f,
+                1f,
+                angle
+        );
     }
     public void setPosition(int x, int y){
         this.setX(x);
