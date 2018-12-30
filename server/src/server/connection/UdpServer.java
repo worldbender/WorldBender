@@ -54,20 +54,22 @@ public class UdpServer extends Thread {
         currentUser.getPlayer().setPosition(content, logicMapHandler, existingUsers);
     }
 
-
     private void createBullet(String id, String content){
         User currentUser = existingUsers.get(id);
-        String[] splitedContent = content.split(":");
-        String bulletType = splitedContent[1];
-        String angle = splitedContent[2];
-        ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getX(), currentUser.getPlayer().getY(), Float.parseFloat(angle));
-        BulletList.addBullet(newBullet);
-        String message = "createBullet:" + newBullet.getType() + ":" + newBullet.getId() + ":" + newBullet.getAngle();
-        for(User user : existingUsers.values()){
-            if(user.getConnection())
-                sendPackage(message, user.getAddress(), user.getUdpPort());
+        if(currentUser.getPlayer().canPlayerShoot()){
+            String[] splitedContent = content.split(":");
+            String bulletType = splitedContent[1];
+            String angle = splitedContent[2];
+            ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getX(), currentUser.getPlayer().getY(), Float.parseFloat(angle));
+            BulletList.addBullet(newBullet);
+            String message = "createBullet:" + newBullet.getType() + ":" + newBullet.getId() + ":" + newBullet.getAngle();
+            for(User user : existingUsers.values()){
+                if(user.getConnection())
+                    sendPackage(message, user.getAddress(), user.getUdpPort());
+            }
         }
     }
+
     private void createOpponent(){
         String opponentType = "Nietzsche";
         AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);

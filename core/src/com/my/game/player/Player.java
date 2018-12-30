@@ -32,9 +32,11 @@ public class Player extends APlayer {
     }
     public void draw(SpriteBatch batch){
         batch.draw(this.texture, (int)this.getX(), (int)this.getY());
+        this.drawHp(batch);
+        this.drawName(batch);
     }
 
-    public void drawHp(SpriteBatch batch){
+    private void drawHp(SpriteBatch batch){
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         batch.end();
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
@@ -45,7 +47,7 @@ public class Player extends APlayer {
         batch.begin();
     }
 
-    public void drawName(SpriteBatch batch){
+    private void drawName(SpriteBatch batch){
         BitmapFont font = new BitmapFont();
         font.draw(batch, this.getName(), (int)this.getX(), (int)this.getY() + this.texture.getHeight() + font.getCapHeight());
     }

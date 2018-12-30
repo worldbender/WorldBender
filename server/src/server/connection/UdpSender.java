@@ -12,24 +12,35 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Date;
 import java.util.Map;
 
 public class UdpSender implements Runnable{
     private DatagramSocket socket;
     private Map<String, User> existingUsers;
-    LogicMapHandler logicMapHandler;
+    private LogicMapHandler logicMapHandler;
+    private static long deltaTime = 0L;
+    private final long MILISECONDS_BEETWEEN_FRAMES = 16L;
     public UdpSender(DatagramSocket socket){
         this.existingUsers = ExistingUsers.getInstance();
         this.socket = socket;
         logicMapHandler = new LogicMapHandler();
     }
+
     public void run(){
+        long timeBefore;
+        long timeAfter;
         while(true){
-            sendPlayerPositionPackage();
-            sendBulletPositionPackage();
-            sendOpponentPositionPackage();
-            informClientsAboutDeadBullets();
-            informClientsAboutDeadOpponents();
+            timeBefore = new Date().getTime();
+            this.doGameLoop();
+            this.sleepIfNecessary();
+            timeAfter = new Date().getTime();
+            deltaTime = timeAfter - timeBefore;
+        }
+    }
+
+    private void sleepIfNecessary(){
+        if(deltaTime < MILISECONDS_BEETWEEN_FRAMES){
             try {
                 Thread.sleep(16);
             } catch (InterruptedException e) {
@@ -38,11 +49,19 @@ public class UdpSender implements Runnable{
         }
     }
 
+    private void doGameLoop(){
+        sendPlayerPositionPackage();
+        sendBulletPositionPackage();
+        sendOpponentPositionPackage();
+        informClientsAboutDeadBullets();
+        informClientsAboutDeadOpponents();
+    }
+
     private void sendOpponentPositionPackage() {
         String message;
         for (User current : existingUsers.values()) {
             for(AOpponent opponent : OpponentList.getOpponents()){
-                opponent.update(5.0);
+                opponent.update(deltaTime);
                 message = "updateOpponentPosition:"+opponent.getId() + ":" + opponent.getX()+ ":"+ opponent.getY();
                 if(current.getConnection())
                     sendPackage(message, current.getAddress(), current.getUdpPort());
@@ -54,7 +73,7 @@ public class UdpSender implements Runnable{
         String message;
         for (User current : existingUsers.values()) {
             for(ABullet bullet : BulletList.getBullets()){
-                bullet.update(5.0, logicMapHandler);
+                bullet.update(deltaTime, logicMapHandler);
                 message = "updateBulletPosition:"+bullet.getId() + ":" + bullet.getX()+ ":"+ bullet.getY();
                 if(current.getConnection())
                     sendPackage(message, current.getAddress(), current.getUdpPort());
@@ -103,5 +122,8 @@ public class UdpSender implements Runnable{
             }
         }
         OpponentList.flushDeadOpponents();
+    }
+    public static long getDeltaTime() {
+        return deltaTime;
     }
 }
