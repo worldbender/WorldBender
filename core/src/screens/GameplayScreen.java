@@ -12,8 +12,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
 import com.my.game.opponents.AOpponent;
+import com.my.game.opponents.Nietzsche;
 import com.my.game.opponents.OpponentList;
 import com.my.game.connection.Connection;
+import com.my.game.opponents.Schopenheuer;
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
 import com.my.game.WBGame;
@@ -24,7 +26,6 @@ public class GameplayScreen extends AbstractScreen{
 
     private Texture playerTexture;
     private Texture bulletTexture;
-    private Texture opponentTexture;
     private static Map<String, Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
@@ -72,7 +73,8 @@ public class GameplayScreen extends AbstractScreen{
     private void loadData() {
         playerTexture = new Texture("cat.png");
         bulletTexture = new Texture("granat.png");
-        opponentTexture = new Texture("schopen.png");
+        Schopenheuer.texture = new Texture("schopen.png");
+        Nietzsche.texture = new Texture("nietzsche.png");
     }
 
     private void init() {
@@ -121,7 +123,6 @@ public class GameplayScreen extends AbstractScreen{
             bullet.draw(spriteBatch);
         }
         for(AOpponent opponent : OpponentList.getOpponents()){
-            opponent.setTexture(opponentTexture);
             opponent.draw(spriteBatch);
         }
     }
