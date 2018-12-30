@@ -3,6 +3,7 @@ package com.my.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
+import screens.RoomScreen;
 import screens.SplashScreen;
 import screens.MenuScreen;
 import screens.GameplayScreen;
@@ -12,9 +13,14 @@ public class WBGame extends Game {
 
     private GameplayScreen gameplayScreen;
     private MenuScreen menuScreen;
+    private RoomScreen roomScreen;
 
     public final static int MENU = 0;
     public final static int PLAY = 1;
+    public final static int ROOM = 2;
+
+    private int currentRoom = 0;
+
     public final static String SERVER_ADRESS = Prosperites.loadConfigFile("ip");
     public final static boolean IS_DEBUG_VERSION = true;
 //    public final static int APPLICATION = 2;
@@ -51,12 +57,14 @@ public class WBGame extends Game {
     public void changeScreen(int screen){
         switch(screen){
             case MENU:
-                if(menuScreen == null) menuScreen = new MenuScreen(this);
-                this.setScreen(menuScreen);
+                this.setScreen(new MenuScreen(this));
                 break;
             case PLAY:
                 if(gameplayScreen == null) gameplayScreen = new GameplayScreen(this);
                 this.setScreen(gameplayScreen);
+                break;
+            case ROOM:
+                this.setScreen(new RoomScreen(this));
                 break;
         }
     }

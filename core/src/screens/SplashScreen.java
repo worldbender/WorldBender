@@ -11,7 +11,6 @@ public class SplashScreen extends AbstractScreen{
 
     public SplashScreen(final WBGame game) {
         super(game);
-        init();
 
         Timer.schedule(new Task() {
             @Override
@@ -21,18 +20,10 @@ public class SplashScreen extends AbstractScreen{
         }, 2);
     }
 
-    private void init() {
-        // TODO implement better assets loading when game grows
-        splashImg = new Texture("mount1.jpg");
-
-    }
-
     @Override
     public void render(float delta) {
         super.render(delta);
 
-        spriteBatch.begin();
-        spriteBatch.draw(splashImg, 0, 0,WBGame.WIDTH, WBGame.HEIGHT);
-        spriteBatch.end();
+        drawBackground();
     }
 }
