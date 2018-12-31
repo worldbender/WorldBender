@@ -51,7 +51,7 @@ public class TcpClientThread extends Thread{
             for (User current : existingUsers.values()) {
                 current.getThread().sendMessage("dc:"+user.getName());
             }
-            System.out.println("Rozłączono");
+            System.out.println("Communication lost with Thread " + clientSocket.getPort());
         }
     }
 
@@ -65,7 +65,7 @@ public class TcpClientThread extends Thread{
             newPlayer(splitedArray[1]);
         }
 
-        System.out.println("echo: " + message);
+        //System.out.println("echo: " + message);
     }
 
     public void newPlayer(String udpPort){

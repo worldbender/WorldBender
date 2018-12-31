@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UdpServer extends Thread {
-    private final static int PORT = 7331;
+    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortUdp"));
     private final static int BUFFER = 1024;
     private DatagramSocket socket;
     private List<Room> rooms;
@@ -118,15 +118,12 @@ public class UdpServer extends Thread {
         InetAddress clientAddress = packet.getAddress();
         int clientPort = packet.getPort();
         String id = clientAddress.toString() + "," + clientPort;
-        System.out.println(id + ":" + content);
+        //System.out.println(id + ":" + content);
         String[] splitedArray = content.split(":");
-        if ("greetings".equals(splitedArray[0])) {
-            initNewPlayer(id, packet);
-        }else if("createBullet".equals(splitedArray[0])){
-            createBullet(id, content);
-        }
-        else {
-            updatePlayerPosition(id, content);
+        switch (splitedArray[0]){
+            case "greetings": initNewPlayer(id, packet); break;
+            case "createBullet": createBullet(id, content); break;
+            default: updatePlayerPosition(id, content); break;
         }
     }
 }
