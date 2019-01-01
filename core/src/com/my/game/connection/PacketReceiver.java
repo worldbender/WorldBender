@@ -74,37 +74,30 @@ public class PacketReceiver implements Runnable {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
-                System.out.println(received);
+                //System.out.println(received);
                 String[] splitedArray = received.split(":");
 
-                if (splitedArray[0].equals("newPlayer")) {
-                    newPlayer(splitedArray[1]);
-                }
-                if (splitedArray[0].equals("init")) {
-                    setPlayers(received);
-                }
-                if (splitedArray[0].equals("updatePosition")) {
-                    setPlayersPositions(received);
-                }
-                if (splitedArray[0].equals("updateBulletPosition")) {
-                    setBulletsPositions(received);
-                }
-                if (splitedArray[0].equals("createBullet")) {
-                    ABullet newBullet = BulletFabric.createBullet(splitedArray[1],Integer.parseInt(splitedArray[2]), Float.parseFloat(splitedArray[3]));
-                    BulletList.addBullet(newBullet);
-                }
-                if (splitedArray[0].equals("updateOpponentPosition")) {
-                    setOpponentsPosition(received);
-                }
-                if (splitedArray[0].equals("createOpponent")) {
-                    AOpponent newOpponent = OpponentFabric.createOpponent(splitedArray[1],Integer.parseInt(splitedArray[2]));
-                    OpponentList.addOpponent(newOpponent);
-                }
-                if (splitedArray[0].equals("deleteBullet")) {
-                    BulletList.removeBulletById(Integer.parseInt(splitedArray[1]));
-                }
-                if (splitedArray[0].equals("deleteOpponent")) {
-                    OpponentList.removeOpponentById(Integer.parseInt(splitedArray[1]));
+                switch (splitedArray[0]) {
+                    case "newPlayer":
+                        newPlayer(splitedArray[1]); break;
+                    case "init":
+                        setPlayers(received); break;
+                    case "updatePosition":
+                        setPlayersPositions(received); break;
+                    case "updateBulletPosition":
+                        setBulletsPositions(received); break;
+                    case "createBullet":
+                        ABullet newBullet = BulletFabric.createBullet(splitedArray[1],Integer.parseInt(splitedArray[2]), Float.parseFloat(splitedArray[3]));
+                        BulletList.addBullet(newBullet); break;
+                    case "updateOpponentPosition":
+                        setOpponentsPosition(received); break;
+                    case "createOpponent":
+                        AOpponent newOpponent = OpponentFabric.createOpponent(splitedArray[1],Integer.parseInt(splitedArray[2]));
+                        OpponentList.addOpponent(newOpponent); break;
+                    case "deleteBullet":
+                        BulletList.removeBulletById(Integer.parseInt(splitedArray[1])); break;
+                    case "deleteOpponent":
+                        OpponentList.removeOpponentById(Integer.parseInt(splitedArray[1])); break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();

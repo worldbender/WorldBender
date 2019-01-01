@@ -2,13 +2,13 @@ package com.my.game.connection;
 
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
-import com.my.game.Prosperites;
+import com.my.game.Properties;
 import java.io.*;
 import java.net.Socket;
 import java.util.Map;
 
 public class TCPConnection extends Thread {
-    private final int PORT = Integer.parseInt(Prosperites.loadConfigFile("PortTcp"));
+    private final int PORT = Integer.parseInt(Properties.loadConfigFile("PortTcp"));
     private String hostname;
     private Socket socket;
     private PrintWriter out;
@@ -44,7 +44,7 @@ public class TCPConnection extends Thread {
         if ("dc".equals(splitedArray[0])) {
             players.remove(splitedArray[1]);
         }
-        System.out.println("echo: " + message);
+        System.out.println("remove player: " + message);
     }
 
 }

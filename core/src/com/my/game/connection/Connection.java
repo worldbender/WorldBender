@@ -7,7 +7,7 @@ import java.net.*;
 
 public class Connection {
     InetAddress IPAddress;
-    private String hostName = WBGame.SERVER_ADRESS;
+    private String hostName = WBGame.SERVER_ADDRESS;
     private DatagramSocket socket;
     public TCPConnection tcp;
     public PacketReceiver receiver;
@@ -23,7 +23,7 @@ public class Connection {
             e.printStackTrace();
         }
         try {
-            IPAddress = InetAddress.getByName(WBGame.SERVER_ADRESS);
+            IPAddress = InetAddress.getByName(WBGame.SERVER_ADDRESS);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

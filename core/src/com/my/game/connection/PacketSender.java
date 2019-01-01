@@ -1,6 +1,6 @@
 package com.my.game.connection;
 
-import com.my.game.Prosperites;
+import com.my.game.Properties;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class PacketSender implements Runnable {
-    private final static int PORT = Integer.parseInt(Prosperites.loadConfigFile("PortUdp"));
+    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortUdp"));
     private DatagramSocket socket;
     private String hostname;
 
