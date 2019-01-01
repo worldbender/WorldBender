@@ -104,7 +104,9 @@ public class GameplayScreen extends AbstractScreen{
             render.setView(camera);
             render.render();
             this.handleMapShift();
+
             spriteBatch.begin();
+
             spriteBatch.setProjectionMatrix(camera.combined);
             this.drawAllMovableObjects(spriteBatch);
             spriteBatch.end();

@@ -1,10 +1,10 @@
 package com.my.game.player;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.my.game.UtilitySingletons.ShapeDrawer;
+import com.my.game.UtilitySingletons.StringDrawer;
 
 
 public class Player extends APlayer {
@@ -37,19 +37,13 @@ public class Player extends APlayer {
     }
 
     private void drawHp(SpriteBatch batch){
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
         batch.end();
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect((int)this.getX() - 10, (int)this.getY(), 10, (float)(30 * (this.getHp()/Player.maxHp)));
-        shapeRenderer.end();
+        ShapeDrawer.drawHp(batch, (int)this.getX(), (int)this.getY(), this.getHp(), (int)Player.maxHp);
         batch.begin();
     }
 
     private void drawName(SpriteBatch batch){
-        BitmapFont font = new BitmapFont();
-        font.draw(batch, this.getName(), (int)this.getX(), (int)this.getY() + this.texture.getHeight() + font.getCapHeight());
+        StringDrawer.drawHp(batch, this.getName(), (int)this.getX(), (int)this.getY() + this.texture.getHeight());
     }
 
     public boolean isCurrentPlayer(){
