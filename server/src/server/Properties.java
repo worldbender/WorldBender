@@ -7,7 +7,7 @@ import java.util.Enumeration;
 
 public class Properties {
 
-    private static final String PATH = "config.properties";
+    private static final String PATH = "../../config.properties";
 
     public static void createConfigFile() {
         java.util.Properties prop = new java.util.Properties();
