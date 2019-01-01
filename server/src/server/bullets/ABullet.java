@@ -33,7 +33,7 @@ public class ABullet {
         } else{
             this.isDead = true;
         }
-        this.checkIfBulletShoudDie();
+        this.checkIfBulletShouldDie();
     }
 
     private void handleBulletCollisionWithOpponent(Rectangle rec){
@@ -51,7 +51,7 @@ public class ABullet {
         decrementRange(deltaTime);
     }
 
-    private void checkIfBulletShoudDie(){
+    private void checkIfBulletShouldDie(){
         if(this.isDead){
             deleteBullet();
         }

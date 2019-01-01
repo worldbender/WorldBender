@@ -104,7 +104,9 @@ public class GameplayScreen extends AbstractScreen{
             render.setView(camera);
             render.render();
             this.handleMapShift();
+
             spriteBatch.begin();
+
             spriteBatch.setProjectionMatrix(camera.combined);
             this.drawAllMovableObjects(spriteBatch);
             spriteBatch.end();
@@ -115,8 +117,6 @@ public class GameplayScreen extends AbstractScreen{
         for(Player player : players.values()){
             player.texture = playerTexture;
             player.draw(spriteBatch);
-            player.drawName(spriteBatch);
-            player.drawHp(spriteBatch);
         }
         for(ABullet bullet : BulletList.getBullets()){
             bullet.setTexture(bulletTexture);
