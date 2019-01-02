@@ -60,12 +60,13 @@ public class PacketReceiver implements Runnable {
         int bulletY = Integer.parseInt(splitedDate[3]);
         BulletList.setBulletPosition(bulletId, bulletX, bulletY);
     }
-    private void setOpponentsPosition(String date){
+    private void setOpponentsData(String date){
         String[] splitedDate = date.split(":");
         int opponentId = Integer.parseInt(splitedDate[1]);
         int opponentX = Integer.parseInt(splitedDate[2]);
         int opponentY = Integer.parseInt(splitedDate[3]);
-        OpponentList.setOpponentPosition(opponentId, opponentX, opponentY);
+        int opponentHp = Integer.parseInt(splitedDate[4]);
+        OpponentList.setOpponentData(opponentId, opponentX, opponentY, opponentHp);
     }
 
     public void run() {
@@ -89,8 +90,8 @@ public class PacketReceiver implements Runnable {
                     case "createBullet":
                         ABullet newBullet = BulletFabric.createBullet(splitedArray[1],Integer.parseInt(splitedArray[2]), Float.parseFloat(splitedArray[3]));
                         BulletList.addBullet(newBullet); break;
-                    case "updateOpponentPosition":
-                        setOpponentsPosition(received); break;
+                    case "updateOpponentData":
+                        setOpponentsData(received); break;
                     case "createOpponent":
                         AOpponent newOpponent = OpponentFabric.createOpponent(splitedArray[1],Integer.parseInt(splitedArray[2]));
                         OpponentList.addOpponent(newOpponent); break;

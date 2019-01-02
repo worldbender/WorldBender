@@ -15,11 +15,12 @@ public class OpponentList {
     public static void removeOpponent(AOpponent opponent){
         opponents.remove(opponent);
     }
-    public static void setOpponentPosition(int id, int x, int y){
+    public static void setOpponentData(int id, int x, int y, int hp){
         for(AOpponent opponent : opponents){
             if(opponent.getId() == id){
                 opponent.setX(x);
                 opponent.setY(y);
+                opponent.setHp(hp);
             }
         }
     }
@@ -29,6 +30,7 @@ public class OpponentList {
     public static void removeOpponentById(int id){
         for(AOpponent opponent : opponents){
             if(opponent.getId() == id){
+                opponent.die();
                 opponents.remove(opponent);
             }
         }

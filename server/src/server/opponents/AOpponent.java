@@ -4,8 +4,8 @@ import java.awt.*;
 import java.util.Random;
 
 public class AOpponent {
-    private int x = 200;
-    private int y = 200;
+    private int x = 300;
+    private int y = 300;
     private int width;
     private int height;
     private int id;

@@ -38,7 +38,7 @@ public class Player extends APlayer {
 
     private void drawHp(SpriteBatch batch){
         batch.end();
-        ShapeDrawer.drawHp(batch, (int)this.getX(), (int)this.getY(), this.getHp(), (int)Player.maxHp);
+        ShapeDrawer.drawHp(batch, this.texture.getHeight(), (int)this.getX(), (int)this.getY(), this.getHp(), (int)Player.maxHp);
         batch.begin();
     }
 

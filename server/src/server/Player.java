@@ -13,7 +13,7 @@ public class Player {
     private int width = 56;
     private int height = 56;
     private int moveSpeed = 1;
-    private long shootCooldown = 1000L;
+    private long shootCooldown = 100L;
     private long lastTimePlayerHasShot = 0L;
 
     public Rectangle getBounds(){

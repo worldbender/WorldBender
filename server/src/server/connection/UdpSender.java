@@ -52,17 +52,17 @@ public class UdpSender implements Runnable{
     private void doGameLoop(){
         sendPlayerPositionPackage();
         sendBulletPositionPackage();
-        sendOpponentPositionPackage();
+        sendOpponentDataPackage();
         informClientsAboutDeadBullets();
         informClientsAboutDeadOpponents();
     }
 
-    private void sendOpponentPositionPackage() {
+    private void sendOpponentDataPackage() {
         String message;
         for (User current : existingUsers.values()) {
             for(AOpponent opponent : OpponentList.getOpponents()){
                 opponent.update(deltaTime);
-                message = "updateOpponentPosition:"+opponent.getId() + ":" + opponent.getX()+ ":"+ opponent.getY();
+                message = "updateOpponentData:"+opponent.getId() + ":" + opponent.getX()+ ":"+ opponent.getY() + ":" + opponent.getHp();
                 if(current.getConnection())
                     sendPackage(message, current.getAddress(), current.getUdpPort());
             }
