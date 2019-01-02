@@ -69,8 +69,6 @@ public class Player {
             }
         }
 
-
-
         if(letter=='A'){
             playersNewBoundsRectangle = new Rectangle(this.x - currentShift, this.y, this.width, this.height);
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){

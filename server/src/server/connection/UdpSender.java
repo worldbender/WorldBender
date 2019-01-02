@@ -61,7 +61,7 @@ public class UdpSender implements Runnable{
         String message;
         for (User current : existingUsers.values()) {
             for(AOpponent opponent : OpponentList.getOpponents()){
-                opponent.update(deltaTime);
+                opponent.update(deltaTime, logicMapHandler);
                 message = "updateOpponentData:"+opponent.getId() + ":" + opponent.getX()+ ":"+ opponent.getY() + ":" + opponent.getHp();
                 if(current.getConnection())
                     sendPackage(message, current.getAddress(), current.getUdpPort());
