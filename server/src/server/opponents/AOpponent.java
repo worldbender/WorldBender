@@ -1,11 +1,13 @@
 package server.opponents;
 
+import server.LogicMapHandler;
+
 import java.awt.*;
 import java.util.Random;
 
 public class AOpponent {
-    private int x = 200;
-    private int y = 200;
+    private int x = 300;
+    private int y = 300;
     private int width;
     private int height;
     private int id;
@@ -16,10 +18,19 @@ public class AOpponent {
     protected AOpponent(){
     }
 
-    public void update(double deltaTime){
+    public void update(double deltaTime, LogicMapHandler map){
         Random generator = new Random();
-        this.setX(this.getX() + generator.nextInt()%10);
-        this.setY(this.getY() + generator.nextInt()%10);
+        int newX = this.getX() + generator.nextInt()%10;
+        int newY = this.getY() + generator.nextInt()%10;
+        Rectangle newPosRectangle = new Rectangle(newX, newY, this.getWidth(), this.getHeight());
+        if(!isOpponentCollidesWithMap(newPosRectangle, map)){
+            this.setX(newX);
+            this.setY(newY);
+        }
+    }
+
+    public boolean isOpponentCollidesWithMap(Rectangle rec, LogicMapHandler map){
+        return map.isRectangleCollidesWithMap(rec);
     }
 
     public Rectangle getBounds(){

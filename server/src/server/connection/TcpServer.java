@@ -1,13 +1,11 @@
 package server.connection;
 
-
 import server.Properties;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 
 public class TcpServer extends Thread{
-
     private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortTcp"));
     private ServerSocket serverSocket;
 
