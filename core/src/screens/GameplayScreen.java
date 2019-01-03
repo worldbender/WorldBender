@@ -5,10 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
 import com.my.game.opponents.AOpponent;
@@ -38,6 +41,14 @@ public class GameplayScreen extends AbstractScreen{
     private int tileHeight;
     private int mapWidth;
     private int mapHeight;
+    public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
+    public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
+    public static final int NUMBER_OF_PLAYER_ANIMATION_FRAMES = 5;
+    private Animation<TextureRegion> downWalkAnimation;
+    private Animation<TextureRegion> upWalkAnimation;
+    private Animation<TextureRegion> rightAnimation;
+    private Animation<TextureRegion> leftAnimation;
+    private float stateTime;
     @Override
     public void show(){
         map = new TmxMapLoader().load("maps/t9.tmx");
@@ -75,6 +86,25 @@ public class GameplayScreen extends AbstractScreen{
         bulletTexture = new Texture("granat.png");
         Schopenheuer.texture = new Texture("schopen.png");
         Nietzsche.texture = new Texture("nietzsche.png");
+        Texture walkSheet = new Texture("isaac/downIsaac.png");
+        Texture upWalkSheet = new Texture("isaac/upIsaac.png");
+        Texture leftSheet = new Texture("isaac/leftWalkIsaac.png");
+        Texture rightSheet = new Texture("isaac/rightWalkIsaac.png");
+        Player.downWalkAnimation = getAnimationFrom1DPicture(walkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
+        Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
+        Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
+        Player.leftWalkAnimation = getAnimationFrom1DPicture(leftSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
+        stateTime = 0f;
+    }
+
+    //TODO This method should be in asset manager
+    private Animation<TextureRegion> getAnimationFrom1DPicture(Texture texture, int textureWidth, int textureHeight, int numberOfAnimationFrames){
+        TextureRegion[][] arrayOfWalks = TextureRegion.split(texture, textureWidth, textureHeight);
+        TextureRegion[] walkFrames = new TextureRegion[numberOfAnimationFrames];
+        for (int i = 0; i < numberOfAnimationFrames; i++) {
+            walkFrames[i] = arrayOfWalks[0][i];
+        }
+        return new Animation<TextureRegion>(0.05f, walkFrames);
     }
 
     private void init() {
@@ -85,6 +115,7 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public void render(float delta) {
+        stateTime += Gdx.graphics.getDeltaTime();
         if(!connectionStatus){
             game.changeScreen(WBGame.MENU);
             try{
@@ -103,20 +134,19 @@ public class GameplayScreen extends AbstractScreen{
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             render.setView(camera);
             render.render();
+
             this.handleMapShift();
 
             spriteBatch.begin();
-
             spriteBatch.setProjectionMatrix(camera.combined);
-            this.drawAllMovableObjects(spriteBatch);
+            this.drawAllMovableObjects(spriteBatch, stateTime);
             spriteBatch.end();
         }
     }
 
-    private void drawAllMovableObjects(SpriteBatch spriteBatch){
+    private void drawAllMovableObjects(SpriteBatch spriteBatch, float stateTime){
         for(Player player : players.values()){
-            player.texture = playerTexture;
-            player.draw(spriteBatch);
+            player.draw(spriteBatch, stateTime);
         }
         for(ABullet bullet : BulletList.getBullets()){
             bullet.setTexture(bulletTexture);
@@ -139,7 +169,6 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void handleMapShift(){
-
         if(this.shouldScreenShiftX()){
             camera.position.x = (float)currentPlayer.getX();
         }
@@ -157,6 +186,12 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void handleInput() {
+        this.handleMovementKeys();
+        this.handleArrowKeys();
+        this.handleSpecialKeys();
+    }
+
+    private void handleMovementKeys(){
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.sendMessageToServer("A");
         }
@@ -169,6 +204,9 @@ public class GameplayScreen extends AbstractScreen{
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             this.sendMessageToServer("S");
         }
+    }
+
+    private void handleArrowKeys(){
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             this.sendMessageToServer("createBullet:Tear:"+(float)Math.PI);
         }
@@ -181,44 +219,19 @@ public class GameplayScreen extends AbstractScreen{
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             this.sendMessageToServer("createBullet:Tear:"+(float)3 * Math.PI/2);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            try {
-                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            try {
-                this.connection.sender.sendMessage("createBullet:Tear:"+(float)0);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            try {
-                this.connection.sender.sendMessage("createBullet:Tear:"+(float)Math.PI/2);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            try {
-                this.connection.sender.sendMessage("createBullet:Tear:"+(float)3 * Math.PI/2);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    }
+
+    private void handleSpecialKeys(){
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             game.changeScreen(WBGame.MENU);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){
             game.switchScreenMode();
         }
-        camera.update();
         if(Gdx.input.isKeyPressed(Input.Keys.M)){
             MusicPlayer.initMusic("sounds/meow.mp3");
             MusicPlayer.playStaticMusic();
         }
     }
+
 }

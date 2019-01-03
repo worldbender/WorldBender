@@ -14,7 +14,7 @@ public class ABullet {
     private float angle;
     private Texture texture;
     public void draw(SpriteBatch spriteBatch){
-        float angle = ((this.getAngle() - (float)(Math.PI/2))*(float)(180f/Math.PI)) ;
+        float angle = ((this.getAngle() - (float)(Math.PI/2))*(float)(180f/Math.PI));
         spriteBatch.draw(
                 new TextureRegion(this.texture),
                 x,

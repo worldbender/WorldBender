@@ -55,9 +55,10 @@ public class UdpServer extends Thread {
     }
 
     private void createBullet(String id, String content){
+        String[] splitedContent = content.split(":");
         User currentUser = existingUsers.get(id);
+        currentUser.getPlayer().setActiveMovementKeyByAngle(splitedContent[2]);
         if(currentUser.getPlayer().canPlayerShoot()){
-            String[] splitedContent = content.split(":");
             String bulletType = splitedContent[1];
             String angle = splitedContent[2];
             ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getX(), currentUser.getPlayer().getY(), Float.parseFloat(angle));

@@ -10,14 +10,15 @@ public class Player {
     private int x=500;
     private int y=500;
     private int hp=10;
-    private int width = 56;
-    private int height = 56;
     private int moveSpeed = 1;
     private long shootCooldown = 100L;
     private long lastTimePlayerHasShot = 0L;
-
+    private String activeMovementKey = "DOWN";
+    public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
+    public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
+    private float scale = 2f;
     public Rectangle getBounds(){
-        return new Rectangle(this.x, this.y, this.width, this.height);
+        return new Rectangle(this.x, this.y, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT);
     }
 
     public int getX(){
@@ -55,6 +56,20 @@ public class Player {
         return isPlayerCollidesWithMap(rec, map) ||
                 isRectangleCollidesWithPlayers(rec, players);
     }
+
+    public void setActiveMovementKeyByAngle(String angle){
+        float parsedAngle = Float.parseFloat(angle);
+        if(Math.abs(parsedAngle - Math.PI) < 0.001f){
+            setActiveMovementKey("LEFT");
+        } else if(Math.abs(parsedAngle - Math.PI/2) < 0.001f){
+            setActiveMovementKey("UP");
+        } else if(Math.abs(parsedAngle) < 0.001f){
+            setActiveMovementKey("RIGHT");
+        } else {
+            setActiveMovementKey("DOWN");
+        }
+    }
+
     public void setPosition(String content, LogicMapHandler map, Map<String, User> users){
         char letter = content.charAt(0);
         Rectangle playersNewBoundsRectangle;
@@ -70,25 +85,29 @@ public class Player {
         }
 
         if(letter=='A'){
-            playersNewBoundsRectangle = new Rectangle(this.x - currentShift, this.y, this.width, this.height);
+            this.setActiveMovementKey("LEFT");
+            playersNewBoundsRectangle = new Rectangle(this.x - currentShift, this.y, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT);
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.x -= currentShift;
             }
         }
         else if(letter=='D'){
-            playersNewBoundsRectangle = new Rectangle(this.x + currentShift, this.y, this.width, this.height);
+            this.setActiveMovementKey("RIGHT");
+            playersNewBoundsRectangle = new Rectangle(this.x + currentShift, this.y, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT);
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.x += currentShift;
             }
         }
         else if(letter=='W'){
-            playersNewBoundsRectangle = new Rectangle(this.x, this.y + currentShift, this.width, this.height);
+            this.setActiveMovementKey("UP");
+            playersNewBoundsRectangle = new Rectangle(this.x, this.y + currentShift, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT);
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.y += currentShift;
             }
         }
         else if(letter=='S'){
-            playersNewBoundsRectangle = new Rectangle(this.x, this.y - currentShift, this.width, this.height);
+            this.setActiveMovementKey("DOWN");
+            playersNewBoundsRectangle = new Rectangle(this.x, this.y - currentShift, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT);
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.y -= currentShift;
             }
@@ -113,5 +132,13 @@ public class Player {
 
     public void setMoveSpeed(int moveSpeed) {
         this.moveSpeed = moveSpeed;
+    }
+
+    public String getActiveMovementKey() {
+        return activeMovementKey;
+    }
+
+    public void setActiveMovementKey(String activeMovementKey) {
+        this.activeMovementKey = activeMovementKey;
     }
 }

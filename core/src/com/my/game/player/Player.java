@@ -1,57 +1,101 @@
 package com.my.game.player;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.my.game.UtilitySingletons.ShapeDrawer;
 import com.my.game.UtilitySingletons.StringDrawer;
+import screens.GameplayScreen;
 
 
 public class Player extends APlayer {
     public static double maxHp = 10;
-    public Player(Texture texture, boolean currentPlayer){
+    public static Animation<TextureRegion> downWalkAnimation;
+    public static Animation<TextureRegion> upWalkAnimation;
+    public static Animation<TextureRegion> rightWalkAnimation;
+    public static Animation<TextureRegion> leftWalkAnimation;
+    private String activeMovementKey = "";
+
+    public Player(boolean currentPlayer) {
         super();
-        this.texture = texture;
-        this.setSize(texture.getWidth(), texture.getHeight());
+        this.setSize(GameplayScreen.PLAYER_TEXTURE_WIDTH, GameplayScreen.PLAYER_TEXTURE_WIDTH);
         this.currentPlayer = currentPlayer;
     }
-    public Player(String name, String x, String y){
+
+    public Player(String name, String x, String y) {
         super();
         this.name = name;
         this.setPosition(Integer.parseInt(x), Integer.parseInt(y));
     }
 
-    public Player(String name, int x, int y){
+    public Player(String name, int x, int y) {
         super();
         this.name = name;
         this.setPosition(x, y);
     }
 
-    public Player(){
+    public Player() {
 
     }
-    public void draw(SpriteBatch batch){
-        batch.draw(this.texture, (int)this.getX(), (int)this.getY());
+
+    public void draw(SpriteBatch batch, float stateTime) {
+        this.drawCharacter(batch, stateTime);
         this.drawHp(batch);
         this.drawName(batch);
     }
 
-    private void drawHp(SpriteBatch batch){
+    private void drawCharacter(SpriteBatch batch, float stateTime){
+        switch (activeMovementKey) {
+            case "UP":
+                batch.draw(upWalkAnimation.getKeyFrame(stateTime, true), (int) this.getX(), (int) this.getY());
+                batch.draw(
+                        upWalkAnimation.getKeyFrame(stateTime, true),
+                        (int) this.getX(),
+                        (int) this.getY(),
+                        65,
+                        65
+                );
+                break;
+            case "DOWN":
+                batch.draw(downWalkAnimation.getKeyFrame(stateTime, true), (int) this.getX(), (int) this.getY());
+                break;
+            case "LEFT":
+                batch.draw(leftWalkAnimation.getKeyFrame(stateTime, true), (int) this.getX(), (int) this.getY());
+                break;
+            case "RIGHT":
+                batch.draw(rightWalkAnimation.getKeyFrame(stateTime, true), (int) this.getX(), (int) this.getY());
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    private void drawHp(SpriteBatch batch) {
         batch.end();
-        ShapeDrawer.drawHp(batch, this.texture.getHeight(), (int)this.getX(), (int)this.getY(), this.getHp(), (int)Player.maxHp);
+        ShapeDrawer.drawHp(batch, (int)this.getHeight(), (int) this.getX(), (int) this.getY(), this.getHp(), (int) Player.maxHp);
         batch.begin();
     }
 
-    private void drawName(SpriteBatch batch){
-        StringDrawer.drawHp(batch, this.getName(), (int)this.getX(), (int)this.getY() + this.texture.getHeight());
+    private void drawName(SpriteBatch batch) {
+        StringDrawer.drawHp(batch, this.getName(), (int) this.getX(), (int) this.getY() + (int)this.getHeight());
     }
 
-    public boolean isCurrentPlayer(){
+    public boolean isCurrentPlayer() {
         return currentPlayer;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
+    public String getActiveMovementKey() {
+        return activeMovementKey;
+    }
+
+    public void setActiveMovementKey(String activeMovementKey) {
+        this.activeMovementKey = activeMovementKey;
+    }
 }
