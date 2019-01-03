@@ -9,16 +9,25 @@ public class Player {
 
     private int x=500;
     private int y=500;
+    private int width;
+    private int height;
     private int hp=10;
     private int moveSpeed = 1;
     private long shootCooldown = 100L;
     private long lastTimePlayerHasShot = 0L;
     private String activeMovementKey = "DOWN";
+    private boolean isMoving = false;
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
     private float scale = 2f;
+
+    public Player(){
+        this.setWidth((int)(PLAYER_TEXTURE_WIDTH * scale));
+        this.setHeight((int)(PLAYER_TEXTURE_HEIGHT * scale));
+    }
+
     public Rectangle getBounds(){
-        return new Rectangle(this.x, this.y, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT);
+        return new Rectangle(this.x, this.y, this.getWidth(), this.getHeight());
     }
 
     public int getX(){
@@ -28,6 +37,7 @@ public class Player {
     public int getY(){
         return this.y;
     }
+
     public boolean isPlayerCollidesWithMap(Rectangle rec, LogicMapHandler map){
         return map.isRectangleCollidesWithMap(rec);
     }
@@ -77,7 +87,6 @@ public class Player {
         double deltaTime = 5.0;
         int currentShift = (int)(deltaTime * this.moveSpeed);
 
-
         for(User user : users.values()){
             if(user.getPlayer() != this){
                 players.add(user.getPlayer());
@@ -86,28 +95,32 @@ public class Player {
 
         if(letter=='A'){
             this.setActiveMovementKey("LEFT");
-            playersNewBoundsRectangle = new Rectangle(this.x - currentShift, this.y, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT);
+            this.setMoving(true);
+            playersNewBoundsRectangle = new Rectangle(this.x - currentShift, this.y, this.getWidth(), this.getHeight());
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.x -= currentShift;
             }
         }
         else if(letter=='D'){
             this.setActiveMovementKey("RIGHT");
-            playersNewBoundsRectangle = new Rectangle(this.x + currentShift, this.y, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT);
+            this.setMoving(true);
+            playersNewBoundsRectangle = new Rectangle(this.x + currentShift, this.y, this.getWidth(), this.getHeight());
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.x += currentShift;
             }
         }
         else if(letter=='W'){
             this.setActiveMovementKey("UP");
-            playersNewBoundsRectangle = new Rectangle(this.x, this.y + currentShift, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT);
+            this.setMoving(true);
+            playersNewBoundsRectangle = new Rectangle(this.x, this.y + currentShift, this.getWidth(), this.getHeight());
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.y += currentShift;
             }
         }
         else if(letter=='S'){
             this.setActiveMovementKey("DOWN");
-            playersNewBoundsRectangle = new Rectangle(this.x, this.y - currentShift, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT);
+            this.setMoving(true);
+            playersNewBoundsRectangle = new Rectangle(this.x, this.y - currentShift, this.getWidth(), this.getHeight());
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.y -= currentShift;
             }
@@ -140,5 +153,37 @@ public class Player {
 
     public void setActiveMovementKey(String activeMovementKey) {
         this.activeMovementKey = activeMovementKey;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
+    }
+
+    public int getCenterX(){
+        return this.getX() + (int)(this.getWidth()/2.0);
+    }
+
+    public int getCenterY(){
+        return this.getY() + (int)(this.getHeight()/2.0);
     }
 }

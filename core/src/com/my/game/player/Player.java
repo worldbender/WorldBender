@@ -16,28 +16,19 @@ public class Player extends APlayer {
     public static Animation<TextureRegion> upWalkAnimation;
     public static Animation<TextureRegion> rightWalkAnimation;
     public static Animation<TextureRegion> leftWalkAnimation;
+    private float scale = 2f;
     private String activeMovementKey = "";
-
-    public Player(boolean currentPlayer) {
-        super();
-        this.setSize(GameplayScreen.PLAYER_TEXTURE_WIDTH, GameplayScreen.PLAYER_TEXTURE_WIDTH);
-        this.currentPlayer = currentPlayer;
-    }
+    private boolean isMoving = false;
 
     public Player(String name, String x, String y) {
-        super();
-        this.name = name;
-        this.setPosition(Integer.parseInt(x), Integer.parseInt(y));
+        this(name, Integer.parseInt(x), Integer.parseInt(y));
     }
 
     public Player(String name, int x, int y) {
         super();
         this.name = name;
+        this.setSize((int)(GameplayScreen.PLAYER_TEXTURE_WIDTH * this.scale), (int)(GameplayScreen.PLAYER_TEXTURE_HEIGHT * this.scale));
         this.setPosition(x, y);
-    }
-
-    public Player() {
-
     }
 
     public void draw(SpriteBatch batch, float stateTime) {
@@ -49,23 +40,40 @@ public class Player extends APlayer {
     private void drawCharacter(SpriteBatch batch, float stateTime){
         switch (activeMovementKey) {
             case "UP":
-                batch.draw(upWalkAnimation.getKeyFrame(stateTime, true), (int) this.getX(), (int) this.getY());
                 batch.draw(
                         upWalkAnimation.getKeyFrame(stateTime, true),
                         (int) this.getX(),
                         (int) this.getY(),
-                        65,
-                        65
+                        this.width,
+                        this.height
                 );
                 break;
             case "DOWN":
-                batch.draw(downWalkAnimation.getKeyFrame(stateTime, true), (int) this.getX(), (int) this.getY());
+                batch.draw(
+                        downWalkAnimation.getKeyFrame(stateTime, true),
+                        (int) this.getX(),
+                        (int) this.getY(),
+                        this.width,
+                        this.height
+                );
                 break;
             case "LEFT":
-                batch.draw(leftWalkAnimation.getKeyFrame(stateTime, true), (int) this.getX(), (int) this.getY());
+                batch.draw(
+                        leftWalkAnimation.getKeyFrame(stateTime, true),
+                        (int) this.getX(),
+                        (int) this.getY(),
+                        this.width,
+                        this.height
+                );
                 break;
             case "RIGHT":
-                batch.draw(rightWalkAnimation.getKeyFrame(stateTime, true), (int) this.getX(), (int) this.getY());
+                batch.draw(
+                        rightWalkAnimation.getKeyFrame(stateTime, true),
+                        (int) this.getX(),
+                        (int) this.getY(),
+                        this.width,
+                        this.height
+                );
                 break;
             default:
                 break;
@@ -97,5 +105,13 @@ public class Player extends APlayer {
 
     public void setActiveMovementKey(String activeMovementKey) {
         this.activeMovementKey = activeMovementKey;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
     }
 }

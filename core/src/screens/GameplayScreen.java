@@ -111,6 +111,8 @@ public class GameplayScreen extends AbstractScreen{
         camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
         camera.translate(WBGame.WIDTH/2,WBGame.HEIGHT/2);
         players = PlayerList.getInstance();
+        MusicPlayer.initMusic();
+        MusicPlayer.playStaticMusic();
     }
 
     @Override
