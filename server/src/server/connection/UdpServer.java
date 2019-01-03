@@ -54,6 +54,13 @@ public class UdpServer extends Thread {
         currentUser.getPlayer().setPosition(content, logicMapHandler, existingUsers);
     }
 
+    private void updatePlayersState(String id, String content){
+        User currentUser = existingUsers.get(id);
+        String splitedContetnt[] = content.split(":");
+        boolean isMoving = Boolean.parseBoolean(splitedContetnt[0]);
+        currentUser.getPlayer().setMoving(isMoving);
+    }
+
     private void createBullet(String id, String content){
         String[] splitedContent = content.split(":");
         User currentUser = existingUsers.get(id);
@@ -127,6 +134,7 @@ public class UdpServer extends Thread {
         switch (splitedArray[0]){
             case "greetings": initNewPlayer(id, packet); break;
             case "createBullet": createBullet(id, content); break;
+            case "playerState": updatePlayersState(id, content); break;
             default: updatePlayerPosition(id, content); break;
         }
     }

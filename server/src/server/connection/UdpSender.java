@@ -89,8 +89,8 @@ public class UdpSender implements Runnable{
                         u.getPlayer().getX() + ":" +
                         u.getPlayer().getY() + ":" +
                         u.getPlayer().getHp() + ":" +
-                        u.getPlayer().getActiveMovementKey();
-
+                        u.getPlayer().getActiveMovementKey() + ":" +
+                        u.getPlayer().isMoving();
                 if(current.getConnection())
                     sendPackage(message, current.getAddress(), current.getUdpPort());
             }

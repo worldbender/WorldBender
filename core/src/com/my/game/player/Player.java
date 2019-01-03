@@ -38,47 +38,59 @@ public class Player extends APlayer {
     }
 
     private void drawCharacter(SpriteBatch batch, float stateTime){
+        if(this.isMoving){
+            this.drawMoving(batch, stateTime);
+        } else {
+            this.drawStanding(batch, stateTime);
+        }
+    }
+
+    private void drawMoving(SpriteBatch batch, float stateTime){
         switch (activeMovementKey) {
             case "UP":
-                batch.draw(
-                        upWalkAnimation.getKeyFrame(stateTime, true),
-                        (int) this.getX(),
-                        (int) this.getY(),
-                        this.width,
-                        this.height
-                );
+                drawAnimationCharacter(batch, upWalkAnimation.getKeyFrame(stateTime, true));
                 break;
             case "DOWN":
-                batch.draw(
-                        downWalkAnimation.getKeyFrame(stateTime, true),
-                        (int) this.getX(),
-                        (int) this.getY(),
-                        this.width,
-                        this.height
-                );
+                drawAnimationCharacter(batch, downWalkAnimation.getKeyFrame(stateTime, true));
                 break;
             case "LEFT":
-                batch.draw(
-                        leftWalkAnimation.getKeyFrame(stateTime, true),
-                        (int) this.getX(),
-                        (int) this.getY(),
-                        this.width,
-                        this.height
-                );
+                drawAnimationCharacter(batch, leftWalkAnimation.getKeyFrame(stateTime, true));
                 break;
             case "RIGHT":
-                batch.draw(
-                        rightWalkAnimation.getKeyFrame(stateTime, true),
-                        (int) this.getX(),
-                        (int) this.getY(),
-                        this.width,
-                        this.height
-                );
+                drawAnimationCharacter(batch, rightWalkAnimation.getKeyFrame(stateTime, true));
                 break;
             default:
                 break;
-
         }
+    }
+
+    private void drawStanding(SpriteBatch batch, float stateTime){
+        switch (activeMovementKey) {
+            case "UP":
+                drawAnimationCharacter(batch, upWalkAnimation.getKeyFrames()[0]);
+                break;
+            case "DOWN":
+                drawAnimationCharacter(batch, downWalkAnimation.getKeyFrames()[0]);
+                break;
+            case "LEFT":
+                drawAnimationCharacter(batch, leftWalkAnimation.getKeyFrames()[9]);
+                break;
+            case "RIGHT":
+                drawAnimationCharacter(batch, rightWalkAnimation.getKeyFrames()[9]);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void drawAnimationCharacter(SpriteBatch batch, TextureRegion textureRegion){
+        batch.draw(
+                textureRegion,
+                (int) this.getX(),
+                (int) this.getY(),
+                this.width,
+                this.height
+        );
     }
 
     private void drawHp(SpriteBatch batch) {
@@ -89,6 +101,14 @@ public class Player extends APlayer {
 
     private void drawName(SpriteBatch batch) {
         StringDrawer.drawHp(batch, this.getName(), (int) this.getX(), (int) this.getY() + (int)this.getHeight());
+    }
+
+    public String getPlayerState(){
+        StringBuilder result = new StringBuilder();
+        result.append(this.isMoving);
+        result.append(":");
+        result.append(this.activeMovementKey);
+        return result.toString();
     }
 
     public boolean isCurrentPlayer() {
@@ -104,7 +124,8 @@ public class Player extends APlayer {
     }
 
     public void setActiveMovementKey(String activeMovementKey) {
-        this.activeMovementKey = activeMovementKey;
+        if(!activeMovementKey.equals(""))
+            this.activeMovementKey = activeMovementKey;
     }
 
     public boolean isMoving() {

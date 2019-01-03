@@ -50,6 +50,7 @@ public class PacketReceiver implements Runnable {
                 player.setPosition(Integer.parseInt(splitedArray[2]), Integer.parseInt(splitedArray[3]));
                 player.setHp(Integer.parseInt(splitedArray[4]));
                 player.setActiveMovementKey(splitedArray[5]);
+                player.setMoving(Boolean.parseBoolean(splitedArray[6]));
             }
         }
     }

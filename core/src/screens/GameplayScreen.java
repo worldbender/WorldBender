@@ -104,7 +104,7 @@ public class GameplayScreen extends AbstractScreen{
         for (int i = 0; i < numberOfAnimationFrames; i++) {
             walkFrames[i] = arrayOfWalks[0][i];
         }
-        return new Animation<TextureRegion>(0.05f, walkFrames);
+        return new Animation<TextureRegion>(0.1f, walkFrames);
     }
 
     private void init() {
@@ -144,6 +144,7 @@ public class GameplayScreen extends AbstractScreen{
             this.drawAllMovableObjects(spriteBatch, stateTime);
             spriteBatch.end();
         }
+        this.sendMessageToServer("playerState:" + currentPlayer.getPlayerState());
     }
 
     private void drawAllMovableObjects(SpriteBatch spriteBatch, float stateTime){
@@ -194,16 +195,21 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void handleMovementKeys(){
+        currentPlayer.setMoving(false);
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            currentPlayer.setMoving(true);
             this.sendMessageToServer("A");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            currentPlayer.setMoving(true);
             this.sendMessageToServer("D");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            currentPlayer.setMoving(true);
             this.sendMessageToServer("W");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            currentPlayer.setMoving(true);
             this.sendMessageToServer("S");
         }
     }

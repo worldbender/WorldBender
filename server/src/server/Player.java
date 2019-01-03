@@ -15,6 +15,8 @@ public class Player {
     private int moveSpeed = 1;
     private long shootCooldown = 100L;
     private long lastTimePlayerHasShot = 0L;
+    private long lastTimePlayerHasChangedMovment = 0L;
+    private long changeMovementCooldown = 20L;
     private String activeMovementKey = "DOWN";
     private boolean isMoving = false;
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
@@ -49,6 +51,17 @@ public class Player {
         if(time - this.lastTimePlayerHasShot > this.shootCooldown){
             result = true;
             this.lastTimePlayerHasShot = time;
+        }
+        return result;
+    }
+
+    public boolean canPlayerChangeMovement(){
+        boolean result = false;
+        Date date= new Date();
+        long time = date.getTime();
+        if(time - this.lastTimePlayerHasChangedMovment > this.changeMovementCooldown){
+            result = true;
+            this.lastTimePlayerHasChangedMovment = time;
         }
         return result;
     }
