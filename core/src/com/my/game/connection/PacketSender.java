@@ -40,7 +40,7 @@ public class PacketSender implements Runnable {
         while (true) {
             try {
                 while (!in.ready()) {
-                    Thread.sleep(100);
+                    Thread.sleep(10);
                 }
                 sendMessage(in.readLine());
             } catch (Exception e) {

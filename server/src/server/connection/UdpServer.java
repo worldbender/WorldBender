@@ -54,13 +54,22 @@ public class UdpServer extends Thread {
         currentUser.getPlayer().setPosition(content, logicMapHandler, existingUsers);
     }
 
-    private void createBullet(String id, String content){
+    private void updatePlayersState(String id, String content){
         User currentUser = existingUsers.get(id);
+        String splitedContetnt[] = content.split(":");
+        boolean isMoving = Boolean.parseBoolean(splitedContetnt[0]);
+        currentUser.getPlayer().setMoving(isMoving);
+    }
+
+    private void createBullet(String id, String content){
+        String[] splitedContent = content.split(":");
+        User currentUser = existingUsers.get(id);
+        currentUser.getPlayer().setActiveMovementKeyByAngle(splitedContent[2]);
+        currentUser.getPlayer().setMoving(true);
         if(currentUser.getPlayer().canPlayerShoot()){
-            String[] splitedContent = content.split(":");
             String bulletType = splitedContent[1];
             String angle = splitedContent[2];
-            ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getX(), currentUser.getPlayer().getY(), Float.parseFloat(angle));
+            ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getCenterX(), currentUser.getPlayer().getCenterY(), Float.parseFloat(angle));
             BulletList.addBullet(newBullet);
             String message = "createBullet:" + newBullet.getType() + ":" + newBullet.getId() + ":" + newBullet.getAngle();
             for(User user : existingUsers.values()){
@@ -125,6 +134,7 @@ public class UdpServer extends Thread {
         switch (splitedArray[0]){
             case "greetings": initNewPlayer(id, packet); break;
             case "createBullet": createBullet(id, content); break;
+            case "playerState": updatePlayersState(id, content); break;
             default: updatePlayerPosition(id, content); break;
         }
     }

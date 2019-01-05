@@ -9,15 +9,27 @@ public class Player {
 
     private int x=500;
     private int y=500;
+    private int width;
+    private int height;
     private int hp=10;
-    private int width = 56;
-    private int height = 56;
     private int moveSpeed = 1;
     private long shootCooldown = 100L;
     private long lastTimePlayerHasShot = 0L;
+    private long lastTimePlayerHasChangedMovment = 0L;
+    private long changeMovementCooldown = 20L;
+    private String activeMovementKey = "DOWN";
+    private boolean isMoving = false;
+    public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
+    public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
+    private float scale = 2f;
+
+    public Player(){
+        this.setWidth((int)(PLAYER_TEXTURE_WIDTH * scale));
+        this.setHeight((int)(PLAYER_TEXTURE_HEIGHT * scale));
+    }
 
     public Rectangle getBounds(){
-        return new Rectangle(this.x, this.y, this.width, this.height);
+        return new Rectangle(this.x, this.y, this.getWidth(), this.getHeight());
     }
 
     public int getX(){
@@ -27,6 +39,7 @@ public class Player {
     public int getY(){
         return this.y;
     }
+
     public boolean isPlayerCollidesWithMap(Rectangle rec, LogicMapHandler map){
         return map.isRectangleCollidesWithMap(rec);
     }
@@ -38,6 +51,17 @@ public class Player {
         if(time - this.lastTimePlayerHasShot > this.shootCooldown){
             result = true;
             this.lastTimePlayerHasShot = time;
+        }
+        return result;
+    }
+
+    public boolean canPlayerChangeMovement(){
+        boolean result = false;
+        Date date= new Date();
+        long time = date.getTime();
+        if(time - this.lastTimePlayerHasChangedMovment > this.changeMovementCooldown){
+            result = true;
+            this.lastTimePlayerHasChangedMovment = time;
         }
         return result;
     }
@@ -55,13 +79,26 @@ public class Player {
         return isPlayerCollidesWithMap(rec, map) ||
                 isRectangleCollidesWithPlayers(rec, players);
     }
+
+    public void setActiveMovementKeyByAngle(String angle){
+        float parsedAngle = Float.parseFloat(angle);
+        if(Math.abs(parsedAngle - Math.PI) < 0.001f){
+            setActiveMovementKey("LEFT");
+        } else if(Math.abs(parsedAngle - Math.PI/2) < 0.001f){
+            setActiveMovementKey("UP");
+        } else if(Math.abs(parsedAngle) < 0.001f){
+            setActiveMovementKey("RIGHT");
+        } else {
+            setActiveMovementKey("DOWN");
+        }
+    }
+
     public void setPosition(String content, LogicMapHandler map, Map<String, User> users){
         char letter = content.charAt(0);
         Rectangle playersNewBoundsRectangle;
         ArrayList<Player> players = new ArrayList<Player>();
         double deltaTime = 5.0;
         int currentShift = (int)(deltaTime * this.moveSpeed);
-
 
         for(User user : users.values()){
             if(user.getPlayer() != this){
@@ -70,25 +107,33 @@ public class Player {
         }
 
         if(letter=='A'){
-            playersNewBoundsRectangle = new Rectangle(this.x - currentShift, this.y, this.width, this.height);
+            this.setActiveMovementKey("LEFT");
+            this.setMoving(true);
+            playersNewBoundsRectangle = new Rectangle(this.x - currentShift, this.y, this.getWidth(), this.getHeight());
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.x -= currentShift;
             }
         }
         else if(letter=='D'){
-            playersNewBoundsRectangle = new Rectangle(this.x + currentShift, this.y, this.width, this.height);
+            this.setActiveMovementKey("RIGHT");
+            this.setMoving(true);
+            playersNewBoundsRectangle = new Rectangle(this.x + currentShift, this.y, this.getWidth(), this.getHeight());
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.x += currentShift;
             }
         }
         else if(letter=='W'){
-            playersNewBoundsRectangle = new Rectangle(this.x, this.y + currentShift, this.width, this.height);
+            this.setActiveMovementKey("UP");
+            this.setMoving(true);
+            playersNewBoundsRectangle = new Rectangle(this.x, this.y + currentShift, this.getWidth(), this.getHeight());
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.y += currentShift;
             }
         }
         else if(letter=='S'){
-            playersNewBoundsRectangle = new Rectangle(this.x, this.y - currentShift, this.width, this.height);
+            this.setActiveMovementKey("DOWN");
+            this.setMoving(true);
+            playersNewBoundsRectangle = new Rectangle(this.x, this.y - currentShift, this.getWidth(), this.getHeight());
             if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
                 this.y -= currentShift;
             }
@@ -113,5 +158,45 @@ public class Player {
 
     public void setMoveSpeed(int moveSpeed) {
         this.moveSpeed = moveSpeed;
+    }
+
+    public String getActiveMovementKey() {
+        return activeMovementKey;
+    }
+
+    public void setActiveMovementKey(String activeMovementKey) {
+        this.activeMovementKey = activeMovementKey;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
+    }
+
+    public int getCenterX(){
+        return this.getX() + (int)(this.getWidth()/2.0);
+    }
+
+    public int getCenterY(){
+        return this.getY() + (int)(this.getHeight()/2.0);
     }
 }

@@ -4,16 +4,11 @@ import com.badlogic.gdx.graphics.Texture;
 import java.awt.*;
 
 public abstract class APlayer extends Rectangle {
-    public Texture texture;
     protected String name;
     protected boolean currentPlayer = false;
     private int hp;
     public APlayer(){
 
-    }
-    public APlayer(Texture t) {
-        super();
-        this.texture = t;
     }
 
     public void setPosition(int x, int y){

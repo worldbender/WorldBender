@@ -43,14 +43,15 @@ public class PacketReceiver implements Runnable {
         players.put(splitedArray[1],p);
     }
 
-    private void setPlayersPositions(String received) {
+    private void setPlayersData(String received) {
         String[] splitedArray = received.split(":");
         for (Player player : players.values()) {
             if (player.getName().equals(splitedArray[1])) {
                 player.setPosition(Integer.parseInt(splitedArray[2]), Integer.parseInt(splitedArray[3]));
                 player.setHp(Integer.parseInt(splitedArray[4]));
+                player.setActiveMovementKey(splitedArray[5]);
+                player.setMoving(Boolean.parseBoolean(splitedArray[6]));
             }
-
         }
     }
     private void setBulletsPositions(String date){
@@ -84,7 +85,7 @@ public class PacketReceiver implements Runnable {
                     case "init":
                         setPlayers(received); break;
                     case "updatePosition":
-                        setPlayersPositions(received); break;
+                        setPlayersData(received); break;
                     case "updateBulletPosition":
                         setBulletsPositions(received); break;
                     case "createBullet":
