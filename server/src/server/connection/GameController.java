@@ -63,11 +63,7 @@ public class GameController implements Runnable {
         }
     }
 
-<<<<<<< HEAD:server/src/server/connection/GameController.java
     private void doGameLoop() {
-=======
-    private void doGameLoop(){
->>>>>>> master:server/src/server/connection/UdpSender.java
         sendPlayerDataPackage();
         sendBulletPositionPackage();
         sendOpponentDataPackage();
@@ -98,11 +94,7 @@ public class GameController implements Runnable {
         }
     }
 
-<<<<<<< HEAD:server/src/server/connection/GameController.java
     public void sendPlayerDataPackage() {
-=======
-    public void sendPlayerDataPackage(){
->>>>>>> master:server/src/server/connection/UdpSender.java
         for (User current : existingUsers.values()) {
             for (User u : existingUsers.values()) {
                 String message = "updatePosition:" +
@@ -112,11 +104,7 @@ public class GameController implements Runnable {
                         u.getPlayer().getHp() + ":" +
                         u.getPlayer().getActiveMovementKey() + ":" +
                         u.getPlayer().isMoving();
-<<<<<<< HEAD:server/src/server/connection/GameController.java
                 if (current.hasConnection())
-=======
-                if(current.getConnection())
->>>>>>> master:server/src/server/connection/UdpSender.java
                     sendPackage(message, current.getAddress(), current.getUdpPort());
             }
         }
