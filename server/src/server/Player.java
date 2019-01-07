@@ -22,10 +22,12 @@ public class Player {
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
     private float scale = 2f;
+    private User user;
 
-    public Player(){
+    public Player(User user){
         this.setWidth((int)(PLAYER_TEXTURE_WIDTH * scale));
         this.setHeight((int)(PLAYER_TEXTURE_HEIGHT * scale));
+        this.user = user;
     }
 
     public Rectangle getBounds(){
@@ -55,21 +57,10 @@ public class Player {
         return result;
     }
 
-    public boolean canPlayerChangeMovement(){
-        boolean result = false;
-        Date date= new Date();
-        long time = date.getTime();
-        if(time - this.lastTimePlayerHasChangedMovment > this.changeMovementCooldown){
-            result = true;
-            this.lastTimePlayerHasChangedMovment = time;
-        }
-        return result;
-    }
-
     public boolean isRectangleCollidesWithPlayers(Rectangle rec, ArrayList<Player> players){
         boolean result = false;
         for(Player player : players){
-            if(rec.intersects(player.getBounds())){
+            if(rec.intersects(player.getBounds()) && player.getUser().hasConnection()){
                 result = true;
             }
         }
@@ -198,5 +189,13 @@ public class Player {
 
     public int getCenterY(){
         return this.getY() + (int)(this.getHeight()/2.0);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
