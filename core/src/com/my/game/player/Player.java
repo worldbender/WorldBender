@@ -20,6 +20,7 @@ public class Player extends APlayer {
     private String activeMovementKey = "";
     private boolean isMoving = false;
 
+
     public Player(){
 
     }
