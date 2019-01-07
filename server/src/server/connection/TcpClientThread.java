@@ -40,7 +40,7 @@ public class TcpClientThread extends Thread{
 
     public void run()
     {
-        System.out.println ("New TCP Communication Thread Started " + clientSocket.getPort());
+        System.out.println ("New TCP Connection Started with" + clientSocket.getPort());
         String message;
         try {
             while ((message = in.readLine()) != null) {
@@ -55,7 +55,7 @@ public class TcpClientThread extends Thread{
         for (User current : existingUsers.values()) {
             current.getThread().sendMessage("dc:"+user.getName());
         }
-        System.out.println("Communication lost with Thread " + clientSocket.getPort());
+        System.out.println("TCP Connection lost with " + clientSocket.getPort());
     }
 
     public void sendMessage(String message){

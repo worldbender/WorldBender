@@ -5,7 +5,7 @@ import server.LogicMapHandler;
 import java.awt.*;
 import java.util.Random;
 
-public class AOpponent {
+public abstract class AOpponent {
     private int x = 300;
     private int y = 300;
     private int width;
@@ -44,7 +44,6 @@ public class AOpponent {
         }
     }
     private void handleOpponentDeath(){
-        OpponentList.addToDeadOpponents(this);
         OpponentList.removeOpponent(this);
     }
     public int getX() {
