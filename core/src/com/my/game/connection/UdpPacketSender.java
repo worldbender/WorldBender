@@ -10,12 +10,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class PacketSender implements Runnable {
+public class UdpPacketSender implements Runnable {
     private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortUdp"));
     private DatagramSocket socket;
     private String hostname;
 
-    PacketSender(DatagramSocket socket, String hostname) {
+    UdpPacketSender(DatagramSocket socket, String hostname) {
         this.socket = socket;
         this.hostname = hostname;
     }

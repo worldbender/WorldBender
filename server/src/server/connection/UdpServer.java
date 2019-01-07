@@ -4,9 +4,6 @@ import server.bullets.ABullet;
 import server.bullets.BulletFabric;
 import server.bullets.BulletList;
 import server.*;
-import server.opponents.AOpponent;
-import server.opponents.OpponentFabric;
-import server.opponents.OpponentList;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -79,39 +76,6 @@ public class UdpServer extends Thread {
         }
     }
 
-    private void createOpponent(){
-        String opponentType = "Nietzsche";
-        AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);
-        OpponentList.addOpponent(newOpponent);
-        String message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
-        for(User user : existingUsers.values()){
-            if(user.getConnection())
-                sendPackage(message, user.getAddress(), user.getUdpPort());
-        }
-        opponentType = "Schopenheuer";
-        newOpponent = OpponentFabric.createOpponent(opponentType);
-        OpponentList.addOpponent(newOpponent);
-        message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
-        for(User user : existingUsers.values()){
-            if(user.getConnection())
-                sendPackage(message, user.getAddress(), user.getUdpPort());
-        }
-    }
-
-    private void initNewPlayer(String id, DatagramPacket packet){
-        sendPackage("Server: Connected", packet.getAddress(), packet.getPort());
-
-        for(User user : existingUsers.values()){
-            sendPackage("newPlayer:player" + (existingUsers.size()-1), user.getAddress(), user.getUdpPort());
-        }
-
-        for (User current : existingUsers.values()) {
-            String message = "init:"+current.getName() + ":" + current.getPlayer().getX() + ":" + current.getPlayer().getY();
-            if(current.getConnection())
-                sendPackage(message, packet.getAddress(), packet.getPort());
-        }
-        createOpponent();
-    }
 
     public void sendPackage(String message, InetAddress clientAddress, int clientPort){
         DatagramPacket packet;
@@ -132,7 +96,6 @@ public class UdpServer extends Thread {
         //System.out.println(id + ":" + content);
         String[] splitedArray = content.split(":");
         switch (splitedArray[0]){
-            case "greetings": initNewPlayer(id, packet); break;
             case "createBullet": createBullet(id, content); break;
             case "playerState": updatePlayersState(id, content); break;
             default: updatePlayerPosition(id, content); break;
