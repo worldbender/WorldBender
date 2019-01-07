@@ -33,7 +33,7 @@ public class GameplayScreen extends AbstractScreen{
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
     private Connection connection;
-    boolean connectionStatus;
+    boolean connectionStatus = false;
     public static Player currentPlayer;
     private int numerOfXTiles;
     private int numerOfYTiles;
@@ -70,6 +70,7 @@ public class GameplayScreen extends AbstractScreen{
     public void create() {
         try{
             connection.createConnection();
+            System.out.println("Nawiązano połączenie w serwerem");
             connectionStatus = true;
         }catch(Exception e){
             System.out.println("Nie nawiązano połączenia");
@@ -143,8 +144,8 @@ public class GameplayScreen extends AbstractScreen{
             spriteBatch.setProjectionMatrix(camera.combined);
             this.drawAllMovableObjects(spriteBatch, stateTime);
             spriteBatch.end();
+            this.sendMessageToServer("playerState:" + currentPlayer.getPlayerState());
         }
-        this.sendMessageToServer("playerState:" + currentPlayer.getPlayerState());
     }
 
     private void drawAllMovableObjects(SpriteBatch spriteBatch, float stateTime){

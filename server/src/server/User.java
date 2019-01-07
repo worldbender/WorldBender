@@ -77,7 +77,7 @@ public class User {
         this.name = name;
     }
 
-    public boolean getConnection(){
+    public boolean hasConnection(){
         return this.connection;
     }
 

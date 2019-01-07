@@ -20,6 +20,10 @@ public class Player extends APlayer {
     private String activeMovementKey = "";
     private boolean isMoving = false;
 
+
+    public Player(){
+
+    }
     public Player(String name, String x, String y) {
         this(name, Integer.parseInt(x), Integer.parseInt(y));
     }
