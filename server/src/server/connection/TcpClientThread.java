@@ -79,18 +79,18 @@ public class TcpClientThread extends Thread{
         this.user.setName("player"+ existingUsers.size());
 
         //ten pakiet wysylamy do naszego gracza z jego poczatkowa pozycja
-        sendMessage("init:"+this.user.getName()+":"+this.user.getPlayer().getX()+":"+this.user.getPlayer().getY());
+        sendMessage("init:"+this.user.getName()+":"+this.user.getPlayer().getX()+":"+this.user.getPlayer().getY()+":true");
 
         //te pakiety wysyłamy do innych graczy z informacja ze gracz dolaczyl do gry
         for (User current : existingUsers.values()) {
-            current.getThread().sendMessage("newPlayer:player" + (existingUsers.size()-1));
+            current.getThread().sendMessage("newPlayer:player" + (existingUsers.size()));
         }
 
         //te pakiety wysylamy do naszego gracza z pozycjami juz istniejacych graczy
         for (User current : existingUsers.values()) {
-            String message = "init:"+current.getName() + ":" + current.getPlayer().getX() + ":" + current.getPlayer().getY();
-            if(current.getConnection())
-                current.getThread().sendMessage(message);
+            String message = "init:"+current.getName() + ":" + current.getPlayer().getX() + ":" + current.getPlayer().getY()+":false";
+            if(current.hasConnection())
+                sendMessage(message);
         }
 
         existingUsers.put(id, this.user);
@@ -104,7 +104,7 @@ public class TcpClientThread extends Thread{
         OpponentList.addOpponent(newOpponent);
         String message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
         for(User user : existingUsers.values()){
-            if(user.getConnection())
+            if(user.hasConnection())
                 user.getThread().sendMessage(message);
         }
         opponentType = "Schopenheuer";
@@ -112,7 +112,7 @@ public class TcpClientThread extends Thread{
         OpponentList.addOpponent(newOpponent);
         message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
         for(User user : existingUsers.values()){
-            if(user.getConnection())
+            if(user.hasConnection())
                 user.getThread().sendMessage(message);
         }
     }

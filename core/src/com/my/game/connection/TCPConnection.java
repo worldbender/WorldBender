@@ -52,20 +52,24 @@ public class TCPConnection extends Thread {
             System.out.println("Remove player: " + splitedArray[1]);
             break;
         case "init":
+            System.out.println("Init player: " + splitedArray[1]);
             Player p = new Player(splitedArray[1], splitedArray[2], splitedArray[3]);
-            p.setCurrentPlayer(true);
-            GameplayScreen.currentPlayer = p;
+            if(splitedArray[4].equals("true")){
+                p.setCurrentPlayer(true);
+                GameplayScreen.currentPlayer = p;
+            }
             players.put(splitedArray[1], p);
             break;
-            case "newPlayer":
-                newPlayer(splitedArray[1]);
-                break;
-            case "createOpponent":
-                AOpponent newOpponent = OpponentFabric.createOpponent(splitedArray[1], Integer.parseInt(splitedArray[2]));
-                OpponentList.addOpponent(newOpponent);
-                break;
-            case "deleteOpponent":
-                OpponentList.removeOpponentById(Integer.parseInt(splitedArray[1])); break;
+        case "newPlayer":
+            System.out.println("New player connected: " + splitedArray[1]);
+            newPlayer(splitedArray[1]);
+            break;
+        case "createOpponent":
+            AOpponent newOpponent = OpponentFabric.createOpponent(splitedArray[1], Integer.parseInt(splitedArray[2]));
+            OpponentList.addOpponent(newOpponent);
+            break;
+        case "deleteOpponent":
+            OpponentList.removeOpponentById(Integer.parseInt(splitedArray[1])); break;
         }
     }
 

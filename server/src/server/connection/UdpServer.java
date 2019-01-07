@@ -21,13 +21,13 @@ public class UdpServer extends Thread {
     private Map<String, User> existingUsers;
     private LogicMapHandler logicMapHandler;
     private Thread senderThread;
-    private UdpSender sender;
+    private GameController sender;
     public UdpServer() throws IOException {
         this.socket = new DatagramSocket(PORT);
         this.existingUsers = ExistingUsers.getInstance();
         this.rooms = RoomList.getInstance();
         logicMapHandler = new LogicMapHandler();
-        sender = new UdpSender(socket);
+        sender = new GameController(socket);
         senderThread = new Thread(sender);
         senderThread.start();
     }
@@ -70,7 +70,7 @@ public class UdpServer extends Thread {
             BulletList.addBullet(newBullet);
             String message = "createBullet:" + newBullet.getType() + ":" + newBullet.getId() + ":" + newBullet.getAngle();
             for(User user : existingUsers.values()){
-                if(user.getConnection())
+                if(user.hasConnection())
                     sendPackage(message, user.getAddress(), user.getUdpPort());
             }
         }
