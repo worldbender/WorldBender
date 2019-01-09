@@ -1,6 +1,6 @@
 package server.bullets;
 
-import server.LogicMapHandler;
+import server.LogicMap.LogicMapHandler;
 import server.opponents.AOpponent;
 import server.opponents.OpponentList;
 

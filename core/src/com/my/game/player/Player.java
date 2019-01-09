@@ -19,7 +19,10 @@ public class Player extends APlayer {
     private float scale = 2f;
     private String activeMovementKey = "";
     private boolean isMoving = false;
-
+    public boolean KEY_W = false;
+    public boolean KEY_S = true;
+    public boolean KEY_A = false;
+    public boolean KEY_D = false;
 
     public Player(){
 
@@ -112,6 +115,16 @@ public class Player extends APlayer {
         result.append(this.isMoving);
         result.append(":");
         result.append(this.activeMovementKey);
+        result.append(":");
+        result.append(this.KEY_W);
+        result.append(",");
+        result.append(this.KEY_S);
+        result.append(",");
+        result.append(this.KEY_A);
+        result.append(",");
+        result.append(this.KEY_D);
+        result.append(",");
+        result.append(":");
         return result.toString();
     }
 
@@ -138,5 +151,12 @@ public class Player extends APlayer {
 
     public void setMoving(boolean moving) {
         isMoving = moving;
+    }
+
+    public void resetWSAD(){
+        this.KEY_W = false;
+        this.KEY_S = false;
+        this.KEY_A = false;
+        this.KEY_D = false;
     }
 }

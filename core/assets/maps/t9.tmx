@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="left-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="left-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="7">
  <tileset firstgid="1" source="t1.tsx"/>
  <layer name="Warstwa Kafelków 1" width="100" height="100">
   <data encoding="csv">
@@ -209,4 +209,26 @@
 245,246,247,245,246,247,248,249,245,246,247,248,249,250,251,245,246,247,248,249,250,251,245,246,247,248,249,250,251,245,246,247,248,249,250,251,245,246,247,248,249,250,251,245,246,247,248,249,250,251,245,246,247,248,249,250,251,245,246,247,248,249,250,251,245,246,247,248,249,250,251,245,246,247,248,249,250,251,245,246,247,248,249,250,251,245,246,247,248,249,250,251,245,246,247,245,246,247,248,249
 </data>
  </layer>
+ <objectgroup name="EventLayer">
+  <object id="2" x="312" y="2850">
+   <properties>
+    <property name="spawn" value="player"/>
+   </properties>
+  </object>
+  <object id="4" x="430" y="2846">
+   <properties>
+    <property name="spawn" value="player"/>
+   </properties>
+  </object>
+  <object id="5" x="188" y="2846">
+   <properties>
+    <property name="spawn" value="player"/>
+   </properties>
+  </object>
+  <object id="6" x="226" y="2710">
+   <properties>
+    <property name="spawn" value="player"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

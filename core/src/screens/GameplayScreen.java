@@ -132,18 +132,14 @@ public class GameplayScreen extends AbstractScreen{
         else{
             super.render(delta);
             this.update();
-
-            Gdx.gl.glClearColor(1, 1, 1, 0);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            this.handleMapShift();
             render.setView(camera);
             render.render();
 
-            this.handleMapShift();
-
             spriteBatch.begin();
-            spriteBatch.setProjectionMatrix(camera.combined);
             this.drawAllMovableObjects(spriteBatch, stateTime);
             spriteBatch.end();
+
             this.sendMessageToServer("playerState:" + currentPlayer.getPlayerState());
         }
     }
@@ -197,36 +193,45 @@ public class GameplayScreen extends AbstractScreen{
 
     private void handleMovementKeys(){
         currentPlayer.setMoving(false);
+        currentPlayer.resetWSAD();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             currentPlayer.setMoving(true);
-            this.sendMessageToServer("A");
+            currentPlayer.setActiveMovementKey("LEFT");
+            currentPlayer.KEY_A = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             currentPlayer.setMoving(true);
-            this.sendMessageToServer("D");
+            currentPlayer.setActiveMovementKey("RIGHT");
+            currentPlayer.KEY_D = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             currentPlayer.setMoving(true);
-            this.sendMessageToServer("W");
+            currentPlayer.setActiveMovementKey("UP");
+            currentPlayer.KEY_W = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             currentPlayer.setMoving(true);
-            this.sendMessageToServer("S");
+            currentPlayer.setActiveMovementKey("DOWN");
+            currentPlayer.KEY_S = true;
         }
     }
 
     private void handleArrowKeys(){
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            this.sendMessageToServer("createBullet:Tear:"+(float)Math.PI);
+            this.sendMessageToServer("createBullet:Tear:"+(float)Math.PI + ":");
+            currentPlayer.setActiveMovementKey("LEFT");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.sendMessageToServer("createBullet:Tear:"+(float)0);
+            this.sendMessageToServer("createBullet:Tear:"+(float)0 + ":");
+            currentPlayer.setActiveMovementKey("RIGHT");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            this.sendMessageToServer("createBullet:Tear:"+(float)Math.PI/2);
+            this.sendMessageToServer("createBullet:Tear:"+(float)Math.PI/2 + ":");
+            currentPlayer.setActiveMovementKey("UP");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            this.sendMessageToServer("createBullet:Tear:"+(float)3 * Math.PI/2);
+            this.sendMessageToServer("createBullet:Tear:"+(float)3 * Math.PI/2 + ":");
+            currentPlayer.setActiveMovementKey("DOWN");
         }
     }
 

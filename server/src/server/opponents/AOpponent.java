@@ -1,6 +1,6 @@
 package server.opponents;
 
-import server.LogicMapHandler;
+import server.LogicMap.LogicMapHandler;
 
 import java.awt.*;
 import java.util.Random;
@@ -20,8 +20,8 @@ public abstract class AOpponent {
 
     public void update(double deltaTime, LogicMapHandler map){
         Random generator = new Random();
-        int newX = this.getX() + generator.nextInt()%10;
-        int newY = this.getY() + generator.nextInt()%10;
+        int newX = this.getX() + generator.nextInt()%5;
+        int newY = this.getY() + generator.nextInt()%5;
         Rectangle newPosRectangle = new Rectangle(newX, newY, this.getWidth(), this.getHeight());
         if(!isOpponentCollidesWithMap(newPosRectangle, map)){
             this.setX(newX);
