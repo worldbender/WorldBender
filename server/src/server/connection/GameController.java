@@ -1,7 +1,7 @@
 package server.connection;
 
 import server.ExistingUsers;
-import server.LogicMapHandler;
+import server.LogicMap.LogicMapHandler;
 import server.User;
 import server.bullets.ABullet;
 import server.bullets.BulletList;
@@ -23,9 +23,9 @@ public class GameController implements Runnable {
     private DatagramSocket socket;
 
 
-    public GameController(DatagramSocket socket) {
+    public GameController(DatagramSocket socket, LogicMapHandler logicMapHandler) {
         this.existingUsers = ExistingUsers.getInstance();
-        logicMapHandler = new LogicMapHandler();
+        this.logicMapHandler = logicMapHandler;
         this.socket = socket;
     }
 

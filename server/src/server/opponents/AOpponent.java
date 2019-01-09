@@ -1,6 +1,6 @@
 package server.opponents;
 
-import server.LogicMapHandler;
+import server.LogicMap.LogicMapHandler;
 
 import java.awt.*;
 import java.util.Random;

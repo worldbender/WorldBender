@@ -1,14 +1,20 @@
-package server;
+package server.LogicMap;
 
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import server.blocks.ABlock;
-import server.blocks.SoftBlock;
-import server.blocks.SolidBlock;
+import server.LogicMap.ABlock;
+import server.LogicMap.EventBlock;
+import server.LogicMap.SoftBlock;
+import server.LogicMap.SolidBlock;
 
 import java.awt.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LogicMapHandler {
     private TiledMap map;
@@ -20,11 +26,14 @@ public class LogicMapHandler {
     private final String BASE_PATH_TO_MAP = "maps/";
     private final String MAP_FILE_FORMAT = ".tmx";
     private ABlock[][] logicMap = new ABlock[mapWidth][mapHeight];
+    private EventList eventList;
 
     public LogicMapHandler() {
-        map = new TmxMapLoader().load("maps/t9.tmx");
-        render = new OrthogonalTiledMapRenderer(this.map);
-        constructLogicMap();
+        this.map = new TmxMapLoader().load("maps/t9.tmx");
+        this.render = new OrthogonalTiledMapRenderer(this.map);
+        this.eventList = new EventList();
+        this.constructLogicMap();
+        this.constructEventObjects();
     }
 
     /**
@@ -37,8 +46,8 @@ public class LogicMapHandler {
         map = new TmxMapLoader().load(pathToMap);
         render = new OrthogonalTiledMapRenderer(this.map);
         constructLogicMap();
+        constructEventObjects();
     }
-
     /**
      * Function creates logic map. It reads map matrix from tmx file and creates a proper block depending on properties of tile.
      */
@@ -64,6 +73,27 @@ public class LogicMapHandler {
             }
         }
     }
+
+    public void constructEventObjects(){
+        MapLayer eventLayer = (this.getMap().getLayers().get("EventLayer"));
+        MapObjects mapObjects = eventLayer.getObjects();
+        RectangleMapObject rectangleMapObject;
+        for(MapObject object : mapObjects){
+            if(object.getProperties().containsKey("spawn")){
+                rectangleMapObject = (RectangleMapObject)(object);
+                eventList.add(new EventBlock(
+                        (int)rectangleMapObject.getRectangle().getX(),
+                        (int)rectangleMapObject.getRectangle().getY(),
+                        "spawn",
+                        object.getProperties().get("spawn").toString())
+                );
+            }
+        }
+    }
+    public Point getNextPlayerSpawnPoint(){
+        return this.eventList.getNextPlayerSpawnPoint();
+    }
+
     public boolean isRectangleCollidesWithMap(Rectangle rec){
         boolean result = false;
         ABlock currentBlock;

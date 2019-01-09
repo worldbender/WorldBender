@@ -1,5 +1,7 @@
 package server;
 
+import server.LogicMap.LogicMapHandler;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,6 +86,23 @@ public class Player {
         }
     }
 
+    public void setActiveMovementKeyFromWSADLetter(char letter){
+        switch (letter){
+            case 'A':
+                this.setActiveMovementKey("LEFT");
+
+                break;
+            case 'D':
+                this.setActiveMovementKey("RIGHT");
+                break;
+            case 'W':
+                this.setActiveMovementKey("UP");
+                break;
+            case 'S':
+                this.setActiveMovementKey("DOWN");
+                break;
+        }
+    }
     public void setPosition(String content, LogicMapHandler map, Map<String, User> users){
         char letter = content.charAt(0);
         Rectangle playersNewBoundsRectangle;

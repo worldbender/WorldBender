@@ -1,5 +1,7 @@
 package server.connection;
 
+import com.badlogic.gdx.Gdx;
+import server.LogicMap.LogicMapHandler;
 import server.bullets.ABullet;
 import server.bullets.BulletFabric;
 import server.bullets.BulletList;
@@ -27,7 +29,7 @@ public class UdpServer extends Thread {
         this.existingUsers = ExistingUsers.getInstance();
         this.rooms = RoomList.getInstance();
         logicMapHandler = new LogicMapHandler();
-        sender = new GameController(socket);
+        sender = new GameController(socket, logicMapHandler);
         senderThread = new Thread(sender);
         senderThread.start();
     }
@@ -48,13 +50,14 @@ public class UdpServer extends Thread {
 
     private void updatePlayerPosition(String id, String content){
         User currentUser = existingUsers.get(id);
+        //System.out.println(Gdx.graphics.getDeltaTime());
         currentUser.getPlayer().setPosition(content, logicMapHandler, existingUsers);
     }
 
     private void updatePlayersState(String id, String content){
         User currentUser = existingUsers.get(id);
         String splitedContetnt[] = content.split(":");
-        boolean isMoving = Boolean.parseBoolean(splitedContetnt[0]);
+        boolean isMoving = Boolean.parseBoolean(splitedContetnt[1]);
         currentUser.getPlayer().setMoving(isMoving);
     }
 
@@ -62,7 +65,6 @@ public class UdpServer extends Thread {
         String[] splitedContent = content.split(":");
         User currentUser = existingUsers.get(id);
         currentUser.getPlayer().setActiveMovementKeyByAngle(splitedContent[2]);
-        currentUser.getPlayer().setMoving(true);
         if(currentUser.getPlayer().canPlayerShoot()){
             String bulletType = splitedContent[1];
             String angle = splitedContent[2];
