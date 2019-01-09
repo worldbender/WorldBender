@@ -14,17 +14,19 @@ public class Player {
     private int width;
     private int height;
     private int hp=10;
-    private int moveSpeed = 1;
+    private double moveSpeed = 0.65;
     private long shootCooldown = 100L;
     private long lastTimePlayerHasShot = 0L;
-    private long lastTimePlayerHasChangedMovment = 0L;
-    private long changeMovementCooldown = 20L;
     private String activeMovementKey = "DOWN";
     private boolean isMoving = false;
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
     private float scale = 2f;
     private User user;
+    public boolean KEY_W = false;
+    public boolean KEY_S = false;
+    public boolean KEY_A = false;
+    public boolean KEY_D = false;
 
     public Player(User user){
         this.setWidth((int)(PLAYER_TEXTURE_WIDTH * scale));
@@ -86,28 +88,9 @@ public class Player {
         }
     }
 
-    public void setActiveMovementKeyFromWSADLetter(char letter){
-        switch (letter){
-            case 'A':
-                this.setActiveMovementKey("LEFT");
-
-                break;
-            case 'D':
-                this.setActiveMovementKey("RIGHT");
-                break;
-            case 'W':
-                this.setActiveMovementKey("UP");
-                break;
-            case 'S':
-                this.setActiveMovementKey("DOWN");
-                break;
-        }
-    }
-    public void setPosition(String content, LogicMapHandler map, Map<String, User> users){
-        char letter = content.charAt(0);
+    public void update(LogicMapHandler map, Map<String, User> users, double deltaTime){
         Rectangle playersNewBoundsRectangle;
         ArrayList<Player> players = new ArrayList<Player>();
-        double deltaTime = 5.0;
         int currentShift = (int)(deltaTime * this.moveSpeed);
 
         for(User user : users.values()){
@@ -115,39 +98,40 @@ public class Player {
                 players.add(user.getPlayer());
             }
         }
+        if(this.isMoving){
+            if(this.KEY_W){
+                playersNewBoundsRectangle = new Rectangle(this.x, this.y + currentShift, this.getWidth(), this.getHeight());
+                if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
+                    this.y += currentShift;
+                }
+            }
+            if(this.KEY_S){
+                playersNewBoundsRectangle = new Rectangle(this.x, this.y - currentShift, this.getWidth(), this.getHeight());
+                if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
+                    this.y -= currentShift;
+                }
+            }
+            if(this.KEY_A){
+                playersNewBoundsRectangle = new Rectangle(this.x - currentShift, this.y, this.getWidth(), this.getHeight());
+                if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
+                    this.x -= currentShift;
+                }
+            }
+            if(this.KEY_D){
+                playersNewBoundsRectangle = new Rectangle(this.x + currentShift, this.y, this.getWidth(), this.getHeight());
+                if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
+                    this.x += currentShift;
+                }
+            }
+        }
+    }
 
-        if(letter=='A'){
-            this.setActiveMovementKey("LEFT");
-            this.setMoving(true);
-            playersNewBoundsRectangle = new Rectangle(this.x - currentShift, this.y, this.getWidth(), this.getHeight());
-            if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
-                this.x -= currentShift;
-            }
-        }
-        else if(letter=='D'){
-            this.setActiveMovementKey("RIGHT");
-            this.setMoving(true);
-            playersNewBoundsRectangle = new Rectangle(this.x + currentShift, this.y, this.getWidth(), this.getHeight());
-            if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
-                this.x += currentShift;
-            }
-        }
-        else if(letter=='W'){
-            this.setActiveMovementKey("UP");
-            this.setMoving(true);
-            playersNewBoundsRectangle = new Rectangle(this.x, this.y + currentShift, this.getWidth(), this.getHeight());
-            if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
-                this.y += currentShift;
-            }
-        }
-        else if(letter=='S'){
-            this.setActiveMovementKey("DOWN");
-            this.setMoving(true);
-            playersNewBoundsRectangle = new Rectangle(this.x, this.y - currentShift, this.getWidth(), this.getHeight());
-            if(!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)){
-                this.y -= currentShift;
-            }
-        }
+    public void setWSAD(String wsad){
+        String splitedWsad[] = wsad.split(",");
+        this.KEY_W = Boolean.parseBoolean(splitedWsad[0]);
+        this.KEY_S = Boolean.parseBoolean(splitedWsad[1]);
+        this.KEY_A = Boolean.parseBoolean(splitedWsad[2]);
+        this.KEY_D = Boolean.parseBoolean(splitedWsad[3]);
     }
 
     public int getHp() {
@@ -160,14 +144,6 @@ public class Player {
 
     public void setShootCooldown(long shootCooldown) {
         this.shootCooldown = shootCooldown;
-    }
-
-    public int getMoveSpeed() {
-        return moveSpeed;
-    }
-
-    public void setMoveSpeed(int moveSpeed) {
-        this.moveSpeed = moveSpeed;
     }
 
     public String getActiveMovementKey() {

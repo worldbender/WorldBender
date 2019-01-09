@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class GameController implements Runnable {
     private static long deltaTime = 0L;
-    private final long MILISECONDS_BEETWEEN_FRAMES = 16L;
+    private final long MILISECONDS_BEETWEEN_FRAMES = 3L;
     private LogicMapHandler logicMapHandler;
     private static Map<String, User> existingUsers;
     private DatagramSocket socket;
@@ -35,9 +35,10 @@ public class GameController implements Runnable {
         while (true) {
             timeBefore = new Date().getTime();
             this.doGameLoop();
-            this.sleepIfNecessary();
             timeAfter = new Date().getTime();
             deltaTime = timeAfter - timeBefore;
+            this.sleepIfNecessary();
+            deltaTime =  new Date().getTime() - timeBefore;
         }
     }
 
@@ -56,7 +57,7 @@ public class GameController implements Runnable {
     private void sleepIfNecessary() {
         if (deltaTime < MILISECONDS_BEETWEEN_FRAMES) {
             try {
-                Thread.sleep(16);
+                Thread.sleep(MILISECONDS_BEETWEEN_FRAMES - deltaTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -68,6 +69,13 @@ public class GameController implements Runnable {
         sendBulletPositionPackage();
         sendOpponentDataPackage();
         informClientsAboutDeadBullets();
+        updatePlayerPosition();
+    }
+    private void updatePlayerPosition(){
+        //System.out.println(Gdx.graphics.getDeltaTime());
+        for (User user : existingUsers.values()){
+            user.getPlayer().update(logicMapHandler, existingUsers, deltaTime);
+        }
     }
 
     private void sendOpponentDataPackage() {

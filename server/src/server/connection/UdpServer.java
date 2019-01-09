@@ -48,17 +48,14 @@ public class UdpServer extends Thread {
         }
     }
 
-    private void updatePlayerPosition(String id, String content){
-        User currentUser = existingUsers.get(id);
-        //System.out.println(Gdx.graphics.getDeltaTime());
-        currentUser.getPlayer().setPosition(content, logicMapHandler, existingUsers);
-    }
-
     private void updatePlayersState(String id, String content){
         User currentUser = existingUsers.get(id);
         String splitedContetnt[] = content.split(":");
         boolean isMoving = Boolean.parseBoolean(splitedContetnt[1]);
+        String direction = splitedContetnt[2];
         currentUser.getPlayer().setMoving(isMoving);
+        currentUser.getPlayer().setWSAD(splitedContetnt[3]);
+        currentUser.getPlayer().setActiveMovementKey(direction);
     }
 
     private void createBullet(String id, String content){
@@ -100,7 +97,6 @@ public class UdpServer extends Thread {
         switch (splitedArray[0]){
             case "createBullet": createBullet(id, content); break;
             case "playerState": updatePlayersState(id, content); break;
-            default: updatePlayerPosition(id, content); break;
         }
     }
 }
