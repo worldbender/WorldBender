@@ -11,7 +11,7 @@ import screens.GameplayScreen;
 
 
 public class Player extends APlayer {
-    public static double maxHp = 10;
+    public static double maxHp = 100;
     public static Animation<TextureRegion> downWalkAnimation;
     public static Animation<TextureRegion> upWalkAnimation;
     public static Animation<TextureRegion> rightWalkAnimation;

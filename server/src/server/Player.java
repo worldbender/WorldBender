@@ -13,7 +13,7 @@ public class Player {
     private int y=500;
     private int width;
     private int height;
-    private int hp=10;
+    private int hp=100;
     private double moveSpeed = 0.65;
     private long shootCooldown = 100L;
     private long lastTimePlayerHasShot = 0L;
@@ -124,6 +124,10 @@ public class Player {
                 }
             }
         }
+    }
+
+    public void doDamage(int damage){
+        this.setHp(this.getHp() - damage);
     }
 
     public void setWSAD(String wsad){

@@ -1,5 +1,8 @@
 package server.connection;
 
+import server.LogicMap.LogicMapHandler;
+import server.RoomsController.Room;
+import server.RoomsController.RoomList;
 import com.badlogic.gdx.Gdx;
 import server.LogicMap.LogicMapHandler;
 import server.bullets.ABullet;
@@ -18,7 +21,7 @@ import java.util.Map;
 public class UdpServer extends Thread {
     private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortUdp"));
     private final static int BUFFER = 1024;
-    private DatagramSocket socket;
+    private static DatagramSocket socket;
     private List<Room> rooms;
     private Map<String, User> existingUsers;
     private LogicMapHandler logicMapHandler;
@@ -27,9 +30,7 @@ public class UdpServer extends Thread {
     public UdpServer() throws IOException {
         this.socket = new DatagramSocket(PORT);
         this.existingUsers = ExistingUsers.getInstance();
-        this.rooms = RoomList.getInstance();
-        logicMapHandler = new LogicMapHandler();
-        sender = new GameController(socket, logicMapHandler);
+        sender = new GameController();
         senderThread = new Thread(sender);
         senderThread.start();
     }
@@ -65,25 +66,23 @@ public class UdpServer extends Thread {
         if(currentUser.getPlayer().canPlayerShoot()){
             String bulletType = splitedContent[1];
             String angle = splitedContent[2];
-            ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getCenterX(), currentUser.getPlayer().getCenterY(), Float.parseFloat(angle));
+            ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getCenterX(), currentUser.getPlayer().getCenterY(), Float.parseFloat(angle), false);
             BulletList.addBullet(newBullet);
-            String message = "createBullet:" + newBullet.getType() + ":" + newBullet.getId() + ":" + newBullet.getAngle();
-            for(User user : existingUsers.values()){
-                if(user.hasConnection())
-                    sendPackage(message, user.getAddress(), user.getUdpPort());
-            }
+            BulletList.addBulletsToCreateList(newBullet);
         }
     }
-
-
-    public void sendPackage(String message, InetAddress clientAddress, int clientPort){
-        DatagramPacket packet;
-        byte[] data = message.getBytes();
-        packet = new DatagramPacket(data, data.length, clientAddress, clientPort);
-        try {
-            socket.send(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void sendUdpMsgToAllUsers(String msg, Map<String, User> existingUsers){
+        for(User user : existingUsers.values()){
+            if(user.hasConnection()){
+                DatagramPacket packet;
+                byte[] data = msg.getBytes();
+                packet = new DatagramPacket(data, data.length, user.getAddress(), user.getUdpPort());
+                try {
+                    socket.send(packet);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -92,7 +91,6 @@ public class UdpServer extends Thread {
         InetAddress clientAddress = packet.getAddress();
         int clientPort = packet.getPort();
         String id = clientAddress.toString() + "," + clientPort;
-        //System.out.println(id + ":" + content);
         String[] splitedArray = content.split(":");
         switch (splitedArray[0]){
             case "createBullet": createBullet(id, content); break;
