@@ -66,8 +66,7 @@ public class UdpServer extends Thread {
             String angle = splitedContent[2];
             ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getCenterX(), currentUser.getPlayer().getCenterY(), Float.parseFloat(angle), false);
             BulletList.addBullet(newBullet);
-            String message = "createBullet:" + newBullet.getType() + ":" + newBullet.getId() + ":" + newBullet.getAngle();
-            sendUdpMsgToAllUsers(message, existingUsers);
+            BulletList.addBulletsToCreateList(newBullet);
         }
     }
     public static void sendUdpMsgToAllUsers(String msg, Map<String, User> existingUsers){

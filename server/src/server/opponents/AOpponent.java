@@ -14,7 +14,7 @@ public abstract class AOpponent {
     private int id;
     private String type;
     private int hp;
-    private long shootCooldown = 100L;
+    private long shootCooldown = 1000L;
     private long lastTimePlayerHasShot = 0L;
     private boolean isDead = false;
 
@@ -23,8 +23,8 @@ public abstract class AOpponent {
 
     public void update(double deltaTime, LogicMapHandler map){
         Random generator = new Random();
-        int newX = this.getX() + generator.nextInt()%5;
-        int newY = this.getY() + generator.nextInt()%5;
+        int newX = this.getX() + generator.nextInt()%3;
+        int newY = this.getY() + generator.nextInt()%3;
         Rectangle newPosRectangle = new Rectangle(newX, newY, this.getWidth(), this.getHeight());
         if(!isOpponentCollidesWithMap(newPosRectangle, map)){
             this.setX(newX);

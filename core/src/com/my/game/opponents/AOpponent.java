@@ -28,8 +28,8 @@ public abstract class AOpponent{
     public abstract void draw(SpriteBatch spriteBatch);
 
     public void die(){
-        //MusicPlayer.initMusic("sounds/meow.mp3");
-        //MusicPlayer.playStaticMusic();
+        MusicPlayer.initMusic("sounds/meow.mp3");
+        MusicPlayer.playStaticMusic();
     }
 
     protected void drawHp(SpriteBatch batch, int textureHeight){

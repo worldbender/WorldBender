@@ -60,6 +60,7 @@ public class GameController implements Runnable {
         updateBulletsAndSendBulletPositionPackage();
         updateOpponentsAndSendOpponentDataPackage();
         informClientsAboutDeadBullets();
+        informClientsAboutNewBullets();
     }
     private void doTcpSends(){
         informClientsAboutDeadOpponents();
@@ -83,7 +84,7 @@ public class GameController implements Runnable {
     private void updateBulletsAndSendBulletPositionPackage() {
         String message;
         for (ABullet bullet : BulletList.getBullets()) {
-            bullet.update(deltaTime, logicMapHandler);
+            bullet.update(deltaTime, logicMapHandler, existingUsers);
             message = "updateBulletPosition:" + bullet.getId() + ":" + bullet.getX() + ":" + bullet.getY();
             UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
         }
@@ -117,5 +118,13 @@ public class GameController implements Runnable {
             TcpServer.sendTcpMsgToAllUsers(message, existingUsers);
         }
         OpponentList.flushDeadAOpponents();
+    }
+    private void informClientsAboutNewBullets(){
+        String message;
+        for (ABullet bullet : BulletList.getBulletsToCreate()) {
+            message = "createBullet:" + bullet.getType() + ":" + bullet.getId() + ":" + bullet.getAngle();
+            UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
+        }
+        BulletList.flushBulletsToCreate();
     }
 }
