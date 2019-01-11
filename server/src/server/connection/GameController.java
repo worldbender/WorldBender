@@ -19,14 +19,11 @@ public class GameController implements Runnable {
     private static long deltaTime = 0L;
     private final long MILISECONDS_BEETWEEN_FRAMES = 3L;
     private LogicMapHandler logicMapHandler;
-    private static Map<String, User> existingUsers;
-    private DatagramSocket socket;
+    private Map<String, User> existingUsers;
 
-
-    public GameController(DatagramSocket socket, LogicMapHandler logicMapHandler) {
+    public GameController() {
         this.existingUsers = ExistingUsers.getInstance();
-        this.logicMapHandler = logicMapHandler;
-        this.socket = socket;
+        this.logicMapHandler = new LogicMapHandler();
     }
 
     public void run() {
@@ -38,21 +35,9 @@ public class GameController implements Runnable {
             timeAfter = new Date().getTime();
             deltaTime = timeAfter - timeBefore;
             this.sleepIfNecessary();
-            deltaTime =  new Date().getTime() - timeBefore;
+            deltaTime = new Date().getTime() - timeBefore;
         }
     }
-
-    public void sendPackage(String message, InetAddress clientAddress, int clientPort) {
-        DatagramPacket packet;
-        byte[] data = message.getBytes();
-        packet = new DatagramPacket(data, data.length, clientAddress, clientPort);
-        try {
-            socket.send(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     private void sleepIfNecessary() {
         if (deltaTime < MILISECONDS_BEETWEEN_FRAMES) {
@@ -65,12 +50,22 @@ public class GameController implements Runnable {
     }
 
     private void doGameLoop() {
-        sendPlayerDataPackage();
-        sendBulletPositionPackage();
-        sendOpponentDataPackage();
-        informClientsAboutDeadBullets();
         updatePlayerPosition();
+        doUdpSends();
+        doTcpSends();
     }
+
+    private void doUdpSends(){
+        sendPlayerDataPackage();
+        updateBulletsAndSendBulletPositionPackage();
+        updateOpponentsAndSendOpponentDataPackage();
+        informClientsAboutDeadBullets();
+        informClientsAboutNewBullets();
+    }
+    private void doTcpSends(){
+        informClientsAboutDeadOpponents();
+    }
+
     private void updatePlayerPosition(){
         //System.out.println(Gdx.graphics.getDeltaTime());
         for (User user : existingUsers.values()){
@@ -78,43 +73,34 @@ public class GameController implements Runnable {
         }
     }
 
-    private void sendOpponentDataPackage() {
+    private void updateOpponentsAndSendOpponentDataPackage() {
         String message;
-        for (User current : existingUsers.values()) {
-            for (AOpponent opponent : OpponentList.getOpponents()) {
-                opponent.update(deltaTime, logicMapHandler);
-                message = "updateOpponentData:" + opponent.getId() + ":" + opponent.getX() + ":" + opponent.getY() + ":" + opponent.getHp();
-                if (current.hasConnection())
-                    sendPackage(message, current.getAddress(), current.getUdpPort());
-            }
+        for (AOpponent opponent : OpponentList.getOpponents()) {
+            opponent.update(deltaTime, logicMapHandler);
+            message = "updateOpponentData:" + opponent.getId() + ":" + opponent.getX() + ":" + opponent.getY() + ":" + opponent.getHp();
+            UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
         }
     }
 
-    private void sendBulletPositionPackage() {
+    private void updateBulletsAndSendBulletPositionPackage() {
         String message;
-        for (User current : existingUsers.values()) {
-            for (ABullet bullet : BulletList.getBullets()) {
-                bullet.update(deltaTime, logicMapHandler);
-                message = "updateBulletPosition:" + bullet.getId() + ":" + bullet.getX() + ":" + bullet.getY();
-                if (current.hasConnection())
-                    sendPackage(message, current.getAddress(), current.getUdpPort());
-            }
+        for (ABullet bullet : BulletList.getBullets()) {
+            bullet.update(deltaTime, logicMapHandler, existingUsers);
+            message = "updateBulletPosition:" + bullet.getId() + ":" + bullet.getX() + ":" + bullet.getY();
+            UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
         }
     }
 
     public void sendPlayerDataPackage() {
-        for (User current : existingUsers.values()) {
-            for (User u : existingUsers.values()) {
-                String message = "updatePosition:" +
-                        u.getName() + ":" +
-                        u.getPlayer().getX() + ":" +
-                        u.getPlayer().getY() + ":" +
-                        u.getPlayer().getHp() + ":" +
-                        u.getPlayer().getActiveMovementKey() + ":" +
-                        u.getPlayer().isMoving();
-                if (current.hasConnection())
-                    sendPackage(message, current.getAddress(), current.getUdpPort());
-            }
+        for (User u : existingUsers.values()) {
+            String message = "updatePosition:" +
+                    u.getName() + ":" +
+                    u.getPlayer().getX() + ":" +
+                    u.getPlayer().getY() + ":" +
+                    u.getPlayer().getHp() + ":" +
+                    u.getPlayer().getActiveMovementKey() + ":" +
+                    u.getPlayer().isMoving();
+            UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
         }
     }
 
@@ -122,23 +108,24 @@ public class GameController implements Runnable {
         String message;
         for (ABullet bullet : BulletList.getDeadBullets()) {
             message = "deleteBullet:" + bullet.getId();
-            for (User current : existingUsers.values()) {
-                if (current.hasConnection())
-                    sendPackage(message, current.getAddress(), current.getUdpPort());
-            }
+            UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
         }
         BulletList.flushDeadBullets();
     }
-
-    public static void removeOpponent(AOpponent opponent) {
-        String message = "deleteOpponent:" + opponent.getId();
-        for (User current : existingUsers.values()) {
-            if (current.hasConnection())
-                current.getThread().sendMessage(message);
+    private void informClientsAboutDeadOpponents() {
+        String message;
+        for (AOpponent opponent : OpponentList.getDeadOpponenets()) {
+            message = "deleteOpponent:" + opponent.getId();
+            TcpServer.sendTcpMsgToAllUsers(message, existingUsers);
         }
+        OpponentList.flushDeadAOpponents();
     }
-
-    public static long getDeltaTime() {
-        return deltaTime;
+    private void informClientsAboutNewBullets(){
+        String message;
+        for (ABullet bullet : BulletList.getBulletsToCreate()) {
+            message = "createBullet:" + bullet.getType() + ":" + bullet.getId() + ":" + bullet.getAngle();
+            UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
+        }
+        BulletList.flushBulletsToCreate();
     }
 }
