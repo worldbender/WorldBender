@@ -18,10 +18,12 @@ public class ABullet {
     private double bulletSpeed = 1;
     private boolean isDead = false;
     private int attack = 1;
-    protected ABullet(int x, int y, float angle){
+    private boolean hostile;
+    protected ABullet(int x, int y, float angle, boolean hostile){
         this.x = x;
         this.y = y;
         this.angle = angle;
+        this.hostile = hostile;
     }
     public void update(double deltaTime, LogicMapHandler map){
         int newX = this.getX() + (int)(deltaTime * Math.cos(angle) * bulletSpeed);
@@ -129,5 +131,13 @@ public class ABullet {
 
     public void setAttack(int attack) {
         this.attack = attack;
+    }
+
+    public boolean isHostile() {
+        return hostile;
+    }
+
+    public void setHostile(boolean hostile) {
+        this.hostile = hostile;
     }
 }

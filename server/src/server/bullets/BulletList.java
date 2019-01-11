@@ -28,9 +28,6 @@ public class BulletList {
     public static void addDeadBulletsTrashList(ABullet bullet){
         deadBullets.add(bullet);
     }
-    public static void deleteBullet(ABullet bullet){
-        deadBullets.remove(bullet);
-    }
     public static void flushDeadBullets(){
         deadBullets.clear();
     }

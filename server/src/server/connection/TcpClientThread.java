@@ -2,8 +2,8 @@ package server.connection;
 
 
 import server.ExistingUsers;
-import server.Room;
-import server.RoomList;
+import server.RoomsController.Room;
+import server.RoomsController.RoomList;
 import server.User;
 import server.opponents.AOpponent;
 import server.opponents.OpponentFabric;
@@ -28,7 +28,6 @@ public class TcpClientThread extends Thread{
     public TcpClientThread(Socket clientSocket) {
         this.user = new User();
         this.existingUsers = ExistingUsers.getInstance();
-        this.rooms = RoomList.getInstance();
         this.clientSocket = clientSocket;
         try {
             out = new PrintWriter(clientSocket.getOutputStream(),true);
@@ -67,7 +66,6 @@ public class TcpClientThread extends Thread{
         if ("udpPort".equals(splitedArray[0])) {
             newUser(splitedArray[1]);
         }
-
     }
 
     public void newUser(String udpPort){
