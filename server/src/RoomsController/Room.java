@@ -1,18 +1,19 @@
-package server;
+package RoomsController;
 
-import java.util.ArrayList;
+import server.User;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Room {
     private int id;
     private int limitUsers = 4;
     private String name;
-    private ArrayList<User> usersInRoom;
+    private CopyOnWriteArrayList<User> usersInRoom;
 
     public Room(){
         setId();
     }
 
-    public ArrayList getUsersInRoom(){
+    public CopyOnWriteArrayList<User> getUsersInRoom(){
         return this.usersInRoom;
     }
 
