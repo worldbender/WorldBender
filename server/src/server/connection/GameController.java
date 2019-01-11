@@ -21,7 +21,7 @@ public class GameController implements Runnable {
     private LogicMapHandler logicMapHandler;
     private Map<String, User> existingUsers;
 
-    public GameController(DatagramSocket socket) {
+    public GameController() {
         this.existingUsers = ExistingUsers.getInstance();
         this.logicMapHandler = new LogicMapHandler();
     }
@@ -66,8 +66,9 @@ public class GameController implements Runnable {
         informClientsAboutDeadOpponents();
     }
 
-    private void updatePlayerPosition() {
-        for (User user : existingUsers.values()) {
+    private void updatePlayerPosition(){
+        //System.out.println(Gdx.graphics.getDeltaTime());
+        for (User user : existingUsers.values()){
             user.getPlayer().update(logicMapHandler, existingUsers, deltaTime);
         }
     }

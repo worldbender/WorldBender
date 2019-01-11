@@ -3,6 +3,8 @@ package server.connection;
 import server.LogicMap.LogicMapHandler;
 import server.RoomsController.Room;
 import server.RoomsController.RoomList;
+import com.badlogic.gdx.Gdx;
+import server.LogicMap.LogicMapHandler;
 import server.bullets.ABullet;
 import server.bullets.BulletFabric;
 import server.bullets.BulletList;
@@ -28,7 +30,7 @@ public class UdpServer extends Thread {
     public UdpServer() throws IOException {
         this.socket = new DatagramSocket(PORT);
         this.existingUsers = ExistingUsers.getInstance();
-        sender = new GameController(socket);
+        sender = new GameController();
         senderThread = new Thread(sender);
         senderThread.start();
     }
