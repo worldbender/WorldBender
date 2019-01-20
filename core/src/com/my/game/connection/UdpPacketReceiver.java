@@ -44,9 +44,9 @@ public class UdpPacketReceiver implements Runnable {
     private void setBulletsPositions(String date){
         String[] splitedDate = date.split(":");
         int bulletId = Integer.parseInt(splitedDate[1]);
-        int bulletX = Integer.parseInt(splitedDate[2]);
-        int bulletY = Integer.parseInt(splitedDate[3]);
-        BulletList.setBulletPosition(bulletId, bulletX, bulletY);
+        double bulletX = Double.parseDouble(splitedDate[2]);
+        double bulletY = Double.parseDouble(splitedDate[3]);
+        BulletList.setBulletPosition(bulletId, (int)bulletX, (int)bulletY);
     }
     private void setOpponentsData(String date){
         String[] splitedDate = date.split(":");

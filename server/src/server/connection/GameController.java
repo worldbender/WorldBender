@@ -76,7 +76,7 @@ public class GameController implements Runnable {
     private void updateOpponentsAndSendOpponentDataPackage() {
         String message;
         for (AOpponent opponent : OpponentList.getOpponents()) {
-            opponent.update(deltaTime, logicMapHandler);
+            opponent.update(deltaTime, logicMapHandler, existingUsers);
             message = "updateOpponentData:" + opponent.getId() + ":" + opponent.getX() + ":" + opponent.getY() + ":" + opponent.getHp();
             UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
         }

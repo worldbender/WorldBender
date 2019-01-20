@@ -30,7 +30,7 @@ public class MusicPlayer {
         staticMusic = Gdx.audio.newMusic(Gdx.files.internal(pathToString));
     }
     public static void playStaticMusic(){
-        staticMusic.setVolume(0.1f);
+        staticMusic.setVolume(0.5f);
         staticMusic.play();
     }
     public static void setStaticVolume(float volume){

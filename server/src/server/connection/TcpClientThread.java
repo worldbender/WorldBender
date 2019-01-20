@@ -106,6 +106,8 @@ public class TcpClientThread extends Thread{
         }
         opponentType = "Schopenheuer";
         newOpponent = OpponentFabric.createOpponent(opponentType);
+        newOpponent.setX(2000);
+        newOpponent.setY(2600);
         OpponentList.addOpponent(newOpponent);
         message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
         for(User user : existingUsers.values()){

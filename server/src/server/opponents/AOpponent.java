@@ -1,9 +1,11 @@
 package server.opponents;
 
 import server.LogicMap.LogicMapHandler;
+import server.User;
 
 import java.awt.*;
 import java.util.Date;
+import java.util.Map;
 import java.util.Random;
 
 public abstract class AOpponent {
@@ -21,7 +23,7 @@ public abstract class AOpponent {
     protected AOpponent(){
     }
 
-    public void update(double deltaTime, LogicMapHandler map){
+    public void update(double deltaTime, LogicMapHandler map, Map<String, User> existingUsers){
         Random generator = new Random();
         int newX = this.getX() + generator.nextInt()%3;
         int newY = this.getY() + generator.nextInt()%3;
