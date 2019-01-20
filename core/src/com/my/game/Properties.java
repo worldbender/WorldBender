@@ -4,17 +4,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Properties;
 
-/**
- * Created by lucyna on 26.11.18.
- */
-public class Prosperites {
+public class Properties {
 
-    private static final String PATH = "config.properties";
+    private static final String PATH = "../../config.properties";
 
     public static void createConfigFile() {
-        Properties prop = new Properties();
+        java.util.Properties prop = new java.util.Properties();
         FileOutputStream output = null;
         try {
             prop.put("ip","localhost");
@@ -38,7 +34,7 @@ public class Prosperites {
 
     public static String loadConfigFile(String inputName) {
 
-        Properties prop = new Properties();
+        java.util.Properties prop = new java.util.Properties();
         FileInputStream input = null;
         try {
             input = new FileInputStream(PATH);
@@ -59,7 +55,7 @@ public class Prosperites {
 
     public static void displayConfigFile(){
 
-        Properties prop = new Properties();
+        java.util.Properties prop = new java.util.Properties();
         FileInputStream input = null;
         try {
             input  = new FileInputStream(PATH);
@@ -83,14 +79,5 @@ public class Prosperites {
                 }
             }
         }
-
-
-
-
-
-
     }
-
-
-
 }

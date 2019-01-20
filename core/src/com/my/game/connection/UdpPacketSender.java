@@ -1,6 +1,6 @@
 package com.my.game.connection;
 
-import com.my.game.Prosperites;
+import com.my.game.Properties;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,12 +10,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class PacketSender implements Runnable {
-    private final static int PORT = Integer.parseInt(Prosperites.loadConfigFile("PortUdp"));
+public class UdpPacketSender implements Runnable {
+    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortUdp"));
     private DatagramSocket socket;
     private String hostname;
 
-    PacketSender(DatagramSocket socket, String hostname) {
+    UdpPacketSender(DatagramSocket socket, String hostname) {
         this.socket = socket;
         this.hostname = hostname;
     }
@@ -40,7 +40,7 @@ public class PacketSender implements Runnable {
         while (true) {
             try {
                 while (!in.ready()) {
-                    Thread.sleep(100);
+                    Thread.sleep(10);
                 }
                 sendMessage(in.readLine());
             } catch (Exception e) {

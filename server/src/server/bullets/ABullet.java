@@ -1,15 +1,18 @@
 package server.bullets;
 
-import server.LogicMapHandler;
+import server.LogicMap.LogicMapHandler;
+import server.Player;
+import server.User;
 import server.opponents.AOpponent;
 import server.opponents.OpponentList;
 
 import java.awt.*;
+import java.util.Map;
 
 public class ABullet {
-    private int x;
-    private int y;
-    private float angle;
+    private double x;
+    private double y;
+    private double angle;
     private int id;
     private int range;
     private int width = 5;
@@ -18,40 +21,62 @@ public class ABullet {
     private double bulletSpeed = 1;
     private boolean isDead = false;
     private int attack = 1;
-    protected ABullet(int x, int y, float angle){
+    private boolean hostile;
+
+    protected ABullet(int x, int y, double angle, boolean hostile){
         this.x = x;
         this.y = y;
         this.angle = angle;
+        this.hostile = hostile;
     }
-    public void update(double deltaTime, LogicMapHandler map){
-        int newX = this.getX() + (int)(deltaTime * Math.cos(angle) * bulletSpeed);
-        int newY = this.getY() + (int)(deltaTime * Math.sin(angle) * bulletSpeed);
-        Rectangle bounds = new Rectangle(this.x, this.y, this.width, this.height);
-        this.handleBulletCollisionWithOpponent(bounds);
-        if(!map.isRectangleCollidesWithMap(bounds)){
-            this.handleBulletShift(newX, newY, deltaTime);
-        } else{
-            this.isDead = true;
-        }
-        this.checkIfBulletShoudDie();
+    public void update(double deltaTime, LogicMapHandler map, Map<String, User> existingUsers){
+        double newX = this.getX() + (deltaTime * Math.cos(angle) * bulletSpeed);
+        double newY = this.getY() + (deltaTime * Math.sin(angle) * bulletSpeed);
+        Rectangle bounds = new Rectangle((int)newX, (int)newY, this.width, this.height);
+        handleAllBulletCollisions(deltaTime, map, existingUsers, bounds, newX, newY);
+        this.checkIfBulletShouldDie();
     }
 
-    private void handleBulletCollisionWithOpponent(Rectangle rec){
+    private void handleAllBulletCollisions(double deltaTime, LogicMapHandler map, Map<String, User> existingUsers, Rectangle bounds, double newX, double newY){
+        this.handleBulletCollisionWithMap(map, bounds);
+        this.handleBulletCollisionWithOpponents(bounds);
+        this.handleBulletCollisionWithPlayers(bounds, existingUsers);
+        this.handleBulletShift(newX, newY, deltaTime);
+    }
+
+    private void handleBulletCollisionWithMap(LogicMapHandler map, Rectangle bounds){
+        if(map.isRectangleCollidesWithMap(bounds)){
+            this.isDead = true;
+        }
+    }
+
+    private void handleBulletCollisionWithOpponents(Rectangle rec){
         for(AOpponent opponent : OpponentList.getOpponents()){
-            if(rec.intersects(opponent.getBounds())){
+            if(rec.intersects(opponent.getBounds()) && !this.isHostile()){
                 opponent.doDamage(this.attack);
                 this.isDead = true;
             }
         }
     }
 
-    private void handleBulletShift(int newX, int newY, double deltaTime){
+    private void handleBulletCollisionWithPlayers(Rectangle rec, Map<String, User> existingUsers){
+        Player player;
+        for(User user : existingUsers.values()){
+            player = user.getPlayer();
+            if(rec.intersects(player.getBounds()) && this.isHostile()){
+                player.doDamage(this.attack);
+                this.isDead = true;
+            }
+        }
+    }
+
+    private void handleBulletShift(double newX, double newY, double deltaTime){
         this.setX(newX);
         this.setY(newY);
         decrementRange(deltaTime);
     }
 
-    private void checkIfBulletShoudDie(){
+    private void checkIfBulletShouldDie(){
         if(this.isDead){
             deleteBullet();
         }
@@ -66,7 +91,7 @@ public class ABullet {
             );
             this.setRange(this.getRange() - (int)shift);
         } else{
-            this.deleteBullet();
+            this.isDead = true;
         }
     }
 
@@ -75,7 +100,7 @@ public class ABullet {
         BulletList.addDeadBulletsTrashList(this);
     }
 
-    public float getAngle() {
+    public double getAngle() {
         return angle;
     }
 
@@ -83,19 +108,19 @@ public class ABullet {
         this.angle = angle;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
@@ -129,5 +154,13 @@ public class ABullet {
 
     public void setAttack(int attack) {
         this.attack = attack;
+    }
+
+    public boolean isHostile() {
+        return hostile;
+    }
+
+    public void setHostile(boolean hostile) {
+        this.hostile = hostile;
     }
 }

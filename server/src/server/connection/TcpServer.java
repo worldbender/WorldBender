@@ -1,12 +1,14 @@
 package server.connection;
 
+import server.Properties;
+import server.User;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Map;
 
 public class TcpServer extends Thread{
-
-    private final static int PORT = 10008;
+    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortTcp"));
     private ServerSocket serverSocket;
 
     public TcpServer(){
@@ -34,6 +36,11 @@ public class TcpServer extends Thread{
             {
                 e.printStackTrace();
             }
+        }
+    }
+    public static void sendTcpMsgToAllUsers(String msg, Map<String, User> existingUsers){
+        for (User current : existingUsers.values()) {
+            current.getThread().sendMessage(msg);
         }
     }
 }

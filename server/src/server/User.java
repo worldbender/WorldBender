@@ -20,12 +20,12 @@ public class User {
         this.userUdpPort = userUdpPort;
         this.connectionId = connectionId;
         this.name = name;
-        this.player = new Player();
+        this.player = new Player(this);
         this.connection = true;
     }
 
     public User(){
-        this.player = new Player();
+        this.player = new Player(this);
         this.connection = true;
     }
 
@@ -77,7 +77,7 @@ public class User {
         this.name = name;
     }
 
-    public boolean getConnection(){
+    public boolean hasConnection(){
         return this.connection;
     }
 

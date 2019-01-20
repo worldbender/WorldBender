@@ -7,11 +7,11 @@ import java.net.*;
 
 public class Connection {
     InetAddress IPAddress;
-    private String hostName = WBGame.SERVER_ADRESS;
+    private String hostName = WBGame.SERVER_ADDRESS;
     private DatagramSocket socket;
     public TCPConnection tcp;
-    public PacketReceiver receiver;
-    public PacketSender sender;
+    public UdpPacketReceiver receiver;
+    public UdpPacketSender sender;
     private Thread receiverThread;
     private Thread senderThread;
     private Thread tcpThread;
@@ -23,7 +23,7 @@ public class Connection {
             e.printStackTrace();
         }
         try {
-            IPAddress = InetAddress.getByName(WBGame.SERVER_ADRESS);
+            IPAddress = InetAddress.getByName(WBGame.SERVER_ADDRESS);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -31,12 +31,21 @@ public class Connection {
     }
 
     public void createConnection() throws IOException {
+        initTcp();
+        initUdp();
+    }
+
+    private void initTcp() throws IOException{
         tcp = new TCPConnection(hostName);
         tcpThread = new Thread(tcp);
         tcpThread.start();
-        tcp.sendMessage(String.valueOf("udpPort:" + socket.getLocalPort()));
-        receiver = new PacketReceiver(socket);
-        sender = new PacketSender(socket, hostName);
+        tcp.sendMessage("udpPort:" + socket.getLocalPort());
+    }
+
+
+    private void initUdp(){
+        receiver = new UdpPacketReceiver(socket);
+        sender = new UdpPacketSender(socket, hostName);
         receiverThread = new Thread(receiver);
         senderThread = new Thread(sender);
         receiverThread.start();

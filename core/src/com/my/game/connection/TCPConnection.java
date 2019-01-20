@@ -1,14 +1,19 @@
 package com.my.game.connection;
 
+import com.my.game.opponents.AOpponent;
+import com.my.game.opponents.OpponentFabric;
+import com.my.game.opponents.OpponentList;
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
-import com.my.game.Prosperites;
+import com.my.game.Properties;
+import screens.GameplayScreen;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Map;
 
 public class TCPConnection extends Thread {
-    private final int PORT = Integer.parseInt(Prosperites.loadConfigFile("PortTcp"));
+    private final int PORT = Integer.parseInt(Properties.loadConfigFile("PortTcp"));
     private String hostname;
     private Socket socket;
     private PrintWriter out;
@@ -41,10 +46,36 @@ public class TCPConnection extends Thread {
 
     public void readMessage(String message){
         String[] splitedArray = message.split(":");
-        if ("dc".equals(splitedArray[0])) {
+        switch(splitedArray[0]) {
+        case "dc":
             players.remove(splitedArray[1]);
+            System.out.println("Remove player: " + splitedArray[1]);
+            break;
+        case "init":
+            System.out.println("Init player: " + splitedArray[1]);
+            Player p = new Player(splitedArray[1], splitedArray[2], splitedArray[3]);
+            if(splitedArray[4].equals("true")){
+                p.setCurrentPlayer(true);
+                GameplayScreen.currentPlayer = p;
+            }
+            players.put(splitedArray[1], p);
+            break;
+        case "newPlayer":
+            System.out.println("New player connected: " + splitedArray[1]);
+            newPlayer(splitedArray[1]);
+            break;
+        case "createOpponent":
+            AOpponent newOpponent = OpponentFabric.createOpponent(splitedArray[1], Integer.parseInt(splitedArray[2]));
+            OpponentList.addOpponent(newOpponent);
+            break;
+        case "deleteOpponent":
+            OpponentList.removeOpponentById(Integer.parseInt(splitedArray[1])); break;
         }
-        System.out.println("echo: " + message);
+    }
+
+    private void newPlayer(String name) {
+        Player p = new Player(name, 0, 0);
+        players.put(name,p);
     }
 
 }

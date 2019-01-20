@@ -1,5 +1,7 @@
 package com.my.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
@@ -16,6 +18,7 @@ public class DesktopLauncher {
 		config.resizable = true;
 		config.fullscreen = false;
 		config.forceExit = true;
+		config.foregroundFPS = 0;
 
 		new LwjglApplication(new WBGame(), config);
 	}

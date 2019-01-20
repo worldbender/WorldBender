@@ -1,10 +1,12 @@
 package server.connection;
 
 
+import RoomsController.Room;
 import server.ExistingUsers;
-import server.Room;
-import server.RoomList;
 import server.User;
+import server.opponents.AOpponent;
+import server.opponents.OpponentFabric;
+import server.opponents.OpponentList;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +27,6 @@ public class TcpClientThread extends Thread{
     public TcpClientThread(Socket clientSocket) {
         this.user = new User();
         this.existingUsers = ExistingUsers.getInstance();
-        this.rooms = RoomList.getInstance();
         this.clientSocket = clientSocket;
         try {
             out = new PrintWriter(clientSocket.getOutputStream(),true);
@@ -37,22 +38,22 @@ public class TcpClientThread extends Thread{
 
     public void run()
     {
-        System.out.println ("New Communication Thread Started " + clientSocket.getPort());
+        System.out.println ("New TCP Connection Started with" + clientSocket.getPort());
         String message;
         try {
             while ((message = in.readLine()) != null) {
                 readMessage(message);
+                System.out.println(message);
             }
             out.close();
             in.close();
             clientSocket.close();
-        } catch (IOException e) {
-            existingUsers.get(user.getConnectionId()).setConnection(false);
-            for (User current : existingUsers.values()) {
-                current.getThread().sendMessage("dc:"+user.getName());
-            }
-            System.out.println("Rozłączono");
+        } catch (IOException e) { }
+        existingUsers.get(user.getConnectionId()).setConnection(false);
+        for (User current : existingUsers.values()) {
+            current.getThread().sendMessage("dc:"+user.getName());
         }
+        System.out.println("TCP Connection lost with " + clientSocket.getPort());
     }
 
     public void sendMessage(String message){
@@ -62,20 +63,56 @@ public class TcpClientThread extends Thread{
     public void readMessage(String message){
         String[] splitedArray = message.split(":");
         if ("udpPort".equals(splitedArray[0])) {
-            newPlayer(splitedArray[1]);
+            newUser(splitedArray[1]);
         }
-
-        System.out.println("echo: " + message);
     }
 
-    public void newPlayer(String udpPort){
+    public void newUser(String udpPort){
         String id = clientSocket.getInetAddress().toString() + "," + udpPort;
         this.user.setAddress(clientSocket.getInetAddress());
         this.user.setTcpPort(clientSocket.getPort());
         this.user.setUdpPort(Integer.valueOf(udpPort));
         this.user.setConnectionId(id);
         this.user.setName("player"+ existingUsers.size());
+
+        //ten pakiet wysylamy do naszego gracza z jego poczatkowa pozycja
+        sendMessage("init:"+this.user.getName()+":"+this.user.getPlayer().getX()+":"+this.user.getPlayer().getY()+":true");
+
+        //te pakiety wysyłamy do innych graczy z informacja ze gracz dolaczyl do gry
+        for (User current : existingUsers.values()) {
+            current.getThread().sendMessage("newPlayer:player" + (existingUsers.size()));
+        }
+
+        //te pakiety wysylamy do naszego gracza z pozycjami juz istniejacych graczy
+        for (User current : existingUsers.values()) {
+            String message = "init:"+current.getName() + ":" + current.getPlayer().getX() + ":" + current.getPlayer().getY()+":false";
+            if(current.hasConnection())
+                sendMessage(message);
+        }
+
         existingUsers.put(id, this.user);
         existingUsers.get(user.getConnectionId()).setThread(this);
+        createOpponent();
+    }
+
+    private void createOpponent(){
+        String opponentType = "Nietzsche";
+        AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);
+        OpponentList.addOpponent(newOpponent);
+        String message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
+        for(User user : existingUsers.values()){
+            if(user.hasConnection())
+                user.getThread().sendMessage(message);
+        }
+        opponentType = "Schopenheuer";
+        newOpponent = OpponentFabric.createOpponent(opponentType);
+        newOpponent.setX(2000);
+        newOpponent.setY(2600);
+        OpponentList.addOpponent(newOpponent);
+        message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
+        for(User user : existingUsers.values()){
+            if(user.hasConnection())
+                user.getThread().sendMessage(message);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package server.blocks;
+package server.LogicMap;
 
 import java.awt.*;
 

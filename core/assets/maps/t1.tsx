@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.1" name="t1" tilewidth="32" tileheight="32" tilecount="256" columns="16">
+<tileset name="t1" tilewidth="32" tileheight="32" tilecount="256" columns="16">
  <image source="mountain_landscape.png" width="512" height="512"/>
  <tile id="116">
   <properties>
@@ -71,6 +71,11 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+ <tile id="203">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
  <tile id="208">
   <properties>
    <property name="blocked" value=""/>
@@ -122,6 +127,16 @@
   </properties>
  </tile>
  <tile id="218">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="219">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="220">
   <properties>
    <property name="blocked" value=""/>
   </properties>
@@ -181,6 +196,26 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+ <tile id="235">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+  <objectgroup draworder="index">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </objectgroup>
+ </tile>
+ <tile id="236">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="237">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
  <tile id="240">
   <properties>
    <property name="blocked" value=""/>
@@ -232,6 +267,16 @@
   </properties>
  </tile>
  <tile id="250">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="251">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="253">
   <properties>
    <property name="blocked" value=""/>
   </properties>
