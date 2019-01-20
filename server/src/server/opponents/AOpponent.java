@@ -1,8 +1,11 @@
 package server.opponents;
 
 import server.LogicMap.LogicMapHandler;
+import server.User;
 
 import java.awt.*;
+import java.util.Date;
+import java.util.Map;
 import java.util.Random;
 
 public abstract class AOpponent {
@@ -13,15 +16,17 @@ public abstract class AOpponent {
     private int id;
     private String type;
     private int hp;
-
+    private long shootCooldown = 1000L;
+    private long lastTimePlayerHasShot = 0L;
+    private boolean isDead = false;
 
     protected AOpponent(){
     }
 
-    public void update(double deltaTime, LogicMapHandler map){
+    public void update(double deltaTime, LogicMapHandler map, Map<String, User> existingUsers){
         Random generator = new Random();
-        int newX = this.getX() + generator.nextInt()%5;
-        int newY = this.getY() + generator.nextInt()%5;
+        int newX = this.getX() + generator.nextInt()%3;
+        int newY = this.getY() + generator.nextInt()%3;
         Rectangle newPosRectangle = new Rectangle(newX, newY, this.getWidth(), this.getHeight());
         if(!isOpponentCollidesWithMap(newPosRectangle, map)){
             this.setX(newX);
@@ -43,8 +48,24 @@ public abstract class AOpponent {
             this.handleOpponentDeath();
         }
     }
+    public boolean canOpponentShoot(){
+        boolean result = false;
+        Date date= new Date();
+        long time = date.getTime();
+        if(time - this.lastTimePlayerHasShot > this.shootCooldown){
+            result = true;
+            this.lastTimePlayerHasShot = time;
+        }
+        return result;
+    }
     private void handleOpponentDeath(){
         OpponentList.removeOpponent(this);
+        OpponentList.addDeadAOpponentsTrashList(this);
+    }
+    private void checkIfOpponentShouldDie(){
+        if(this.isDead){
+            handleOpponentDeath();
+        }
     }
     public int getX() {
         return x;
@@ -100,5 +121,13 @@ public abstract class AOpponent {
 
     public void setHp(int hp) {
         this.hp = hp;
+    }
+
+    public int getCenterX(){
+        return this.getX() + (int)(this.getWidth()/2.0);
+    }
+
+    public int getCenterY(){
+        return this.getY() + (int)(this.getHeight()/2.0);
     }
 }

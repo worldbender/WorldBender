@@ -10,7 +10,9 @@ public class ShapeDrawer {
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(x - 10, y, 10, (float)(textureHeight * ((double)accualHp/maxHp)));
+        if((double)accualHp/maxHp > 0.0){
+            shapeRenderer.rect(x - 10, y, 10, (float)(textureHeight * ((double)accualHp/maxHp)));
+        }
         shapeRenderer.end();
     }
 }
