@@ -2,6 +2,7 @@ package server.connection;
 
 
 import RoomsController.Room;
+import RoomsController.RoomList;
 import server.ExistingUsers;
 import server.User;
 import server.opponents.AOpponent;
@@ -28,6 +29,7 @@ public class TcpClientThread extends Thread{
         this.user = new User();
         this.existingUsers = ExistingUsers.getInstance();
         this.clientSocket = clientSocket;
+        this.rooms = RoomList.getInstance();
         try {
             out = new PrintWriter(clientSocket.getOutputStream(),true);
             in = new BufferedReader(new InputStreamReader( clientSocket.getInputStream()));
@@ -62,8 +64,11 @@ public class TcpClientThread extends Thread{
 
     public void readMessage(String message){
         String[] splitedArray = message.split(":");
-        if ("udpPort".equals(splitedArray[0])) {
-            newUser(splitedArray[1]);
+        switch (splitedArray[0]){
+            case "udpPort": newUser(splitedArray[1]); break;
+            case "newRoom": newRoom(this.user); break;
+            case "joinRoom": joinRoom(this.user); break;
+            case "leaveRoom": leaveRoom(this.user); break;
         }
     }
 
@@ -93,6 +98,49 @@ public class TcpClientThread extends Thread{
         existingUsers.put(id, this.user);
         existingUsers.get(user.getConnectionId()).setThread(this);
         createOpponent();
+    }
+
+    private void newRoom(User user){
+        Room newRoom = new Room(rooms.size());
+        newRoom.addUserToRoom(user);
+        rooms.add(newRoom);
+
+
+    }
+
+    //TODO: dolaczanie do roznych pokoi
+    private void joinRoom(User user){
+        for(Room room : rooms){
+            if(room.getId() == 0) room.addUserToRoom(user);
+        }
+    }
+
+    //TODO: opuszczanie pokoi
+    private void leaveRoom(User user){
+        for(Room room : rooms){
+            if(room.getId() == 0) {
+                room.deleteUserFromRoom(user);
+                if(room.getUsersInRoom().size() == 0) deleteRoom(room);
+            }
+        }
+    }
+
+    //TODO: start gry
+    private void startGame(){
+        //te pakiety wysyłamy do innych graczy z informacja ze gracz dolaczyl do gry
+        for (User current : existingUsers.values()) {
+            current.getThread().sendMessage("newPlayer:player" + (existingUsers.size()));
+        }
+    }
+
+    //TODO: sprawdzic czy poprawnie dziala
+    private void deleteRoom(Room roomToDelete){
+        System.out.println("deleting room");
+        for(Room room : rooms){
+            if(room.getId() == roomToDelete.getId()) {
+                rooms.remove(room);
+            }
+        }
     }
 
     private void createOpponent(){

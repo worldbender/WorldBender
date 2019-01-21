@@ -14,6 +14,7 @@ import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UdpServer extends Thread {
     private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortUdp"));
@@ -70,16 +71,13 @@ public class UdpServer extends Thread {
     }
     public static void sendUdpMsgToAllUsers(String msg, Map<String, User> existingUsers){
         for(User user : existingUsers.values()){
-            if(user.hasConnection()){
-                DatagramPacket packet;
-                byte[] data = msg.getBytes();
-                packet = new DatagramPacket(data, data.length, user.getAddress(), user.getUdpPort());
-                try {
-                    socket.send(packet);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            createPackage(msg, user);
+        }
+    }
+
+    public static void sendUdpMsgToAllUsersInRoom(String msg, CopyOnWriteArrayList<User> usersInRoom){
+        for(User user : usersInRoom){
+            createPackage(msg, user);
         }
     }
 
@@ -92,6 +90,19 @@ public class UdpServer extends Thread {
         switch (splitedArray[0]){
             case "createBullet": createBullet(id, content); break;
             case "playerState": updatePlayersState(id, content); break;
+        }
+    }
+
+    private static void createPackage(String msg, User user){
+        if(user.hasConnection()){
+            DatagramPacket packet;
+            byte[] data = msg.getBytes();
+            packet = new DatagramPacket(data, data.length, user.getAddress(), user.getUdpPort());
+            try {
+                socket.send(packet);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

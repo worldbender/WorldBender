@@ -27,8 +27,8 @@ public class RoomScreen extends AbstractScreen {
         Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
 
         //create buttons
-        TextButton newGame = new TextButton("New Game", skin);
-        TextButton back = new TextButton("Main Menu", skin);
+        TextButton newGame = new TextButton("Start Game", skin);
+        TextButton back = new TextButton("Leave Room", skin);
 
         //add buttons to table
         table.add(newGame).fillX().uniformX().bottom();
@@ -41,6 +41,7 @@ public class RoomScreen extends AbstractScreen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                WBGame.connection.tcp.sendMessage("leaveRoom:" + WBGame.connection.socket.getLocalPort());
                 game.changeScreen(WBGame.MENU);
             }
         });

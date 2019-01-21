@@ -2,6 +2,7 @@ package server.connection;
 
 import server.Properties;
 import server.User;
+import RoomsController.Room;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -40,6 +41,12 @@ public class TcpServer extends Thread{
     }
     public static void sendTcpMsgToAllUsers(String msg, Map<String, User> existingUsers){
         for (User current : existingUsers.values()) {
+            current.getThread().sendMessage(msg);
+        }
+    }
+
+    public static void sendTcpMsgToAllUsersInRoom(String msg, Room room){
+        for (User current : room.getUsersInRoom()) {
             current.getThread().sendMessage(msg);
         }
     }

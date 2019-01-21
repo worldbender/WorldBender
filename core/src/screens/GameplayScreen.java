@@ -32,8 +32,6 @@ public class GameplayScreen extends AbstractScreen{
     private static Map<String, Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
-    private Connection connection;
-    boolean connectionStatus = false;
     public static Player currentPlayer;
     private int numerOfXTiles;
     private int numerOfYTiles;
@@ -63,19 +61,10 @@ public class GameplayScreen extends AbstractScreen{
 
     public GameplayScreen(WBGame game) {
         super(game);
-        connection = new Connection();
         this.create();
     }
 
     public void create() {
-        try{
-            connection.createConnection();
-            System.out.println("Nawiązano połączenie w serwerem");
-            connectionStatus = true;
-        }catch(Exception e){
-            System.out.println("Nie nawiązano połączenia");
-            connectionStatus = false;
-        }
         this.loadData();
         this.init();
         MusicPlayer musicPlayer = new MusicPlayer();
@@ -119,29 +108,17 @@ public class GameplayScreen extends AbstractScreen{
     @Override
     public void render(float delta) {
         stateTime += Gdx.graphics.getDeltaTime();
-        if(!connectionStatus){
-            game.changeScreen(WBGame.MENU);
-            try{
-                connection.createConnection();
-                connectionStatus = true;
-                game.changeScreen(WBGame.PLAY);
-            }catch(Exception e){
-                System.out.println("Nie nawiązano połączenia");
-            }
-        }
-        else{
-            super.render(delta);
-            this.update();
-            this.handleMapShift();
-            render.setView(camera);
-            render.render();
+        super.render(delta);
+        this.update();
+        this.handleMapShift();
+        render.setView(camera);
+        render.render();
 
-            spriteBatch.begin();
-            this.drawAllMovableObjects(spriteBatch, stateTime);
-            spriteBatch.end();
+        spriteBatch.begin();
+        this.drawAllMovableObjects(spriteBatch, stateTime);
+        spriteBatch.end();
 
-            this.sendMessageToServer("playerState:" + currentPlayer.getPlayerState());
-        }
+        this.sendMessageToServer("playerState:" + currentPlayer.getPlayerState());
     }
 
     private void drawAllMovableObjects(SpriteBatch spriteBatch, float stateTime){
@@ -179,7 +156,8 @@ public class GameplayScreen extends AbstractScreen{
 
     private void sendMessageToServer(String message){
         try {
-            this.connection.sender.sendMessage(message);
+            WBGame.connection.sender.sendMessage(message);
+            WBGame.connection.sender.sendMessage(message);
         } catch (Exception e) {
             e.printStackTrace();
         }

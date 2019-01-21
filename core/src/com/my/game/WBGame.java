@@ -3,18 +3,22 @@ package com.my.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
-import screens.RoomScreen;
+import com.my.game.connection.Connection;
+import screens.*;
 import screens.SplashScreen;
-import screens.MenuScreen;
-import screens.GameplayScreen;
+
 import java.awt.*;
 
 public class WBGame extends Game {
+
+    public static Connection connection;
+    public  static boolean connectionStatus = false;
 
     private GameplayScreen gameplayScreen;
     private MenuScreen menuScreen;
     private RoomScreen roomScreen;
 
+    public final static int SPLASH = -1;
     public final static int MENU = 0;
     public final static int PLAY = 1;
     public final static int ROOM = 2;
@@ -41,6 +45,7 @@ public class WBGame extends Game {
 
     @Override
     public void create () {
+        this.connection = new Connection();
         this.setScreen(new SplashScreen(this));
     }
 
@@ -54,6 +59,9 @@ public class WBGame extends Game {
 
     public void changeScreen(int screen){
         switch(screen){
+            case SPLASH:
+                this.setScreen(new SplashScreen(this));
+                break;
             case MENU:
                 this.setScreen(new MenuScreen(this));
                 break;

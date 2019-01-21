@@ -1,5 +1,6 @@
 package server.connection;
 
+import RoomsController.Room;
 import server.ExistingUsers;
 import server.LogicMap.LogicMapHandler;
 import server.User;
@@ -14,15 +15,22 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameController implements Runnable {
     private static long deltaTime = 0L;
     private final long MILISECONDS_BEETWEEN_FRAMES = 3L;
     private LogicMapHandler logicMapHandler;
     private Map<String, User> existingUsers;
+    private CopyOnWriteArrayList<User> usersInRoom;
 
     public GameController() {
         this.existingUsers = ExistingUsers.getInstance();
+        this.logicMapHandler = new LogicMapHandler();
+    }
+
+    public GameController(Room room) {
+        this.usersInRoom = room.getUsersInRoom();
         this.logicMapHandler = new LogicMapHandler();
     }
 
