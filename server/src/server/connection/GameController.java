@@ -129,7 +129,7 @@ public class GameController implements Runnable {
         String message;
         for (AOpponent opponent : room.opponentList.getDeadOpponenets()) {
             message = "deleteOpponent:" + opponent.getId();
-            UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
+            TcpServer.sendTcpMsgToAllUsersInRoom(message, usersInRoom);
         }
         room.opponentList.flushDeadAOpponents();
     }
