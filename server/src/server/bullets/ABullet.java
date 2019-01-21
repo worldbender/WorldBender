@@ -8,6 +8,7 @@ import server.opponents.OpponentList;
 
 import java.awt.*;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ABullet {
     private double x;
@@ -29,18 +30,18 @@ public class ABullet {
         this.angle = angle;
         this.hostile = hostile;
     }
-    public void update(double deltaTime, LogicMapHandler map, Map<String, User> existingUsers){
+    public void update(double deltaTime, LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, OpponentList opponentList, BulletList bulletList){
         double newX = this.getX() + (deltaTime * Math.cos(angle) * bulletSpeed);
         double newY = this.getY() + (deltaTime * Math.sin(angle) * bulletSpeed);
         Rectangle bounds = new Rectangle((int)newX, (int)newY, this.width, this.height);
-        handleAllBulletCollisions(deltaTime, map, existingUsers, bounds, newX, newY);
-        this.checkIfBulletShouldDie();
+        handleAllBulletCollisions(deltaTime, map, usersInRoom, bounds, newX, newY, opponentList);
+        this.checkIfBulletShouldDie(bulletList);
     }
 
-    private void handleAllBulletCollisions(double deltaTime, LogicMapHandler map, Map<String, User> existingUsers, Rectangle bounds, double newX, double newY){
+    private void handleAllBulletCollisions(double deltaTime, LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, Rectangle bounds, double newX, double newY, OpponentList opponentList){
         this.handleBulletCollisionWithMap(map, bounds);
-        this.handleBulletCollisionWithOpponents(bounds);
-        this.handleBulletCollisionWithPlayers(bounds, existingUsers);
+        this.handleBulletCollisionWithOpponents(bounds, opponentList);
+        this.handleBulletCollisionWithPlayers(bounds, usersInRoom);
         this.handleBulletShift(newX, newY, deltaTime);
     }
 
@@ -50,18 +51,18 @@ public class ABullet {
         }
     }
 
-    private void handleBulletCollisionWithOpponents(Rectangle rec){
-        for(AOpponent opponent : OpponentList.getOpponents()){
+    private void handleBulletCollisionWithOpponents(Rectangle rec, OpponentList opponentList){
+        for(AOpponent opponent : opponentList.getOpponents()){
             if(rec.intersects(opponent.getBounds()) && !this.isHostile()){
-                opponent.doDamage(this.attack);
+                opponent.doDamage(this.attack, opponentList);
                 this.isDead = true;
             }
         }
     }
 
-    private void handleBulletCollisionWithPlayers(Rectangle rec, Map<String, User> existingUsers){
+    private void handleBulletCollisionWithPlayers(Rectangle rec, CopyOnWriteArrayList<User> usersInRoom){
         Player player;
-        for(User user : existingUsers.values()){
+        for(User user : usersInRoom){
             player = user.getPlayer();
             if(rec.intersects(player.getBounds()) && this.isHostile()){
                 player.doDamage(this.attack);
@@ -76,9 +77,9 @@ public class ABullet {
         decrementRange(deltaTime);
     }
 
-    private void checkIfBulletShouldDie(){
+    private void checkIfBulletShouldDie(BulletList bulletList){
         if(this.isDead){
-            deleteBullet();
+            deleteBullet(bulletList);
         }
     }
 
@@ -95,9 +96,9 @@ public class ABullet {
         }
     }
 
-    private void deleteBullet(){
-        BulletList.removeBullet(this);
-        BulletList.addDeadBulletsTrashList(this);
+    private void deleteBullet(BulletList bulletList){
+        bulletList.removeBullet(this);
+        bulletList.addDeadBulletsTrashList(this);
     }
 
     public double getAngle() {

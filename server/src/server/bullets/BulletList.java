@@ -4,47 +4,47 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BulletList {
-    private static CopyOnWriteArrayList<ABullet> bulletsToCreate = new CopyOnWriteArrayList<ABullet>();
-    private static CopyOnWriteArrayList<ABullet> bullets = new CopyOnWriteArrayList<ABullet>();
-    private static CopyOnWriteArrayList<ABullet> deadBullets = new CopyOnWriteArrayList<ABullet>();
+    private CopyOnWriteArrayList<ABullet> bulletsToCreate = new CopyOnWriteArrayList<ABullet>();
+    private CopyOnWriteArrayList<ABullet> bullets = new CopyOnWriteArrayList<ABullet>();
+    private CopyOnWriteArrayList<ABullet> deadBullets = new CopyOnWriteArrayList<ABullet>();
 
     public static int id = 0;
-    private BulletList(){
+    public BulletList(){
 
     }
-    public static void addBullet(ABullet bullet){
+    public void addBullet(ABullet bullet){
         bullet.setId(id);
         id++;
         bullets.add(bullet);
     }
 
     //BulletList
-    public static List<ABullet> getBullets(){
+    public List<ABullet> getBullets(){
         return bullets;
     }
-    public static void removeBullet(ABullet bullet){
+    public void removeBullet(ABullet bullet){
         bullets.remove(bullet);
     }
 
     //DeadBulletList
-    public static List<ABullet> getDeadBullets(){
+    public List<ABullet> getDeadBullets(){
         return deadBullets;
     }
-    public static void addDeadBulletsTrashList(ABullet bullet){
+    public void addDeadBulletsTrashList(ABullet bullet){
         deadBullets.add(bullet);
     }
-    public static void flushDeadBullets(){
+    public void flushDeadBullets(){
         deadBullets.clear();
     }
 
     //BulletsToCreateList
-    public static CopyOnWriteArrayList<ABullet> getBulletsToCreate() {
+    public CopyOnWriteArrayList<ABullet> getBulletsToCreate() {
         return bulletsToCreate;
     }
-    public static void addBulletsToCreateList(ABullet bullet){
+    public void addBulletsToCreateList(ABullet bullet){
         bulletsToCreate.add(bullet);
     }
-    public static void flushBulletsToCreate(){
+    public void flushBulletsToCreate(){
         bulletsToCreate.clear();
     }
 

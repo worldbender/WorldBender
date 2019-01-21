@@ -2,11 +2,13 @@ package server.opponents;
 
 import server.LogicMap.LogicMapHandler;
 import server.User;
+import server.bullets.BulletList;
 
 import java.awt.*;
 import java.util.Date;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class AOpponent {
     private int x = 300;
@@ -23,7 +25,7 @@ public abstract class AOpponent {
     protected AOpponent(){
     }
 
-    public void update(double deltaTime, LogicMapHandler map, Map<String, User> existingUsers){
+    public void update(double deltaTime, LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, BulletList bulletList){
         Random generator = new Random();
         int newX = this.getX() + generator.nextInt()%3;
         int newY = this.getY() + generator.nextInt()%3;
@@ -42,10 +44,10 @@ public abstract class AOpponent {
         return new Rectangle(this.x, this.y, this.width, this.height);
     }
 
-    public void doDamage(int damage){
+    public void doDamage(int damage, OpponentList opponentList){
         this.hp -= damage;
         if(this.hp <= 0){
-            this.handleOpponentDeath();
+            this.handleOpponentDeath(opponentList);
         }
     }
     public boolean canOpponentShoot(){
@@ -58,13 +60,13 @@ public abstract class AOpponent {
         }
         return result;
     }
-    private void handleOpponentDeath(){
-        OpponentList.removeOpponent(this);
-        OpponentList.addDeadAOpponentsTrashList(this);
+    private void handleOpponentDeath(OpponentList opponentList){
+        opponentList.removeOpponent(this);
+        opponentList.addDeadAOpponentsTrashList(this);
     }
-    private void checkIfOpponentShouldDie(){
+    private void checkIfOpponentShouldDie(OpponentList opponentList){
         if(this.isDead){
-            handleOpponentDeath();
+            handleOpponentDeath(opponentList);
         }
     }
     public int getX() {

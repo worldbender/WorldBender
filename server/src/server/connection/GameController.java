@@ -23,18 +23,11 @@ public class GameController implements Runnable {
     private static long deltaTime = 0L;
     private final long MILISECONDS_BEETWEEN_FRAMES = 3L;
     private LogicMapHandler logicMapHandler;
-    private Map<String, User> existingUsers;
     private List<Room> rooms;
     private Room room;
     private CopyOnWriteArrayList<User> usersInRoom;
 
-    public GameController() {
-        this.existingUsers = ExistingUsers.getInstance();
-        this.logicMapHandler = new LogicMapHandler();
-    }
-
     public GameController(Room room) {
-        this.existingUsers = ExistingUsers.getInstance();
         this.rooms = RoomList.getInstance();
         this.room = room;
         this.usersInRoom = room.getUsersInRoom();
@@ -89,14 +82,14 @@ public class GameController implements Runnable {
     private void updatePlayerPosition(){
         //System.out.println(Gdx.graphics.getDeltaTime());
         for (User user : usersInRoom){
-            user.getPlayer().update(logicMapHandler, existingUsers, deltaTime);
+            user.getPlayer().update(logicMapHandler, usersInRoom, deltaTime);
         }
     }
 
     private void updateOpponentsAndSendOpponentDataPackage() {
         String message;
-        for (AOpponent opponent : OpponentList.getOpponents()) {
-            opponent.update(deltaTime, logicMapHandler, existingUsers);
+        for (AOpponent opponent : room.opponentList.getOpponents()) {
+            opponent.update(deltaTime, logicMapHandler, usersInRoom, room.bulletList);
             message = "updateOpponentData:" + opponent.getId() + ":" + opponent.getX() + ":" + opponent.getY() + ":" + opponent.getHp();
             UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
@@ -104,8 +97,8 @@ public class GameController implements Runnable {
 
     private void updateBulletsAndSendBulletPositionPackage() {
         String message;
-        for (ABullet bullet : BulletList.getBullets()) {
-            bullet.update(deltaTime, logicMapHandler, existingUsers);
+        for (ABullet bullet : room.bulletList.getBullets()) {
+            bullet.update(deltaTime, logicMapHandler, usersInRoom, room.opponentList, room.bulletList);
             message = "updateBulletPosition:" + bullet.getId() + ":" + bullet.getX() + ":" + bullet.getY();
             UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
@@ -126,26 +119,26 @@ public class GameController implements Runnable {
 
     private void informClientsAboutDeadBullets() {
         String message;
-        for (ABullet bullet : BulletList.getDeadBullets()) {
+        for (ABullet bullet : room.bulletList.getDeadBullets()) {
             message = "deleteBullet:" + bullet.getId();
             UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
-        BulletList.flushDeadBullets();
+        room.bulletList.flushDeadBullets();
     }
     private void informClientsAboutDeadOpponents() {
         String message;
-        for (AOpponent opponent : OpponentList.getDeadOpponenets()) {
+        for (AOpponent opponent : room.opponentList.getDeadOpponenets()) {
             message = "deleteOpponent:" + opponent.getId();
             UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
-        OpponentList.flushDeadAOpponents();
+        room.opponentList.flushDeadAOpponents();
     }
     private void informClientsAboutNewBullets(){
         String message;
-        for (ABullet bullet : BulletList.getBulletsToCreate()) {
+        for (ABullet bullet : room.bulletList.getBulletsToCreate()) {
             message = "createBullet:" + bullet.getType() + ":" + bullet.getId() + ":" + bullet.getAngle();
             UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
-        BulletList.flushBulletsToCreate();
+        room.bulletList.flushBulletsToCreate();
     }
 }

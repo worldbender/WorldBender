@@ -7,6 +7,7 @@ import RoomsController.Room;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TcpServer extends Thread{
     private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortTcp"));
@@ -15,9 +16,6 @@ public class TcpServer extends Thread{
     private static GameController sender;
 
     public TcpServer(){
-//        sender = new GameController();
-//        senderThread = new Thread(sender);
-//        senderThread.start();
     }
 
     public void run()
@@ -56,8 +54,8 @@ public class TcpServer extends Thread{
         }
     }
 
-    public static void sendTcpMsgToAllUsersInRoom(String msg, Room room){
-        for (User current : room.getUsersInRoom()) {
+    public static void sendTcpMsgToAllUsersInRoom(String msg, CopyOnWriteArrayList<User> usersInRoom){
+        for (User current : usersInRoom) {
             current.getThread().sendMessage(msg);
         }
     }

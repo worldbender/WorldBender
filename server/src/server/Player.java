@@ -6,6 +6,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Player {
 
@@ -88,12 +89,12 @@ public class Player {
         }
     }
 
-    public void update(LogicMapHandler map, Map<String, User> users, double deltaTime){
+    public void update(LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, double deltaTime){
         Rectangle playersNewBoundsRectangle;
         ArrayList<Player> players = new ArrayList<Player>();
         int currentShift = (int)(deltaTime * this.moveSpeed);
 
-        for(User user : users.values()){
+        for(User user : usersInRoom){
             if(user.getPlayer() != this){
                 players.add(user.getPlayer());
             }

@@ -1,6 +1,7 @@
 package server.connection;
 
 import RoomsController.Room;
+import RoomsController.RoomList;
 import server.LogicMap.LogicMapHandler;
 import server.bullets.ABullet;
 import server.bullets.BulletFabric;
@@ -22,16 +23,11 @@ public class UdpServer extends Thread {
     private static DatagramSocket socket;
     private List<Room> rooms;
     private Map<String, User> existingUsers;
-    private LogicMapHandler logicMapHandler;
-    private Thread senderThread;
-    private GameController sender;
 
     public UdpServer() throws IOException {
         this.socket = new DatagramSocket(PORT);
         this.existingUsers = ExistingUsers.getInstance();
-//        sender = new GameController();
-//        senderThread = new Thread(sender);
-//        senderThread.start();
+        this.rooms = RoomList.getInstance();
     }
 
     public void run() {
@@ -61,13 +57,14 @@ public class UdpServer extends Thread {
     private void createBullet(String id, String content){
         String[] splitedContent = content.split(":");
         User currentUser = existingUsers.get(id);
+        Room currentRoom = RoomList.getUserRoom(id);
         currentUser.getPlayer().setActiveMovementKeyByAngle(splitedContent[2]);
         if(currentUser.getPlayer().canPlayerShoot()){
             String bulletType = splitedContent[1];
             String angle = splitedContent[2];
             ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getCenterX(), currentUser.getPlayer().getCenterY(), Float.parseFloat(angle), false);
-            BulletList.addBullet(newBullet);
-            BulletList.addBulletsToCreateList(newBullet);
+            currentRoom.bulletList.addBullet(newBullet);
+            currentRoom.bulletList.addBulletsToCreateList(newBullet);
         }
     }
     public static void sendUdpMsgToAllUsers(String msg, Map<String, User> existingUsers){

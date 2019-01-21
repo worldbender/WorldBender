@@ -25,8 +25,6 @@ public class TcpClientThread extends Thread{
     private Map<String, User> existingUsers;
     private List<Room> rooms;
     public User user;
-    private Thread senderThread;
-    private GameController sender;
 
     public TcpClientThread(Socket clientSocket) {
         this.user = new User();
@@ -39,9 +37,6 @@ public class TcpClientThread extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        sender = new GameController();
-//        senderThread = new Thread(sender);
-//        senderThread.start();
     }
 
     public void run()
@@ -88,7 +83,7 @@ public class TcpClientThread extends Thread{
 
         existingUsers.put(id, this.user);
         existingUsers.get(user.getConnectionId()).setThread(this);
-        createOpponent();
+
     }
 
     private void initUser(User initedUser, Room room){
@@ -116,12 +111,8 @@ public class TcpClientThread extends Thread{
         initUser(user, newRoom);
         newRoom.addUserToRoom(user);
         rooms.add(newRoom);
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                TcpServer.createGameController(newRoom);
-            }
-        });
+        Gdx.app.postRunnable(() -> TcpServer.createGameController(newRoom));
+        createOpponent(newRoom);
     }
 
     //TODO: dolaczanie do roznych pokoi
@@ -132,6 +123,7 @@ public class TcpClientThread extends Thread{
             if(room.getId() == 0) {
                 initUser(user, room);
                 room.addUserToRoom(user);
+                createOpponent(room);
             }
         }
     }
@@ -156,7 +148,7 @@ public class TcpClientThread extends Thread{
         }
     }
 
-    //TODO: sprawdzic czy poprawnie dziala
+    //TODO: sprawdzic czy poprawnie dziala & zrobić usuwanie wątków & usuwanie pokoi jak gracze wyjdą w trakcie gry
     private void deleteRoom(Room roomToDelete){
         System.out.println("deleting room");
         for(Room room : rooms){
@@ -166,12 +158,13 @@ public class TcpClientThread extends Thread{
         }
     }
 
-    private void createOpponent(){
+    private void createOpponent(Room room){
         String opponentType = "Nietzsche";
         AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);
-        OpponentList.addOpponent(newOpponent);
+        room.opponentList.addOpponent(newOpponent);
+//        OpponentList.addOpponent(newOpponent);
         String message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
-        for(User user : existingUsers.values()){
+        for(User user : room.getUsersInRoom()){
             if(user.hasConnection())
                 user.getThread().sendMessage(message);
         }
@@ -179,15 +172,13 @@ public class TcpClientThread extends Thread{
         newOpponent = OpponentFabric.createOpponent(opponentType);
         newOpponent.setX(2000);
         newOpponent.setY(2600);
-        OpponentList.addOpponent(newOpponent);
+        room.opponentList.addOpponent(newOpponent);
+//        OpponentList.addOpponent(newOpponent);
         message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
-        for(User user : existingUsers.values()){
+        for(User user : room.getUsersInRoom()){
             if(user.hasConnection())
                 user.getThread().sendMessage(message);
         }
     }
 
-    private void sendInfo(){
-
-    }
 }

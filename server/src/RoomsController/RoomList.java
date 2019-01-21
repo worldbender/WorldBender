@@ -1,10 +1,15 @@
 package RoomsController;
 
+import server.ExistingUsers;
+import server.User;
+
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RoomList {
     private static List<Room> rooms;
+    private static Map<String, User> existingUsers = ExistingUsers.getInstance();
 
     private RoomList(){ }
 
@@ -20,6 +25,16 @@ public class RoomList {
         for(Room room : rooms){
             if (room.getId() == id)
                 return room;
+        }
+        return null;
+    }
+
+    public static Room getUserRoom(String id){
+        User currentUser = existingUsers.get(id);
+        for(Room room : rooms){
+            for(User user : room.getUsersInRoom()){
+                if(user.getConnectionId() == currentUser.getConnectionId()) return room;
+            }
         }
         return null;
     }
