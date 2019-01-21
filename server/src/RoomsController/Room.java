@@ -1,7 +1,9 @@
 package RoomsController;
 
+import com.badlogic.gdx.Gdx;
 import server.User;
 import server.connection.GameController;
+import server.connection.TcpServer;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -10,15 +12,12 @@ public class Room {
     private int limitUsers = 4;
     private String name;
     private CopyOnWriteArrayList<User> usersInRoom;
-    private Thread senderThread;
-    private GameController sender;
+    private GameController gc;
+
 
     public Room(int id){
         setId(id);
         usersInRoom = new CopyOnWriteArrayList<>();
-        sender = new GameController(this);
-        senderThread = new Thread(sender);
-        senderThread.start();
     }
 
     public CopyOnWriteArrayList<User> getUsersInRoom(){

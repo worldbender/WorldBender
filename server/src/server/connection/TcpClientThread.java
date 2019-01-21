@@ -3,6 +3,7 @@ package server.connection;
 
 import RoomsController.Room;
 import RoomsController.RoomList;
+import com.badlogic.gdx.Gdx;
 import server.ExistingUsers;
 import server.User;
 import server.opponents.AOpponent;
@@ -24,6 +25,8 @@ public class TcpClientThread extends Thread{
     private Map<String, User> existingUsers;
     private List<Room> rooms;
     public User user;
+    private Thread senderThread;
+    private GameController sender;
 
     public TcpClientThread(Socket clientSocket) {
         this.user = new User();
@@ -36,6 +39,9 @@ public class TcpClientThread extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
         }
+//        sender = new GameController();
+//        senderThread = new Thread(sender);
+//        senderThread.start();
     }
 
     public void run()
@@ -66,9 +72,9 @@ public class TcpClientThread extends Thread{
         String[] splitedArray = message.split(":");
         switch (splitedArray[0]){
             case "udpPort": newUser(splitedArray[1]); break;
-            case "newRoom": newRoom(this.user); break;
-            case "joinRoom": joinRoom(this.user); break;
-            case "leaveRoom": leaveRoom(this.user); break;
+            case "newRoom": newRoom(splitedArray[1]); break;
+            case "joinRoom": joinRoom(splitedArray[1]); break;
+            case "leaveRoom": leaveRoom(splitedArray[1]); break;
         }
     }
 
@@ -80,43 +86,60 @@ public class TcpClientThread extends Thread{
         this.user.setConnectionId(id);
         this.user.setName("player"+ existingUsers.size());
 
-        //ten pakiet wysylamy do naszego gracza z jego poczatkowa pozycja
-        sendMessage("init:"+this.user.getName()+":"+this.user.getPlayer().getX()+":"+this.user.getPlayer().getY()+":true");
-
-        //te pakiety wysyłamy do innych graczy z informacja ze gracz dolaczyl do gry
-        for (User current : existingUsers.values()) {
-            current.getThread().sendMessage("newPlayer:player" + (existingUsers.size()));
-        }
-
-        //te pakiety wysylamy do naszego gracza z pozycjami juz istniejacych graczy
-        for (User current : existingUsers.values()) {
-            String message = "init:"+current.getName() + ":" + current.getPlayer().getX() + ":" + current.getPlayer().getY()+":false";
-            if(current.hasConnection())
-                sendMessage(message);
-        }
-
         existingUsers.put(id, this.user);
         existingUsers.get(user.getConnectionId()).setThread(this);
         createOpponent();
     }
 
-    private void newRoom(User user){
-        Room newRoom = new Room(rooms.size());
-        newRoom.addUserToRoom(user);
-        rooms.add(newRoom);
+    private void initUser(User initedUser, Room room){
+        //ten pakiet wysylamy do naszego gracza z jego poczatkowa pozycja
+        sendMessage("init:"+initedUser.getName()+":"+initedUser.getPlayer().getX()+":"+initedUser.getPlayer().getY()+":true");
 
+        //te pakiety wysyłamy do innych graczy z informacja ze gracz dolaczyl do gry
+        for (User current : room.getUsersInRoom()) {
+            current.getThread().sendMessage("newPlayer:player" + (room.getUsersInRoom().size()));
+        }
+
+        //te pakiety wysylamy do naszego gracza z pozycjami juz istniejacych graczy
+        for (User current : room.getUsersInRoom()) {
+            String message = "init:" + current.getName() + ":" + current.getPlayer().getX() + ":" + current.getPlayer().getY() + ":false";
+            if (current.hasConnection())
+                sendMessage(message);
+        }
 
     }
 
+    private void newRoom(String udpPort){
+        String id = clientSocket.getInetAddress().toString() + "," + udpPort;
+        User user = existingUsers.get(id);
+        Room newRoom = new Room(rooms.size());
+        initUser(user, newRoom);
+        newRoom.addUserToRoom(user);
+        rooms.add(newRoom);
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                TcpServer.createGameController(newRoom);
+            }
+        });
+    }
+
     //TODO: dolaczanie do roznych pokoi
-    private void joinRoom(User user){
+    private void joinRoom(String udpPort){
+        String id = clientSocket.getInetAddress().toString() + "," + udpPort;
+        User user = existingUsers.get(id);
         for(Room room : rooms){
-            if(room.getId() == 0) room.addUserToRoom(user);
+            if(room.getId() == 0) {
+                initUser(user, room);
+                room.addUserToRoom(user);
+            }
         }
     }
 
     //TODO: opuszczanie pokoi
-    private void leaveRoom(User user){
+    private void leaveRoom(String udpPort){
+        String id = clientSocket.getInetAddress().toString() + "," + udpPort;
+        User user = existingUsers.get(id);
         for(Room room : rooms){
             if(room.getId() == 0) {
                 room.deleteUserFromRoom(user);
@@ -162,5 +185,9 @@ public class TcpClientThread extends Thread{
             if(user.hasConnection())
                 user.getThread().sendMessage(message);
         }
+    }
+
+    private void sendInfo(){
+
     }
 }

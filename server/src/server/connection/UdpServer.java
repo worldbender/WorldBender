@@ -25,12 +25,13 @@ public class UdpServer extends Thread {
     private LogicMapHandler logicMapHandler;
     private Thread senderThread;
     private GameController sender;
+
     public UdpServer() throws IOException {
         this.socket = new DatagramSocket(PORT);
         this.existingUsers = ExistingUsers.getInstance();
-        sender = new GameController();
-        senderThread = new Thread(sender);
-        senderThread.start();
+//        sender = new GameController();
+//        senderThread = new Thread(sender);
+//        senderThread.start();
     }
 
     public void run() {

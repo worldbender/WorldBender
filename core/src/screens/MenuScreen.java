@@ -84,18 +84,21 @@ public class MenuScreen extends AbstractScreen{
         joinRoom.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                new Dialog("Text input", skin) {
-                    {
-                        text("rly");
-                        button("yes", "bye");
-                        button("no", "nice you stayed");
-                    }
+//                new Dialog("Text input", skin) {
+//                    {
+//                        text("rly");
+//                        button("yes", "bye");
+//                        button("no", "nice you stayed");
+//                    }
+//
+//                    @Override
+//                    protected void result(Object object) {
+//                        System.out.println(object);
+//                    }
+//                }.show(stage);
 
-                    @Override
-                    protected void result(Object object) {
-                        System.out.println(object);
-                    }
-                }.show(stage);
+                WBGame.connection.tcp.sendMessage("joinRoom:" + WBGame.connection.socket.getLocalPort());
+                game.changeScreen(WBGame.ROOM);
             }
         });
 

@@ -11,9 +11,13 @@ import java.util.Map;
 public class TcpServer extends Thread{
     private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortTcp"));
     private ServerSocket serverSocket;
+    private static Thread senderThread;
+    private static GameController sender;
 
     public TcpServer(){
-
+//        sender = new GameController();
+//        senderThread = new Thread(sender);
+//        senderThread.start();
     }
 
     public void run()
@@ -39,6 +43,13 @@ public class TcpServer extends Thread{
             }
         }
     }
+
+    public static void createGameController(Room room){
+        sender = new GameController(room);
+        senderThread = new Thread(sender);
+        senderThread.start();
+    }
+
     public static void sendTcpMsgToAllUsers(String msg, Map<String, User> existingUsers){
         for (User current : existingUsers.values()) {
             current.getThread().sendMessage(msg);

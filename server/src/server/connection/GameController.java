@@ -1,6 +1,7 @@
 package server.connection;
 
 import RoomsController.Room;
+import RoomsController.RoomList;
 import server.ExistingUsers;
 import server.LogicMap.LogicMapHandler;
 import server.User;
@@ -14,6 +15,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -22,6 +24,8 @@ public class GameController implements Runnable {
     private final long MILISECONDS_BEETWEEN_FRAMES = 3L;
     private LogicMapHandler logicMapHandler;
     private Map<String, User> existingUsers;
+    private List<Room> rooms;
+    private Room room;
     private CopyOnWriteArrayList<User> usersInRoom;
 
     public GameController() {
@@ -30,8 +34,16 @@ public class GameController implements Runnable {
     }
 
     public GameController(Room room) {
+        this.existingUsers = ExistingUsers.getInstance();
+        this.rooms = RoomList.getInstance();
+        this.room = room;
         this.usersInRoom = room.getUsersInRoom();
         this.logicMapHandler = new LogicMapHandler();
+    }
+
+    public void setRoom(Room room){
+        this.room = room;
+        this.usersInRoom = room.getUsersInRoom();
     }
 
     public void run() {
@@ -76,7 +88,7 @@ public class GameController implements Runnable {
 
     private void updatePlayerPosition(){
         //System.out.println(Gdx.graphics.getDeltaTime());
-        for (User user : existingUsers.values()){
+        for (User user : usersInRoom){
             user.getPlayer().update(logicMapHandler, existingUsers, deltaTime);
         }
     }
@@ -86,7 +98,7 @@ public class GameController implements Runnable {
         for (AOpponent opponent : OpponentList.getOpponents()) {
             opponent.update(deltaTime, logicMapHandler, existingUsers);
             message = "updateOpponentData:" + opponent.getId() + ":" + opponent.getX() + ":" + opponent.getY() + ":" + opponent.getHp();
-            UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
+            UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
     }
 
@@ -95,12 +107,12 @@ public class GameController implements Runnable {
         for (ABullet bullet : BulletList.getBullets()) {
             bullet.update(deltaTime, logicMapHandler, existingUsers);
             message = "updateBulletPosition:" + bullet.getId() + ":" + bullet.getX() + ":" + bullet.getY();
-            UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
+            UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
     }
 
     public void sendPlayerDataPackage() {
-        for (User u : existingUsers.values()) {
+        for (User u : usersInRoom) {
             String message = "updatePosition:" +
                     u.getName() + ":" +
                     u.getPlayer().getX() + ":" +
@@ -108,7 +120,7 @@ public class GameController implements Runnable {
                     u.getPlayer().getHp() + ":" +
                     u.getPlayer().getActiveMovementKey() + ":" +
                     u.getPlayer().isMoving();
-            UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
+            UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
     }
 
@@ -116,7 +128,7 @@ public class GameController implements Runnable {
         String message;
         for (ABullet bullet : BulletList.getDeadBullets()) {
             message = "deleteBullet:" + bullet.getId();
-            UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
+            UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
         BulletList.flushDeadBullets();
     }
@@ -124,7 +136,7 @@ public class GameController implements Runnable {
         String message;
         for (AOpponent opponent : OpponentList.getDeadOpponenets()) {
             message = "deleteOpponent:" + opponent.getId();
-            TcpServer.sendTcpMsgToAllUsers(message, existingUsers);
+            UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
         OpponentList.flushDeadAOpponents();
     }
@@ -132,7 +144,7 @@ public class GameController implements Runnable {
         String message;
         for (ABullet bullet : BulletList.getBulletsToCreate()) {
             message = "createBullet:" + bullet.getType() + ":" + bullet.getId() + ":" + bullet.getAngle();
-            UdpServer.sendUdpMsgToAllUsers(message, existingUsers);
+            UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
         BulletList.flushBulletsToCreate();
     }
