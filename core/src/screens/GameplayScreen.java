@@ -157,7 +157,6 @@ public class GameplayScreen extends AbstractScreen{
     private void sendMessageToServer(String message){
         try {
             WBGame.connection.sender.sendMessage(message);
-            WBGame.connection.sender.sendMessage(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
