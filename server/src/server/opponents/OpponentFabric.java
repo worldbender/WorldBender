@@ -10,6 +10,9 @@ public class OpponentFabric {
             case "Nietzsche":
                 resultOpponent = new Nietzsche();
                 break;
+            case "Poe":
+                resultOpponent = new Poe();
+                break;
         }
         return resultOpponent;
     }

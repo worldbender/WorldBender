@@ -95,6 +95,11 @@ public class TcpClientThread extends Thread{
             current.getThread().sendMessage("newPlayer:player" + (room.getUsersInRoom().size()));
         }
 
+        //Rozsyłamy informacje o istniejacych potworkach do nowego gracza
+        for(AOpponent opponent : room.opponentList.getOpponents()){
+            sendMessage("createOpponent:" + opponent.getType() + ":" + opponent.getId());
+        }
+
         //te pakiety wysylamy do naszego gracza z pozycjami juz istniejacych graczy
         for (User current : room.getUsersInRoom()) {
             String message = "init:" + current.getName() + ":" + current.getPlayer().getX() + ":" + current.getPlayer().getY() + ":false";
@@ -123,7 +128,6 @@ public class TcpClientThread extends Thread{
             if(room.getId() == 0) {
                 initUser(user, room);
                 room.addUserToRoom(user);
-                createOpponent(room);
             }
         }
     }
@@ -160,7 +164,7 @@ public class TcpClientThread extends Thread{
         }
     }
 
-    private void createOpponent(Room room){
+    /*private void createOpponent(Room room){
         String opponentType = "Nietzsche";
         AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);
         room.opponentList.addOpponent(newOpponent);
@@ -178,6 +182,75 @@ public class TcpClientThread extends Thread{
         for(User user : room.getUsersInRoom()){
             if(user.hasConnection())
                 user.getThread().sendMessage(message);
+        }
+    }*/
+    private void createOpponent(Room room) {
+        String opponentType = "Nietzsche";
+        AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);
+        newOpponent.setX(1600);
+        newOpponent.setY(400);
+        room.opponentList.addOpponent(newOpponent);
+
+        opponentType = "Schopenheuer";
+        newOpponent = OpponentFabric.createOpponent(opponentType);
+        newOpponent.setX(2000);
+        newOpponent.setY(2600);
+        room.opponentList.addOpponent(newOpponent);
+
+
+        opponentType = "Poe";
+        newOpponent = OpponentFabric.createOpponent(opponentType);
+        newOpponent.setX(1400);
+        newOpponent.setY(400);
+        room.opponentList.addOpponent(newOpponent);
+
+        newOpponent = OpponentFabric.createOpponent("Poe");
+        newOpponent.setX(600);
+        newOpponent.setY(1600);
+        room.opponentList.addOpponent(newOpponent);
+
+        newOpponent = OpponentFabric.createOpponent("Poe");
+        newOpponent.setX(1900);
+        newOpponent.setY(500);
+        room.opponentList.addOpponent(newOpponent);
+
+        newOpponent = OpponentFabric.createOpponent("Poe");
+        newOpponent.setX(2000);
+        newOpponent.setY(400);
+        room.opponentList.addOpponent(newOpponent);
+
+        newOpponent = OpponentFabric.createOpponent("Poe");
+        newOpponent.setX(1900);
+        newOpponent.setY(1500);
+        room.opponentList.addOpponent(newOpponent);
+
+        newOpponent = OpponentFabric.createOpponent("Poe");
+        newOpponent.setX(1500);
+        newOpponent.setY(1500);
+        room.opponentList.addOpponent(newOpponent);;
+
+        newOpponent = OpponentFabric.createOpponent("Poe");
+        newOpponent.setX(1330);
+        newOpponent.setY(1500);
+        room.opponentList.addOpponent(newOpponent);
+
+        newOpponent = OpponentFabric.createOpponent("Poe");
+        newOpponent.setX(1200);
+        newOpponent.setY(1500);
+        room.opponentList.addOpponent(newOpponent);
+
+        newOpponent = OpponentFabric.createOpponent("Poe");
+        newOpponent.setX(1000);
+        newOpponent.setY(1500);
+        room.opponentList.addOpponent(newOpponent);
+        String message;
+        for(User user : room.getUsersInRoom()){
+            for(AOpponent opponent : room.opponentList.getOpponents()){
+                message = "createOpponent:" + opponent.getType() + ":" + opponent.getId();
+                if(user.hasConnection())
+                    user.getThread().sendMessage(message);
+            }
+
         }
     }
 

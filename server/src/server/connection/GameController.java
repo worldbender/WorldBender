@@ -8,6 +8,7 @@ import server.User;
 import server.bullets.ABullet;
 import server.bullets.BulletList;
 import server.opponents.AOpponent;
+import server.opponents.OpponentFabric;
 import server.opponents.OpponentList;
 
 import java.io.IOException;
@@ -147,4 +148,5 @@ public class GameController implements Runnable {
         }
         room.bulletList.flushBulletsToCreate();
     }
+
 }

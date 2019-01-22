@@ -20,7 +20,7 @@ public class RoomScreen extends AbstractScreen {
         Table table = new Table();
         table = table.bottom();
         table.setFillParent(true);
-        table.setDebug(true);
+        table.setDebug(false);
         stage.addActor(table);
 
         // temporary until we have asset manager in
