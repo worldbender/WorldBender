@@ -46,15 +46,15 @@ public class MenuScreen extends AbstractScreen{
         //create buttons
         TextButton newRoom = new TextButton("Create Room", skin);
         TextButton joinRoom = new TextButton("Join Room", skin);
-        TextButton preferences = new TextButton("Preferences", skin);
+//        TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
 
         //add buttons to table
         table.add(newRoom).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(joinRoom).fillX().uniformX();
-        table.row();
-        table.add(preferences).fillX().uniformX();
+//        table.row();
+//        table.add(preferences).fillX().uniformX();
         table.row();
         table.add(exit).fillX().uniformX();
 
@@ -66,12 +66,12 @@ public class MenuScreen extends AbstractScreen{
             }
         });
 
-        preferences.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(WBGame.PLAY);
-            }
-        });
+//        preferences.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                game.changeScreen(WBGame.PLAY);
+//            }
+//        });
 
         newRoom.addListener(new ChangeListener() {
             @Override
