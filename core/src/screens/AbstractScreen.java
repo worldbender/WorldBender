@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -21,12 +22,15 @@ public abstract class AbstractScreen implements Screen {
     protected int mapPositionX = 0;
     protected int mapPositionY = 0;
 
+    protected Texture splashImg;
+
     public AbstractScreen(WBGame game){
         this.game = game;
         createCamera();
         stage = new Stage(new StretchViewport(WBGame.WIDTH, WBGame.HEIGHT, camera));
         spriteBatch = new SpriteBatch();
         Gdx.input.setInputProcessor(stage);
+        splashImg = new Texture("mount1.jpg");
     }
 
     private void createCamera() {
@@ -70,5 +74,11 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+    }
+
+    public void drawBackground(){
+        spriteBatch.begin();
+        spriteBatch.draw(splashImg, 0, 0,WBGame.WIDTH, WBGame.HEIGHT);
+        spriteBatch.end();
     }
 }

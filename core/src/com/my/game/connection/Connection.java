@@ -8,7 +8,7 @@ import java.net.*;
 public class Connection {
     InetAddress IPAddress;
     private String hostName = WBGame.SERVER_ADDRESS;
-    private DatagramSocket socket;
+    public DatagramSocket socket;
     public TCPConnection tcp;
     public UdpPacketReceiver receiver;
     public UdpPacketSender sender;

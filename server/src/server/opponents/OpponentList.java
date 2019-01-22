@@ -6,34 +6,34 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class OpponentList {
-    private static CopyOnWriteArrayList<AOpponent> opponents=new CopyOnWriteArrayList<AOpponent>();
-    private static CopyOnWriteArrayList<AOpponent> deadOpponents = new CopyOnWriteArrayList<AOpponent>();
-    public static int id = 0;
+    private CopyOnWriteArrayList<AOpponent> opponents = new CopyOnWriteArrayList<AOpponent>();
+    private CopyOnWriteArrayList<AOpponent> deadOpponents = new CopyOnWriteArrayList<AOpponent>();
+    public int id = 0;
 
-    private OpponentList(){
+    public OpponentList(){
 
     }
 
-    public static void addOpponent(AOpponent opponent){
+    public void addOpponent(AOpponent opponent){
         opponent.setId(id);
         id++;
         opponents.add(opponent);
     }
 
-    public static void removeOpponent(AOpponent opponent){
+    public void removeOpponent(AOpponent opponent){
         opponents.remove(opponent);
     }
 
-    public static void addDeadAOpponentsTrashList(AOpponent opponent){
+    public void addDeadAOpponentsTrashList(AOpponent opponent){
         deadOpponents.add(opponent);
     }
-    public static void flushDeadAOpponents(){
+    public void flushDeadAOpponents(){
         deadOpponents.clear();
     }
-    public static List<AOpponent> getOpponents(){
+    public List<AOpponent> getOpponents(){
         return opponents;
     }
-    public static List<AOpponent> getDeadOpponenets(){
+    public List<AOpponent> getDeadOpponenets(){
         return deadOpponents;
     }
 }
