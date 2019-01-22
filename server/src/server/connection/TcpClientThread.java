@@ -132,8 +132,9 @@ public class TcpClientThread extends Thread{
     private void leaveRoom(String udpPort){
         String id = clientSocket.getInetAddress().toString() + "," + udpPort;
         User user = existingUsers.get(id);
+        Room currentRoom = RoomList.getUserRoom(id);
         for(Room room : rooms){
-            if(room.getId() == 0) {
+            if(room.getId() == currentRoom.getId()) {
                 room.deleteUserFromRoom(user);
                 if(room.getUsersInRoom().size() == 0) deleteRoom(room);
             }
@@ -153,6 +154,7 @@ public class TcpClientThread extends Thread{
         System.out.println("deleting room");
         for(Room room : rooms){
             if(room.getId() == roomToDelete.getId()) {
+                room.getGameController().killThread();
                 rooms.remove(room);
             }
         }
@@ -162,7 +164,6 @@ public class TcpClientThread extends Thread{
         String opponentType = "Nietzsche";
         AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);
         room.opponentList.addOpponent(newOpponent);
-//        OpponentList.addOpponent(newOpponent);
         String message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
         for(User user : room.getUsersInRoom()){
             if(user.hasConnection())
@@ -173,7 +174,6 @@ public class TcpClientThread extends Thread{
         newOpponent.setX(2000);
         newOpponent.setY(2600);
         room.opponentList.addOpponent(newOpponent);
-//        OpponentList.addOpponent(newOpponent);
         message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
         for(User user : room.getUsersInRoom()){
             if(user.hasConnection())

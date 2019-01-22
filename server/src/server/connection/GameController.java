@@ -22,6 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GameController implements Runnable {
     private static long deltaTime = 0L;
     private final long MILISECONDS_BEETWEEN_FRAMES = 3L;
+    private boolean flag = true;
     private LogicMapHandler logicMapHandler;
     private List<Room> rooms;
     private Room room;
@@ -32,6 +33,7 @@ public class GameController implements Runnable {
         this.room = room;
         this.usersInRoom = room.getUsersInRoom();
         this.logicMapHandler = new LogicMapHandler();
+        this.room.setGameController(this);
     }
 
     public void setRoom(Room room){
@@ -42,7 +44,7 @@ public class GameController implements Runnable {
     public void run() {
         long timeBefore;
         long timeAfter;
-        while (true) {
+        while (flag) {
             timeBefore = new Date().getTime();
             this.doGameLoop();
             timeAfter = new Date().getTime();
@@ -50,6 +52,10 @@ public class GameController implements Runnable {
             this.sleepIfNecessary();
             deltaTime = new Date().getTime() - timeBefore;
         }
+    }
+
+    public void killThread(){
+        this.flag = false;
     }
 
     private void sleepIfNecessary() {

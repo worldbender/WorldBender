@@ -17,6 +17,7 @@ public class Room {
     private CopyOnWriteArrayList<User> usersInRoom;
     public OpponentList opponentList;
     public BulletList bulletList;
+    private GameController GC;
 
     public Room(int id){
         setId(id);
@@ -46,5 +47,13 @@ public class Room {
 
     private void setId(int id){
         this.id = id;
+    }
+
+    public void setGameController(GameController gameController){
+        this.GC = gameController;
+    }
+
+    public GameController getGameController(){
+        return this.GC;
     }
 }
