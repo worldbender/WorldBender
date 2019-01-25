@@ -1,8 +1,8 @@
 package server.connection;
 
 
-import RoomsController.Room;
-import RoomsController.RoomList;
+import server.rooms.Room;
+import server.rooms.RoomList;
 import com.badlogic.gdx.Gdx;
 import server.ExistingUsers;
 import server.User;

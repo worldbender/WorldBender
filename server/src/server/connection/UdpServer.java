@@ -1,11 +1,9 @@
 package server.connection;
 
-import RoomsController.Room;
-import RoomsController.RoomList;
-import server.LogicMap.LogicMapHandler;
+import server.rooms.Room;
+import server.rooms.RoomList;
 import server.bullets.ABullet;
 import server.bullets.BulletFabric;
-import server.bullets.BulletList;
 import server.*;
 
 import java.io.IOException;
@@ -63,8 +61,8 @@ public class UdpServer extends Thread {
             String bulletType = splitedContent[1];
             String angle = splitedContent[2];
             ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getCenterX(), currentUser.getPlayer().getCenterY(), Float.parseFloat(angle), false);
-            currentRoom.bulletList.addBullet(newBullet);
-            currentRoom.bulletList.addBulletsToCreateList(newBullet);
+            currentRoom.getBulletList().addBullet(newBullet);
+            currentRoom.getBulletList().addBulletsToCreateList(newBullet);
         }
     }
     public static void sendUdpMsgToAllUsers(String msg, Map<String, User> existingUsers){

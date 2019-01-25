@@ -1,4 +1,4 @@
-package RoomsController;
+package server.rooms;
 
 import server.User;
 import server.bullets.BulletList;

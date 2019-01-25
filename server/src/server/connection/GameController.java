@@ -1,7 +1,7 @@
 package server.connection;
 
-import RoomsController.Room;
-import RoomsController.RoomList;
+import server.rooms.Room;
+import server.rooms.RoomList;
 import server.LogicMap.LogicMapHandler;
 import server.User;
 import server.bullets.ABullet;
