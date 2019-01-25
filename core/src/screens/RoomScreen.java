@@ -1,10 +1,7 @@
 package screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -30,9 +27,6 @@ public class RoomScreen extends AbstractScreen {
         table.setDebug(false);
         stage.addActor(table);
 
-        // temporary until we have asset manager in
-        Skin skin = new Skin(Gdx.files.internal("skin/sgx-ui.json"));
-
         //create buttons
         TextButton newGame = new TextButton("Start Game", skin);
         TextButton back = new TextButton("Leave Room", skin);
@@ -51,13 +45,11 @@ public class RoomScreen extends AbstractScreen {
             }
         });
 
-        //TODO: wysłanie wszystkim pakietu że gra sie zaczeła
         if(isOwner) {
             newGame.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     WBGame.connection.tcp.sendMessage("startGame:" + WBGame.connection.socket.getLocalPort());
-//                    game.changeScreen(WBGame.PLAY);
                 }
             });
         }
@@ -65,7 +57,6 @@ public class RoomScreen extends AbstractScreen {
             newGame.setDisabled(true);
             newGame.setTouchable(Touchable.disabled);
         }
-
     }
 
     @Override

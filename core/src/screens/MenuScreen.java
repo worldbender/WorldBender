@@ -1,17 +1,13 @@
 package screens;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.my.game.WBGame;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.my.game.connection.Connection;
 
 public class MenuScreen extends AbstractScreen{
     private boolean isRoomFull = false;
@@ -38,7 +34,6 @@ public class MenuScreen extends AbstractScreen{
             WBGame.connectionStatus = true;
         }catch(Exception e){
             System.out.println("Nie nawiązano połączenia");
-            WBGame.connectionStatus = false;
         }
     }
 
@@ -48,9 +43,6 @@ public class MenuScreen extends AbstractScreen{
         table.setFillParent(true);
         table.setDebug(false);
         stage.addActor(table);
-
-        // temporary until we have asset manager in
-        Skin skin = new Skin(Gdx.files.internal("skin/sgx-ui.json"));
 
         //create buttons
         TextButton newRoom = new TextButton("Create Room", skin);
@@ -85,11 +77,6 @@ public class MenuScreen extends AbstractScreen{
                         button("Ok :c");
                         button("Happens");
                     }
-
-                    @Override
-                    protected void result(Object object) {
-                        System.out.println(object);
-                    }
                 }.show(stage);
             }
         });
@@ -115,11 +102,10 @@ public class MenuScreen extends AbstractScreen{
                     text("This room is full!");
                     button("OK");
                 }
-
-                @Override
-                protected void result(Object object) {
-                    System.out.println(object);
-                }
+//                @Override
+//                protected void result(Object object) {
+//                    System.out.println(object);
+//                }
             }.show(stage);
         }
 
