@@ -1,29 +1,31 @@
 package RoomsController;
 
-import com.badlogic.gdx.Gdx;
 import server.User;
 import server.bullets.BulletList;
 import server.connection.GameController;
-import server.connection.TcpServer;
-import server.opponents.AOpponent;
 import server.opponents.OpponentList;
 
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Room {
     private int id;
     private int limitUsers = 4;
     private String name;
+    private List<Room> rooms;
     private CopyOnWriteArrayList<User> usersInRoom;
-    public OpponentList opponentList;
-    public BulletList bulletList;
-    private GameController GC;
+    private OpponentList opponentList;
+    private BulletList bulletList;
+    private GameController gameController;
 
     public Room(int id){
         setId(id);
+        rooms = RoomList.getInstance();
         usersInRoom = new CopyOnWriteArrayList<>();
         opponentList = new OpponentList();
         bulletList = new BulletList();
+
+        addRoomToList();
     }
 
     public CopyOnWriteArrayList<User> getUsersInRoom(){
@@ -37,8 +39,9 @@ public class Room {
     public void deleteUserFromRoom(User userToDelete){
         for(User user : usersInRoom){
             if(user.getName() == userToDelete.getName())
-                usersInRoom.remove(user);
+                this.usersInRoom.remove(user);
         }
+        if(this.getUsersInRoom().size() == 0) deleteRoom();
     }
 
     public int getId(){
@@ -49,11 +52,32 @@ public class Room {
         this.id = id;
     }
 
-    public void setGameController(GameController gameController){
-        this.GC = gameController;
+    public OpponentList getOpponentList(){
+        return this.opponentList;
+    }
+
+    public BulletList getBulletList(){
+        return this.bulletList;
     }
 
     public GameController getGameController(){
-        return this.GC;
+        return this.gameController;
+    }
+
+    public void setGameController(GameController gameController){
+        this.gameController = gameController;
+    }
+
+    private void addRoomToList(){
+        rooms.add(this);
+    }
+
+    private void deleteRoom(){
+        for(Room room : rooms){
+            if(room.getId() == this.getId()) {
+                room.getGameController().stopThread();
+                rooms.remove(room);
+            }
+        }
     }
 }
