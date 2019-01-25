@@ -12,6 +12,7 @@ import com.my.game.WBGame;
 
 public class RoomScreen extends AbstractScreen {
     private boolean isOwner = false;
+
     public RoomScreen(WBGame game) {
         super(game);
     }

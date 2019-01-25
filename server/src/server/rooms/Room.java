@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Room {
     private int id;
-    private int limitUsers = 4;
+    private int limitOfPlayers = 4;
     private String name;
     private List<Room> rooms;
     private CopyOnWriteArrayList<User> usersInRoom;
@@ -34,8 +34,12 @@ public class Room {
         return this.usersInRoom;
     }
 
-    public void addUserToRoom(User user){
-        this.usersInRoom.add(user);
+    public boolean addUserToRoom(User user){
+        if(this.getUsersInRoom().size() < limitOfPlayers) {
+            this.usersInRoom.add(user);
+            return true;
+        }
+        else return false;
     }
 
     public void deleteUserFromRoom(User userToDelete){

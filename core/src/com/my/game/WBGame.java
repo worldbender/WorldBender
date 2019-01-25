@@ -20,6 +20,7 @@ public class WBGame extends Game {
 
     public final static int SPLASH = 0;
     public final static int MENU = 1;
+    public final static int MENU_FULL_ROOM = 5;
     public final static int PLAY = 2;
     public final static int ROOM = 3;
     public final static int ROOM_OWNER = 4;
@@ -65,6 +66,9 @@ public class WBGame extends Game {
                 break;
             case MENU:
                 this.setScreen(new MenuScreen(this));
+                break;
+            case MENU_FULL_ROOM:
+                this.setScreen(new MenuScreen(this, true));
                 break;
             case PLAY:
                 if(gameplayScreen == null) gameplayScreen = new GameplayScreen(this);

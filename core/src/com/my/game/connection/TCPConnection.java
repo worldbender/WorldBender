@@ -82,7 +82,15 @@ public class TCPConnection extends Thread {
             break;
         case "startGame":
             System.out.println("Game started by: " + splitedArray[1]);
-            startGame();
+            Gdx.app.postRunnable(() -> game.changeScreen(WBGame.PLAY));
+            break;
+        case "joinedRoom":
+            System.out.println("Joined room successfully: " + splitedArray[1]);
+            Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM));
+            break;
+        case "fullRoom":
+            System.out.println("Room is full: " + splitedArray[1]);
+            Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_FULL_ROOM));
             break;
         }
     }
@@ -91,9 +99,4 @@ public class TCPConnection extends Thread {
         Player p = new Player(name, 0, 0);
         players.put(name,p);
     }
-
-    private void startGame(){
-        Gdx.app.postRunnable(() -> game.changeScreen(WBGame.PLAY));
-    }
-
 }

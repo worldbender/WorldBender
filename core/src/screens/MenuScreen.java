@@ -14,12 +14,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.my.game.connection.Connection;
 
 public class MenuScreen extends AbstractScreen{
+    private boolean isRoomFull = false;
 
     public MenuScreen(WBGame game) {
         super(game);
         if(!WBGame.connectionStatus) {
             this.create();
         }
+    }
+
+    public MenuScreen(WBGame game, boolean isRoomFull) {
+        super(game);
+        if(!WBGame.connectionStatus) {
+            this.create();
+        }
+        this.isRoomFull = isRoomFull;
     }
 
     public void create() {
@@ -37,7 +46,7 @@ public class MenuScreen extends AbstractScreen{
     public void show() {
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(true);
+        table.setDebug(false);
         stage.addActor(table);
 
         // temporary until we have asset manager in
@@ -96,22 +105,23 @@ public class MenuScreen extends AbstractScreen{
         joinRoom.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-//                new Dialog("Text input", skin) {
-//                    {
-//                        text("rly");
-//                        button("yes", "bye");
-//                        button("no", "nice you stayed");
-//                    }
-//
-//                    @Override
-//                    protected void result(Object object) {
-//                        System.out.println(object);
-//                    }
-//                }.show(stage);
                 WBGame.connection.tcp.sendMessage("joinRoom:" + WBGame.connection.socket.getLocalPort());
-                game.changeScreen(WBGame.ROOM);
             }
         });
+
+        if(isRoomFull){
+            new Dialog("Error", skin) {
+                {
+                    text("This room is full!");
+                    button("OK");
+                }
+
+                @Override
+                protected void result(Object object) {
+                    System.out.println(object);
+                }
+            }.show(stage);
+        }
 
     }
 
