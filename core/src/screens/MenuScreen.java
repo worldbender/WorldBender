@@ -37,26 +37,27 @@ public class MenuScreen extends AbstractScreen{
     public void show() {
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(false);
+        table.setDebug(true);
         stage.addActor(table);
 
         // temporary until we have asset manager in
-        Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+        Skin skin = new Skin(Gdx.files.internal("skin/sgx-ui.json"));
 
         //create buttons
         TextButton newRoom = new TextButton("Create Room", skin);
         TextButton joinRoom = new TextButton("Join Room", skin);
-//        TextButton preferences = new TextButton("Preferences", skin);
+        TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
 
         //add buttons to table
         table.add(newRoom).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(10, 0, 0, 0);
         table.add(joinRoom).fillX().uniformX();
-//        table.row();
-//        table.add(preferences).fillX().uniformX();
-        table.row();
+        table.row().pad(10, 0, 0, 0);
+        table.add(preferences).fillX().uniformX();
+        table.row().pad(10, 0, 0, 0);
         table.add(exit).fillX().uniformX();
+        table.row();
 
         // create button listeners
         exit.addListener(new ChangeListener() {
@@ -66,18 +67,29 @@ public class MenuScreen extends AbstractScreen{
             }
         });
 
-//        preferences.addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                game.changeScreen(WBGame.PLAY);
-//            }
-//        });
+        preferences.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                new Dialog("Warning", skin) {
+                    {
+                        text("Preferences not ready yet");
+                        button("Ok :c");
+                        button("Happens");
+                    }
+
+                    @Override
+                    protected void result(Object object) {
+                        System.out.println(object);
+                    }
+                }.show(stage);
+            }
+        });
 
         newRoom.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 WBGame.connection.tcp.sendMessage("newRoom:" + WBGame.connection.socket.getLocalPort());
-                game.changeScreen(WBGame.ROOM);
+                game.changeScreen(WBGame.ROOM_OWNER);
             }
         });
 
@@ -96,7 +108,6 @@ public class MenuScreen extends AbstractScreen{
 //                        System.out.println(object);
 //                    }
 //                }.show(stage);
-
                 WBGame.connection.tcp.sendMessage("joinRoom:" + WBGame.connection.socket.getLocalPort());
                 game.changeScreen(WBGame.ROOM);
             }

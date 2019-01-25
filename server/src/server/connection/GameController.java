@@ -28,11 +28,6 @@ public class GameController implements Runnable {
         this.room.setGameController(this);
     }
 
-    public void setRoom(Room room){
-        this.room = room;
-        this.usersInRoom = room.getUsersInRoom();
-    }
-
     public void run() {
         long timeBefore;
         long timeAfter;

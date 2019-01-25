@@ -17,13 +17,15 @@ public class Room {
     private OpponentList opponentList;
     private BulletList bulletList;
     private GameController gameController;
+    private User roomOwner;
 
-    public Room(int id){
+    public Room(int id, User roomOwner){
         setId(id);
-        rooms = RoomList.getInstance();
-        usersInRoom = new CopyOnWriteArrayList<>();
-        opponentList = new OpponentList();
-        bulletList = new BulletList();
+        this.rooms = RoomList.getInstance();
+        this.usersInRoom = new CopyOnWriteArrayList<>();
+        this.opponentList = new OpponentList();
+        this.bulletList = new BulletList();
+        setRoomOwner(roomOwner);
 
         addRoomToList();
     }
@@ -68,6 +70,14 @@ public class Room {
         this.gameController = gameController;
     }
 
+    public User getRoomOwner() {
+        return roomOwner;
+    }
+
+    private void setRoomOwner(User roomOwner) {
+        this.roomOwner = roomOwner;
+    }
+
     private void addRoomToList(){
         rooms.add(this);
     }
@@ -80,4 +90,5 @@ public class Room {
             }
         }
     }
+
 }

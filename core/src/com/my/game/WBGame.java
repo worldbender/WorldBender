@@ -12,16 +12,17 @@ import java.awt.*;
 public class WBGame extends Game {
 
     public static Connection connection;
-    public  static boolean connectionStatus = false;
+    public static boolean connectionStatus = false;
 
     private GameplayScreen gameplayScreen;
     private MenuScreen menuScreen;
     private RoomScreen roomScreen;
 
-    public final static int SPLASH = -1;
-    public final static int MENU = 0;
-    public final static int PLAY = 1;
-    public final static int ROOM = 2;
+    public final static int SPLASH = 0;
+    public final static int MENU = 1;
+    public final static int PLAY = 2;
+    public final static int ROOM = 3;
+    public final static int ROOM_OWNER = 4;
     private int currentRoom = 0;
     public final static String SERVER_ADDRESS = Properties.loadConfigFile("ip");
     public final static boolean IS_DEBUG_VERSION = true;
@@ -45,7 +46,7 @@ public class WBGame extends Game {
 
     @Override
     public void create () {
-        this.connection = new Connection();
+        this.connection = new Connection(this);
         this.setScreen(new SplashScreen(this));
     }
 
@@ -71,6 +72,9 @@ public class WBGame extends Game {
                 break;
             case ROOM:
                 this.setScreen(new RoomScreen(this));
+                break;
+            case ROOM_OWNER:
+                this.setScreen(new RoomScreen(this, true));
                 break;
         }
     }

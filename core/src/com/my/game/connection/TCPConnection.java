@@ -1,5 +1,7 @@
 package com.my.game.connection;
 
+import com.badlogic.gdx.Gdx;
+import com.my.game.WBGame;
 import com.my.game.opponents.AOpponent;
 import com.my.game.opponents.OpponentFabric;
 import com.my.game.opponents.OpponentList;
@@ -13,6 +15,7 @@ import java.net.Socket;
 import java.util.Map;
 
 public class TCPConnection extends Thread {
+    private WBGame game;
     private final int PORT = Integer.parseInt(Properties.loadConfigFile("PortTcp"));
     private String hostname;
     private Socket socket;
@@ -20,7 +23,8 @@ public class TCPConnection extends Thread {
     private BufferedReader in;
     private static Map<String, Player> players;
 
-    public TCPConnection(String hostName) throws IOException {
+    public TCPConnection(String hostName, WBGame game) throws IOException {
+        this.game = game;
         this.hostname = hostName;
         socket = new Socket(hostname, PORT);
         out = new PrintWriter(socket.getOutputStream(), true);
@@ -60,6 +64,11 @@ public class TCPConnection extends Thread {
             }
             players.put(splitedArray[1], p);
             break;
+        case "setStartPosition":
+            System.out.println("Update player start position: " + splitedArray[1]);
+            Player u = players.get(splitedArray[1]);
+            u.setPosition(Integer.parseInt(splitedArray[2]), Integer.parseInt(splitedArray[3]));
+            break;
         case "newPlayer":
             System.out.println("New player connected: " + splitedArray[1]);
             newPlayer(splitedArray[1]);
@@ -69,13 +78,22 @@ public class TCPConnection extends Thread {
             OpponentList.addOpponent(newOpponent);
             break;
         case "deleteOpponent":
-            OpponentList.removeOpponentById(Integer.parseInt(splitedArray[1])); break;
+            OpponentList.removeOpponentById(Integer.parseInt(splitedArray[1]));
+            break;
+        case "startGame":
+            System.out.println("Game started by: " + splitedArray[1]);
+            startGame();
+            break;
         }
     }
 
     private void newPlayer(String name) {
         Player p = new Player(name, 0, 0);
         players.put(name,p);
+    }
+
+    private void startGame(){
+        Gdx.app.postRunnable(() -> game.changeScreen(WBGame.PLAY));
     }
 
 }
