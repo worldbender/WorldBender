@@ -34,12 +34,15 @@ public class Room {
         return this.usersInRoom;
     }
 
-    public boolean addUserToRoom(User user){
+    public boolean checkIfUserCanJoinRoom(User user){
         if(this.getUsersInRoom().size() < limitOfPlayers) {
-            this.usersInRoom.add(user);
             return true;
         }
         else return false;
+    }
+
+    public void addUserToRoom(User user){
+        this.usersInRoom.add(user);
     }
 
     public void deleteUserFromRoom(User userToDelete){

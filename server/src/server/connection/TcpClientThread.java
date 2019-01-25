@@ -128,8 +128,8 @@ public class TcpClientThread extends Thread{
         User user = existingUsers.get(id);
         Room room = new Room(rooms.size(), user);
 
-        room.addUserToRoom(user);
         initUser(user, room);
+        room.addUserToRoom(user);
 
         Gdx.app.postRunnable(() -> TcpServer.createGameController(room));
     }
@@ -141,8 +141,10 @@ public class TcpClientThread extends Thread{
 
         for(Room room : rooms){
             if(room.getId() == 0) {
-                if(room.addUserToRoom(user)) {
+                initUser(user, room);
+                if(room.checkIfUserCanJoinRoom(user)) {
                     initUser(user, room);
+                    room.addUserToRoom(user);
                     sendMessage("joinedRoom:" + user.getName());
                 }
                 else sendMessage("fullRoom:" + user.getName());

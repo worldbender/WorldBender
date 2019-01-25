@@ -64,11 +64,6 @@ public class TCPConnection extends Thread {
             }
             players.put(splitedArray[1], p);
             break;
-        case "setStartPosition":
-            System.out.println("Update player start position: " + splitedArray[1]);
-            Player u = players.get(splitedArray[1]);
-            u.setPosition(Integer.parseInt(splitedArray[2]), Integer.parseInt(splitedArray[3]));
-            break;
         case "newPlayer":
             System.out.println("New player connected: " + splitedArray[1]);
             newPlayer(splitedArray[1]);
