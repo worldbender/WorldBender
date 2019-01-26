@@ -20,12 +20,12 @@ public class WBGame extends Game {
 
     public final static int SPLASH = 0;
     public final static int MENU = 1;
-    public final static int MENU_FULL_ROOM = 5;
-    public final static int MENU_NO_ROOM = 6;
-    public final static int MENU_IN_GAME = 7;
-    public final static int PLAY = 2;
-    public final static int ROOM = 3;
-    public final static int ROOM_OWNER = 4;
+    public final static int MENU_FULL_ROOM = 2;
+    public final static int MENU_NO_ROOM = 3;
+    public final static int MENU_IN_GAME = 4;
+    public final static int PLAY = 5;
+    public final static int ROOM = 6;
+    public final static int ROOM_OWNER = 7;
     private int currentRoom = 0;
     public final static String SERVER_ADDRESS = Properties.loadConfigFile("ip");
     public final static boolean IS_DEBUG_VERSION = true;
