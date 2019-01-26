@@ -210,7 +210,7 @@ public class GameplayScreen extends AbstractScreen{
 
     private void handleSpecialKeys(){
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-            game.changeScreen(WBGame.MENU);
+            game.changeScreen(WBGame.MENU_IN_GAME);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){
             game.switchScreenMode();
