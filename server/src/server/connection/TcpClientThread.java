@@ -123,6 +123,7 @@ public class TcpClientThread extends Thread{
         }
     }
 
+    //TODO: lepsze nadawanie id pokoi
     private void newRoom(String udpPort){
         String id = clientSocket.getInetAddress().toString() + "," + udpPort;
         User user = existingUsers.get(id);
@@ -132,9 +133,10 @@ public class TcpClientThread extends Thread{
         room.addUserToRoom(user);
 
         Gdx.app.postRunnable(() -> TcpServer.createGameController(room));
+
+        sendMessage("createdRoom:" + user.getName() + ":" + room.getId());
     }
 
-    //TODO: dolaczanie do roznych pokoi
     private void joinRoom(String udpPort, String roomToJoin){
         boolean roomExists = false;
         String id = clientSocket.getInetAddress().toString() + "," + udpPort;
@@ -146,9 +148,8 @@ public class TcpClientThread extends Thread{
                 roomExists = true;
                 initUser(user, room);
                 if(room.checkIfUserCanJoinRoom()) {
-                    initUser(user, room);
                     room.addUserToRoom(user);
-                    sendMessage("joinedRoom:" + user.getName());
+                    sendMessage("joinedRoom:" + user.getName() + ":" + room.getId());
                 }
                 else sendMessage("fullRoom:" + user.getName());
                 break;

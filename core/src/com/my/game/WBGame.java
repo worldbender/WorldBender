@@ -78,11 +78,16 @@ public class WBGame extends Game {
                 if(gameplayScreen == null) gameplayScreen = new GameplayScreen(this);
                 this.setScreen(gameplayScreen);
                 break;
-            case ROOM:
-                this.setScreen(new RoomScreen(this));
-                break;
+        }
+    }
+
+    public void changeScreen(int screen, int roomId){
+        switch(screen){
             case ROOM_OWNER:
-                this.setScreen(new RoomScreen(this, true));
+                this.setScreen(new RoomScreen(this, true, roomId));
+                break;
+            case ROOM:
+                this.setScreen(new RoomScreen(this, roomId));
                 break;
         }
     }

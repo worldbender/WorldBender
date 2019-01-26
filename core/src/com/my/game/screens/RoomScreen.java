@@ -2,6 +2,7 @@ package com.my.game.screens;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -9,13 +10,15 @@ import com.my.game.WBGame;
 
 public class RoomScreen extends AbstractScreen {
     private boolean isOwner = false;
+    private int roomId;
 
-    public RoomScreen(WBGame game) {
+    public RoomScreen(WBGame game, int roomId) {
         super(game);
+        this.roomId = roomId;
     }
 
-    public RoomScreen(WBGame game, boolean isOwner) {
-        super(game);
+    public RoomScreen(WBGame game, boolean isOwner, int roomId) {
+        this(game, roomId);
         this.isOwner = isOwner;
     }
 
@@ -30,11 +33,14 @@ public class RoomScreen extends AbstractScreen {
         //create buttons
         TextButton newGame = new TextButton("Start Game", skin);
         TextButton back = new TextButton("Leave Room", skin);
+        Label roomLabel = new Label("Room ID: " + roomId, skin);
 
         //add buttons to table
+        table.add(roomLabel).fillX().uniformX().bottom();
+        table.row().pad(50, 0, 50, 0);
         table.add(newGame).fillX().uniformX().bottom();
         table.add(back).fillX().uniformX().bottom();
-        table.row().pad(30, 0, 30, 0);
+        table.row().pad(50, 0, 50, 0);
 
         // create button listeners
         back.addListener(new ChangeListener() {

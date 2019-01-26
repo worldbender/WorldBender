@@ -84,7 +84,7 @@ public class MenuScreen extends AbstractScreen{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 WBGame.connection.tcp.sendMessage("newRoom:" + WBGame.connection.socket.getLocalPort());
-                game.changeScreen(WBGame.ROOM_OWNER);
+//                game.changeScreen(WBGame.ROOM_OWNER);
             }
         });
 

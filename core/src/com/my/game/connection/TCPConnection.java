@@ -79,9 +79,13 @@ public class TCPConnection extends Thread {
             System.out.println("Game started by: " + splitedArray[1]);
             Gdx.app.postRunnable(() -> game.changeScreen(WBGame.PLAY));
             break;
+        case "createdRoom":
+            System.out.println("Created room ID: " + splitedArray[2]);
+            Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_OWNER, Integer.parseInt(splitedArray[2])));
+            break;
         case "joinedRoom":
-            System.out.println("Joined room successfully: " + splitedArray[1]);
-            Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM));
+            System.out.println("Joined room ID: " + splitedArray[2]);
+            Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM, Integer.parseInt(splitedArray[2])));
             break;
         case "fullRoom":
             System.out.println("Room is full: " + splitedArray[1]);
