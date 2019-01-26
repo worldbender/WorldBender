@@ -95,7 +95,7 @@ public class TcpClientThread extends Thread{
 
         //te pakiety wysyłamy do innych graczy z informacja ze gracz dolaczyl do gry
         for (User currentUser : room.getUsersInRoom()) {
-            currentUser.getThread().sendMessage("newPlayer:player" + (room.getUsersInRoom().size()));
+            currentUser.getThread().sendMessage("newPlayer:player" + (existingUsers.size()-1));
         }
 
         //TODO
