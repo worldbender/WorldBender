@@ -3,12 +3,9 @@ package com.my.game.connection;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletFabric;
 import com.my.game.bullets.BulletList;
-import com.my.game.opponents.AOpponent;
-import com.my.game.opponents.OpponentFabric;
 import com.my.game.opponents.OpponentList;
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
-import screens.GameplayScreen;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

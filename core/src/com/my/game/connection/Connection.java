@@ -15,8 +15,10 @@ public class Connection {
     private Thread receiverThread;
     private Thread senderThread;
     private Thread tcpThread;
+    private WBGame game;
 
-    public Connection(){
+    public Connection(WBGame game){
+        this.game = game;
         try {
             socket = new DatagramSocket();
         } catch (SocketException e) {
@@ -36,7 +38,7 @@ public class Connection {
     }
 
     private void initTcp() throws IOException{
-        tcp = new TCPConnection(hostName);
+        tcp = new TCPConnection(hostName, game);
         tcpThread = new Thread(tcp);
         tcpThread.start();
         tcp.sendMessage("udpPort:" + socket.getLocalPort());

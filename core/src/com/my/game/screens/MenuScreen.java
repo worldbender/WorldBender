@@ -1,25 +1,38 @@
-package screens;
+package com.my.game.screens;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.my.game.WBGame;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.my.game.connection.Connection;
+import com.my.game.screens.dialogs.ErrorDialog;
+import com.my.game.screens.dialogs.JoinRoomDialog;
 
 public class MenuScreen extends AbstractScreen{
+    private boolean isRoomFull = false;
+    private boolean roomExists = true;
+    private boolean inGame = false;
 
     public MenuScreen(WBGame game) {
         super(game);
         if(!WBGame.connectionStatus) {
             this.create();
         }
+    }
+
+    public MenuScreen(WBGame game, boolean isRoomFull, boolean roomExists) {
+        this(game);
+        this.isRoomFull = isRoomFull;
+        this.roomExists = roomExists;
+    }
+
+    public MenuScreen(WBGame game, boolean inGame) {
+        this(game);
+        this.inGame = inGame;
     }
 
     public void create() {
@@ -29,7 +42,6 @@ public class MenuScreen extends AbstractScreen{
             WBGame.connectionStatus = true;
         }catch(Exception e){
             System.out.println("Nie nawiązano połączenia");
-            WBGame.connectionStatus = false;
         }
     }
 
@@ -40,25 +52,58 @@ public class MenuScreen extends AbstractScreen{
         table.setDebug(false);
         stage.addActor(table);
 
-        // temporary until we have asset manager in
-        Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-
         //create buttons
         TextButton newRoom = new TextButton("Create Room", skin);
         TextButton joinRoom = new TextButton("Join Room", skin);
-//        TextButton preferences = new TextButton("Preferences", skin);
+        TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
+        TextButton resume = new TextButton("Resume", skin);
 
         //add buttons to table
-        table.add(newRoom).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
-        table.add(joinRoom).fillX().uniformX();
-//        table.row();
-//        table.add(preferences).fillX().uniformX();
-        table.row();
+        if(inGame){
+            table.add(resume).fillX().uniformX();
+            table.row().pad(10, 0, 0, 0);
+        }
+        else {
+            table.add(newRoom).fillX().uniformX();
+            table.row().pad(10, 0, 0, 0);
+            table.add(joinRoom).fillX().uniformX();
+            table.row().pad(10, 0, 0, 0);
+        }
+        table.add(preferences).fillX().uniformX();
+        table.row().pad(10, 0, 0, 0);
         table.add(exit).fillX().uniformX();
+        table.row();
 
         // create button listeners
+        preferences.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                new ErrorDialog(skin, stage, "Preferences not ready yet!");
+            }
+        });
+
+        newRoom.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                WBGame.connection.tcp.sendMessage("newRoom:" + WBGame.connection.socket.getLocalPort());
+            }
+        });
+
+        joinRoom.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                new JoinRoomDialog(skin, stage);
+            }
+        });
+
+        resume.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(WBGame.PLAY);
+            }
+        });
+
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -66,42 +111,14 @@ public class MenuScreen extends AbstractScreen{
             }
         });
 
-//        preferences.addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                game.changeScreen(WBGame.PLAY);
-//            }
-//        });
 
-        newRoom.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                WBGame.connection.tcp.sendMessage("newRoom:" + WBGame.connection.socket.getLocalPort());
-                game.changeScreen(WBGame.ROOM);
-            }
-        });
+        if(isRoomFull){
+            new ErrorDialog(skin, stage, "Game already started or room is full!");
+        }
 
-        joinRoom.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-//                new Dialog("Text input", skin) {
-//                    {
-//                        text("rly");
-//                        button("yes", "bye");
-//                        button("no", "nice you stayed");
-//                    }
-//
-//                    @Override
-//                    protected void result(Object object) {
-//                        System.out.println(object);
-//                    }
-//                }.show(stage);
-
-                WBGame.connection.tcp.sendMessage("joinRoom:" + WBGame.connection.socket.getLocalPort());
-                game.changeScreen(WBGame.ROOM);
-            }
-        });
-
+        if(!roomExists){
+            new ErrorDialog(skin, stage, "Room with this ID doesn't exist!");
+        }
     }
 
     @Override

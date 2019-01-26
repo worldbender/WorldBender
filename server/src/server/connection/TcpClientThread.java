@@ -1,8 +1,8 @@
 package server.connection;
 
 
-import RoomsController.Room;
-import RoomsController.RoomList;
+import server.rooms.Room;
+import server.rooms.RoomList;
 import com.badlogic.gdx.Gdx;
 import server.ExistingUsers;
 import server.User;
@@ -41,7 +41,7 @@ public class TcpClientThread extends Thread{
 
     public void run()
     {
-        System.out.println ("New TCP Connection Started with" + clientSocket.getPort());
+        System.out.println ("New TCP Connection Started with " + clientSocket.getPort());
         String message;
         try {
             while ((message = in.readLine()) != null) {
@@ -68,8 +68,9 @@ public class TcpClientThread extends Thread{
         switch (splitedArray[0]){
             case "udpPort": newUser(splitedArray[1]); break;
             case "newRoom": newRoom(splitedArray[1]); break;
-            case "joinRoom": joinRoom(splitedArray[1]); break;
+            case "joinRoom": joinRoom(splitedArray[1], splitedArray[2]); break;
             case "leaveRoom": leaveRoom(splitedArray[1]); break;
+            case "startGame": startGame(splitedArray[1]); break;
         }
     }
 
@@ -83,174 +84,187 @@ public class TcpClientThread extends Thread{
 
         existingUsers.put(id, this.user);
         existingUsers.get(user.getConnectionId()).setThread(this);
-
     }
 
     private void initUser(User initedUser, Room room){
         //ten pakiet wysylamy do naszego gracza z jego poczatkowa pozycja
-        sendMessage("init:"+initedUser.getName()+":"+initedUser.getPlayer().getX()+":"+initedUser.getPlayer().getY()+":true");
+        sendMessage("init:" +
+                initedUser.getName() + ":" +
+                initedUser.getPlayer().getX() + ":" +
+                initedUser.getPlayer().getY() + ":true");
 
         //te pakiety wysyłamy do innych graczy z informacja ze gracz dolaczyl do gry
-        for (User current : room.getUsersInRoom()) {
-            current.getThread().sendMessage("newPlayer:player" + (room.getUsersInRoom().size()));
+        for (User currentUser : room.getUsersInRoom()) {
+            currentUser.getThread().sendMessage("newPlayer:player" + (existingUsers.size()-1));
         }
 
+        //TODO
+        //Rozsyłamy informacje graczom, kto jest właścicielem pokoju
+//        for (User currentUser : room.getUsersInRoom()) {
+//            currentUser.getThread().sendMessage("owner:" + room.getRoomOwner().getName());
+//        }
+
         //Rozsyłamy informacje o istniejacych potworkach do nowego gracza
-        for(AOpponent opponent : room.opponentList.getOpponents()){
-            sendMessage("createOpponent:" + opponent.getType() + ":" + opponent.getId());
+        for(AOpponent opponent : room.getOpponentList().getOpponents()){
+            sendMessage("createOpponent:" +
+                    opponent.getType() + ":" +
+                    opponent.getId());
         }
 
         //te pakiety wysylamy do naszego gracza z pozycjami juz istniejacych graczy
-        for (User current : room.getUsersInRoom()) {
-            String message = "init:" + current.getName() + ":" + current.getPlayer().getX() + ":" + current.getPlayer().getY() + ":false";
-            if (current.hasConnection())
+        for (User currentUser : room.getUsersInRoom()) {
+            String message = "init:" +
+                    currentUser.getName() + ":" +
+                    currentUser.getPlayer().getX() + ":" +
+                    currentUser.getPlayer().getY() + ":false";
+
+            if (currentUser.hasConnection())
                 sendMessage(message);
         }
-
     }
 
+    //TODO: lepsze nadawanie id pokoi
     private void newRoom(String udpPort){
         String id = clientSocket.getInetAddress().toString() + "," + udpPort;
         User user = existingUsers.get(id);
-        Room newRoom = new Room(rooms.size());
-        initUser(user, newRoom);
-        newRoom.addUserToRoom(user);
-        rooms.add(newRoom);
-        Gdx.app.postRunnable(() -> TcpServer.createGameController(newRoom));
-        createOpponent(newRoom);
+        Room room = new Room(rooms.size(), user);
+
+        initUser(user, room);
+        room.addUserToRoom(user);
+
+        Gdx.app.postRunnable(() -> TcpServer.createGameController(room));
+
+        sendMessage("createdRoom:" + user.getName() + ":" + room.getId());
     }
 
-    //TODO: dolaczanie do roznych pokoi
-    private void joinRoom(String udpPort){
+    private void joinRoom(String udpPort, String roomToJoin){
+        boolean roomExists = false;
         String id = clientSocket.getInetAddress().toString() + "," + udpPort;
         User user = existingUsers.get(id);
+        int roomId = Integer.parseInt(roomToJoin);
+
         for(Room room : rooms){
-            if(room.getId() == 0) {
+            if(room.getId() == roomId) {
+                roomExists = true;
                 initUser(user, room);
-                room.addUserToRoom(user);
+                if(room.checkIfUserCanJoinRoom()) {
+                    room.addUserToRoom(user);
+                    sendMessage("joinedRoom:" + user.getName() + ":" + room.getId());
+                }
+                else sendMessage("fullRoom:" + user.getName());
+                break;
             }
         }
+
+        if(!roomExists)
+            sendMessage("roomDoesNotExist:" + user.getName());
     }
 
-    //TODO: opuszczanie pokoi
     private void leaveRoom(String udpPort){
         String id = clientSocket.getInetAddress().toString() + "," + udpPort;
         User user = existingUsers.get(id);
         Room currentRoom = RoomList.getUserRoom(id);
-        for(Room room : rooms){
-            if(room.getId() == currentRoom.getId()) {
-                room.deleteUserFromRoom(user);
-                if(room.getUsersInRoom().size() == 0) deleteRoom(room);
-            }
-        }
+
+        currentRoom.deleteUserFromRoom(user);
     }
 
-    //TODO: start gry
-    private void startGame(){
-        //te pakiety wysyłamy do innych graczy z informacja ze gracz dolaczyl do gry
-        for (User current : existingUsers.values()) {
-            current.getThread().sendMessage("newPlayer:player" + (existingUsers.size()));
+    private void startGame(String udpPort){
+        String id = clientSocket.getInetAddress().toString() + "," + udpPort;
+        User user = existingUsers.get(id);
+        Room currentRoom = RoomList.getUserRoom(id);
+
+        initGame(currentRoom);
+
+        for(User currentUser : currentRoom.getUsersInRoom()){
+            currentUser.getThread().sendMessage("startGame:" + user.getName()); //TODO: ewentualna poprawka wysyłanego info
         }
+
+        currentRoom.setGameStarted(true);
     }
 
-    //TODO: sprawdzic czy poprawnie dziala & zrobić usuwanie wątków & usuwanie pokoi jak gracze wyjdą w trakcie gry
-    private void deleteRoom(Room roomToDelete){
-        System.out.println("deleting room");
-        for(Room room : rooms){
-            if(room.getId() == roomToDelete.getId()) {
-                room.getGameController().killThread();
-                rooms.remove(room);
-            }
-        }
-    }
-
-    /*private void createOpponent(Room room){
-        String opponentType = "Nietzsche";
-        AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);
-        room.opponentList.addOpponent(newOpponent);
-        String message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
+    //TODO: przejściowa wersja, do ogarnięcia
+    private void initGame(Room room){
+        int x = 0;
+        int nextX = 100;
         for(User user : room.getUsersInRoom()){
-            if(user.hasConnection())
-                user.getThread().sendMessage(message);
+            user.getPlayer().setX(user.getPlayer().getX() + x);
+            x -= nextX;
         }
-        opponentType = "Schopenheuer";
-        newOpponent = OpponentFabric.createOpponent(opponentType);
-        newOpponent.setX(2000);
-        newOpponent.setY(2600);
-        room.opponentList.addOpponent(newOpponent);
-        message = "createOpponent:" + newOpponent.getType() + ":" + newOpponent.getId();
-        for(User user : room.getUsersInRoom()){
-            if(user.hasConnection())
-                user.getThread().sendMessage(message);
-        }
-    }*/
+
+        createOpponent(room);
+    }
+
     private void createOpponent(Room room) {
+        OpponentList roomOpponentList = room.getOpponentList();
+
         String opponentType = "Nietzsche";
         AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);
         newOpponent.setX(1600);
         newOpponent.setY(400);
-        room.opponentList.addOpponent(newOpponent);
+        roomOpponentList.addOpponent(newOpponent);
 
         opponentType = "Schopenheuer";
         newOpponent = OpponentFabric.createOpponent(opponentType);
         newOpponent.setX(2000);
         newOpponent.setY(2600);
-        room.opponentList.addOpponent(newOpponent);
-
+        roomOpponentList.addOpponent(newOpponent);
 
         opponentType = "Poe";
         newOpponent = OpponentFabric.createOpponent(opponentType);
         newOpponent.setX(1400);
         newOpponent.setY(400);
-        room.opponentList.addOpponent(newOpponent);
+        roomOpponentList.addOpponent(newOpponent);
 
         newOpponent = OpponentFabric.createOpponent("Poe");
         newOpponent.setX(600);
         newOpponent.setY(1600);
-        room.opponentList.addOpponent(newOpponent);
+        roomOpponentList.addOpponent(newOpponent);
 
         newOpponent = OpponentFabric.createOpponent("Poe");
         newOpponent.setX(1900);
         newOpponent.setY(500);
-        room.opponentList.addOpponent(newOpponent);
+        roomOpponentList.addOpponent(newOpponent);
 
         newOpponent = OpponentFabric.createOpponent("Poe");
         newOpponent.setX(2000);
         newOpponent.setY(400);
-        room.opponentList.addOpponent(newOpponent);
+        roomOpponentList.addOpponent(newOpponent);
 
         newOpponent = OpponentFabric.createOpponent("Poe");
         newOpponent.setX(1900);
         newOpponent.setY(1500);
-        room.opponentList.addOpponent(newOpponent);
+        roomOpponentList.addOpponent(newOpponent);
 
         newOpponent = OpponentFabric.createOpponent("Poe");
         newOpponent.setX(1500);
         newOpponent.setY(1500);
-        room.opponentList.addOpponent(newOpponent);;
+        roomOpponentList.addOpponent(newOpponent);;
 
         newOpponent = OpponentFabric.createOpponent("Poe");
         newOpponent.setX(1330);
         newOpponent.setY(1500);
-        room.opponentList.addOpponent(newOpponent);
+        roomOpponentList.addOpponent(newOpponent);
 
         newOpponent = OpponentFabric.createOpponent("Poe");
         newOpponent.setX(1200);
         newOpponent.setY(1500);
-        room.opponentList.addOpponent(newOpponent);
+        roomOpponentList.addOpponent(newOpponent);
 
         newOpponent = OpponentFabric.createOpponent("Poe");
         newOpponent.setX(1000);
         newOpponent.setY(1500);
-        room.opponentList.addOpponent(newOpponent);
+        roomOpponentList.addOpponent(newOpponent);
+
         String message;
         for(User user : room.getUsersInRoom()){
-            for(AOpponent opponent : room.opponentList.getOpponents()){
-                message = "createOpponent:" + opponent.getType() + ":" + opponent.getId();
+            for(AOpponent opponent : roomOpponentList.getOpponents()){
+                message = "createOpponent:" +
+                        opponent.getType() + ":" +
+                        opponent.getId();
+
                 if(user.hasConnection())
                     user.getThread().sendMessage(message);
             }
-
         }
     }
 

@@ -1,18 +1,25 @@
-package screens;
+package com.my.game.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.my.game.WBGame;
 
 public class RoomScreen extends AbstractScreen {
+    private boolean isOwner = false;
+    private int roomId;
 
-    public RoomScreen(WBGame game) {
+    public RoomScreen(WBGame game, int roomId) {
         super(game);
+        this.roomId = roomId;
+    }
+
+    public RoomScreen(WBGame game, boolean isOwner, int roomId) {
+        this(game, roomId);
+        this.isOwner = isOwner;
     }
 
     @Override
@@ -23,19 +30,17 @@ public class RoomScreen extends AbstractScreen {
         table.setDebug(false);
         stage.addActor(table);
 
-        // temporary until we have asset manager in
-        Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-
         //create buttons
         TextButton newGame = new TextButton("Start Game", skin);
         TextButton back = new TextButton("Leave Room", skin);
+        Label roomLabel = new Label("Room ID: " + roomId, skin);
 
         //add buttons to table
+        table.add(roomLabel).fillX().uniformX().bottom();
+        table.row().pad(50, 0, 50, 0);
         table.add(newGame).fillX().uniformX().bottom();
         table.add(back).fillX().uniformX().bottom();
-        table.row().pad(10, 0, 10, 0);
-        table.row();
-
+        table.row().pad(50, 0, 50, 0);
 
         // create button listeners
         back.addListener(new ChangeListener() {
@@ -46,14 +51,18 @@ public class RoomScreen extends AbstractScreen {
             }
         });
 
-        newGame.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(WBGame.PLAY);
-            }
-        });
-
-
+        if(isOwner) {
+            newGame.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    WBGame.connection.tcp.sendMessage("startGame:" + WBGame.connection.socket.getLocalPort());
+                }
+            });
+        }
+        else {
+            newGame.setDisabled(true);
+            newGame.setTouchable(Touchable.disabled);
+        }
     }
 
     @Override

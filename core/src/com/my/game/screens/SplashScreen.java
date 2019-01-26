@@ -1,4 +1,4 @@
-package screens;
+package com.my.game.screens;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Timer;

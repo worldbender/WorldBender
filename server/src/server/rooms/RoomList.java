@@ -1,4 +1,4 @@
-package RoomsController;
+package server.rooms;
 
 import server.ExistingUsers;
 import server.User;

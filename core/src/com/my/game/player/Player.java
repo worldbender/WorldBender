@@ -1,13 +1,11 @@
 package com.my.game.player;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.my.game.UtilitySingletons.ShapeDrawer;
 import com.my.game.UtilitySingletons.StringDrawer;
-import screens.GameplayScreen;
+import com.my.game.screens.GameplayScreen;
 
 
 public class Player extends APlayer {
