@@ -1,8 +1,7 @@
-package screens;
+package com.my.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -15,7 +14,6 @@ import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
 import com.my.game.opponents.*;
-import com.my.game.connection.Connection;
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
 import com.my.game.WBGame;

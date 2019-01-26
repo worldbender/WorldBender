@@ -4,8 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.my.game.connection.Connection;
-import screens.*;
-import screens.SplashScreen;
+import com.my.game.screens.*;
+import com.my.game.screens.SplashScreen;
 
 import java.awt.*;
 

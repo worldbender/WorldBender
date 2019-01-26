@@ -1,6 +1,7 @@
-package screens;
+package com.my.game.screens;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.my.game.WBGame;
 
 import com.badlogic.gdx.Gdx;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.my.game.screens.dialogs.ErrorDialog;
+import com.my.game.screens.dialogs.JoinRoomDialog;
 
 public class MenuScreen extends AbstractScreen{
     private boolean isRoomFull = false;
@@ -71,13 +74,7 @@ public class MenuScreen extends AbstractScreen{
         preferences.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                new Dialog("Warning", skin) {
-                    {
-                        text("Preferences not ready yet");
-                        button("Ok :c");
-                        button("Happens");
-                    }
-                }.show(stage);
+                new ErrorDialog(skin, stage, "Preferences not ready yet!");
             }
         });
 
@@ -92,21 +89,12 @@ public class MenuScreen extends AbstractScreen{
         joinRoom.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                WBGame.connection.tcp.sendMessage("joinRoom:" + WBGame.connection.socket.getLocalPort());
+                new JoinRoomDialog(skin, stage);
             }
         });
 
         if(isRoomFull){
-            new Dialog("Error", skin) {
-                {
-                    text("This room is full!");
-                    button("OK");
-                }
-//                @Override
-//                protected void result(Object object) {
-//                    System.out.println(object);
-//                }
-            }.show(stage);
+            new ErrorDialog(skin, stage, "This room is full!");
         }
 
     }

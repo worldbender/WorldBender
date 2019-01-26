@@ -8,7 +8,7 @@ import com.my.game.opponents.OpponentList;
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
 import com.my.game.Properties;
-import screens.GameplayScreen;
+import com.my.game.screens.GameplayScreen;
 
 import java.io.*;
 import java.net.Socket;
