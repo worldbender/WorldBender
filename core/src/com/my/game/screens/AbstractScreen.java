@@ -32,7 +32,7 @@ public abstract class AbstractScreen implements Screen {
         stage = new Stage(new StretchViewport(WBGame.WIDTH, WBGame.HEIGHT, camera));
         spriteBatch = new SpriteBatch();
         Gdx.input.setInputProcessor(stage);
-        splashImg = new Texture("mount1.jpg");
+        splashImg = new Texture("tree.jpg");
     }
 
     private void createCamera() {
