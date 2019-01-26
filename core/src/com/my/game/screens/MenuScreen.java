@@ -14,6 +14,7 @@ import com.my.game.screens.dialogs.JoinRoomDialog;
 
 public class MenuScreen extends AbstractScreen{
     private boolean isRoomFull = false;
+    private boolean roomExists = true;
 
     public MenuScreen(WBGame game) {
         super(game);
@@ -22,12 +23,13 @@ public class MenuScreen extends AbstractScreen{
         }
     }
 
-    public MenuScreen(WBGame game, boolean isRoomFull) {
+    public MenuScreen(WBGame game, boolean isRoomFull, boolean roomExists) {
         super(game);
         if(!WBGame.connectionStatus) {
             this.create();
         }
         this.isRoomFull = isRoomFull;
+        this.roomExists = roomExists;
     }
 
     public void create() {
@@ -94,7 +96,11 @@ public class MenuScreen extends AbstractScreen{
         });
 
         if(isRoomFull){
-            new ErrorDialog(skin, stage, "This room is full!");
+            new ErrorDialog(skin, stage, "Game already started or room is full!");
+        }
+
+        if(!roomExists){
+            new ErrorDialog(skin, stage, "Room with this ID doesn't exist!");
         }
 
     }

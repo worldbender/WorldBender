@@ -35,10 +35,12 @@ public class JoinRoomDialog extends Dialog {
     @Override
     protected void result(Object object) {
         TextField newTf = (TextField) object;
-        int id = 0;
+        int id;
         try{
             id = Integer.parseInt(newTf.getText());
-            WBGame.connection.tcp.sendMessage("joinRoom:" + WBGame.connection.socket.getLocalPort());
+            WBGame.connection.tcp.sendMessage("joinRoom:" +
+                    WBGame.connection.socket.getLocalPort() + ":" +
+                    id);
         } catch (NumberFormatException e) {
             new ErrorDialog(skin, stage, "Room ID has to be a number!");
         }

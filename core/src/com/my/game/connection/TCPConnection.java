@@ -87,6 +87,10 @@ public class TCPConnection extends Thread {
             System.out.println("Room is full: " + splitedArray[1]);
             Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_FULL_ROOM));
             break;
+        case "roomDoesNotExist":
+            System.out.println("Room doesn't exist: " + splitedArray[1]);
+            Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_NO_ROOM));
+            break;
         }
     }
 

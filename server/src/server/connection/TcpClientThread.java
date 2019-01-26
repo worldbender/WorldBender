@@ -68,7 +68,7 @@ public class TcpClientThread extends Thread{
         switch (splitedArray[0]){
             case "udpPort": newUser(splitedArray[1]); break;
             case "newRoom": newRoom(splitedArray[1]); break;
-            case "joinRoom": joinRoom(splitedArray[1]); break;
+            case "joinRoom": joinRoom(splitedArray[1], splitedArray[2]); break;
             case "leaveRoom": leaveRoom(splitedArray[1]); break;
             case "startGame": startGame(splitedArray[1]); break;
         }
@@ -135,21 +135,28 @@ public class TcpClientThread extends Thread{
     }
 
     //TODO: dolaczanie do roznych pokoi
-    private void joinRoom(String udpPort){
+    private void joinRoom(String udpPort, String roomToJoin){
+        boolean roomExists = false;
         String id = clientSocket.getInetAddress().toString() + "," + udpPort;
         User user = existingUsers.get(id);
+        int roomId = Integer.parseInt(roomToJoin);
 
         for(Room room : rooms){
-            if(room.getId() == 0) {
+            if(room.getId() == roomId) {
+                roomExists = true;
                 initUser(user, room);
-                if(room.checkIfUserCanJoinRoom(user)) {
+                if(room.checkIfUserCanJoinRoom()) {
                     initUser(user, room);
                     room.addUserToRoom(user);
                     sendMessage("joinedRoom:" + user.getName());
                 }
                 else sendMessage("fullRoom:" + user.getName());
+                break;
             }
         }
+
+        if(!roomExists)
+            sendMessage("roomDoesNotExist:" + user.getName());
     }
 
     private void leaveRoom(String udpPort){
@@ -170,6 +177,8 @@ public class TcpClientThread extends Thread{
         for(User currentUser : currentRoom.getUsersInRoom()){
             currentUser.getThread().sendMessage("startGame:" + user.getName()); //TODO: ewentualna poprawka wysyłanego info
         }
+
+        currentRoom.setGameStarted(true);
     }
 
     //TODO: przejściowa wersja, do ogarnięcia

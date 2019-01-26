@@ -18,6 +18,7 @@ public class Room {
     private BulletList bulletList;
     private GameController gameController;
     private User roomOwner;
+    private boolean gameStarted = false;
 
     public Room(int id, User roomOwner){
         setId(id);
@@ -34,8 +35,8 @@ public class Room {
         return this.usersInRoom;
     }
 
-    public boolean checkIfUserCanJoinRoom(User user){
-        if(this.getUsersInRoom().size() < limitOfPlayers) {
+    public boolean checkIfUserCanJoinRoom(){
+        if(this.getUsersInRoom().size() < limitOfPlayers && this.gameStarted == false) {
             return true;
         }
         else return false;
@@ -83,6 +84,10 @@ public class Room {
 
     private void setRoomOwner(User roomOwner) {
         this.roomOwner = roomOwner;
+    }
+
+    public void setGameStarted(boolean gameStarted) {
+        this.gameStarted = gameStarted;
     }
 
     private void addRoomToList(){
