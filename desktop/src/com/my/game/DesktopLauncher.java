@@ -22,7 +22,7 @@ public class DesktopLauncher {
 
 		new LwjglApplication(new WBGame(), config);
 	}
-//	public static void toggleFullscreen(){
-//		config.fullscreen = !config.fullscreen;
-//	}
+	public static void toggleFullscreen(){
+		config.fullscreen = !config.fullscreen;
+	}
 }

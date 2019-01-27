@@ -82,11 +82,11 @@ public class GameController implements Runnable {
     private void updateOpponentsAndSendOpponentDataPackage() {
         String message;
         for (AOpponent opponent : room.getOpponentList().getOpponents()) {
-            opponent.update(deltaTime, logicMapHandler, usersInRoom, room.getBulletList());
+            opponent.update(deltaTime, logicMapHandler, usersInRoom, room.getBulletList(), room.getOpponentList());
             message = "updateOpponentData:" +
                     opponent.getId() + ":" +
-                    opponent.getX() + ":" +
-                    opponent.getY() + ":" +
+                    (int)opponent.getX() + ":" +
+                    (int)opponent.getY() + ":" +
                     opponent.getHp();
 
             UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
