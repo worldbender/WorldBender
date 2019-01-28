@@ -135,11 +135,13 @@ public abstract class AOpponent {
         }
         return result;
     }
+
     private void handleOpponentDeath(OpponentList opponentList, PickupList pickupList){
         opponentList.removeOpponent(this);
         opponentList.addDeadAOpponentsTrashList(this);
         pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"Hp"));
     }
+
     private void checkIfOpponentShouldDie(OpponentList opponentList, PickupList pickupList){
         if(this.getHp() <= 0){
             this.isDead = true;
@@ -148,6 +150,7 @@ public abstract class AOpponent {
             handleOpponentDeath(opponentList, pickupList);
         }
     }
+
     public double getX() {
         return x;
     }
