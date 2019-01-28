@@ -15,6 +15,7 @@ public class Player {
     private int width;
     private int height;
     private int hp=100;
+    public final int MAX_HP = 100;
     private double moveSpeed = 0.65;
     private long shootCooldown = 100L;
     private long lastTimePlayerHasShot = 0L;
@@ -44,6 +45,8 @@ public class Player {
     }
 
     public void setX(int x) { this.x = x; }
+
+    public void setY(int y) { this.y = y; }
 
     public int getY(){
         return this.y;

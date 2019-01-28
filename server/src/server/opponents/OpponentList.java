@@ -1,7 +1,5 @@
 package server.opponents;
 
-import server.connection.GameController;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

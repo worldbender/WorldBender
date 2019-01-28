@@ -14,6 +14,9 @@ import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
 import com.my.game.opponents.*;
+import com.my.game.pickups.APickup;
+import com.my.game.pickups.HpPickup;
+import com.my.game.pickups.PickupList;
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
 import com.my.game.WBGame;
@@ -80,6 +83,7 @@ public class GameplayScreen extends AbstractScreen{
         Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
         Player.leftWalkAnimation = getAnimationFrom1DPicture(leftSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
+        HpPickup.texture = new Texture("hp.png");
         stateTime = 0f;
     }
 
@@ -127,6 +131,9 @@ public class GameplayScreen extends AbstractScreen{
         }
         for(AOpponent opponent : OpponentList.getOpponents()){
             opponent.draw(spriteBatch);
+        }
+        for(APickup pickup : PickupList.getPickups()){
+            pickup.draw(spriteBatch);
         }
     }
 

@@ -1,12 +1,13 @@
 package server.LogicMap;
 
-public class EventBlock {
+public class EventBlock extends ABlock{
     private int x;
     private int y;
     private String key;
     private String value;
     private boolean happened;
     public EventBlock(int x, int y, String key, String value){
+        super(x, y, 100, 100);
         this.x = x;
         this.y = y;
         this.key = key;

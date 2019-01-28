@@ -1,5 +1,7 @@
 package server.connection;
 
+import server.pickups.APickup;
+import server.pickups.PickupList;
 import server.rooms.Room;
 import server.rooms.RoomList;
 import server.LogicMap.LogicMapHandler;
@@ -7,6 +9,7 @@ import server.User;
 import server.bullets.ABullet;
 import server.opponents.AOpponent;
 
+import java.awt.*;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -19,6 +22,7 @@ public class GameController implements Runnable {
     private Room room;
     private List<Room> rooms;
     private CopyOnWriteArrayList<User> usersInRoom;
+    private PickupList pickupList;
 
     public GameController(Room room) {
         this.rooms = RoomList.getInstance();
@@ -26,6 +30,7 @@ public class GameController implements Runnable {
         this.usersInRoom = room.getUsersInRoom();
         this.logicMapHandler = new LogicMapHandler();
         this.room.setGameController(this);
+        this.pickupList = new PickupList(usersInRoom);
     }
 
     public void run() {
@@ -41,7 +46,7 @@ public class GameController implements Runnable {
         }
     }
 
-    public void stopThread(){
+    public void stopThread() {
         this.flag = false;
     }
 
@@ -57,36 +62,48 @@ public class GameController implements Runnable {
 
     private void doGameLoop() {
         updatePlayerPosition();
+        updatePickups();
         doUdpSends();
         doTcpSends();
     }
 
-    private void doUdpSends(){
+    private void doUdpSends() {
         sendPlayerDataPackage();
         updateBulletsAndSendBulletPositionPackage();
         updateOpponentsAndSendOpponentDataPackage();
         informClientsAboutDeadBullets();
         informClientsAboutNewBullets();
     }
-    private void doTcpSends(){
+
+    private void doTcpSends() {
         informClientsAboutDeadOpponents();
     }
 
-    private void updatePlayerPosition(){
-        //System.out.println(Gdx.graphics.getDeltaTime());
-        for (User user : usersInRoom){
+    private void updatePlayerPosition() {
+        for (User user : usersInRoom) {
             user.getPlayer().update(logicMapHandler, usersInRoom, deltaTime);
+        }
+    }
+
+    private void updatePickups(){
+        for(APickup pickup : this.pickupList.getPickups()){
+            for(User user : this.usersInRoom){
+               if(pickup.getBounds().intersects(user.getPlayer().getBounds())){
+                   pickup.modifyPlayer(user.getPlayer());
+                   this.pickupList.deletePickup(pickup);
+               }
+            }
         }
     }
 
     private void updateOpponentsAndSendOpponentDataPackage() {
         String message;
         for (AOpponent opponent : room.getOpponentList().getOpponents()) {
-            opponent.update(deltaTime, logicMapHandler, usersInRoom, room.getBulletList(), room.getOpponentList());
+            opponent.update(deltaTime, logicMapHandler, usersInRoom, room.getBulletList(), room.getOpponentList(), this.pickupList);
             message = "updateOpponentData:" +
                     opponent.getId() + ":" +
-                    (int)opponent.getX() + ":" +
-                    (int)opponent.getY() + ":" +
+                    (int) opponent.getX() + ":" +
+                    (int) opponent.getY() + ":" +
                     opponent.getHp();
 
             UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
@@ -129,6 +146,7 @@ public class GameController implements Runnable {
         }
         room.getBulletList().flushDeadBullets();
     }
+
     private void informClientsAboutDeadOpponents() {
         String message;
         for (AOpponent opponent : room.getOpponentList().getDeadOpponenets()) {
@@ -139,7 +157,8 @@ public class GameController implements Runnable {
         }
         room.getOpponentList().flushDeadAOpponents();
     }
-    private void informClientsAboutNewBullets(){
+
+    private void informClientsAboutNewBullets() {
         String message;
         for (ABullet bullet : room.getBulletList().getBulletsToCreate()) {
             message = "createBullet:" +
@@ -152,4 +171,23 @@ public class GameController implements Runnable {
         room.getBulletList().flushBulletsToCreate();
     }
 
+    public void setPlayersPosition() {
+        for (User user : room.getUsersInRoom()) {
+            Point nextFreePoint = logicMapHandler.getNextPlayerSpawnPoint();
+            user.getPlayer().setX((int) nextFreePoint.getX());
+            user.getPlayer().setY((int) nextFreePoint.getY());
+        }
+    }
+
+    public void spawnAllOpponents() {
+        this.logicMapHandler.getEventList().spawnAllOpponents(this.room.getOpponentList());
+        String message;
+        for (AOpponent opponent : this.room.getOpponentList().getOpponents()) {
+            message = "createOpponent:" +
+                    opponent.getType() + ":" +
+                    opponent.getId();
+
+            TcpServer.sendTcpMsgToAllUsersInRoom(message, room.getUsersInRoom());
+        }
+    }
 }

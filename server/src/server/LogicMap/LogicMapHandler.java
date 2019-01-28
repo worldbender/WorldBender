@@ -88,6 +88,15 @@ public class LogicMapHandler {
                         object.getProperties().get("spawn").toString())
                 );
             }
+            if(object.getProperties().containsKey("enemy")){
+                rectangleMapObject = (RectangleMapObject)(object);
+                eventList.add(new EventBlock(
+                        (int)rectangleMapObject.getRectangle().getX(),
+                        (int)rectangleMapObject.getRectangle().getY(),
+                        "enemy",
+                        object.getProperties().get("enemy").toString())
+                );
+            }
         }
     }
     public Point getNextPlayerSpawnPoint(){
@@ -112,7 +121,7 @@ public class LogicMapHandler {
         for(int x = startObjTileX; x < endObjTileX; x++){
             for(int y = startObjTileY; y < endObjTileY; y++){
                 currentBlock = this.getCertainTileByTileXY(x,y);
-                if(currentBlock.getType() == "Solid"){
+                if(currentBlock.getBLockType() == "Solid"){
                     if(rec.intersects(currentBlock.getRectangle())){
                         result = true;
                     }
@@ -168,5 +177,9 @@ public class LogicMapHandler {
 
     public int getMapHeight() {
         return this.getNumerOfYTiles() * tileHeight;
+    }
+
+    public EventList getEventList(){
+        return this.eventList;
     }
 }

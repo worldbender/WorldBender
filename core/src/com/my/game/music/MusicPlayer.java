@@ -33,6 +33,10 @@ public class MusicPlayer {
         staticMusic.setVolume(0.5f);
         staticMusic.play();
     }
+    public static void playHpUpSound(){
+        staticMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/hpup.wav"));
+        staticMusic.play();
+    }
     public static void setStaticVolume(float volume){
         staticMusic.setVolume(volume);
     }

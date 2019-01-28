@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="left-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="7">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="left-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="25">
  <tileset firstgid="1" source="t1.tsx"/>
  <layer name="Warstwa Kafelków 1" width="100" height="100">
   <data encoding="csv">
@@ -210,24 +210,69 @@
 </data>
  </layer>
  <objectgroup name="EventLayer">
-  <object id="2" x="312" y="2850">
+  <object id="2" x="276" y="2622">
    <properties>
     <property name="spawn" value="player"/>
    </properties>
   </object>
-  <object id="4" x="430" y="2846">
+  <object id="4" x="284" y="2878">
    <properties>
     <property name="spawn" value="player"/>
    </properties>
   </object>
-  <object id="5" x="188" y="2846">
+  <object id="5" x="516" y="2892">
    <properties>
     <property name="spawn" value="player"/>
    </properties>
   </object>
-  <object id="6" x="226" y="2710">
+  <object id="6" x="522" y="2606">
    <properties>
     <property name="spawn" value="player"/>
+   </properties>
+  </object>
+  <object id="12" x="1366" y="2710">
+   <properties>
+    <property name="enemy" value="Poe"/>
+   </properties>
+  </object>
+  <object id="14" x="1624" y="2484">
+   <properties>
+    <property name="enemy" value="Poe"/>
+   </properties>
+  </object>
+  <object id="18" x="1492" y="420">
+   <properties>
+    <property name="enemy" value="Schopenheuer"/>
+   </properties>
+  </object>
+  <object id="19" x="1814" y="2768">
+   <properties>
+    <property name="enemy" value="Nietzsche"/>
+   </properties>
+  </object>
+  <object id="20" x="2282" y="2752">
+   <properties>
+    <property name="enemy" value="Poe"/>
+   </properties>
+  </object>
+  <object id="21" x="2542" y="1866">
+   <properties>
+    <property name="enemy" value="Poe"/>
+   </properties>
+  </object>
+  <object id="22" x="1926" y="1700">
+   <properties>
+    <property name="enemy" value="Poe"/>
+   </properties>
+  </object>
+  <object id="23" x="1168" y="1848">
+   <properties>
+    <property name="enemy" value="Poe"/>
+   </properties>
+  </object>
+  <object id="24" x="1448" y="2956">
+   <properties>
+    <property name="enemy" value="Poe"/>
    </properties>
   </object>
  </objectgroup>

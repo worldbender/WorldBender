@@ -5,7 +5,7 @@ import java.awt.*;
 public abstract class ABlock {
     protected Rectangle rectangle;
     protected String blockType;
-    private ABlock(){
+    protected ABlock(){
 
     }
 
@@ -22,10 +22,10 @@ public abstract class ABlock {
     }
 
 
-    public String getType(){
+    public String getBLockType(){
         return this.blockType;
     }
-    public void setType(String type){
+    public void setBlockType(String type){
         this.blockType = type;
     }
     public Rectangle getRectangle(){

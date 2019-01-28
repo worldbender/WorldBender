@@ -5,6 +5,7 @@ import server.User;
 import server.bullets.ABullet;
 import server.bullets.BulletFabric;
 import server.bullets.BulletList;
+import server.pickups.PickupList;
 
 import java.awt.*;
 import java.util.Random;
@@ -20,7 +21,8 @@ public class Poe extends AOpponent{
     }
 
     @Override
-    public void update(double deltaTime, LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, BulletList bulletList, OpponentList opponentList) {
+    public void update(double deltaTime, LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, BulletList bulletList, OpponentList opponentList, PickupList pickupList) {
+        super.update(deltaTime, map, usersInRoom, bulletList, opponentList, pickupList);
         this.chasePlayer(usersInRoom, deltaTime, map, opponentList);
         this.handleOpponentShoot(usersInRoom, bulletList);
         this.choosePlayerToChaseIfTimeComes(usersInRoom);

@@ -6,6 +6,8 @@ import server.User;
 import server.bullets.ABullet;
 import server.bullets.BulletFabric;
 import server.bullets.BulletList;
+import server.pickups.PickupFabric;
+import server.pickups.PickupList;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -34,15 +36,8 @@ public abstract class AOpponent {
     protected AOpponent(){
     }
 
-    public void update(double deltaTime, LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, BulletList bulletList, OpponentList opponentList){
-        Random generator = new Random();
-        int newX = (int)this.getX() + generator.nextInt()%3;
-        int newY = (int)this.getY() + generator.nextInt()%3;
-        Rectangle newPosRectangle = new Rectangle(newX, newY, this.getWidth(), this.getHeight());
-        if(!isOpponentCollidesWithMap(newPosRectangle, map)){
-            this.setX(newX);
-            this.setY(newY);
-        }
+    public void update(double deltaTime, LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, BulletList bulletList, OpponentList opponentList, PickupList pickupList){
+        checkIfOpponentShouldDie(opponentList, pickupList);
     }
 
     protected void handleOpponentShoot(CopyOnWriteArrayList<User> usersInRoom, BulletList bulletList){
@@ -72,6 +67,7 @@ public abstract class AOpponent {
                         (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()) * (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()))));
                 if (distance < this.getViewRange() && distance < savedDistance) {
                     this.setIdOfChasedPlayer(user.getName());
+                    savedDistance = distance;
                 }
             }
         }
@@ -118,9 +114,6 @@ public abstract class AOpponent {
 
     public void doDamage(int damage, OpponentList opponentList){
         this.hp -= damage;
-        if(this.hp <= 0){
-            this.handleOpponentDeath(opponentList);
-        }
     }
     public boolean canOpponentShoot(){
         boolean result = false;
@@ -142,13 +135,17 @@ public abstract class AOpponent {
         }
         return result;
     }
-    private void handleOpponentDeath(OpponentList opponentList){
+    private void handleOpponentDeath(OpponentList opponentList, PickupList pickupList){
         opponentList.removeOpponent(this);
         opponentList.addDeadAOpponentsTrashList(this);
+        pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"Hp"));
     }
-    private void checkIfOpponentShouldDie(OpponentList opponentList){
+    private void checkIfOpponentShouldDie(OpponentList opponentList, PickupList pickupList){
+        if(this.getHp() <= 0){
+            this.isDead = true;
+        }
         if(this.isDead){
-            handleOpponentDeath(opponentList);
+            handleOpponentDeath(opponentList, pickupList);
         }
     }
     public double getX() {
