@@ -25,7 +25,7 @@ public class Room {
         this.rooms = RoomList.getInstance();
         this.usersInRoom = new CopyOnWriteArrayList<>();
         this.opponentList = new OpponentList();
-        this.bulletList = new BulletList();
+        this.bulletList = new BulletList(this.usersInRoom);
         setRoomOwner(roomOwner);
 
         addRoomToList();

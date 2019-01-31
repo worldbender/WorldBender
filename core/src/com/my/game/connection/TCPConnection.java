@@ -2,6 +2,9 @@ package com.my.game.connection;
 
 import com.badlogic.gdx.Gdx;
 import com.my.game.WBGame;
+import com.my.game.bullets.ABullet;
+import com.my.game.bullets.BulletFabric;
+import com.my.game.bullets.BulletList;
 import com.my.game.music.MusicPlayer;
 import com.my.game.opponents.AOpponent;
 import com.my.game.opponents.OpponentFabric;
@@ -55,6 +58,11 @@ public class TCPConnection extends Thread {
     public void readMessage(String message) {
         String[] splitedArray = message.split(":");
         switch (splitedArray[0]) {
+            case "createBullet":
+                ABullet newBullet = BulletFabric.createBullet(splitedArray[1],Integer.parseInt(splitedArray[2]), Float.parseFloat(splitedArray[3]));
+                BulletList.addBullet(newBullet); break;
+            case "deleteBullet":
+                BulletList.removeBulletById(Integer.parseInt(splitedArray[1])); break;
             case "dc":
                 players.remove(splitedArray[1]);
                 System.out.println("Remove player: " + splitedArray[1]);

@@ -51,7 +51,6 @@ public abstract class AOpponent {
                     angle = (float) (Math.atan2(user.getPlayer().getCenterY() - this.getCenterY(), this.getCenterX() - user.getPlayer().getCenterX()));
                     ABullet newBullet = BulletFabric.createBullet("Tear", this.getCenterX(), this.getCenterY(), -angle + (float) Math.PI, true);
                     bulletList.addBullet(newBullet);
-                    bulletList.addBulletsToCreateList(newBullet);
                 }
             }
         }
@@ -139,7 +138,18 @@ public abstract class AOpponent {
     private void handleOpponentDeath(OpponentList opponentList, PickupList pickupList){
         opponentList.removeOpponent(this);
         opponentList.addDeadAOpponentsTrashList(this);
-        pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"Hp"));
+        int randomInt = Math.abs(new Random().nextInt()%3);
+        switch (randomInt){
+            case 0:
+                pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"Hp"));
+                break;
+            case 1:
+                pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"InnerEye"));
+                break;
+            case 2:
+                pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"SadOnion"));
+                break;
+        }
     }
 
     private void checkIfOpponentShouldDie(OpponentList opponentList, PickupList pickupList){

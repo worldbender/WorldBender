@@ -14,9 +14,7 @@ import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
 import com.my.game.opponents.*;
-import com.my.game.pickups.APickup;
-import com.my.game.pickups.HpPickup;
-import com.my.game.pickups.PickupList;
+import com.my.game.pickups.*;
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
 import com.my.game.WBGame;
@@ -40,10 +38,6 @@ public class GameplayScreen extends AbstractScreen{
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
     public static final int NUMBER_OF_PLAYER_ANIMATION_FRAMES = 5;
-    private Animation<TextureRegion> downWalkAnimation;
-    private Animation<TextureRegion> upWalkAnimation;
-    private Animation<TextureRegion> rightAnimation;
-    private Animation<TextureRegion> leftAnimation;
     private float stateTime;
     @Override
     public void show(){
@@ -55,6 +49,9 @@ public class GameplayScreen extends AbstractScreen{
         this.tileHeight = map.getProperties().get("tileheight", Integer.class);
         this.mapWidth = numerOfXTiles * tileWidth;
         this.mapHeight = numerOfYTiles * tileHeight;
+        camera.position.x = (float)currentPlayer.getX() < (this.mapWidth - WBGame.WIDTH/2f) ? WBGame.WIDTH/2f: (this.mapWidth - WBGame.WIDTH/2f);
+        camera.position.y = (float)currentPlayer.getY() < (this.mapHeight - WBGame.HEIGHT/2f) ? WBGame.WIDTH/2f : (this.mapHeight - WBGame.HEIGHT/2f);
+        render.setView(camera);
     }
 
     public GameplayScreen(WBGame game) {
@@ -72,9 +69,9 @@ public class GameplayScreen extends AbstractScreen{
     private void loadData() {
         playerTexture = new Texture("cat.png");
         bulletTexture = new Texture("granat.png");
-        Schopenheuer.texture = new Texture("schopen.png");
-        Nietzsche.texture = new Texture("nietzsche.png");
-        Poe.texture = new Texture("poe.png");
+        Schopenheuer.texture = new Texture("opponents/schopen.png");
+        Nietzsche.texture = new Texture("opponents/nietzsche.png");
+        Poe.texture = new Texture("opponents/poe.png");
         Texture walkSheet = new Texture("isaac/downIsaac.png");
         Texture upWalkSheet = new Texture("isaac/upIsaac.png");
         Texture leftSheet = new Texture("isaac/leftWalkIsaac.png");
@@ -83,7 +80,9 @@ public class GameplayScreen extends AbstractScreen{
         Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
         Player.leftWalkAnimation = getAnimationFrom1DPicture(leftSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
-        HpPickup.texture = new Texture("hp.png");
+        HpPickup.texture = new Texture("pickups/hp.png");
+        InnerEye.texture = new Texture("pickups/InnerEye.png");
+        SadOnion.texture = new Texture("pickups/SadOnion.png");
         stateTime = 0f;
     }
 
@@ -99,10 +98,10 @@ public class GameplayScreen extends AbstractScreen{
 
     private void init() {
         camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
-        camera.translate(WBGame.WIDTH/2,WBGame.HEIGHT/2);
         players = PlayerList.getInstance();
         MusicPlayer.initMusic();
         MusicPlayer.playStaticMusic();
+
     }
 
     @Override
@@ -198,19 +197,19 @@ public class GameplayScreen extends AbstractScreen{
 
     private void handleArrowKeys(){
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            this.sendMessageToServer("createBullet:Tear:"+(float)Math.PI + ":");
+            this.sendMessageToServer("createBullet:"+(float)Math.PI + ":");
             currentPlayer.setActiveMovementKey("LEFT");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.sendMessageToServer("createBullet:Tear:"+(float)0 + ":");
+            this.sendMessageToServer("createBullet:"+(float)0 + ":");
             currentPlayer.setActiveMovementKey("RIGHT");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            this.sendMessageToServer("createBullet:Tear:"+(float)Math.PI/2 + ":");
+            this.sendMessageToServer("createBullet:"+(float)Math.PI/2 + ":");
             currentPlayer.setActiveMovementKey("UP");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            this.sendMessageToServer("createBullet:Tear:"+(float)3 * Math.PI/2 + ":");
+            this.sendMessageToServer("createBullet:"+(float)3 * Math.PI/2 + ":");
             currentPlayer.setActiveMovementKey("DOWN");
         }
     }

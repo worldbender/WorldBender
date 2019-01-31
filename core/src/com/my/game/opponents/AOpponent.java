@@ -17,7 +17,7 @@ public abstract class AOpponent{
     private int direction = 0;
     private boolean alive = false;
     private int hp = 500;
-    private int maxHp = 1000;
+    private int maxHp = 500;
     private int attack = 0;
     private int movement = 0;
     private int id;
@@ -28,8 +28,7 @@ public abstract class AOpponent{
     public abstract void draw(SpriteBatch spriteBatch);
 
     public void die(){
-//        MusicPlayer.initMusic("sounds/meow.mp3");
-//        MusicPlayer.playStaticMusic();
+        MusicPlayer.playOpponentDieSound();
     }
 
     protected void drawHp(SpriteBatch batch, int textureHeight){

@@ -37,6 +37,11 @@ public class MusicPlayer {
         staticMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/hpup.wav"));
         staticMusic.play();
     }
+    public static void playOpponentDieSound(){
+        staticMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/meow.mp3"));
+        staticMusic.setVolume(0.1f);
+        staticMusic.play();
+    }
     public static void setStaticVolume(float volume){
         staticMusic.setVolume(volume);
     }
