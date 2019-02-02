@@ -13,7 +13,10 @@ public class InnerEye extends APickup{
     public void modifyPlayer(Player player) {
         if(!player.getWeaponType().equals("Triple")){
             player.setWeaponType("Triple");
-            player.setShootCooldown(player.getShootCooldown()*2L);
         }
+        if(!player.hasPlayerItem("Triple")){
+            player.setShootSpeedModificator(2L);
+        }
+        player.getCollectedItems().add("Triple");
     }
 }

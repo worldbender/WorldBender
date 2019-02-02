@@ -2,6 +2,7 @@ package server;
 
 import server.LogicMap.LogicMapHandler;
 import server.bullets.ABullet;
+import server.bullets.AtackFabric;
 import server.bullets.BulletFabric;
 import server.bullets.BulletList;
 
@@ -22,9 +23,11 @@ public class Player {
     private double moveSpeed = 0.65;
     private long shootCooldown = 100L;
     private long lastTimePlayerHasShot = 0L;
+    private long shootSpeedModificator = 1L;
     private String activeMovementKey = "DOWN";
     private String bulletType = "Tear";
     private String weaponType = "Normal";
+    private ArrayList<String> collectedItems;
     private boolean isMoving = false;
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
@@ -39,6 +42,7 @@ public class Player {
         this.setWidth((int) (PLAYER_TEXTURE_WIDTH * scale));
         this.setHeight((int) (PLAYER_TEXTURE_HEIGHT * scale));
         this.user = user;
+        this.collectedItems = new ArrayList<String>();
     }
 
     public Rectangle getBounds() {
@@ -66,79 +70,14 @@ public class Player {
     }
 
     public void shoot(BulletList bulletList, float angle) {
-        ABullet newBullet;
-        switch (this.weaponType) {
-            case "Normal":
-                newBullet= BulletFabric.createBullet(
-                        this.bulletType,
-                        this.getCenterX(),
-                        this.getCenterY(),
-                        angle,
-                        false
-                );
-                bulletList.addBullet(newBullet);
-                break;
-            case "Triple":
-                newBullet = BulletFabric.createBullet(
-                        this.bulletType,
-                        this.getCenterX() + (int)(Math.cos(angle + (Math.PI/4.0))*20.0),
-                        this.getCenterY() + (int)(Math.sin(angle + (Math.PI/4.0))*20.0),
-                        angle,
-                        false
-                );
-                bulletList.addBullet(newBullet);
-                newBullet = BulletFabric.createBullet(
-                        this.bulletType,
-                        this.getCenterX() + (int)(Math.cos(angle)*20.0),
-                        this.getCenterY() + (int)(Math.sin(angle)*20.0),
-                        angle,
-                        false
-                );
-                bulletList.addBullet(newBullet);
-                newBullet = BulletFabric.createBullet(
-                        this.bulletType,
-                        this.getCenterX() + (int)(Math.cos(angle + (-Math.PI/4.0))*20.0),
-                        this.getCenterY() + (int)(Math.sin(angle + (-Math.PI/4.0))*20.0),
-                        angle,
-                        false
-                );
-                bulletList.addBullet(newBullet);
-                break;
-            case "SadOnion":
-                newBullet = BulletFabric.createBullet(
-                        this.bulletType,
-                        this.getCenterX() + (int)(Math.cos(angle + (Math.PI/4.0))*20.0),
-                        this.getCenterY() + (int)(Math.sin(angle + (Math.PI/4.0))*20.0),
-                        angle + (float)(Math.PI/6.0),
-                        false
-                );
-                bulletList.addBullet(newBullet);
-                newBullet = BulletFabric.createBullet(
-                        this.bulletType,
-                        this.getCenterX() + (int)(Math.cos(angle)*20.0),
-                        this.getCenterY() + (int)(Math.sin(angle)*20.0),
-                        angle,
-                        false
-                );
-                bulletList.addBullet(newBullet);
-                newBullet = BulletFabric.createBullet(
-                        this.bulletType,
-                        this.getCenterX() + (int)(Math.cos(angle + (-Math.PI/4.0))*20.0),
-                        this.getCenterY() + (int)(Math.sin(angle + (-Math.PI/4.0))*20.0),
-                        angle + (float)(-Math.PI/6.0),
-                        false
-                );
-                bulletList.addBullet(newBullet);
-                break;
-        }
-
+        AtackFabric.createAtack(this, bulletList, angle);
     }
 
     public boolean canPlayerShoot() {
         boolean result = false;
         Date date = new Date();
         long time = date.getTime();
-        if (time - this.lastTimePlayerHasShot > this.shootCooldown) {
+        if (time - this.lastTimePlayerHasShot > this.shootCooldown * this.shootSpeedModificator) {
             result = true;
             this.lastTimePlayerHasShot = time;
         }
@@ -300,5 +239,28 @@ public class Player {
 
     public void setWeaponType(String weaponType) {
         this.weaponType = weaponType;
+    }
+
+    public ArrayList<String> getCollectedItems() {
+        return collectedItems;
+    }
+
+    public void setCollectedItems(ArrayList<String> collectedItems) {
+        this.collectedItems = collectedItems;
+    }
+    public boolean hasPlayerItem(String item){
+        boolean result = false;
+        for(String colletedItem : this.collectedItems){
+            result = colletedItem.equals(item);
+        }
+        return result;
+    }
+
+    public long getShootSpeedModificator() {
+        return shootSpeedModificator;
+    }
+
+    public void setShootSpeedModificator(long shootSpeedModificator) {
+        this.shootSpeedModificator = shootSpeedModificator;
     }
 }

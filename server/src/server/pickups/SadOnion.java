@@ -13,7 +13,10 @@ public class SadOnion extends APickup{
     public void modifyPlayer(Player player) {
         if(!player.getWeaponType().equals("SadOnion")){
             player.setWeaponType("SadOnion");
-            player.setShootCooldown(player.getShootCooldown()*2L);
         }
+        if(!player.hasPlayerItem("SadOnion")){
+            player.setShootSpeedModificator(2L);
+        }
+        player.getCollectedItems().add("SadOnion");
     }
 }

@@ -49,8 +49,14 @@ public class GameplayScreen extends AbstractScreen{
         this.tileHeight = map.getProperties().get("tileheight", Integer.class);
         this.mapWidth = numerOfXTiles * tileWidth;
         this.mapHeight = numerOfYTiles * tileHeight;
-        camera.position.x = (float)currentPlayer.getX() < (this.mapWidth - WBGame.WIDTH/2f) ? WBGame.WIDTH/2f: (this.mapWidth - WBGame.WIDTH/2f);
-        camera.position.y = (float)currentPlayer.getY() < (this.mapHeight - WBGame.HEIGHT/2f) ? WBGame.WIDTH/2f : (this.mapHeight - WBGame.HEIGHT/2f);
+        camera.position.x = (float)currentPlayer.getX() < (this.mapWidth - WBGame.WIDTH/2f) ? WBGame.WIDTH/2f : (this.mapWidth - WBGame.WIDTH/2f);
+        camera.position.y = (float)currentPlayer.getY() < (this.mapHeight - WBGame.HEIGHT/2f) ?  WBGame.HEIGHT/2f: (this.mapHeight - WBGame.HEIGHT/2f);
+       /* if((float)currentPlayer.getX() < 0f){
+            camera.position.x = WBGame.WIDTH/2f;
+        }
+        if((float)currentPlayer.getY() < 0f){
+            camera.position.y = WBGame.HEIGHT/2f;
+        }*/
         render.setView(camera);
     }
 
