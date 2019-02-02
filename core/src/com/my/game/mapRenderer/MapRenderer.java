@@ -13,7 +13,7 @@ public class MapRenderer {
     private final String MAP_FILE_FORMAT = ".tmx";
     private ABlock[][] logicMap = new ABlock[100][100];
     public MapRenderer() {
-        map = new TmxMapLoader().load("maps/t9.tmx");
+        map = new TmxMapLoader().load("maps/map2.tmx");
         render = new OrthogonalTiledMapRenderer(this.map);
 
     }

@@ -1,12 +1,13 @@
 package server;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import server.connection.TcpServer;
 import server.connection.UdpServer;
 
 import java.io.IOException;
 
-class Server extends Game {
+class Server implements ApplicationListener {
     public Server(){
 
     }
@@ -22,5 +23,30 @@ class Server extends Game {
         } catch (IOException e) {
             System.out.println("Porty zajęte, prawdopodobnie serwer już jest włączony!");
         }
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void render() {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

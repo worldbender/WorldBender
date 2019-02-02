@@ -17,8 +17,8 @@ public class ABullet {
     private double angle;
     private int id;
     private int range;
-    private int width = 5;
-    private int height = 5;
+    private int width = 15;
+    private int height = 28;
     private String type;
     private double bulletSpeed = 1;
     private boolean isDead = false;
@@ -98,8 +98,7 @@ public class ABullet {
     }
 
     private void deleteBullet(BulletList bulletList){
-        bulletList.removeBullet(this);
-        bulletList.addDeadBulletsTrashList(this);
+        bulletList.deleteBullet(this);
     }
 
     public double getAngle() {

@@ -18,7 +18,7 @@ public class Nietzsche extends AOpponent {
         this.setType("Nietzsche");
         this.setWidth(200);
         this.setHeight(250);
-        this.setHp(1000);
+        this.setHp(500);
         this.setViewRange(800.0);
     }
 

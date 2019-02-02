@@ -68,13 +68,8 @@ public class UdpPacketReceiver implements Runnable {
                         setPlayersData(received); break;
                     case "updateBulletPosition":
                         setBulletsPositions(received); break;
-                    case "createBullet":
-                        ABullet newBullet = BulletFabric.createBullet(splitedArray[1],Integer.parseInt(splitedArray[2]), Float.parseFloat(splitedArray[3]));
-                        BulletList.addBullet(newBullet); break;
                     case "updateOpponentData":
                         setOpponentsData(received); break;
-                    case "deleteBullet":
-                        BulletList.removeBulletById(Integer.parseInt(splitedArray[1])); break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();

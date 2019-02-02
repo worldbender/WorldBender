@@ -10,7 +10,7 @@ public class Nietzsche extends AOpponent {
     public Nietzsche(int id){
         super(id);
         this.setHp(500);
-        this.setMaxHp(1000);
+        this.setMaxHp(500);
     }
     @Override
     public void draw(SpriteBatch spriteBatch) {

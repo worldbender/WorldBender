@@ -56,18 +56,9 @@ public class UdpServer extends Thread {
         String[] splitedContent = content.split(":");
         User currentUser = existingUsers.get(id);
         Room currentRoom = RoomList.getUserRoom(id);
-        currentUser.getPlayer().setActiveMovementKeyByAngle(splitedContent[2]);
+        currentUser.getPlayer().setActiveMovementKeyByAngle(splitedContent[1]);
         if(currentUser.getPlayer().canPlayerShoot()){
-            String bulletType = splitedContent[1];
-            String angle = splitedContent[2];
-            ABullet newBullet = BulletFabric.createBullet(bulletType, currentUser.getPlayer().getCenterX(), currentUser.getPlayer().getCenterY(), Float.parseFloat(angle), false);
-            currentRoom.getBulletList().addBullet(newBullet);
-            currentRoom.getBulletList().addBulletsToCreateList(newBullet);
-        }
-    }
-    public static void sendUdpMsgToAllUsers(String msg, Map<String, User> existingUsers){
-        for(User user : existingUsers.values()){
-            createPackage(msg, user);
+            currentUser.getPlayer().shoot(currentRoom.getBulletList(), Float.parseFloat(splitedContent[1]));
         }
     }
 

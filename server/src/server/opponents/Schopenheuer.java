@@ -14,7 +14,7 @@ public class Schopenheuer extends AOpponent{
         this.setType("Schopenheuer");
         this.setWidth(288);
         this.setHeight(286);
-        this.setHp(1000);
+        this.setHp(500);
         this.setViewRange(1000.0);
     }
     @Override
