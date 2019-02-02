@@ -18,7 +18,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LogicMapHandler {
     private TiledMap map;
-    private OrthogonalTiledMapRenderer render;
     private final int mapWidth = 100;
     private final int mapHeight = 100;
     private final int tileWidth = 32;
@@ -30,7 +29,6 @@ public class LogicMapHandler {
 
     public LogicMapHandler() {
         this.map = new TmxMapLoader().load("maps/t9.tmx");
-        this.render = new OrthogonalTiledMapRenderer(this.map);
         this.eventList = new EventList();
         this.constructLogicMap();
         this.constructEventObjects();
@@ -44,7 +42,6 @@ public class LogicMapHandler {
     public void LoadMap(String mapName) {
         String pathToMap = BASE_PATH_TO_MAP + mapName + MAP_FILE_FORMAT;
         map = new TmxMapLoader().load(pathToMap);
-        render = new OrthogonalTiledMapRenderer(this.map);
         constructLogicMap();
         constructEventObjects();
     }
@@ -157,10 +154,6 @@ public class LogicMapHandler {
 
     public TiledMap getMap() {
         return this.map;
-    }
-
-    public OrthogonalTiledMapRenderer getRender() {
-        return this.render;
     }
 
     public int getNumerOfXTiles() {
