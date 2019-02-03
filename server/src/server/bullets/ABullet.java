@@ -5,10 +5,7 @@ import server.Player;
 import server.User;
 import server.opponents.AOpponent;
 import server.opponents.OpponentList;
-import server.pickups.PickupList;
-
 import java.awt.*;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ABullet {

@@ -2,7 +2,6 @@ package server.bullets;
 
 import server.User;
 import server.connection.TcpServer;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

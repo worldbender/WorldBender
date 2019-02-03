@@ -1,15 +1,11 @@
 package server.connection;
 
-
 import server.rooms.Room;
 import server.rooms.RoomList;
 import com.badlogic.gdx.Gdx;
 import server.ExistingUsers;
 import server.User;
 import server.opponents.AOpponent;
-import server.opponents.OpponentFabric;
-import server.opponents.OpponentList;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

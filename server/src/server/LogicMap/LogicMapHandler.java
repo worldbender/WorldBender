@@ -7,14 +7,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import server.LogicMap.ABlock;
-import server.LogicMap.EventBlock;
-import server.LogicMap.SoftBlock;
-import server.LogicMap.SolidBlock;
-
 import java.awt.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LogicMapHandler {
     private TiledMap map;

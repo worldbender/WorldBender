@@ -1,16 +1,12 @@
 package com.my.game.connection;
 
-import com.my.game.bullets.ABullet;
-import com.my.game.bullets.BulletFabric;
 import com.my.game.bullets.BulletList;
 import com.my.game.opponents.OpponentList;
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
-
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.Map;
-
 
 public class UdpPacketReceiver implements Runnable {
     private DatagramSocket socket;

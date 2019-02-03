@@ -1,18 +1,14 @@
 package server.opponents;
 
 import server.LogicMap.LogicMapHandler;
-import server.Player;
 import server.User;
 import server.bullets.ABullet;
 import server.bullets.BulletFabric;
 import server.bullets.BulletList;
 import server.pickups.PickupFabric;
 import server.pickups.PickupList;
-
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 

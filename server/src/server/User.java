@@ -1,7 +1,6 @@
 package server;
 
 import server.connection.TcpClientThread;
-
 import java.net.InetAddress;
 
 public class User {

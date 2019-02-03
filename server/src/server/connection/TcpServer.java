@@ -3,7 +3,6 @@ package server.connection;
 import server.Properties;
 import server.User;
 import server.rooms.Room;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Map;

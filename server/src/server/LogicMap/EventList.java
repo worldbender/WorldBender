@@ -3,7 +3,6 @@ package server.LogicMap;
 import server.opponents.AOpponent;
 import server.opponents.OpponentFabric;
 import server.opponents.OpponentList;
-
 import java.awt.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 

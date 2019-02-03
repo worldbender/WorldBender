@@ -4,7 +4,6 @@ import server.User;
 import server.bullets.BulletList;
 import server.connection.GameController;
 import server.opponents.OpponentList;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

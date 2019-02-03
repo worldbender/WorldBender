@@ -1,10 +1,8 @@
 package server;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Game;
 import server.connection.TcpServer;
 import server.connection.UdpServer;
-
 import java.io.IOException;
 
 class Server implements ApplicationListener {

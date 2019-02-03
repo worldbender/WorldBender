@@ -2,7 +2,6 @@ package com.my.game.opponents;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Schopenheuer extends AOpponent {
     public static Texture texture;
