@@ -43,6 +43,7 @@ public class TcpServer extends Thread{
 
     public static void createGameController(Room room){
         sender = new GameController(room);
+        room.setGameController(sender);
         senderThread = new Thread(sender);
         senderThread.start();
     }

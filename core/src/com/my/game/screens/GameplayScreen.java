@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
+import com.my.game.mapRenderer.GraphicMapHandler;
 import com.my.game.opponents.*;
 import com.my.game.pickups.*;
 import com.my.game.player.Player;
@@ -28,6 +29,7 @@ public class GameplayScreen extends AbstractScreen{
     private static Map<String, Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
+    private GraphicMapHandler graphicMapHandler;
     public static Player currentPlayer;
     private int numerOfXTiles;
     private int numerOfYTiles;
@@ -39,37 +41,35 @@ public class GameplayScreen extends AbstractScreen{
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
     public static final int NUMBER_OF_PLAYER_ANIMATION_FRAMES = 5;
     private float stateTime;
-    @Override
-    public void show(){
-        map = new TmxMapLoader().load("maps/t9.tmx");
-        render = new OrthogonalTiledMapRenderer(map);
-        this.numerOfXTiles = map.getProperties().get("width", Integer.class);
-        this.numerOfYTiles = map.getProperties().get("height", Integer.class);
-        this.tileWidth = map.getProperties().get("tilewidth", Integer.class);
-        this.tileHeight = map.getProperties().get("tileheight", Integer.class);
-        this.mapWidth = numerOfXTiles * tileWidth;
-        this.mapHeight = numerOfYTiles * tileHeight;
-        camera.position.x = (float)currentPlayer.getX() < (this.mapWidth - WBGame.WIDTH/2f) ? WBGame.WIDTH/2f : (this.mapWidth - WBGame.WIDTH/2f);
-        camera.position.y = (float)currentPlayer.getY() < (this.mapHeight - WBGame.HEIGHT/2f) ?  WBGame.HEIGHT/2f: (this.mapHeight - WBGame.HEIGHT/2f);
-       /* if((float)currentPlayer.getX() < 0f){
-            camera.position.x = WBGame.WIDTH/2f;
-        }
-        if((float)currentPlayer.getY() < 0f){
-            camera.position.y = WBGame.HEIGHT/2f;
-        }*/
-        render.setView(camera);
-    }
 
     public GameplayScreen(WBGame game) {
         super(game);
         this.create();
     }
 
+    public void changeLevel(String map){
+        Gdx.app.postRunnable(() -> this.graphicMapHandler.LoadMap(map));
+        this.numerOfXTiles = this.graphicMapHandler.getMap().getProperties().get("width", Integer.class);
+        this.numerOfYTiles = this.graphicMapHandler.getMap().getProperties().get("height", Integer.class);
+        this.tileWidth = this.graphicMapHandler.getMap().getProperties().get("tilewidth", Integer.class);
+        this.tileHeight = this.graphicMapHandler.getMap().getProperties().get("tileheight", Integer.class);
+        this.mapWidth = numerOfXTiles * tileWidth;
+        this.mapHeight = numerOfYTiles * tileHeight;
+        camera.position.x = (float)currentPlayer.getX() < (this.mapWidth - WBGame.WIDTH/2f) ? WBGame.WIDTH/2f : (this.mapWidth - WBGame.WIDTH/2f);
+        camera.position.y = (float)currentPlayer.getY() < (this.mapHeight - WBGame.HEIGHT/2f) ?  WBGame.HEIGHT/2f: (this.mapHeight - WBGame.HEIGHT/2f);
+        Gdx.app.postRunnable(() -> this.graphicMapHandler.getRender().setView(camera));
+    }
+
+    @Override
+    public void show(){
+        changeLevel("t9");
+    }
+
     public void create() {
         this.loadData();
         this.init();
-        MusicPlayer musicPlayer = new MusicPlayer();
-        musicPlayer.playMusic();
+        MusicPlayer.initSounds();
+        MusicPlayer.playBackgroundMusic();
     }
 
     private void loadData() {
@@ -89,6 +89,7 @@ public class GameplayScreen extends AbstractScreen{
         HpPickup.texture = new Texture("pickups/hp.png");
         InnerEye.texture = new Texture("pickups/InnerEye.png");
         SadOnion.texture = new Texture("pickups/SadOnion.png");
+        Warp.texture = new Texture("pickups/warp.png");
         stateTime = 0f;
     }
 
@@ -104,10 +105,8 @@ public class GameplayScreen extends AbstractScreen{
 
     private void init() {
         camera = new OrthographicCamera(WBGame.WIDTH, WBGame.HEIGHT);
+        this.graphicMapHandler = new GraphicMapHandler();
         players = PlayerList.getInstance();
-        MusicPlayer.initMusic();
-        MusicPlayer.playStaticMusic();
-
     }
 
     @Override
@@ -116,8 +115,8 @@ public class GameplayScreen extends AbstractScreen{
         super.render(delta);
         this.update();
         this.handleMapShift();
-        render.setView(camera);
-        render.render();
+        this.graphicMapHandler.getRender().setView(camera);
+        this.graphicMapHandler.getRender().render();
 
         spriteBatch.begin();
         this.drawAllMovableObjects(spriteBatch, stateTime);
@@ -228,8 +227,7 @@ public class GameplayScreen extends AbstractScreen{
             game.switchScreenMode();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.M)){
-            MusicPlayer.initMusic("sounds/meow.mp3");
-            MusicPlayer.playStaticMusic();
+            MusicPlayer.playOpponentDieSound();
         }
     }
 

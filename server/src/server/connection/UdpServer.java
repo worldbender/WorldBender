@@ -55,7 +55,7 @@ public class UdpServer extends Thread {
         Room currentRoom = RoomList.getUserRoom(id);
         currentUser.getPlayer().setActiveMovementKeyByAngle(splitedContent[1]);
         if(currentUser.getPlayer().canPlayerShoot()){
-            currentUser.getPlayer().shoot(currentRoom.getBulletList(), Float.parseFloat(splitedContent[1]));
+            currentUser.getPlayer().shoot(Float.parseFloat(splitedContent[1]));
         }
     }
 

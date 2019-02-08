@@ -66,18 +66,14 @@ public class TCPConnection extends Thread {
                 players.remove(splitedArray[1]);
                 System.out.println("Remove player: " + splitedArray[1]);
                 break;
-            case "init":
+            case "newPlayer":
                 System.out.println("Init player: " + splitedArray[1]);
-                Player p = new Player(splitedArray[1], splitedArray[2], splitedArray[3]);
-                if (splitedArray[4].equals("true")) {
+                Player p = new Player(splitedArray[1]);
+                if (splitedArray[2].equals("true")) {
                     p.setCurrentPlayer(true);
                     GameplayScreen.currentPlayer = p;
                 }
                 players.put(splitedArray[1], p);
-                break;
-            case "newPlayer":
-                System.out.println("New player connected: " + splitedArray[1]);
-                newPlayer(splitedArray[1]);
                 break;
             case "createOpponent":
                 AOpponent newOpponent = OpponentFabric.createOpponent(splitedArray[1], Integer.parseInt(splitedArray[2]));
@@ -119,11 +115,9 @@ public class TCPConnection extends Thread {
                 System.out.println("Room doesn't exist: " + splitedArray[1]);
                 Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_NO_ROOM));
                 break;
+            case "changeLevel":
+                game.getGameplayScreen().changeLevel(splitedArray[1]);
+                break;
         }
-    }
-
-    private void newPlayer(String name) {
-        Player p = new Player(name, 0, 0);
-        players.put(name, p);
     }
 }

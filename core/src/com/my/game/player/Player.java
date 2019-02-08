@@ -22,8 +22,8 @@ public class Player extends APlayer {
     public boolean KEY_A = false;
     public boolean KEY_D = false;
 
-    public Player(){
-
+    public Player(String name){
+        this(name, 0, 0);
     }
     public Player(String name, String x, String y) {
         this(name, Integer.parseInt(x), Integer.parseInt(y));

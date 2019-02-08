@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
-public class MapRenderer {
+public class GraphicMapHandler {
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
     private final int tileWidth = 32;
@@ -12,12 +12,10 @@ public class MapRenderer {
     private final String BASE_PATH_TO_MAP = "maps/";
     private final String MAP_FILE_FORMAT = ".tmx";
     private ABlock[][] logicMap = new ABlock[100][100];
-    public MapRenderer() {
-        map = new TmxMapLoader().load("maps/map2.tmx");
+    public GraphicMapHandler() {
+        map = new TmxMapLoader().load("maps/t9.tmx");
         render = new OrthogonalTiledMapRenderer(this.map);
-
     }
-
 
     public void LoadMap(String mapName){
         String pathToMap = BASE_PATH_TO_MAP + mapName + MAP_FILE_FORMAT;

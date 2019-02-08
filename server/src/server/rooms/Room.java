@@ -35,7 +35,7 @@ public class Room {
     }
 
     public boolean checkIfUserCanJoinRoom(){
-        if(this.getUsersInRoom().size() < limitOfPlayers && this.gameStarted == false) {
+        if(this.getUsersInRoom().size() < limitOfPlayers && !this.gameStarted) {
             return true;
         }
         else return false;

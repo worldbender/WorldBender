@@ -7,6 +7,8 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import server.connection.GameController;
+
 import java.awt.*;
 
 public class LogicMapHandler {
@@ -19,10 +21,12 @@ public class LogicMapHandler {
     private final String MAP_FILE_FORMAT = ".tmx";
     private ABlock[][] logicMap = new ABlock[mapWidth][mapHeight];
     private EventList eventList;
+    private GameController gameController;
 
-    public LogicMapHandler() {
+    public LogicMapHandler(GameController gameController) {
         this.map = new TmxMapLoader().load("maps/t9.tmx");
-        this.eventList = new EventList();
+        this.eventList = new EventList(gameController);
+        this.gameController = gameController;
         this.constructLogicMap();
         this.constructEventObjects();
     }
@@ -35,6 +39,7 @@ public class LogicMapHandler {
     public void LoadMap(String mapName) {
         String pathToMap = BASE_PATH_TO_MAP + mapName + MAP_FILE_FORMAT;
         map = new TmxMapLoader().load(pathToMap);
+        this.eventList = new EventList(this.gameController);
         constructLogicMap();
         constructEventObjects();
     }
@@ -69,23 +74,35 @@ public class LogicMapHandler {
         MapObjects mapObjects = eventLayer.getObjects();
         RectangleMapObject rectangleMapObject;
         for(MapObject object : mapObjects){
-            if(object.getProperties().containsKey("spawn")){
-                rectangleMapObject = (RectangleMapObject)(object);
-                eventList.add(new EventBlock(
-                        (int)rectangleMapObject.getRectangle().getX(),
-                        (int)rectangleMapObject.getRectangle().getY(),
-                        "spawn",
-                        object.getProperties().get("spawn").toString())
-                );
-            }
-            if(object.getProperties().containsKey("enemy")){
-                rectangleMapObject = (RectangleMapObject)(object);
-                eventList.add(new EventBlock(
-                        (int)rectangleMapObject.getRectangle().getX(),
-                        (int)rectangleMapObject.getRectangle().getY(),
-                        "enemy",
-                        object.getProperties().get("enemy").toString())
-                );
+            if(object.getProperties().containsKey("active")){
+                if(object.getProperties().containsKey("warp")){
+                    rectangleMapObject = (RectangleMapObject)(object);
+                    eventList.addPassiveEvent(new EventBlock(
+                            (int)rectangleMapObject.getRectangle().getX(),
+                            (int)rectangleMapObject.getRectangle().getY(),
+                            "warp",
+                            object.getProperties().get("warp").toString())
+                    );
+                }
+            } else {
+                if(object.getProperties().containsKey("spawn")){
+                    rectangleMapObject = (RectangleMapObject)(object);
+                    eventList.addPassiveEvent(new EventBlock(
+                            (int)rectangleMapObject.getRectangle().getX(),
+                            (int)rectangleMapObject.getRectangle().getY(),
+                            "spawn",
+                            object.getProperties().get("spawn").toString())
+                    );
+                }
+                if(object.getProperties().containsKey("enemy")){
+                    rectangleMapObject = (RectangleMapObject)(object);
+                    eventList.addPassiveEvent(new EventBlock(
+                            (int)rectangleMapObject.getRectangle().getX(),
+                            (int)rectangleMapObject.getRectangle().getY(),
+                            "enemy",
+                            object.getProperties().get("enemy").toString())
+                    );
+                }
             }
         }
     }

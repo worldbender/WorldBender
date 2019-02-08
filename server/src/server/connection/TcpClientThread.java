@@ -84,14 +84,12 @@ public class TcpClientThread extends Thread{
 
     private void initUser(User initedUser, Room room){
         //ten pakiet wysylamy do naszego gracza z jego poczatkowa pozycja
-        sendMessage("init:" +
-                initedUser.getName() + ":" +
-                initedUser.getPlayer().getX() + ":" +
-                initedUser.getPlayer().getY() + ":true");
+        sendMessage("newPlayer:" +
+                initedUser.getName() + ":true");
 
         //te pakiety wysyłamy do innych graczy z informacja ze gracz dolaczyl do gry
         for (User currentUser : room.getUsersInRoom()) {
-            currentUser.getThread().sendMessage("newPlayer:player" + (existingUsers.size()-1));
+            currentUser.getThread().sendMessage("newPlayer:"+ initedUser.getName() + ":false") ;
         }
 
         //TODO
@@ -100,19 +98,10 @@ public class TcpClientThread extends Thread{
 //            currentUser.getThread().sendMessage("owner:" + room.getRoomOwner().getName());
 //        }
 
-        //Rozsyłamy informacje o istniejacych potworkach do nowego gracza
-        for(AOpponent opponent : room.getOpponentList().getOpponents()){
-            sendMessage("createOpponent:" +
-                    opponent.getType() + ":" +
-                    opponent.getId());
-        }
-
         //te pakiety wysylamy do naszego gracza z pozycjami juz istniejacych graczy
         for (User currentUser : room.getUsersInRoom()) {
-            String message = "init:" +
-                    currentUser.getName() + ":" +
-                    currentUser.getPlayer().getX() + ":" +
-                    currentUser.getPlayer().getY() + ":false";
+            String message = "newPlayer:" +
+                    currentUser.getName() + ":false";
 
             if (currentUser.hasConnection())
                 sendMessage(message);
@@ -180,6 +169,9 @@ public class TcpClientThread extends Thread{
 
     //TODO: przejściowa wersja, do ogarnięcia
     private void initGame(Room room){
+        for(User user : room.getUsersInRoom()){
+            user.initializePlayer(room.getGameController());
+        }
         room.getGameController().setPlayersPosition();
         room.getGameController().spawnAllOpponents();
     }

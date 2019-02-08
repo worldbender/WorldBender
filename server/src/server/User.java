@@ -1,5 +1,6 @@
 package server;
 
+import server.connection.GameController;
 import server.connection.TcpClientThread;
 import java.net.InetAddress;
 
@@ -26,6 +27,10 @@ public class User {
     public User(){
         this.player = new Player(this);
         this.connection = true;
+    }
+
+    public void initializePlayer(GameController gameController){
+        this.player = new Player(this, gameController);
     }
 
     public String getConnectionId(){

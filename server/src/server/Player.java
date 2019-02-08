@@ -3,6 +3,9 @@ package server;
 import server.LogicMap.LogicMapHandler;
 import server.bullets.AtackFabric;
 import server.bullets.BulletList;
+import server.connection.GameController;
+
+import javax.jws.soap.SOAPBinding;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +36,10 @@ public class Player {
     public boolean KEY_S = false;
     public boolean KEY_A = false;
     public boolean KEY_D = false;
+    private LogicMapHandler map;
+    private BulletList bulletList;
+    private CopyOnWriteArrayList<User> usersInRoom;
+    private GameController gameController;
 
     public Player(User user) {
         this.setWidth((int) (PLAYER_TEXTURE_WIDTH * scale));
@@ -41,32 +48,26 @@ public class Player {
         this.collectedItems = new ArrayList<String>();
     }
 
+    public Player(User user, GameController gameController){
+        this(user);
+        this.map = gameController.logicMapHandler;
+        this.bulletList = gameController.bulletList;
+        this.usersInRoom = gameController.usersInRoom;
+        this.gameController = gameController;
+    }
+
     public Rectangle getBounds() {
         return new Rectangle(this.x, this.y, this.getWidth(), this.getHeight());
     }
 
-    public int getX() {
-        return this.x;
+
+
+    public boolean isPlayerCollidesWithMap(Rectangle rec) {
+        return this.map.isRectangleCollidesWithMap(rec);
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getY() {
-        return this.y;
-    }
-
-    public boolean isPlayerCollidesWithMap(Rectangle rec, LogicMapHandler map) {
-        return map.isRectangleCollidesWithMap(rec);
-    }
-
-    public void shoot(BulletList bulletList, float angle) {
-        AtackFabric.createAtack(this, bulletList, angle);
+    public void shoot(float angle) {
+        AtackFabric.createAtack(this, this.bulletList, angle, gameController);
     }
 
     public boolean canPlayerShoot() {
@@ -90,8 +91,8 @@ public class Player {
         return result;
     }
 
-    public boolean isPlayersCollidesWithAnything(Rectangle rec, LogicMapHandler map, ArrayList<Player> players) {
-        return isPlayerCollidesWithMap(rec, map) ||
+    public boolean isPlayersCollidesWithAnything(Rectangle rec, ArrayList<Player> players) {
+        return isPlayerCollidesWithMap(rec) ||
                 isRectangleCollidesWithPlayers(rec, players);
     }
 
@@ -108,7 +109,7 @@ public class Player {
         }
     }
 
-    public void update(LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, double deltaTime) {
+    public void update(CopyOnWriteArrayList<User> usersInRoom, double deltaTime) {
         Rectangle playersNewBoundsRectangle;
         ArrayList<Player> players = new ArrayList<Player>();
         int currentShift = (int) (deltaTime * this.moveSpeed);
@@ -121,25 +122,25 @@ public class Player {
         if (this.isMoving) {
             if (this.KEY_W) {
                 playersNewBoundsRectangle = new Rectangle(this.x, this.y + currentShift, this.getWidth(), this.getHeight());
-                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)) {
+                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
                     this.y += currentShift;
                 }
             }
             if (this.KEY_S) {
                 playersNewBoundsRectangle = new Rectangle(this.x, this.y - currentShift, this.getWidth(), this.getHeight());
-                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)) {
+                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
                     this.y -= currentShift;
                 }
             }
             if (this.KEY_A) {
                 playersNewBoundsRectangle = new Rectangle(this.x - currentShift, this.y, this.getWidth(), this.getHeight());
-                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)) {
+                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
                     this.x -= currentShift;
                 }
             }
             if (this.KEY_D) {
                 playersNewBoundsRectangle = new Rectangle(this.x + currentShift, this.y, this.getWidth(), this.getHeight());
-                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, map, players)) {
+                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
                     this.x += currentShift;
                 }
             }
@@ -258,5 +259,23 @@ public class Player {
 
     public void setShootSpeedModificator(long shootSpeedModificator) {
         this.shootSpeedModificator = shootSpeedModificator;
+    }
+    public int getX() {
+        return this.x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+    public GameController getGameController(){
+        return this.gameController;
     }
 }

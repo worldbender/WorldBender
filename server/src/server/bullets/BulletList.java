@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BulletList {
-    private CopyOnWriteArrayList<ABullet> bulletsToCreate = new CopyOnWriteArrayList<ABullet>();
     private CopyOnWriteArrayList<ABullet> bullets = new CopyOnWriteArrayList<ABullet>();
-    private CopyOnWriteArrayList<ABullet> deadBullets = new CopyOnWriteArrayList<ABullet>();
     private CopyOnWriteArrayList<User> users;
     public static int id = 0;
 
