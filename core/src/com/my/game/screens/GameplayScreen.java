@@ -62,7 +62,8 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public void show(){
-        changeLevel("t9");
+        String startMap = Properties.loadConfigFile("START_MAP");
+        changeLevel(startMap);
     }
 
     public void create() {

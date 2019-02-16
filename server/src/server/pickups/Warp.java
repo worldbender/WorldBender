@@ -10,6 +10,6 @@ public class Warp extends APickup {
     }
     @Override
     public void modifyPlayer(Player player) {
-        player.getGameController().changeMap("map2");
+        player.getGameController().changeMap();
     }
 }

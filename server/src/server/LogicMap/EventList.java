@@ -10,6 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class EventList {
     private CopyOnWriteArrayList<EventBlock> passiveEventList = new CopyOnWriteArrayList<EventBlock>();
     private CopyOnWriteArrayList<EventBlock> activeEventList = new CopyOnWriteArrayList<EventBlock>();
+    private String nextMap;
     private GameController gameController;
     public EventList(GameController gameController){
         this.gameController = gameController;
@@ -46,5 +47,13 @@ public class EventList {
     }
     public void addActiveEvent(EventBlock eventBlock){
         this.activeEventList.add(eventBlock);
+    }
+
+    public String getNextMap() {
+        return nextMap;
+    }
+
+    public void setNextMap(String nextMap) {
+        this.nextMap = nextMap;
     }
 }

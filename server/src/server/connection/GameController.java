@@ -157,15 +157,19 @@ public class GameController implements Runnable {
         }
     }
 
-    public void changeMap(String map){
+    public void changeMap(){
+        String nextMap = this.logicMapHandler.getEventList().getNextMap();
         for(AOpponent opponent : this.opponentList.getOpponents()){
             this.opponentList.deleteOpponent(opponent);
         }
-        this.logicMapHandler.LoadMap(map);
+        for(APickup pickup : this.pickupList.getPickups()){
+            this.pickupList.deletePickup(pickup);
+        }
+        this.logicMapHandler.LoadMap(nextMap);
         this.setPlayersPosition();
         this.sendPlayerDataPackage();
         this.spawnAllOpponents();
-        String msg = "changeLevel:" + map + ":";
+        String msg = "changeLevel:" + nextMap + ":";
         TcpServer.sendTcpMsgToAllUsersInRoom(msg, this.room.getUsersInRoom());
     }
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import server.Properties;
 import server.connection.GameController;
 
 import java.awt.*;
@@ -24,7 +25,8 @@ public class LogicMapHandler {
     private GameController gameController;
 
     public LogicMapHandler(GameController gameController) {
-        this.map = new TmxMapLoader().load("maps/t9.tmx");
+        String startMap = Properties.loadConfigFile("START_MAP");
+        this.map = new TmxMapLoader().load("maps/" + startMap + ".tmx");
         this.eventList = new EventList(gameController);
         this.gameController = gameController;
         this.constructLogicMap();
@@ -76,13 +78,7 @@ public class LogicMapHandler {
         for(MapObject object : mapObjects){
             if(object.getProperties().containsKey("active")){
                 if(object.getProperties().containsKey("warp")){
-                    rectangleMapObject = (RectangleMapObject)(object);
-                    eventList.addPassiveEvent(new EventBlock(
-                            (int)rectangleMapObject.getRectangle().getX(),
-                            (int)rectangleMapObject.getRectangle().getY(),
-                            "warp",
-                            object.getProperties().get("warp").toString())
-                    );
+                    eventList.setNextMap(object.getProperties().get("warp").toString());
                 }
             } else {
                 if(object.getProperties().containsKey("spawn")){

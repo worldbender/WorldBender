@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="left-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="19">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="left-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="20">
  <tileset firstgid="1" source="t1.tsx"/>
  <layer name="Warstwa Kafelków 1" width="100" height="100">
   <data encoding="csv">
@@ -255,9 +255,15 @@
     <property name="enemy" value="Nietzsche"/>
    </properties>
   </object>
-  <object id="18" x="592" y="2880">
+  <object id="18" x="728" y="2984">
    <properties>
     <property name="enemy" value="Schopenheuer"/>
+   </properties>
+  </object>
+  <object id="19" x="2952" y="3004" width="188" height="156">
+   <properties>
+    <property name="active" value=""/>
+    <property name="warp" value="map3"/>
    </properties>
   </object>
  </objectgroup>
