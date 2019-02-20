@@ -128,8 +128,8 @@ public class GameController implements Runnable {
         for (User u : usersInRoom) {
             String message = "updatePosition:" +
                     u.getName() + ":" +
-                    u.getPlayer().getX() + ":" +
-                    u.getPlayer().getY() + ":" +
+                    (int)u.getPlayer().getX() + ":" +
+                    (int)u.getPlayer().getY() + ":" +
                     u.getPlayer().getHp() + ":" +
                     u.getPlayer().getActiveMovementKey() + ":" +
                     u.getPlayer().isMoving();

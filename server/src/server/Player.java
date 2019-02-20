@@ -13,13 +13,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Player {
 
-    private int x = 500;
-    private int y = 500;
+    private double x = 500;
+    private double y = 500;
     private int width;
     private int height;
     private int hp = 100;
     public final int MAX_HP = 100;
-    private double moveSpeed = 0.65;
+    private final double MAX_SPEED = 0.5;
+    private double moveSpeed = 0.0;
+    private double acceleration = 0.0;
     private long shootCooldown = 100L;
     private long lastTimePlayerHasShot = 0L;
     private long shootSpeedModificator = 1L;
@@ -36,6 +38,10 @@ public class Player {
     public boolean KEY_S = false;
     public boolean KEY_A = false;
     public boolean KEY_D = false;
+    public boolean UP_ARROW = false;
+    public boolean DOWN_ARROW = false;
+    public boolean LEFT_ARROW = false;
+    public boolean RIGHT_ARROW = false;
     private LogicMapHandler map;
     private BulletList bulletList;
     private CopyOnWriteArrayList<User> usersInRoom;
@@ -56,17 +62,62 @@ public class Player {
         this.gameController = gameController;
     }
 
-    public Rectangle getBounds() {
-        return new Rectangle(this.x, this.y, this.getWidth(), this.getHeight());
+    public void update(CopyOnWriteArrayList<User> usersInRoom, double deltaTime) {
+        Rectangle playersNewBoundsRectangle;
+        ArrayList<Player> players = new ArrayList<Player>();
+        double currentShift;
+
+        for (User user : usersInRoom) {
+            if (user.getPlayer() != this) {
+                players.add(user.getPlayer());
+            }
+        }
+        if (this.isMoving) {
+            currentShift = (deltaTime * this.calculateSpeed(deltaTime));
+            if (this.KEY_W) {
+                playersNewBoundsRectangle = new Rectangle((int)this.x, (int)(this.y + currentShift), this.getWidth(), this.getHeight());
+                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
+                    this.y += currentShift;
+                }
+            }
+            if (this.KEY_S) {
+                playersNewBoundsRectangle = new Rectangle((int)this.x, (int)(this.y - currentShift), this.getWidth(), this.getHeight());
+                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
+                    this.y -= currentShift;
+                }
+            }
+            if (this.KEY_A) {
+                playersNewBoundsRectangle = new Rectangle((int)(this.x - currentShift), (int)this.y, this.getWidth(), this.getHeight());
+                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
+                    this.x -= currentShift;
+                }
+            }
+            if (this.KEY_D) {
+                playersNewBoundsRectangle = new Rectangle((int)(this.x + currentShift), (int)this.y, this.getWidth(), this.getHeight());
+                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
+                    this.x += currentShift;
+                }
+            }
+        }
+        else {
+            this.moveSpeed = (this.moveSpeed - (0.0003 * deltaTime)) < 0.0 ? 0.0 : this.moveSpeed - (0.0003 * deltaTime);
+        }
     }
 
-
-
-    public boolean isPlayerCollidesWithMap(Rectangle rec) {
-        return this.map.isRectangleCollidesWithMap(rec);
-    }
-
-    public void shoot(float angle) {
+    public void shoot() {
+        float angle = 0f;
+        if(this.UP_ARROW){
+            angle = (float)Math.PI/2;
+        }
+        if(this.DOWN_ARROW){
+            angle = (float)(3 * Math.PI/2);
+        }
+        if(this.LEFT_ARROW){
+            angle = (float)Math.PI;
+        }
+        if(this.RIGHT_ARROW){
+            angle = 0f;
+        }
         AtackFabric.createAtack(this, this.bulletList, angle, gameController);
     }
 
@@ -79,6 +130,14 @@ public class Player {
             this.lastTimePlayerHasShot = time;
         }
         return result;
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle((int)this.x, (int)this.y, this.getWidth(), this.getHeight());
+    }
+
+    public boolean isPlayerCollidesWithMap(Rectangle rec) {
+        return this.map.isRectangleCollidesWithMap(rec);
     }
 
     public boolean isRectangleCollidesWithPlayers(Rectangle rec, ArrayList<Player> players) {
@@ -96,55 +155,13 @@ public class Player {
                 isRectangleCollidesWithPlayers(rec, players);
     }
 
-    public void setActiveMovementKeyByAngle(String angle) {
-        float parsedAngle = Float.parseFloat(angle);
-        if (Math.abs(parsedAngle - Math.PI) < 0.001f) {
-            setActiveMovementKey("LEFT");
-        } else if (Math.abs(parsedAngle - Math.PI / 2) < 0.001f) {
-            setActiveMovementKey("UP");
-        } else if (Math.abs(parsedAngle) < 0.001f) {
-            setActiveMovementKey("RIGHT");
-        } else {
-            setActiveMovementKey("DOWN");
-        }
-    }
 
-    public void update(CopyOnWriteArrayList<User> usersInRoom, double deltaTime) {
-        Rectangle playersNewBoundsRectangle;
-        ArrayList<Player> players = new ArrayList<Player>();
-        int currentShift = (int) (deltaTime * this.moveSpeed);
 
-        for (User user : usersInRoom) {
-            if (user.getPlayer() != this) {
-                players.add(user.getPlayer());
-            }
-        }
-        if (this.isMoving) {
-            if (this.KEY_W) {
-                playersNewBoundsRectangle = new Rectangle(this.x, this.y + currentShift, this.getWidth(), this.getHeight());
-                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
-                    this.y += currentShift;
-                }
-            }
-            if (this.KEY_S) {
-                playersNewBoundsRectangle = new Rectangle(this.x, this.y - currentShift, this.getWidth(), this.getHeight());
-                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
-                    this.y -= currentShift;
-                }
-            }
-            if (this.KEY_A) {
-                playersNewBoundsRectangle = new Rectangle(this.x - currentShift, this.y, this.getWidth(), this.getHeight());
-                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
-                    this.x -= currentShift;
-                }
-            }
-            if (this.KEY_D) {
-                playersNewBoundsRectangle = new Rectangle(this.x + currentShift, this.y, this.getWidth(), this.getHeight());
-                if (!isPlayersCollidesWithAnything(playersNewBoundsRectangle, players)) {
-                    this.x += currentShift;
-                }
-            }
-        }
+    private double calculateSpeed(double deltaTime){
+        double speed;
+        this.moveSpeed = this.moveSpeed + (0.0003 * deltaTime) > (0.6 * this.MAX_SPEED) ? (0.6 * this.MAX_SPEED) : this.moveSpeed + (0.0003 * deltaTime);
+        speed = (0.4 * this.MAX_SPEED) + this.moveSpeed;
+        return speed;
     }
 
     public void doDamage(int damage) {
@@ -157,6 +174,10 @@ public class Player {
         this.KEY_S = Boolean.parseBoolean(splitedWsad[1]);
         this.KEY_A = Boolean.parseBoolean(splitedWsad[2]);
         this.KEY_D = Boolean.parseBoolean(splitedWsad[3]);
+        this.UP_ARROW = Boolean.parseBoolean(splitedWsad[4]);
+        this.DOWN_ARROW = Boolean.parseBoolean(splitedWsad[5]);
+        this.LEFT_ARROW = Boolean.parseBoolean(splitedWsad[6]);
+        this.RIGHT_ARROW = Boolean.parseBoolean(splitedWsad[7]);
     }
 
     public int getHp() {
@@ -207,11 +228,11 @@ public class Player {
     }
 
     public int getCenterX() {
-        return this.getX() + (int) (this.getWidth() / 2.0);
+        return (int)this.getX() + (int) (this.getWidth() / 2.0);
     }
 
     public int getCenterY() {
-        return this.getY() + (int) (this.getHeight() / 2.0);
+        return (int)this.getY() + (int) (this.getHeight() / 2.0);
     }
 
     public User getUser() {
@@ -260,7 +281,7 @@ public class Player {
     public void setShootSpeedModificator(long shootSpeedModificator) {
         this.shootSpeedModificator = shootSpeedModificator;
     }
-    public int getX() {
+    public double getX() {
         return this.x;
     }
 
@@ -272,10 +293,18 @@ public class Player {
         this.y = y;
     }
 
-    public int getY() {
+    public double getY() {
         return this.y;
     }
     public GameController getGameController(){
         return this.gameController;
+    }
+
+    public double getAcceleration() {
+        return acceleration;
+    }
+
+    public void setAcceleration(double acceleration) {
+        this.acceleration = acceleration;
     }
 }

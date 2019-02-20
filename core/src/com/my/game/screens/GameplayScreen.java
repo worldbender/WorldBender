@@ -171,6 +171,7 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void handleInput() {
+        currentPlayer.resetkeys();
         this.handleMovementKeys();
         this.handleArrowKeys();
         this.handleSpecialKeys();
@@ -178,7 +179,6 @@ public class GameplayScreen extends AbstractScreen{
 
     private void handleMovementKeys(){
         currentPlayer.setMoving(false);
-        currentPlayer.resetWSAD();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             currentPlayer.setMoving(true);
             currentPlayer.setActiveMovementKey("LEFT");
@@ -203,20 +203,24 @@ public class GameplayScreen extends AbstractScreen{
 
     private void handleArrowKeys(){
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            this.sendMessageToServer("createBullet:"+(float)Math.PI + ":");
+            this.sendMessageToServer("createBullet:");
             currentPlayer.setActiveMovementKey("LEFT");
+            currentPlayer.LEFT_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.sendMessageToServer("createBullet:"+(float)0 + ":");
+            this.sendMessageToServer("createBullet:");
             currentPlayer.setActiveMovementKey("RIGHT");
+            currentPlayer.RIGHT_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            this.sendMessageToServer("createBullet:"+(float)Math.PI/2 + ":");
+            this.sendMessageToServer("createBullet:");
             currentPlayer.setActiveMovementKey("UP");
+            currentPlayer.UP_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            this.sendMessageToServer("createBullet:"+(float)3 * Math.PI/2 + ":");
+            this.sendMessageToServer("createBullet:");
             currentPlayer.setActiveMovementKey("DOWN");
+            currentPlayer.DOWN_ARROW = true;
         }
     }
 

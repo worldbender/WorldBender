@@ -49,13 +49,10 @@ public class UdpServer extends Thread {
         currentUser.getPlayer().setActiveMovementKey(direction);
     }
 
-    private void createBullet(String id, String content){
-        String[] splitedContent = content.split(":");
+    private void createBullet(String id){
         User currentUser = existingUsers.get(id);
-        Room currentRoom = RoomList.getUserRoom(id);
-        currentUser.getPlayer().setActiveMovementKeyByAngle(splitedContent[1]);
         if(currentUser.getPlayer().canPlayerShoot()){
-            currentUser.getPlayer().shoot(Float.parseFloat(splitedContent[1]));
+            currentUser.getPlayer().shoot();
         }
     }
 
@@ -72,7 +69,7 @@ public class UdpServer extends Thread {
         String id = clientAddress.toString() + "," + clientPort;
         String[] splitedArray = content.split(":");
         switch (splitedArray[0]){
-            case "createBullet": createBullet(id, content); break;
+            case "createBullet": createBullet(id); break;
             case "playerState": updatePlayersState(id, content); break;
         }
     }
