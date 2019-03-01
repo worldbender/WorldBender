@@ -4,7 +4,6 @@ import server.User;
 import server.bullets.BulletList;
 import server.connection.GameController;
 import server.opponents.OpponentList;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -36,7 +35,7 @@ public class Room {
     }
 
     public boolean checkIfUserCanJoinRoom(){
-        if(this.getUsersInRoom().size() < limitOfPlayers && this.gameStarted == false) {
+        if(this.getUsersInRoom().size() < limitOfPlayers && !this.gameStarted) {
             return true;
         }
         else return false;

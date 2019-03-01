@@ -1,7 +1,6 @@
 package server.pickups;
 
 import server.Player;
-
 import java.awt.*;
 
 public abstract class APickup{

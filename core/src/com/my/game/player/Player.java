@@ -21,9 +21,13 @@ public class Player extends APlayer {
     public boolean KEY_S = true;
     public boolean KEY_A = false;
     public boolean KEY_D = false;
+    public boolean UP_ARROW = false;
+    public boolean DOWN_ARROW = false;
+    public boolean LEFT_ARROW = false;
+    public boolean RIGHT_ARROW = false;
 
-    public Player(){
-
+    public Player(String name){
+        this(name, 0, 0);
     }
     public Player(String name, String x, String y) {
         this(name, Integer.parseInt(x), Integer.parseInt(y));
@@ -122,6 +126,14 @@ public class Player extends APlayer {
         result.append(",");
         result.append(this.KEY_D);
         result.append(",");
+        result.append(this.UP_ARROW);
+        result.append(",");
+        result.append(this.DOWN_ARROW);
+        result.append(",");
+        result.append(this.LEFT_ARROW);
+        result.append(",");
+        result.append(this.RIGHT_ARROW);
+        result.append(",");
         result.append(":");
         return result.toString();
     }
@@ -151,10 +163,14 @@ public class Player extends APlayer {
         isMoving = moving;
     }
 
-    public void resetWSAD(){
+    public void resetkeys(){
         this.KEY_W = false;
         this.KEY_S = false;
         this.KEY_A = false;
         this.KEY_D = false;
+        this.UP_ARROW = false;
+        this.DOWN_ARROW = false;
+        this.LEFT_ARROW = false;
+        this.RIGHT_ARROW = false;
     }
 }

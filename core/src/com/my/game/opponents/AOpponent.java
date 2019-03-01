@@ -1,11 +1,9 @@
 package com.my.game.opponents;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.my.game.UtilitySingletons.ShapeDrawer;
 import com.my.game.UtilitySingletons.StringDrawer;
 import com.my.game.music.MusicPlayer;
-import com.my.game.player.Player;
 
 /**
  * Created by lucyna on 02.11.18.

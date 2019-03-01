@@ -6,6 +6,7 @@ public class EventBlock extends ABlock{
     private String key;
     private String value;
     private boolean happened;
+    private boolean active = false;
     public EventBlock(int x, int y, String key, String value){
         super(x, y, 100, 100);
         this.x = x;
@@ -53,5 +54,13 @@ public class EventBlock extends ABlock{
 
     public void setHappened(boolean happened) {
         this.happened = happened;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

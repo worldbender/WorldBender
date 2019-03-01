@@ -2,7 +2,6 @@ package server.pickups;
 
 import server.User;
 import server.connection.TcpServer;
-
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PickupList {

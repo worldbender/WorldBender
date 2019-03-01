@@ -3,12 +3,10 @@ package server.bullets;
 import server.LogicMap.LogicMapHandler;
 import server.Player;
 import server.User;
+import server.connection.GameController;
 import server.opponents.AOpponent;
 import server.opponents.OpponentList;
-import server.pickups.PickupList;
-
 import java.awt.*;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ABullet {
@@ -24,38 +22,47 @@ public class ABullet {
     private boolean isDead = false;
     private int attack = 1;
     private boolean hostile;
+    protected OpponentList opponentList;
+    protected BulletList bulletList;
+    protected CopyOnWriteArrayList<User> usersInRoom;
+    protected LogicMapHandler map;
+    protected GameController gameController;
 
-    protected ABullet(int x, int y, double angle, boolean hostile){
+    protected ABullet(int x, int y, double angle, boolean hostile, GameController gameController){
         this.x = x;
         this.y = y;
         this.angle = angle;
         this.hostile = hostile;
+        this.opponentList = gameController.opponentList;
+        this.bulletList = gameController.bulletList;
+        this.gameController = gameController;
+        this.map = gameController.logicMapHandler;
     }
-    public void update(double deltaTime, LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, OpponentList opponentList, BulletList bulletList){
+    public void update(double deltaTime, CopyOnWriteArrayList<User> usersInRoom){
         double newX = this.getX() + (deltaTime * Math.cos(angle) * bulletSpeed);
         double newY = this.getY() + (deltaTime * Math.sin(angle) * bulletSpeed);
         Rectangle bounds = new Rectangle((int)newX, (int)newY, this.width, this.height);
-        handleAllBulletCollisions(deltaTime, map, usersInRoom, bounds, newX, newY, opponentList);
-        this.checkIfBulletShouldDie(bulletList);
+        handleAllBulletCollisions(deltaTime, usersInRoom, bounds, newX, newY);
+        this.checkIfBulletShouldDie();
     }
 
-    private void handleAllBulletCollisions(double deltaTime, LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, Rectangle bounds, double newX, double newY, OpponentList opponentList){
-        this.handleBulletCollisionWithMap(map, bounds);
-        this.handleBulletCollisionWithOpponents(bounds, opponentList);
+    private void handleAllBulletCollisions(double deltaTime, CopyOnWriteArrayList<User> usersInRoom, Rectangle bounds, double newX, double newY){
+        this.handleBulletCollisionWithMap(bounds);
+        this.handleBulletCollisionWithOpponents(bounds);
         this.handleBulletCollisionWithPlayers(bounds, usersInRoom);
         this.handleBulletShift(newX, newY, deltaTime);
     }
 
-    private void handleBulletCollisionWithMap(LogicMapHandler map, Rectangle bounds){
-        if(map.isRectangleCollidesWithMap(bounds)){
+    private void handleBulletCollisionWithMap( Rectangle bounds){
+        if(this.map.isRectangleCollidesWithMap(bounds)){
             this.isDead = true;
         }
     }
 
-    private void handleBulletCollisionWithOpponents(Rectangle rec, OpponentList opponentList){
-        for(AOpponent opponent : opponentList.getOpponents()){
+    private void handleBulletCollisionWithOpponents(Rectangle rec){
+        for(AOpponent opponent : this.opponentList.getOpponents()){
             if(rec.intersects(opponent.getBounds()) && !this.isHostile()){
-                opponent.doDamage(this.attack, opponentList);
+                opponent.doDamage(this.attack);
                 this.isDead = true;
             }
         }
@@ -78,9 +85,9 @@ public class ABullet {
         decrementRange(deltaTime);
     }
 
-    private void checkIfBulletShouldDie(BulletList bulletList){
+    private void checkIfBulletShouldDie(){
         if(this.isDead){
-            deleteBullet(bulletList);
+            deleteBullet();
         }
     }
 
@@ -97,8 +104,8 @@ public class ABullet {
         }
     }
 
-    private void deleteBullet(BulletList bulletList){
-        bulletList.deleteBullet(this);
+    private void deleteBullet(){
+        this.bulletList.deleteBullet(this);
     }
 
     public double getAngle() {

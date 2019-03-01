@@ -3,7 +3,6 @@ package server.connection;
 import server.Properties;
 import server.User;
 import server.rooms.Room;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Map;
@@ -44,6 +43,7 @@ public class TcpServer extends Thread{
 
     public static void createGameController(Room room){
         sender = new GameController(room);
+        room.setGameController(sender);
         senderThread = new Thread(sender);
         senderThread.start();
     }

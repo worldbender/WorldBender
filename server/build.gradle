@@ -34,6 +34,9 @@ task dist(type: Jar) {
         attributes 'Main-Class': project.mainClassName
     }
 }
+task stage(){
+    
+}
 
 dist.dependsOn classes
 

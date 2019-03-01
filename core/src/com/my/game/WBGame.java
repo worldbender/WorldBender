@@ -104,4 +104,7 @@ public class WBGame extends Game {
         else
             Gdx.graphics.setFullscreenMode(currentMode);
     }
+    public GameplayScreen getGameplayScreen(){
+        return this.gameplayScreen;
+    }
 }
