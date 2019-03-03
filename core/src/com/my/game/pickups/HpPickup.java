@@ -10,7 +10,7 @@ public class HpPickup extends APickup {
     }
 
     @Override
-    public void draw(SpriteBatch spriteBatch) {
+    public void draw(SpriteBatch spriteBatch, float stateTime) {
         spriteBatch.draw(HpPickup.texture, this.getX(), this.getY());
     }
 }

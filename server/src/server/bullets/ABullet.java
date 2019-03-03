@@ -7,6 +7,7 @@ import server.connection.GameController;
 import server.opponents.AOpponent;
 import server.opponents.OpponentList;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ABullet {
@@ -45,6 +46,7 @@ public class ABullet {
         handleAllBulletCollisions(deltaTime, usersInRoom, bounds, newX, newY);
         this.checkIfBulletShouldDie();
     }
+
 
     private void handleAllBulletCollisions(double deltaTime, CopyOnWriteArrayList<User> usersInRoom, Rectangle bounds, double newX, double newY){
         this.handleBulletCollisionWithMap(bounds);

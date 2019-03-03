@@ -10,7 +10,7 @@ public class SadOnion extends APickup{
     }
 
     @Override
-    public void draw(SpriteBatch spriteBatch) {
+    public void draw(SpriteBatch spriteBatch, float stateTime) {
         spriteBatch.draw(SadOnion.texture, this.getX(), this.getY());
     }
 }

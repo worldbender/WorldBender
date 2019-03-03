@@ -7,9 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
@@ -23,12 +20,8 @@ import com.my.game.music.MusicPlayer;
 import java.util.Map;
 
 public class GameplayScreen extends AbstractScreen{
-
-    private Texture playerTexture;
     private Texture bulletTexture;
     private static Map<String, Player> players;
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer render;
     private GraphicMapHandler graphicMapHandler;
     public static Player currentPlayer;
     private int numerOfXTiles;
@@ -74,23 +67,26 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void loadData() {
-        playerTexture = new Texture("cat.png");
         bulletTexture = new Texture("granat.png");
         Schopenheuer.texture = new Texture("opponents/schopen.png");
         Nietzsche.texture = new Texture("opponents/nietzsche.png");
         Poe.texture = new Texture("opponents/poe.png");
-        Texture walkSheet = new Texture("isaac/downIsaac.png");
-        Texture upWalkSheet = new Texture("isaac/upIsaac.png");
-        Texture leftSheet = new Texture("isaac/leftWalkIsaac.png");
-        Texture rightSheet = new Texture("isaac/rightWalkIsaac.png");
+        Texture walkSheet = new Texture("isaac/downIsaacHeadless.png");
+        Texture upWalkSheet = new Texture("isaac/upIsaacHeadless.png");
+        Texture leftSheet = new Texture("isaac/leftWalkIsaacHeadless.png");
+        Texture rightSheet = new Texture("isaac/rightWalkIsaacHeadless.png");
+        Texture heads = new Texture("isaac/deal.png");
         Player.downWalkAnimation = getAnimationFrom1DPicture(walkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
         Player.leftWalkAnimation = getAnimationFrom1DPicture(leftSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
+        Player.heads = getAnimationFrom1DPicture(heads, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
         HpPickup.texture = new Texture("pickups/hp.png");
         InnerEye.texture = new Texture("pickups/InnerEye.png");
         SadOnion.texture = new Texture("pickups/SadOnion.png");
         Warp.texture = new Texture("pickups/warp.png");
+        Texture warpAnimation = new Texture("pickups/warpAnimated.png");
+        Warp.warpAnimation = getAnimationFrom1DPicture(warpAnimation, 64, 64, 9);
         stateTime = 0f;
     }
 
@@ -138,7 +134,7 @@ public class GameplayScreen extends AbstractScreen{
             opponent.draw(spriteBatch);
         }
         for(APickup pickup : PickupList.getPickups()){
-            pickup.draw(spriteBatch);
+            pickup.draw(spriteBatch, stateTime);
         }
     }
 
@@ -182,44 +178,44 @@ public class GameplayScreen extends AbstractScreen{
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             currentPlayer.setMoving(true);
             currentPlayer.setActiveMovementKey("LEFT");
+            currentPlayer.setHeadDirection("LEFT");
             currentPlayer.KEY_A = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             currentPlayer.setMoving(true);
             currentPlayer.setActiveMovementKey("RIGHT");
+            currentPlayer.setHeadDirection("RIGHT");
             currentPlayer.KEY_D = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             currentPlayer.setMoving(true);
             currentPlayer.setActiveMovementKey("UP");
+            currentPlayer.setHeadDirection("UP");
             currentPlayer.KEY_W = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             currentPlayer.setMoving(true);
             currentPlayer.setActiveMovementKey("DOWN");
+            currentPlayer.setHeadDirection("DOWN");
             currentPlayer.KEY_S = true;
         }
     }
 
     private void handleArrowKeys(){
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            this.sendMessageToServer("createBullet:");
-            currentPlayer.setActiveMovementKey("LEFT");
+            currentPlayer.setHeadDirection("LEFT");
             currentPlayer.LEFT_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.sendMessageToServer("createBullet:");
-            currentPlayer.setActiveMovementKey("RIGHT");
+            currentPlayer.setHeadDirection("RIGHT");
             currentPlayer.RIGHT_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            this.sendMessageToServer("createBullet:");
-            currentPlayer.setActiveMovementKey("UP");
+            currentPlayer.setHeadDirection("UP");
             currentPlayer.UP_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            this.sendMessageToServer("createBullet:");
-            currentPlayer.setActiveMovementKey("DOWN");
+            currentPlayer.setHeadDirection("DOWN");
             currentPlayer.DOWN_ARROW = true;
         }
     }

@@ -132,6 +132,7 @@ public class GameController implements Runnable {
                     (int)u.getPlayer().getY() + ":" +
                     u.getPlayer().getHp() + ":" +
                     u.getPlayer().getActiveMovementKey() + ":" +
+                    u.getPlayer().getHeadDirection() + ":" +
                     u.getPlayer().isMoving();
             UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }

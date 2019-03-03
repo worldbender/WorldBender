@@ -10,6 +10,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 public class Player {
 
@@ -26,6 +27,7 @@ public class Player {
     private long lastTimePlayerHasShot = 0L;
     private long shootSpeedModificator = 1L;
     private String activeMovementKey = "DOWN";
+    private String headDirection = "DOWN";
     private String bulletType = "Tear";
     private String weaponType = "Normal";
     private ArrayList<String> collectedItems;
@@ -63,15 +65,22 @@ public class Player {
     }
 
     public void update(CopyOnWriteArrayList<User> usersInRoom, double deltaTime) {
+        this.handleMovementKeys(usersInRoom, deltaTime);
+        if((this.UP_ARROW || this.DOWN_ARROW || this.LEFT_ARROW || this.RIGHT_ARROW) && this.canPlayerShoot()){
+            shoot();
+        }
+    }
+
+    private void handleMovementKeys(CopyOnWriteArrayList<User> usersInRoom, double deltaTime){
+        double currentShift;
         Rectangle playersNewBoundsRectangle;
         ArrayList<Player> players = new ArrayList<Player>();
-        double currentShift;
 
-        for (User user : usersInRoom) {
-            if (user.getPlayer() != this) {
-                players.add(user.getPlayer());
-            }
-        }
+        players = usersInRoom.stream()
+                .filter(x -> x.getPlayer() != this)
+                .map(x -> x.getPlayer())
+                .collect(Collectors.toCollection(ArrayList::new));
+
         if (this.isMoving) {
             currentShift = (deltaTime * this.calculateSpeed(deltaTime));
             if (this.KEY_W) {
@@ -141,21 +150,13 @@ public class Player {
     }
 
     public boolean isRectangleCollidesWithPlayers(Rectangle rec, ArrayList<Player> players) {
-        boolean result = false;
-        for (Player player : players) {
-            if (rec.intersects(player.getBounds()) && player.getUser().hasConnection()) {
-                result = true;
-            }
-        }
-        return result;
+        return players.stream().anyMatch(x -> rec.intersects(x.getBounds()) && x.getUser().hasConnection());
     }
 
     public boolean isPlayersCollidesWithAnything(Rectangle rec, ArrayList<Player> players) {
         return isPlayerCollidesWithMap(rec) ||
                 isRectangleCollidesWithPlayers(rec, players);
     }
-
-
 
     private double calculateSpeed(double deltaTime){
         double speed;
@@ -306,5 +307,13 @@ public class Player {
 
     public void setAcceleration(double acceleration) {
         this.acceleration = acceleration;
+    }
+
+    public String getHeadDirection() {
+        return headDirection;
+    }
+
+    public void setHeadDirection(String headDirection) {
+        this.headDirection = headDirection;
     }
 }

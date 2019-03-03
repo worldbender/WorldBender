@@ -43,18 +43,13 @@ public class UdpServer extends Thread {
         User currentUser = existingUsers.get(id);
         String splitedContetnt[] = content.split(":");
         boolean isMoving = Boolean.parseBoolean(splitedContetnt[1]);
-        String direction = splitedContetnt[2];
         currentUser.getPlayer().setMoving(isMoving);
-        currentUser.getPlayer().setWSAD(splitedContetnt[3]);
+        String direction = splitedContetnt[2];
         currentUser.getPlayer().setActiveMovementKey(direction);
+        currentUser.getPlayer().setHeadDirection(splitedContetnt[3]);
+        currentUser.getPlayer().setWSAD(splitedContetnt[4]);
     }
 
-    private void createBullet(String id){
-        User currentUser = existingUsers.get(id);
-        if(currentUser.getPlayer().canPlayerShoot()){
-            currentUser.getPlayer().shoot();
-        }
-    }
 
     public static void sendUdpMsgToAllUsersInRoom(String msg, CopyOnWriteArrayList<User> usersInRoom){
         for(User user : usersInRoom){
@@ -69,7 +64,6 @@ public class UdpServer extends Thread {
         String id = clientAddress.toString() + "," + clientPort;
         String[] splitedArray = content.split(":");
         switch (splitedArray[0]){
-            case "createBullet": createBullet(id); break;
             case "playerState": updatePlayersState(id, content); break;
         }
     }

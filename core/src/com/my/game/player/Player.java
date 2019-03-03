@@ -14,8 +14,10 @@ public class Player extends APlayer {
     public static Animation<TextureRegion> upWalkAnimation;
     public static Animation<TextureRegion> rightWalkAnimation;
     public static Animation<TextureRegion> leftWalkAnimation;
+    public static Animation<TextureRegion> heads;
     private float scale = 2f;
     private String activeMovementKey = "";
+    private String headDirection = "";
     private boolean isMoving = false;
     public boolean KEY_W = false;
     public boolean KEY_S = true;
@@ -42,6 +44,7 @@ public class Player extends APlayer {
 
     public void draw(SpriteBatch batch, float stateTime) {
         this.drawCharacter(batch, stateTime);
+        this.drawHead(batch);
         this.drawHp(batch);
         this.drawName(batch);
     }
@@ -92,6 +95,25 @@ public class Player extends APlayer {
         }
     }
 
+    private void drawHead(SpriteBatch batch){
+        switch (this.headDirection){
+            case "UP":
+                drawAnimationCharacter(batch, heads.getKeyFrames()[2]);
+                break;
+            case "DOWN":
+                drawAnimationCharacter(batch, heads.getKeyFrames()[0]);
+                break;
+            case "LEFT":
+                drawAnimationCharacter(batch, heads.getKeyFrames()[3]);
+                break;
+            case "RIGHT":
+                drawAnimationCharacter(batch, heads.getKeyFrames()[1]);
+                break;
+            default:
+                break;
+        }
+    }
+
     private void drawAnimationCharacter(SpriteBatch batch, TextureRegion textureRegion){
         batch.draw(
                 textureRegion,
@@ -117,6 +139,8 @@ public class Player extends APlayer {
         result.append(this.isMoving);
         result.append(":");
         result.append(this.activeMovementKey);
+        result.append(":");
+        result.append(this.headDirection);
         result.append(":");
         result.append(this.KEY_W);
         result.append(",");
@@ -172,5 +196,9 @@ public class Player extends APlayer {
         this.DOWN_ARROW = false;
         this.LEFT_ARROW = false;
         this.RIGHT_ARROW = false;
+    }
+
+    public void setHeadDirection(String headDirection) {
+        this.headDirection = headDirection;
     }
 }
