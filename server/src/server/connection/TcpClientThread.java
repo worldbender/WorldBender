@@ -87,11 +87,8 @@ public class TcpClientThread extends Thread{
 
     //TODO: lepsze nadawanie id pokoi
     private void newRoom(){
-        String id = clientSocket.getInetAddress().toString() + "," + this.user.getUdpPort();
-        User user = existingUsers.get(id);
-        Room room = new Room(rooms.size(), user);
-
-        room.addUserToRoom(user);
+        Room room = new Room(rooms.size(), this.user);
+        room.addUserToRoom(this.user);
 
         Gdx.app.postRunnable(() -> TcpServer.createGameController(room));
 
@@ -102,9 +99,6 @@ public class TcpClientThread extends Thread{
 
     private void joinRoom(int roomId){
         boolean roomExists = false;
-        String id = clientSocket.getInetAddress().toString() + "," + this.user.getUdpPort();
-        User user = existingUsers.get(id);
-
         for(Room room : rooms){
             if(room.getId() == roomId) {
                 roomExists = true;
@@ -129,17 +123,12 @@ public class TcpClientThread extends Thread{
     }
 
     private void leaveRoom(){
-        String id = clientSocket.getInetAddress().toString() + "," + this.user.getUdpPort();
-        User user = existingUsers.get(id);
-        Room currentRoom = RoomList.getUserRoom(id);
-
-        currentRoom.deleteUserFromRoom(user);
+        Room currentRoom = RoomList.getUserRoom(this.user.getConnectionId());
+        currentRoom.deleteUserFromRoom(this.user);
     }
 
     private void startGame(){
-        String id = clientSocket.getInetAddress().toString() + "," + this.user.getUdpPort();
-        User user = existingUsers.get(id);
-        Room currentRoom = RoomList.getUserRoom(id);
+        Room currentRoom = RoomList.getUserRoom(this.user.getConnectionId());
         initGame(currentRoom);
 
         JSONObject content = new JSONObject().put("owner", user.getName()).put("opponents", currentRoom.getGameController().getOpponentsData()).put("players", currentRoom.getGameController().getPlayersData());

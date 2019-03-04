@@ -170,7 +170,6 @@ public class Player {
     }
 
     public void setWSAD(JSONObject wsad) {
-        //JSONObject obj = new JSONObject(wsad);
         this.KEY_W = wsad.getBoolean("w");
         this.KEY_S = wsad.getBoolean("s");
         this.KEY_A = wsad.getBoolean("a");

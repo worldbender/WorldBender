@@ -35,7 +35,7 @@ public class UdpPacketReceiver implements Runnable {
                     player.setPosition(receivedPlayer.getInt("x"), receivedPlayer.getInt("y"));
                     player.setHp(receivedPlayer.getInt("hp"));
                     player.setActiveMovementKey(receivedPlayer.getString("key"));
-                    player.setMoving(receivedPlayer.getBoolean("moving"));
+                    player.setMoving(receivedPlayer.getBoolean("isMoving"));
                 }
             }
         }

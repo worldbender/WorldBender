@@ -157,7 +157,7 @@ public class GameController implements Runnable {
                     .put("y", u.getPlayer().getY())
                     .put("hp", u.getPlayer().getHp())
                     .put("key", u.getPlayer().getActiveMovementKey())
-                    .put("moving", u.getPlayer().isMoving());
+                    .put("isMoving", u.getPlayer().isMoving());
 
             playersList.put(p);
         }

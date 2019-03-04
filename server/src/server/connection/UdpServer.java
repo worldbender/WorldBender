@@ -42,7 +42,7 @@ public class UdpServer extends Thread {
 
     private void updatePlayersState(String id, JSONObject content){
         User currentUser = existingUsers.get(id);
-        boolean isMoving = content.getBoolean("moving");
+        boolean isMoving = content.getBoolean("isMoving");
         String direction = content.getString("key");
         currentUser.getPlayer().setMoving(isMoving);
         currentUser.getPlayer().setWSAD((JSONObject)content.get("wsad"));

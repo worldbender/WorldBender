@@ -117,7 +117,7 @@ public class Player extends APlayer {
     public JSONObject getPlayerState(){
 
         JSONObject result =  new JSONObject()
-                .put("moving", this.isMoving)
+                .put("isMoving", this.isMoving)
                 .put("key", this.activeMovementKey)
                 .put("wsad", new JSONObject()
                             .put("w", this.KEY_W)
