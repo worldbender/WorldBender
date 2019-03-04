@@ -1,5 +1,6 @@
 package server.connection;
 
+import org.json.JSONObject;
 import server.Properties;
 import server.User;
 import server.rooms.Room;
@@ -9,7 +10,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TcpServer extends Thread{
-    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortTcp"));
+    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_TCP"));
     private ServerSocket serverSocket;
     private static Thread senderThread;
     private static GameController sender;
@@ -48,13 +49,13 @@ public class TcpServer extends Thread{
         senderThread.start();
     }
 
-    public static void sendTcpMsgToAllUsers(String msg, Map<String, User> existingUsers){
+    public static void sendTcpMsgToAllUsers(JSONObject msg, Map<String, User> existingUsers){
         for (User current : existingUsers.values()) {
             current.getThread().sendMessage(msg);
         }
     }
 
-    public static void sendTcpMsgToAllUsersInRoom(String msg, CopyOnWriteArrayList<User> usersInRoom){
+    public static void sendTcpMsgToAllUsersInRoom(JSONObject msg, CopyOnWriteArrayList<User> usersInRoom){
         for (User current : usersInRoom) {
             current.getThread().sendMessage(msg);
         }

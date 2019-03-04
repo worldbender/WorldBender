@@ -27,7 +27,7 @@ public class WBGame extends Game {
     public final static int ROOM = 6;
     public final static int ROOM_OWNER = 7;
     private int currentRoom = 0;
-    public final static String SERVER_ADDRESS = Properties.loadConfigFile("ip");
+    public final static String SERVER_ADDRESS = Properties.loadConfigFile("IP");
     public final static boolean IS_DEBUG_VERSION = true;
 //    public final static int APPLICATION = 2;
 
@@ -43,6 +43,7 @@ public class WBGame extends Game {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         RES_WIDTH = screenSize.width;
         RES_HEIGHT = screenSize.height;
+        //TODO to nie powinno byc wpisane na sztywno
         WIDTH = 1600;
         HEIGHT = 900;
     }
@@ -97,7 +98,7 @@ public class WBGame extends Game {
     }
 
     public void switchScreenMode(){
-        Boolean fullScreen = Gdx.graphics.isFullscreen();
+        boolean fullScreen = Gdx.graphics.isFullscreen();
         Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
         if (fullScreen)
             Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);

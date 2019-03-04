@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.my.game.Properties;
@@ -20,6 +19,8 @@ import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
 import com.my.game.WBGame;
 import com.my.game.music.MusicPlayer;
+import org.json.JSONObject;
+
 import java.util.Map;
 
 public class GameplayScreen extends AbstractScreen{
@@ -123,7 +124,9 @@ public class GameplayScreen extends AbstractScreen{
         this.drawAllMovableObjects(spriteBatch, stateTime);
         spriteBatch.end();
 
-        this.sendMessageToServer("playerState:" + currentPlayer.getPlayerState());
+        this.sendMessageToServer(new JSONObject()
+                .put("msg", "playerState")
+                .put("content", currentPlayer.getPlayerState()));
     }
 
     private void drawAllMovableObjects(SpriteBatch spriteBatch, float stateTime){
@@ -162,7 +165,7 @@ public class GameplayScreen extends AbstractScreen{
         }
     }
 
-    private void sendMessageToServer(String message){
+    private void sendMessageToServer(JSONObject message){
         try {
             WBGame.connection.sender.sendMessage(message);
         } catch (Exception e) {
@@ -203,22 +206,26 @@ public class GameplayScreen extends AbstractScreen{
 
     private void handleArrowKeys(){
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            this.sendMessageToServer("createBullet:");
+            this.sendMessageToServer(new JSONObject()
+                    .put("msg", "createBullet"));
             currentPlayer.setActiveMovementKey("LEFT");
             currentPlayer.LEFT_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.sendMessageToServer("createBullet:");
+            this.sendMessageToServer(new JSONObject()
+                    .put("msg", "createBullet"));
             currentPlayer.setActiveMovementKey("RIGHT");
             currentPlayer.RIGHT_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            this.sendMessageToServer("createBullet:");
+            this.sendMessageToServer(new JSONObject()
+                    .put("msg", "createBullet"));
             currentPlayer.setActiveMovementKey("UP");
             currentPlayer.UP_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            this.sendMessageToServer("createBullet:");
+            this.sendMessageToServer(new JSONObject()
+                    .put("msg", "createBullet"));
             currentPlayer.setActiveMovementKey("DOWN");
             currentPlayer.DOWN_ARROW = true;
         }

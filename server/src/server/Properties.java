@@ -12,9 +12,9 @@ public class Properties {
         java.util.Properties prop = new java.util.Properties();
         FileOutputStream output = null;
         try {
-            prop.put("ip","localhost");
-            prop.put("PortTcp", "10008");
-            prop.put("PortUdp", "7331");
+            prop.put("IP","localhost");
+            prop.put("PORT_TCP", "10008");
+            prop.put("PORT_UDP", "7331");
 
             output = new FileOutputStream(PATH);
         } catch (Exception io) {

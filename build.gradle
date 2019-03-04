@@ -11,8 +11,6 @@ buildscript {
     }
     dependencies {
         classpath 'org.wisepersist:gwt-gradle-plugin:1.0.6'
-        
-
     }
 }
 
@@ -54,6 +52,7 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        compile 'org.json:json:20180813'
     }
 }
 
@@ -80,6 +79,7 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile 'org.json:json:20180813'
         
     }
 }
@@ -97,6 +97,7 @@ project(":server") {
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         compile "org.mockito:mockito-all:1.9.5"
+        compile 'org.json:json:20180813'
 
     }
 }

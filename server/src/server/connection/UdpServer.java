@@ -1,5 +1,6 @@
 package server.connection;
 
+import org.json.JSONObject;
 import server.rooms.Room;
 import server.rooms.RoomList;
 import server.*;
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UdpServer extends Thread {
-    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortUdp"));
+    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
     private final static int BUFFER = 1024;
     private static DatagramSocket socket;
     private List<Room> rooms;
@@ -39,13 +40,12 @@ public class UdpServer extends Thread {
         }
     }
 
-    private void updatePlayersState(String id, String content){
+    private void updatePlayersState(String id, JSONObject content){
         User currentUser = existingUsers.get(id);
-        String splitedContetnt[] = content.split(":");
-        boolean isMoving = Boolean.parseBoolean(splitedContetnt[1]);
-        String direction = splitedContetnt[2];
+        boolean isMoving = content.getBoolean("moving");
+        String direction = content.getString("key");
         currentUser.getPlayer().setMoving(isMoving);
-        currentUser.getPlayer().setWSAD(splitedContetnt[3]);
+        currentUser.getPlayer().setWSAD((JSONObject)content.get("wsad"));
         currentUser.getPlayer().setActiveMovementKey(direction);
     }
 
@@ -67,10 +67,10 @@ public class UdpServer extends Thread {
         InetAddress clientAddress = packet.getAddress();
         int clientPort = packet.getPort();
         String id = clientAddress.toString() + "," + clientPort;
-        String[] splitedArray = content.split(":");
-        switch (splitedArray[0]){
+        JSONObject obj = new JSONObject(content);
+        switch (obj.getString("msg")){
             case "createBullet": createBullet(id); break;
-            case "playerState": updatePlayersState(id, content); break;
+            case "playerState": updatePlayersState(id, (JSONObject) obj.get("content")); break;
         }
     }
 
