@@ -111,13 +111,13 @@ public class TCPConnection extends Thread {
                 break;
             case "changeLevel":
                 System.out.println(contentJSON);
-                game.getGameplayScreen().changeLevel(contentJSON.getString("map"));
                 JSONArray opponents = contentJSON.getJSONArray("opponents");
                 for (int i = 0; i < opponents.length(); i++) {
                     JSONObject opponent = opponents.getJSONObject(i);
                     AOpponent newOpponent = OpponentFabric.createOpponent(opponent.getString("type"), opponent.getInt("id"));
                     OpponentList.addOpponent(newOpponent);
                 }
+                game.getGameplayScreen().changeLevel(contentJSON.getString("map"));
                 break;
         }
     }
