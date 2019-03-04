@@ -50,7 +50,7 @@ public class TcpClientThread extends Thread{
         existingUsers.get(user.getConnectionId()).setConnection(false);
         for (User current : existingUsers.values()) {
             current.getThread().sendMessage(new JSONObject()
-                    .put("msg", "dc")
+                    .put("msg", "disconnect")
                     .put("content", new JSONObject().put("name", user.getName())));
         }
         System.out.println("TCP Connection lost with " + clientSocket.getPort());
@@ -61,10 +61,10 @@ public class TcpClientThread extends Thread{
     }
 
     public void readMessage(String message){
-        JSONObject obj = new JSONObject(message);
-        JSONObject contentJSON = (JSONObject) obj.get("content");
+        JSONObject json = new JSONObject(message);
+        JSONObject contentJSON = (JSONObject) json.get("content");
 
-        switch (obj.get("msg").toString()){
+        switch (json.getString("msg")){
             case "udpPort": newUser(contentJSON.getInt("port")); break;
             case "newRoom": newRoom(); break;
             case "joinRoom": joinRoom(contentJSON.getInt("id")); break;

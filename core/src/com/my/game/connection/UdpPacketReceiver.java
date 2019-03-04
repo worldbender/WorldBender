@@ -68,15 +68,14 @@ public class UdpPacketReceiver implements Runnable {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
-                JSONObject obj = new JSONObject(received);
+                JSONObject json = new JSONObject(received);
 
-                switch (obj.getString("msg")) {
+                switch (json.getString("msg")) {
                     case "game":
-                        JSONObject gameObj = (JSONObject) obj.get("content");
-                        //System.out.println(gameObj);
-                        setPlayersData(gameObj.getJSONArray("players"));
-                        setBulletsPositions(gameObj.getJSONArray("bullets"));
-                        setOpponentsData(gameObj.getJSONArray("opponents")); break;
+                        JSONObject gameJson = (JSONObject) json.get("content");
+                        setPlayersData(gameJson.getJSONArray("players"));
+                        setBulletsPositions(gameJson.getJSONArray("bullets"));
+                        setOpponentsData(gameJson.getJSONArray("opponents")); break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -67,10 +67,10 @@ public class UdpServer extends Thread {
         InetAddress clientAddress = packet.getAddress();
         int clientPort = packet.getPort();
         String id = clientAddress.toString() + "," + clientPort;
-        JSONObject obj = new JSONObject(content);
-        switch (obj.getString("msg")){
+        JSONObject json = new JSONObject(content);
+        switch (json.getString("msg")){
             case "createBullet": createBullet(id); break;
-            case "playerState": updatePlayersState(id, (JSONObject) obj.get("content")); break;
+            case "playerState": updatePlayersState(id, (JSONObject) json.get("content")); break;
         }
     }
 

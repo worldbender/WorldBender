@@ -60,12 +60,11 @@ public class TCPConnection extends Thread {
     }
 
     public void readMessage(String message) {
-        JSONObject obj = new JSONObject(message);
-        JSONObject contentJSON = (JSONObject) obj.get("content");
+        JSONObject json = new JSONObject(message);
+        JSONObject contentJSON = (JSONObject) json.get("content");
 
-        switch (obj.getString("msg")) {
+        switch (json.getString("msg")) {
             case "startGame":
-                System.out.println(contentJSON);
                 startGame(contentJSON);
                 break;
             case "createBullet":
@@ -73,7 +72,7 @@ public class TCPConnection extends Thread {
                 BulletList.addBullet(newBullet); break;
             case "deleteBullet":
                 BulletList.removeBulletById(contentJSON.getInt("id")); break;
-            case "dc":
+            case "disconnect":
                 players.remove(contentJSON.get("name").toString());
                 System.out.println("Remove player: " + (contentJSON.getString("name")));
                 break;
@@ -131,9 +130,9 @@ public class TCPConnection extends Thread {
             OpponentList.addOpponent(newOpponent);
         }
 
-        JSONArray players2 = contentJSON.getJSONArray("players");
-        for (int i = 0; i < players2.length(); i++) {
-            JSONObject player = players2.getJSONObject(i);
+        JSONArray playersJSON = contentJSON.getJSONArray("players");
+        for (int i = 0; i < playersJSON.length(); i++) {
+            JSONObject player = playersJSON.getJSONObject(i);
             Player p = new Player(player.getString("name"));
             if (player.getString("name").equals(contentJSON.getString("current"))) {
                 p.setCurrentPlayer(true);
