@@ -1,14 +1,9 @@
 package server.opponents;
 
-import server.LogicMap.LogicMapHandler;
-import server.User;
-import server.bullets.BulletList;
 import server.connection.GameController;
 import server.pickups.PickupFabric;
-import server.pickups.PickupList;
 import java.awt.*;
 import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Schopenheuer extends AOpponent{
     public Schopenheuer(GameController gameController){
@@ -18,6 +13,7 @@ public class Schopenheuer extends AOpponent{
         this.setHeight(286);
         this.setHp(500);
         this.setViewRange(1000.0);
+        this.setBulletType("Tear");
     }
     @Override
     public void update(double deltaTime) {

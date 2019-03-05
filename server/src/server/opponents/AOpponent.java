@@ -29,6 +29,7 @@ public abstract class AOpponent {
     private long lastTimeOpponentHasChandedTargetToChase= 0L;
     private boolean isDead = false;
     private String idOfChasedPlayer = "";
+    private String bulletType;
     protected LogicMapHandler map;
     protected CopyOnWriteArrayList<User> usersInRoom;
     protected BulletList bulletList;
@@ -58,7 +59,7 @@ public abstract class AOpponent {
                         (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()) * (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()))));
                 if (distance < this.getViewRange()) {
                     angle = (float) (Math.atan2(user.getPlayer().getCenterY() - this.getCenterY(), this.getCenterX() - user.getPlayer().getCenterX()));
-                    ABullet newBullet = BulletFabric.createBullet("Tear", this.getCenterX(), this.getCenterY(), -angle + (float) Math.PI, true, this.gameController);
+                    ABullet newBullet = BulletFabric.createBullet(this.getBulletType(), this.getCenterX(), this.getCenterY(), -angle + (float) Math.PI, true, this.gameController);
                     this.bulletList.addBullet(newBullet);
                 }
             }
@@ -274,5 +275,13 @@ public abstract class AOpponent {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public String getBulletType() {
+        return bulletType;
+    }
+
+    public void setBulletType(String bulletType) {
+        this.bulletType = bulletType;
     }
 }

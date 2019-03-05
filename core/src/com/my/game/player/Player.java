@@ -15,7 +15,7 @@ public class Player extends APlayer {
     public static Animation<TextureRegion> rightWalkAnimation;
     public static Animation<TextureRegion> leftWalkAnimation;
     public static Animation<TextureRegion> heads;
-    private float scale = 2f;
+    private float scale = 4f;
     private String activeMovementKey = "";
     private String headDirection = "";
     private boolean isMoving = false;

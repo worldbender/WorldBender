@@ -17,6 +17,7 @@ public class Nietzsche extends AOpponent {
         this.setHeight(250);
         this.setHp(500);
         this.setViewRange(800.0);
+        this.setBulletType("Tear");
     }
 
     @Override

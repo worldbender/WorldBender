@@ -28,13 +28,13 @@ public class Player {
     private long shootSpeedModificator = 1L;
     private String activeMovementKey = "DOWN";
     private String headDirection = "DOWN";
-    private String bulletType = "Tear";
+    private String bulletType = "SpectralTear";
     private String weaponType = "Normal";
     private ArrayList<String> collectedItems;
     private boolean isMoving = false;
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
-    private float scale = 2f;
+    private float scale = 4f;
     private User user;
     public boolean KEY_W = false;
     public boolean KEY_S = false;
@@ -77,8 +77,8 @@ public class Player {
         ArrayList<Player> players = new ArrayList<Player>();
 
         players = usersInRoom.stream()
-                .filter(x -> x.getPlayer() != this)
-                .map(x -> x.getPlayer())
+                .filter(player -> player.getPlayer() != this)
+                .map(player -> player.getPlayer())
                 .collect(Collectors.toCollection(ArrayList::new));
 
         if (this.isMoving) {
@@ -150,7 +150,7 @@ public class Player {
     }
 
     public boolean isRectangleCollidesWithPlayers(Rectangle rec, ArrayList<Player> players) {
-        return players.stream().anyMatch(x -> rec.intersects(x.getBounds()) && x.getUser().hasConnection());
+        return players.stream().anyMatch(player -> rec.intersects(player.getBounds()) && player.getUser().hasConnection());
     }
 
     public boolean isPlayersCollidesWithAnything(Rectangle rec, ArrayList<Player> players) {

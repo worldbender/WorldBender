@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
+import com.my.game.bullets.SpectralTear;
+import com.my.game.bullets.Tear;
 import com.my.game.mapRenderer.GraphicMapHandler;
 import com.my.game.opponents.*;
 import com.my.game.pickups.*;
@@ -67,7 +69,8 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void loadData() {
-        bulletTexture = new Texture("granat.png");
+        Tear.tearTexture = new Texture("bullets/granat.png");
+        SpectralTear.spectralTearTexture = new Texture("bullets/spectralTear.png");
         Schopenheuer.texture = new Texture("opponents/schopen.png");
         Nietzsche.texture = new Texture("opponents/nietzsche.png");
         Poe.texture = new Texture("opponents/poe.png");
@@ -75,7 +78,7 @@ public class GameplayScreen extends AbstractScreen{
         Texture upWalkSheet = new Texture("isaac/upIsaacHeadless.png");
         Texture leftSheet = new Texture("isaac/leftWalkIsaacHeadless.png");
         Texture rightSheet = new Texture("isaac/rightWalkIsaacHeadless.png");
-        Texture heads = new Texture("isaac/deal.png");
+        Texture heads = new Texture("isaac/prof.png");
         Player.downWalkAnimation = getAnimationFrom1DPicture(walkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
@@ -127,7 +130,6 @@ public class GameplayScreen extends AbstractScreen{
             player.draw(spriteBatch, stateTime);
         }
         for(ABullet bullet : BulletList.getBullets()){
-            bullet.setTexture(bulletTexture);
             bullet.draw(spriteBatch);
         }
         for(AOpponent opponent : OpponentList.getOpponents()){
