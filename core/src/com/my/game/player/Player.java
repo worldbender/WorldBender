@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.my.game.UtilitySingletons.ShapeDrawer;
 import com.my.game.UtilitySingletons.StringDrawer;
+import com.my.game.WBGame;
 import com.my.game.screens.GameplayScreen;
+import org.json.JSONObject;
 
 
 public class Player extends APlayer {
@@ -112,30 +114,23 @@ public class Player extends APlayer {
         StringDrawer.drawHp(batch, this.getName(), (int) this.getX(), (int) this.getY() + (int)this.getHeight());
     }
 
-    public String getPlayerState(){
-        StringBuilder result = new StringBuilder();
-        result.append(this.isMoving);
-        result.append(":");
-        result.append(this.activeMovementKey);
-        result.append(":");
-        result.append(this.KEY_W);
-        result.append(",");
-        result.append(this.KEY_S);
-        result.append(",");
-        result.append(this.KEY_A);
-        result.append(",");
-        result.append(this.KEY_D);
-        result.append(",");
-        result.append(this.UP_ARROW);
-        result.append(",");
-        result.append(this.DOWN_ARROW);
-        result.append(",");
-        result.append(this.LEFT_ARROW);
-        result.append(",");
-        result.append(this.RIGHT_ARROW);
-        result.append(",");
-        result.append(":");
-        return result.toString();
+    public JSONObject getPlayerState(){
+
+        JSONObject result =  new JSONObject()
+                .put("isMoving", this.isMoving)
+                .put("key", this.activeMovementKey)
+                .put("wsad", new JSONObject()
+                            .put("w", this.KEY_W)
+                            .put("s", this.KEY_S)
+                            .put("d", this.KEY_D)
+                            .put("a", this.KEY_A)
+                            .put("up", this.UP_ARROW)
+                            .put("down", this.DOWN_ARROW)
+                            .put("left", this.LEFT_ARROW)
+                            .put("right", this.RIGHT_ARROW)
+                );
+
+        return result;
     }
 
     public boolean isCurrentPlayer() {

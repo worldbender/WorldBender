@@ -1,6 +1,7 @@
 package com.my.game.connection;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Json;
 import com.my.game.WBGame;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletFabric;
@@ -16,13 +17,16 @@ import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
 import com.my.game.Properties;
 import com.my.game.screens.GameplayScreen;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Map;
 
 public class TCPConnection extends Thread {
     private WBGame game;
-    private final int PORT = Integer.parseInt(Properties.loadConfigFile("PortTcp"));
+    private final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_TCP"));
     private String hostname;
     private Socket socket;
     private PrintWriter out;
@@ -42,82 +46,99 @@ public class TCPConnection extends Thread {
         String message;
         while (true) {
             try {
-                if ((message = in.readLine()) != null)
+                if ((message = in.readLine()) != null){
                     readMessage(message);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void sendMessage(String message) {
-        out.println(message);
+    public void sendMessage(JSONObject message) {
+        out.println(message.toString());
     }
 
     public void readMessage(String message) {
-        String[] splitedArray = message.split(":");
-        switch (splitedArray[0]) {
+        JSONObject json = new JSONObject(message);
+        JSONObject contentJSON = (JSONObject) json.get("content");
+
+        switch (json.getString("msg")) {
+            case "startGame":
+                startGame(contentJSON);
+                break;
             case "createBullet":
-                ABullet newBullet = BulletFabric.createBullet(splitedArray[1],Integer.parseInt(splitedArray[2]), Float.parseFloat(splitedArray[3]));
+                ABullet newBullet = BulletFabric.createBullet(contentJSON.getString("type"),contentJSON.getInt("id"), contentJSON.getFloat("angle"));
                 BulletList.addBullet(newBullet); break;
             case "deleteBullet":
-                BulletList.removeBulletById(Integer.parseInt(splitedArray[1])); break;
-            case "dc":
-                players.remove(splitedArray[1]);
-                System.out.println("Remove player: " + splitedArray[1]);
-                break;
-            case "newPlayer":
-                System.out.println("Init player: " + splitedArray[1]);
-                Player p = new Player(splitedArray[1]);
-                if (splitedArray[2].equals("true")) {
-                    p.setCurrentPlayer(true);
-                    GameplayScreen.currentPlayer = p;
-                }
-                players.put(splitedArray[1], p);
-                break;
-            case "createOpponent":
-                AOpponent newOpponent = OpponentFabric.createOpponent(splitedArray[1], Integer.parseInt(splitedArray[2]));
-                OpponentList.addOpponent(newOpponent);
+                BulletList.removeBulletById(contentJSON.getInt("id")); break;
+            case "disconnect":
+                players.remove(contentJSON.get("name").toString());
+                System.out.println("Remove player: " + (contentJSON.getString("name")));
                 break;
             case "deleteOpponent":
-                OpponentList.removeOpponentById(Integer.parseInt(splitedArray[1]));
+                OpponentList.removeOpponentById(contentJSON.getInt("id"));
                 break;
             case "createPickup":
                 APickup pickup = PickupFabric.createPickup(
-                        Integer.parseInt(splitedArray[1]),
-                        Integer.parseInt(splitedArray[2]),
-                        Integer.parseInt(splitedArray[3]),
-                        splitedArray[4]
+                        contentJSON.getInt("x"),
+                        contentJSON.getInt("y"),
+                        contentJSON.getInt("id"),
+                        contentJSON.getString("type")
                 );
                 PickupList.addPickup(pickup);
                 break;
             case "deletePickup":
-                PickupList.removePickupById(Integer.parseInt(splitedArray[1]));
+                PickupList.removePickupById(contentJSON.getInt("id"));
                 MusicPlayer.playHpUpSound();
                 break;
-            case "startGame":
-                System.out.println("Game started by: " + splitedArray[1]);
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.PLAY));
-                break;
             case "createdRoom":
-                System.out.println("Created room ID: " + splitedArray[2]);
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_OWNER, Integer.parseInt(splitedArray[2])));
+                System.out.println("Created room ID: " + contentJSON.getInt("id"));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_OWNER, contentJSON.getInt("id")));
                 break;
             case "joinedRoom":
-                System.out.println("Joined room ID: " + splitedArray[2]);
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM, Integer.parseInt(splitedArray[2])));
+                System.out.println("Joined room ID: " + contentJSON.getInt("id"));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM, contentJSON.getInt("id")));
                 break;
             case "fullRoom":
-                System.out.println("Room is full: " + splitedArray[1]);
+                System.out.println("Room is full: " + contentJSON.getInt("id"));
                 Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_FULL_ROOM));
                 break;
             case "roomDoesNotExist":
-                System.out.println("Room doesn't exist: " + splitedArray[1]);
+                System.out.println("Room doesn't exist: " + contentJSON.getInt("id"));
                 Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_NO_ROOM));
                 break;
             case "changeLevel":
-                game.getGameplayScreen().changeLevel(splitedArray[1]);
+                System.out.println(contentJSON);
+                JSONArray opponents = contentJSON.getJSONArray("opponents");
+                for (int i = 0; i < opponents.length(); i++) {
+                    JSONObject opponent = opponents.getJSONObject(i);
+                    AOpponent newOpponent = OpponentFabric.createOpponent(opponent.getString("type"), opponent.getInt("id"));
+                    OpponentList.addOpponent(newOpponent);
+                }
+                game.getGameplayScreen().changeLevel(contentJSON.getString("map"));
                 break;
+        }
+    }
+
+    private void startGame(JSONObject contentJSON) {
+        Gdx.app.postRunnable(() -> game.changeScreen(WBGame.PLAY));
+        JSONArray opponents = contentJSON.getJSONArray("opponents");
+        for (int i = 0; i < opponents.length(); i++) {
+            JSONObject opponent = opponents.getJSONObject(i);
+            AOpponent newOpponent = OpponentFabric.createOpponent(opponent.getString("type"), opponent.getInt("id"));
+            OpponentList.addOpponent(newOpponent);
+        }
+
+        JSONArray playersJSON = contentJSON.getJSONArray("players");
+        for (int i = 0; i < playersJSON.length(); i++) {
+            JSONObject player = playersJSON.getJSONObject(i);
+            Player p = new Player(player.getString("name"));
+            if (player.getString("name").equals(contentJSON.getString("current"))) {
+                p.setCurrentPlayer(true);
+                GameplayScreen.currentPlayer = p;
+            }
+            players.put(player.getString("name"), p);
         }
     }
 }

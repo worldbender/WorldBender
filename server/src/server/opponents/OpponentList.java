@@ -1,5 +1,6 @@
 package server.opponents;
 
+import org.json.JSONObject;
 import server.User;
 import server.connection.GameController;
 import server.connection.TcpServer;
@@ -27,13 +28,13 @@ public class OpponentList {
         opponent.setId(id);
         id++;
         opponents.add(opponent);
-        String message = "createOpponent:" + opponent.getType() + ":" + opponent.getId();
-        TcpServer.sendTcpMsgToAllUsersInRoom(message, this.usersInRoom);
     }
 
     public void deleteOpponent(AOpponent opponent){
         opponents.remove(opponent);
-        String message = "deleteOpponent:" + opponent.getId();
+        JSONObject message = new JSONObject()
+                .put("msg", "deleteOpponent")
+                .put("content", new JSONObject().put("id", opponent.getId()));
         TcpServer.sendTcpMsgToAllUsersInRoom(message, this.usersInRoom);
     }
 }

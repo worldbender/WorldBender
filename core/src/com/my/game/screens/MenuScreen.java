@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.my.game.screens.dialogs.ErrorDialog;
 import com.my.game.screens.dialogs.JoinRoomDialog;
+import org.json.JSONObject;
 
 public class MenuScreen extends AbstractScreen{
     private boolean isRoomFull = false;
@@ -83,7 +84,9 @@ public class MenuScreen extends AbstractScreen{
         newRoom.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                WBGame.connection.tcp.sendMessage("newRoom:" + WBGame.connection.socket.getLocalPort());
+                WBGame.connection.tcp.sendMessage(new JSONObject()
+                        .put("msg", "newRoom")
+                        .put("content", new JSONObject().put("port", WBGame.connection.socket.getLocalPort())));
             }
         });
 

@@ -18,6 +18,7 @@ class Server implements ApplicationListener {
             tcpServer = new TcpServer();
             tcpServer.start();
             udpServer.start();
+            System.out.println("Server is running.");
         } catch (IOException e) {
             System.out.println("Porty zajęte, prawdopodobnie serwer już jest włączony!");
         }

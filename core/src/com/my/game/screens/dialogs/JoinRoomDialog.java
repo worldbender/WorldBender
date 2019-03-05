@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.my.game.WBGame;
+import org.json.JSONObject;
 
 public class JoinRoomDialog extends Dialog {
     private Skin skin;
@@ -38,9 +39,12 @@ public class JoinRoomDialog extends Dialog {
         int id;
         try{
             id = Integer.parseInt(newTf.getText());
-            WBGame.connection.tcp.sendMessage("joinRoom:" +
-                    WBGame.connection.socket.getLocalPort() + ":" +
-                    id);
+            WBGame.connection.tcp.sendMessage(new JSONObject()
+                    .put("msg", "joinRoom")
+                    .put("content", new JSONObject().put("id", id)
+                    ));
+
+
         } catch (NumberFormatException e) {
             new ErrorDialog(skin, stage, "Room ID has to be a number!");
         }
