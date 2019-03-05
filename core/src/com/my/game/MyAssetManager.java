@@ -1,20 +1,13 @@
-package server;
+package com.my.game;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.ParticleEffectLoader.ParticleEffectParameter;
-import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class AssetManager {
 
-    public final AssetManager manager = new AssetManager();
+
+public class MyAssetManager {
+
+    public static final AssetManager manager = new AssetManager();
 
     //Isaaac
     public final String downIsaac 		= "../../core/assets/isaac/downIsaac.png";
@@ -36,6 +29,8 @@ public class AssetManager {
 
     public void loadImages(){
         manager.load(downIsaac, Texture.class);
-
+        manager.load(leftWalkIsaac, Texture.class);
+        manager.load(rightWalkIsaac, Texture.class);
+        manager.load(upIsaac, Texture.class);
     }
 }
