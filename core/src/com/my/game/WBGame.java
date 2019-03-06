@@ -40,6 +40,7 @@ public class WBGame extends Game {
     private boolean paused;
 
     public WBGame(){
+        MyAssetManager.loadAllAssets();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         RES_WIDTH = screenSize.width;
         RES_HEIGHT = screenSize.height;
