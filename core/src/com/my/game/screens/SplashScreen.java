@@ -11,7 +11,6 @@ public class SplashScreen extends AbstractScreen{
 
     public SplashScreen(final WBGame game) {
         super(game);
-
         Timer.schedule(new Task() {
             @Override
             public void run() {
@@ -23,7 +22,7 @@ public class SplashScreen extends AbstractScreen{
     @Override
     public void render(float delta) {
         super.render(delta);
-
         drawBackground();
+        showScreenMessage("Connecting ...");
     }
 }

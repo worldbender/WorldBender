@@ -40,12 +40,16 @@ public class GameplayScreen extends AbstractScreen{
     private int mapHeight;
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
+    public static final int PLAYER_HEAD_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_HEAD_WIDTH"));
+    public static final int PLAYER_HEAD_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_HEAD_HEIGHT"));
     public static final int NUMBER_OF_PLAYER_ANIMATION_FRAMES = 5;
     private float stateTime;
+    private Hud hud;
 
     public GameplayScreen(WBGame game) {
         super(game);
         this.create();
+        hud = new Hud(spriteBatch, players);
     }
 
     public void changeLevel(String map){
@@ -93,6 +97,7 @@ public class GameplayScreen extends AbstractScreen{
         SadOnion.texture = new Texture("pickups/SadOnion.png");
         Warp.texture = new Texture("pickups/warp.png");
         stateTime = 0f;
+        Player.headRegion = new TextureRegion(walkSheet, 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
     }
 
     //TODO This method should be in asset manager
@@ -117,12 +122,17 @@ public class GameplayScreen extends AbstractScreen{
         super.render(delta);
         this.update();
         this.handleMapShift();
+        camera.update();
         this.graphicMapHandler.getRender().setView(camera);
         this.graphicMapHandler.getRender().render();
 
         spriteBatch.begin();
         this.drawAllMovableObjects(spriteBatch, stateTime);
         spriteBatch.end();
+
+        spriteBatch.setProjectionMatrix(hud.getStage().getCamera().combined);
+        hud.getStage().act(delta);
+        hud.getStage().draw();
 
         this.sendMessageToServer(new JSONObject()
                 .put("msg", "playerState")
@@ -132,6 +142,7 @@ public class GameplayScreen extends AbstractScreen{
     private void drawAllMovableObjects(SpriteBatch spriteBatch, float stateTime){
         for(Player player : players.values()){
             player.draw(spriteBatch, stateTime);
+            hud.setHealthBarValue(player.getName(), player.getHp());
         }
         for(ABullet bullet : BulletList.getBullets()){
             bullet.setTexture(bulletTexture);
@@ -241,6 +252,18 @@ public class GameplayScreen extends AbstractScreen{
         if(Gdx.input.isKeyPressed(Input.Keys.M)){
             MusicPlayer.playOpponentDieSound();
         }
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height);
+        hud.getStage().getViewport().update(width, height);
+    }
+
+    @Override
+    public void dispose() {
+        hud.dispose();
+        spriteBatch.dispose();
     }
 
 }

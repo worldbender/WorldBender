@@ -17,9 +17,6 @@ public class MenuScreen extends AbstractScreen{
 
     public MenuScreen(WBGame game) {
         super(game);
-        if(!WBGame.connectionStatus) {
-            this.create();
-        }
     }
 
     public MenuScreen(WBGame game, boolean isRoomFull, boolean roomExists) {
@@ -33,7 +30,8 @@ public class MenuScreen extends AbstractScreen{
         this.inGame = inGame;
     }
 
-    public void create() {
+    public void createConnection() {
+        showScreenMessage("Connecting ...");
         try{
             WBGame.connection.createConnection();
             System.out.println("Nawiązano połączenie z serwerem");
@@ -123,21 +121,13 @@ public class MenuScreen extends AbstractScreen{
 
     @Override
     public void render(float delta) {
+        super.render(delta);
+        drawBackground();
+
         if(!WBGame.connectionStatus){
-            game.changeScreen(WBGame.SPLASH);
-            try{
-                WBGame.connection.createConnection();
-                WBGame.connectionStatus = true;
-                game.changeScreen(WBGame.MENU);
-            }catch(Exception e){
-                System.out.println("Nie nawiązano połączenia");
-            }
+            this.createConnection();
         }
         else {
-            super.render(delta);
-
-            drawBackground();
-
             stage.act();
             stage.draw();
         }
