@@ -41,7 +41,6 @@ public class Player extends APlayer {
 
     public void draw(SpriteBatch batch, float stateTime) {
         this.drawCharacter(batch, stateTime);
-        this.drawHp(batch);
         this.drawName(batch);
     }
 
