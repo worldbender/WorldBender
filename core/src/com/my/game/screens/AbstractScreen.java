@@ -5,9 +5,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import com.my.game.WBGame;
@@ -78,9 +82,21 @@ public abstract class AbstractScreen implements Screen {
     public void resize(int width, int height) {
     }
 
-    public void drawBackground(){
+    protected void drawBackground(){
         spriteBatch.begin();
         spriteBatch.draw(splashImg, 0, 0,WBGame.WIDTH, WBGame.HEIGHT);
+        spriteBatch.end();
+    }
+
+    protected void showScreenMessage(String message){
+        Skin skin = new Skin(Gdx.files.internal("skin/sgx-ui.json"));
+        BitmapFont font = skin.getFont("title");
+        GlyphLayout glyphLayout = new GlyphLayout(font,message);
+        float fontX = WBGame.WIDTH/2F - glyphLayout.width/2F;
+        float fontY = WBGame.HEIGHT/2F + glyphLayout.height/2F;
+
+        spriteBatch.begin();
+        font.draw(spriteBatch, glyphLayout, fontX, fontY);
         spriteBatch.end();
     }
 }

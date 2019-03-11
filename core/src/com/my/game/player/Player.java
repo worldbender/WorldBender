@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.my.game.UtilitySingletons.ShapeDrawer;
 import com.my.game.UtilitySingletons.StringDrawer;
-import com.my.game.WBGame;
 import com.my.game.screens.GameplayScreen;
 import org.json.JSONObject;
 
@@ -16,6 +15,7 @@ public class Player extends APlayer {
     public static Animation<TextureRegion> upWalkAnimation;
     public static Animation<TextureRegion> rightWalkAnimation;
     public static Animation<TextureRegion> leftWalkAnimation;
+    public static TextureRegion headRegion;
     private float scale = 2f;
     private String activeMovementKey = "";
     private boolean isMoving = false;
@@ -31,9 +31,6 @@ public class Player extends APlayer {
     public Player(String name){
         this(name, 0, 0);
     }
-    public Player(String name, String x, String y) {
-        this(name, Integer.parseInt(x), Integer.parseInt(y));
-    }
 
     public Player(String name, int x, int y) {
         super();
@@ -44,7 +41,6 @@ public class Player extends APlayer {
 
     public void draw(SpriteBatch batch, float stateTime) {
         this.drawCharacter(batch, stateTime);
-        this.drawHp(batch);
         this.drawName(batch);
     }
 
