@@ -19,6 +19,7 @@ public class Poe extends AOpponent{
     public void update(double deltaTime) {
         super.update(deltaTime);
         this.opponentAI.behave(deltaTime);
+        this.handleOpponentShoot();
     }
     @Override
     protected void handleOpponentDeath(){

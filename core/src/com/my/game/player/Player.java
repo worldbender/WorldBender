@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.my.game.Properties;
 import com.my.game.UtilitySingletons.ShapeDrawer;
 import com.my.game.UtilitySingletons.StringDrawer;
-import com.my.game.WBGame;
 import com.my.game.screens.GameplayScreen;
 import org.json.JSONObject;
 
@@ -21,6 +20,7 @@ public class Player extends APlayer {
     private float scale = java.lang.Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
     private String activeMovementKey = "DOWN";
     private String headDirection = "DOWN";
+    public static TextureRegion headRegion;
     private boolean isMoving = false;
     public boolean KEY_W = false;
     public boolean KEY_S = true;
@@ -34,9 +34,6 @@ public class Player extends APlayer {
     public Player(String name){
         this(name, 0, 0);
     }
-    public Player(String name, String x, String y) {
-        this(name, Integer.parseInt(x), Integer.parseInt(y));
-    }
 
     public Player(String name, int x, int y) {
         super();
@@ -48,7 +45,6 @@ public class Player extends APlayer {
     public void draw(SpriteBatch batch, float stateTime) {
         this.drawCharacter(batch, stateTime);
         this.drawHead(batch);
-        this.drawHp(batch);
         this.drawName(batch);
     }
 
