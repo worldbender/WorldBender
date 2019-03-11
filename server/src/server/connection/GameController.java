@@ -1,6 +1,7 @@
 package server.connection;
 
-import com.badlogic.gdx.Gdx;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import server.bullets.BulletList;
 import server.opponents.OpponentList;
 import server.pickups.APickup;
@@ -66,18 +67,20 @@ public class GameController implements Runnable {
     private void doGameLoop() {
         updatePlayerPosition();
         updatePickups();
+        updateOpponents();
+        updateBullets();
         doUdpSends();
-        doTcpSends();
     }
 
     private void doUdpSends() {
-        sendPlayerDataPackage();
-        updateBulletsAndSendBulletPositionPackage();
-        updateOpponentsAndSendOpponentDataPackage();
-    }
+        JSONObject data = new JSONObject();
+        JSONArray players = getPlayersData();
+        JSONArray bullets = getBulletsData();
+        JSONArray opponents = getOpponentsData();
 
-    private void doTcpSends() {
-
+        data.put("msg", "game")
+                .put("content",new JSONObject().put("players",players).put("bullets", bullets).put("opponents",opponents));
+        UdpServer.sendUdpMsgToAllUsersInRoom(data.toString(), usersInRoom);
     }
 
     private void updatePlayerPosition() {
@@ -97,45 +100,70 @@ public class GameController implements Runnable {
         }
     }
 
-    private void updateOpponentsAndSendOpponentDataPackage() {
-        String message;
+    private void updateOpponents(){
         for (AOpponent opponent : this.opponentList.getOpponents()) {
             opponent.update(deltaTime);
-            message = "updateOpponentData:" +
-                    opponent.getId() + ":" +
-                    (int) opponent.getX() + ":" +
-                    (int) opponent.getY() + ":" +
-                    opponent.getHp();
-
-            UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
     }
 
-    private void updateBulletsAndSendBulletPositionPackage() {
-        String message;
+    private void updateBullets(){
         for (ABullet bullet : this.bulletList.getBullets()) {
             bullet.update(deltaTime, usersInRoom);
-            message = "updateBulletPosition:" +
-                    bullet.getId() + ":" +
-                    bullet.getX() + ":" +
-                    bullet.getY();
-
-            UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
         }
     }
 
-    public void sendPlayerDataPackage() {
-        for (User u : usersInRoom) {
-            String message = "updatePosition:" +
-                    u.getName() + ":" +
-                    (int)u.getPlayer().getX() + ":" +
-                    (int)u.getPlayer().getY() + ":" +
-                    u.getPlayer().getHp() + ":" +
-                    u.getPlayer().getActiveMovementKey() + ":" +
-                    u.getPlayer().getHeadDirection() + ":" +
-                    u.getPlayer().isMoving();
-            UdpServer.sendUdpMsgToAllUsersInRoom(message, usersInRoom);
+    public JSONArray getOpponentsData() {
+
+        JSONArray opponentsList = new JSONArray();
+
+        for (AOpponent opponent : this.opponentList.getOpponents()) {
+            JSONObject opponentData = new JSONObject()
+                    .put("id", opponent.getId())
+                    .put("x", opponent.getX())
+                    .put("y", opponent.getY())
+                    .put("hp", opponent.getHp())
+                    .put("type",opponent.getType());
+
+            opponentsList.put(opponentData);
         }
+
+        return opponentsList;
+    }
+
+    private JSONArray getBulletsData() {
+
+        JSONArray bulletsList = new JSONArray();
+
+        for (ABullet bullet : this.bulletList.getBullets()) {
+            JSONObject bulletData = new JSONObject()
+                    .put("id", bullet.getId())
+                    .put("x", bullet.getX())
+                    .put("y", bullet.getY());
+
+            bulletsList.put(bulletData);
+        }
+
+        return bulletsList;
+    }
+
+    public JSONArray getPlayersData() {
+
+        JSONArray playersList = new JSONArray();
+
+        for (User user : usersInRoom) {
+            JSONObject playerData = new JSONObject()
+                    .put("name", user.getName())
+                    .put("x", user.getPlayer().getX())
+                    .put("y", user.getPlayer().getY())
+                    .put("hp", user.getPlayer().getHp())
+                    .put("activeMovementKey", user.getPlayer().getActiveMovementKey())
+                    .put("headDirection", user.getPlayer().getHeadDirection())
+                    .put("isMoving", user.getPlayer().isMoving());
+
+            playersList.put(playerData);
+        }
+
+        return playersList;
     }
 
     public void setPlayersPosition() {
@@ -148,14 +176,6 @@ public class GameController implements Runnable {
 
     public void spawnAllOpponents() {
         this.logicMapHandler.getEventList().spawnAllOpponents(this.opponentList);
-        String message;
-        for (AOpponent opponent : this.opponentList.getOpponents()) {
-            message = "createOpponent:" +
-                    opponent.getType() + ":" +
-                    opponent.getId();
-
-            TcpServer.sendTcpMsgToAllUsersInRoom(message, room.getUsersInRoom());
-        }
     }
 
     public void changeMap(){
@@ -168,9 +188,13 @@ public class GameController implements Runnable {
         }
         this.logicMapHandler.LoadMap(nextMap);
         this.setPlayersPosition();
-        this.sendPlayerDataPackage();
         this.spawnAllOpponents();
-        String msg = "changeLevel:" + nextMap + ":";
+
+        JSONArray players = this.getPlayersData();
+        JSONArray opponents = this.getOpponentsData();
+
+        JSONObject msg = new JSONObject().put("msg", "changeLevel")
+                .put("content", new JSONObject().put("map", nextMap).put("opponents", opponents).put("players", players));
         TcpServer.sendTcpMsgToAllUsersInRoom(msg, this.room.getUsersInRoom());
     }
 }

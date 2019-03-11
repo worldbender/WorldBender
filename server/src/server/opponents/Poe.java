@@ -1,6 +1,8 @@
 package server.opponents;
 
 import server.connection.GameController;
+import server.opponents.opponentAI.ChaserAI;
+import server.opponents.opponentAI.IdlerAI;
 
 public class Poe extends AOpponent{
     public Poe(GameController gameController){
@@ -10,14 +12,13 @@ public class Poe extends AOpponent{
         this.setHeight(75);
         this.setHp(100);
         this.setBulletType("SpectralTear");
+        this.opponentAI = new IdlerAI(this, gameController, true);
     }
 
     @Override
     public void update(double deltaTime) {
         super.update(deltaTime);
-        this.chasePlayer(deltaTime);
-        this.handleOpponentShoot();
-        this.choosePlayerToChaseIfTimeComes();
+        this.opponentAI.behave(deltaTime);
     }
     @Override
     protected void handleOpponentDeath(){

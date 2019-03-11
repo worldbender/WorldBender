@@ -1,5 +1,6 @@
 package server.connection;
 
+import org.json.JSONObject;
 import server.rooms.Room;
 import server.rooms.RoomList;
 import server.*;
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UdpServer extends Thread {
-    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortUdp"));
+    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
     private final static int BUFFER = 1024;
     private static DatagramSocket socket;
     private List<Room> rooms;
@@ -39,15 +40,14 @@ public class UdpServer extends Thread {
         }
     }
 
-    private void updatePlayersState(String id, String content){
+    private void updatePlayersState(String id, JSONObject content){
         User currentUser = existingUsers.get(id);
-        String splitedContetnt[] = content.split(":");
-        boolean isMoving = Boolean.parseBoolean(splitedContetnt[1]);
+        boolean isMoving = content.getBoolean("isMoving");
+        String activeMovementKey = content.getString("activeMovementKey");
         currentUser.getPlayer().setMoving(isMoving);
-        String direction = splitedContetnt[2];
-        currentUser.getPlayer().setActiveMovementKey(direction);
-        currentUser.getPlayer().setHeadDirection(splitedContetnt[3]);
-        currentUser.getPlayer().setWSAD(splitedContetnt[4]);
+        currentUser.getPlayer().setWSAD((JSONObject)content.get("wsad"));
+        currentUser.getPlayer().setActiveMovementKey(activeMovementKey);
+        currentUser.getPlayer().setHeadDirection(content.getString("headDirection"));
     }
 
 
@@ -62,9 +62,9 @@ public class UdpServer extends Thread {
         InetAddress clientAddress = packet.getAddress();
         int clientPort = packet.getPort();
         String id = clientAddress.toString() + "," + clientPort;
-        String[] splitedArray = content.split(":");
-        switch (splitedArray[0]){
-            case "playerState": updatePlayersState(id, content); break;
+        JSONObject json = new JSONObject(content);
+        switch (json.getString("msg")){
+            case "playerState": updatePlayersState(id, (JSONObject) json.get("content")); break;
         }
     }
 

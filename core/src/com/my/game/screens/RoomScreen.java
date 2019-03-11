@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.my.game.WBGame;
+import org.json.JSONObject;
 
 public class RoomScreen extends AbstractScreen {
     private boolean isOwner = false;
@@ -46,7 +47,9 @@ public class RoomScreen extends AbstractScreen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                WBGame.connection.tcp.sendMessage("leaveRoom:" + WBGame.connection.socket.getLocalPort());
+                WBGame.connection.tcp.sendMessage(new JSONObject()
+                        .put("msg", "leaveRoom")
+                        .put("content", new JSONObject().put("port", WBGame.connection.socket.getLocalPort())));
                 game.changeScreen(WBGame.MENU);
             }
         });
@@ -55,7 +58,9 @@ public class RoomScreen extends AbstractScreen {
             newGame.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    WBGame.connection.tcp.sendMessage("startGame:" + WBGame.connection.socket.getLocalPort());
+                    WBGame.connection.tcp.sendMessage(new JSONObject()
+                            .put("msg", "startGame")
+                            .put("content", new JSONObject().put("port", WBGame.connection.socket.getLocalPort())));
                 }
             });
         }

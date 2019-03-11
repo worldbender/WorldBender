@@ -1,5 +1,6 @@
 package server;
 
+import org.json.JSONObject;
 import server.LogicMap.LogicMapHandler;
 import server.bullets.AtackFabric;
 import server.bullets.BulletList;
@@ -34,7 +35,7 @@ public class Player {
     private boolean isMoving = false;
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
-    private float scale = 4f;
+    private float scale = Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
     private User user;
     public boolean KEY_W = false;
     public boolean KEY_S = false;
@@ -169,16 +170,15 @@ public class Player {
         this.setHp(this.getHp() - damage);
     }
 
-    public void setWSAD(String wsad) {
-        String splitedWsad[] = wsad.split(",");
-        this.KEY_W = Boolean.parseBoolean(splitedWsad[0]);
-        this.KEY_S = Boolean.parseBoolean(splitedWsad[1]);
-        this.KEY_A = Boolean.parseBoolean(splitedWsad[2]);
-        this.KEY_D = Boolean.parseBoolean(splitedWsad[3]);
-        this.UP_ARROW = Boolean.parseBoolean(splitedWsad[4]);
-        this.DOWN_ARROW = Boolean.parseBoolean(splitedWsad[5]);
-        this.LEFT_ARROW = Boolean.parseBoolean(splitedWsad[6]);
-        this.RIGHT_ARROW = Boolean.parseBoolean(splitedWsad[7]);
+    public void setWSAD(JSONObject wsad) {
+        this.KEY_W = wsad.getBoolean("w");
+        this.KEY_S = wsad.getBoolean("s");
+        this.KEY_A = wsad.getBoolean("a");
+        this.KEY_D = wsad.getBoolean("d");
+        this.UP_ARROW = wsad.getBoolean("up");
+        this.DOWN_ARROW = wsad.getBoolean("down");
+        this.LEFT_ARROW = wsad.getBoolean("left");
+        this.RIGHT_ARROW = wsad.getBoolean("right");
     }
 
     public int getHp() {

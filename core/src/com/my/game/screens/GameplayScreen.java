@@ -19,6 +19,8 @@ import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
 import com.my.game.WBGame;
 import com.my.game.music.MusicPlayer;
+import org.json.JSONObject;
+
 import java.util.Map;
 
 public class GameplayScreen extends AbstractScreen{
@@ -65,7 +67,9 @@ public class GameplayScreen extends AbstractScreen{
         this.loadData();
         this.init();
         MusicPlayer.initSounds();
-        MusicPlayer.playBackgroundMusic();
+        if(!Boolean.parseBoolean(Properties.loadConfigFile("DEBUG_MODE"))){
+            MusicPlayer.playBackgroundMusic();
+        }
     }
 
     private void loadData() {
@@ -74,13 +78,13 @@ public class GameplayScreen extends AbstractScreen{
         Schopenheuer.texture = new Texture("opponents/schopen.png");
         Nietzsche.texture = new Texture("opponents/nietzsche.png");
         Poe.texture = new Texture("opponents/poe.png");
-        Texture walkSheet = new Texture("isaac/downIsaacHeadless.png");
-        Texture upWalkSheet = new Texture("isaac/upIsaacHeadless.png");
+        Texture walkSheet = new Texture("isaac/downIsaacHeadless2.png");
+        Texture upWalkSheet = new Texture("isaac/upIsaacHeadless2.png");
         Texture leftSheet = new Texture("isaac/leftWalkIsaacHeadless.png");
         Texture rightSheet = new Texture("isaac/rightWalkIsaacHeadless.png");
         Texture heads = new Texture("isaac/prof.png");
-        Player.downWalkAnimation = getAnimationFrom1DPicture(walkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
-        Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
+        Player.downWalkAnimation = getAnimationFrom1DPicture(walkSheet, PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
+        Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
         Player.leftWalkAnimation = getAnimationFrom1DPicture(leftSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
         Player.heads = getAnimationFrom1DPicture(heads, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
@@ -122,7 +126,9 @@ public class GameplayScreen extends AbstractScreen{
         this.drawAllMovableObjects(spriteBatch, stateTime);
         spriteBatch.end();
 
-        this.sendMessageToServer("playerState:" + currentPlayer.getPlayerState());
+        this.sendMessageToServer(new JSONObject()
+                .put("msg", "playerState")
+                .put("content", currentPlayer.getPlayerState()));
     }
 
     private void drawAllMovableObjects(SpriteBatch spriteBatch, float stateTime){
@@ -160,7 +166,7 @@ public class GameplayScreen extends AbstractScreen{
         }
     }
 
-    private void sendMessageToServer(String message){
+    private void sendMessageToServer(JSONObject message){
         try {
             WBGame.connection.sender.sendMessage(message);
         } catch (Exception e) {
