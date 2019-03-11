@@ -1,7 +1,9 @@
 package server.opponents.opponentAI;
 
 public interface IOpponentAI {
-    public abstract void behave(double deltaTime);
-    public abstract boolean shouldChangeAI();
-    public abstract void changeAI();
+    void behave(double deltaTime);
+    boolean shouldChangeAI();
+    void changeAI();
+    void setAdditionalFlag(boolean additionalFlag);
+    boolean getAdditionalFlag();
 }

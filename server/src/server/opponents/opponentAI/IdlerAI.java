@@ -44,7 +44,7 @@ public class IdlerAI extends AOpponentAI {
         double newX = opponent.getX() + diffX;
         double newY = opponent.getY() + diffY;
         Rectangle newPosRectangle = new Rectangle((int)newX, (int)newY, opponent.getWidth(), opponent.getHeight());
-        if(!opponent.isOpponentCollidesWithMap(newPosRectangle)){
+        if(!opponent.isOpponentCollidesWithMap(newPosRectangle) && !opponent.isOpponentCollidesWithOpponents(newPosRectangle)){
             opponent.setX(newX);
             opponent.setY(newY);
             this.movementVextorX -= diffX;

@@ -45,6 +45,7 @@ public class UdpServer extends Thread {
         boolean isMoving = content.getBoolean("isMoving");
         String activeMovementKey = content.getString("activeMovementKey");
         currentUser.getPlayer().setMoving(isMoving);
+        currentUser.getPlayer().setSpecialKeys((JSONObject)content.get("specialKeys"));
         currentUser.getPlayer().setWSAD((JSONObject)content.get("wsad"));
         currentUser.getPlayer().setActiveMovementKey(activeMovementKey);
         currentUser.getPlayer().setHeadDirection(content.getString("headDirection"));

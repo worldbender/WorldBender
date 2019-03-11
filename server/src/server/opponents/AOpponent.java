@@ -6,7 +6,9 @@ import server.bullets.ABullet;
 import server.bullets.BulletFabric;
 import server.bullets.BulletList;
 import server.connection.GameController;
+import server.opponents.opponentAI.ChaserAI;
 import server.opponents.opponentAI.IOpponentAI;
+import server.opponents.opponentAI.OpponentAIFabric;
 import server.pickups.PickupFabric;
 import server.pickups.PickupList;
 import java.awt.*;
@@ -26,8 +28,6 @@ public abstract class AOpponent {
     private int hp;
     private long shootCooldown = 1000L;
     private long lastTimePlayerHasShot = 0L;
-    private long chaseCooldown = 2000L;
-    private long lastTimeOpponentHasChangedTargetToChase= 0L;
     protected IOpponentAI opponentAI;
     private boolean isDead = false;
     private String idOfChasedPlayer = "";
@@ -81,6 +81,10 @@ public abstract class AOpponent {
         return result;
     }
 
+    public void setOpponentAI(String type){
+        this.opponentAI = OpponentAIFabric.createOpponentAI("Chaser",this, gameController, false);
+    }
+
     public boolean isOpponentCollidesWithMap(Rectangle rec){
         return this.map.isRectangleCollidesWithMap(rec);
     }
@@ -99,16 +103,6 @@ public abstract class AOpponent {
         if(time - this.lastTimePlayerHasShot > this.shootCooldown){
             result = true;
             this.lastTimePlayerHasShot = time;
-        }
-        return result;
-    }
-    public boolean shouldOpponentChangeChaseTarget(){
-        boolean result = false;
-        Date date= new Date();
-        long time = date.getTime();
-        if(time - this.lastTimeOpponentHasChangedTargetToChase > this.chaseCooldown){
-            result = true;
-            this.lastTimeOpponentHasChangedTargetToChase = time;
         }
         return result;
     }
@@ -211,22 +205,6 @@ public abstract class AOpponent {
 
     public void setViewRange(double viewRange) {
         this.viewRange = viewRange;
-    }
-
-    public long getChaseCooldown() {
-        return chaseCooldown;
-    }
-
-    public void setChaseCooldown(long chaseCooldown) {
-        this.chaseCooldown = chaseCooldown;
-    }
-
-    public long getLastTimeOpponentHasChandedTargetToChase() {
-        return lastTimeOpponentHasChangedTargetToChase;
-    }
-
-    public void setLastTimeOpponentHasChandedTargetToChase(long lastTimeOpponentHasChandedTargetToChase) {
-        this.lastTimeOpponentHasChangedTargetToChase = lastTimeOpponentHasChandedTargetToChase;
     }
 
     public String getIdOfChasedPlayer() {

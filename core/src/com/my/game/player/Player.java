@@ -30,6 +30,7 @@ public class Player extends APlayer {
     public boolean DOWN_ARROW = false;
     public boolean LEFT_ARROW = false;
     public boolean RIGHT_ARROW = false;
+    public boolean KEY_SPACE = false;
 
     public Player(String name){
         this(name, 0, 0);
@@ -138,6 +139,9 @@ public class Player extends APlayer {
                 .put("isMoving", this.isMoving)
                 .put("activeMovementKey", this.activeMovementKey)
                 .put("headDirection", this.headDirection)
+                .put("specialKeys", new JSONObject()
+                        .put("space", this.KEY_SPACE)
+                )
                 .put("wsad", new JSONObject()
                             .put("w", this.KEY_W)
                             .put("s", this.KEY_S)
@@ -186,6 +190,7 @@ public class Player extends APlayer {
         this.DOWN_ARROW = false;
         this.LEFT_ARROW = false;
         this.RIGHT_ARROW = false;
+        this.KEY_SPACE = false;
     }
 
     public void setHeadDirection(String headDirection) {

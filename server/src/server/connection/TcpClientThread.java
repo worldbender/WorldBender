@@ -144,6 +144,7 @@ public class TcpClientThread extends Thread{
         }
 
         currentRoom.setGameStarted(true);
+        currentRoom.getGameController().hasStarted = true;
     }
 
     //TODO: przejściowa wersja, do ogarnięcia

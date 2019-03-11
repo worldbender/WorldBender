@@ -11,6 +11,7 @@ import server.LogicMap.LogicMapHandler;
 import server.User;
 import server.bullets.ABullet;
 import server.opponents.AOpponent;
+
 import java.awt.*;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -19,6 +20,7 @@ public class GameController implements Runnable {
     private static long deltaTime = 0L;
     private final long MILISECONDS_BEETWEEN_FRAMES = 3L;
     private boolean flag = true;
+    public boolean hasStarted = false;
     public LogicMapHandler logicMapHandler;
     private Room room;
     public CopyOnWriteArrayList<User> usersInRoom;
@@ -40,13 +42,25 @@ public class GameController implements Runnable {
     public void run() {
         long timeBefore;
         long timeAfter;
+
+        //Dont start game loop before everthing is set up
+        while(!this.hasStarted){
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         while (flag) {
-            timeBefore = new Date().getTime();
-            this.doGameLoop();
-            timeAfter = new Date().getTime();
-            deltaTime = timeAfter - timeBefore;
-            this.sleepIfNecessary();
-            deltaTime = new Date().getTime() - timeBefore;
+            if (true) {
+                timeBefore = new Date().getTime();
+                this.doGameLoop();
+                timeAfter = new Date().getTime();
+                deltaTime = timeAfter - timeBefore;
+                this.sleepIfNecessary();
+                deltaTime = new Date().getTime() - timeBefore;
+            }
         }
     }
 
@@ -79,7 +93,7 @@ public class GameController implements Runnable {
         JSONArray opponents = getOpponentsData();
 
         data.put("msg", "game")
-                .put("content",new JSONObject().put("players",players).put("bullets", bullets).put("opponents",opponents));
+                .put("content", new JSONObject().put("players", players).put("bullets", bullets).put("opponents", opponents));
         UdpServer.sendUdpMsgToAllUsersInRoom(data.toString(), usersInRoom);
     }
 
@@ -89,24 +103,24 @@ public class GameController implements Runnable {
         }
     }
 
-    private void updatePickups(){
-        for(APickup pickup : this.pickupList.getPickups()){
-            for(User user : this.usersInRoom){
-               if(pickup.getBounds().intersects(user.getPlayer().getBounds())){
-                   pickup.modifyPlayer(user.getPlayer());
-                   this.pickupList.deletePickup(pickup);
-               }
+    private void updatePickups() {
+        for (APickup pickup : this.pickupList.getPickups()) {
+            for (User user : this.usersInRoom) {
+                if (pickup.getBounds().intersects(user.getPlayer().getBounds())) {
+                    pickup.modifyPlayer(user.getPlayer());
+                    this.pickupList.deletePickup(pickup);
+                }
             }
         }
     }
 
-    private void updateOpponents(){
+    private void updateOpponents() {
         for (AOpponent opponent : this.opponentList.getOpponents()) {
             opponent.update(deltaTime);
         }
     }
 
-    private void updateBullets(){
+    private void updateBullets() {
         for (ABullet bullet : this.bulletList.getBullets()) {
             bullet.update(deltaTime, usersInRoom);
         }
@@ -122,7 +136,7 @@ public class GameController implements Runnable {
                     .put("x", opponent.getX())
                     .put("y", opponent.getY())
                     .put("hp", opponent.getHp())
-                    .put("type",opponent.getType());
+                    .put("type", opponent.getType());
 
             opponentsList.put(opponentData);
         }
@@ -178,12 +192,12 @@ public class GameController implements Runnable {
         this.logicMapHandler.getEventList().spawnAllOpponents(this.opponentList);
     }
 
-    public void changeMap(){
+    public void changeMap() {
         String nextMap = this.logicMapHandler.getEventList().getNextMap();
-        for(AOpponent opponent : this.opponentList.getOpponents()){
+        for (AOpponent opponent : this.opponentList.getOpponents()) {
             this.opponentList.deleteOpponent(opponent);
         }
-        for(APickup pickup : this.pickupList.getPickups()){
+        for (APickup pickup : this.pickupList.getPickups()) {
             this.pickupList.deletePickup(pickup);
         }
         this.logicMapHandler.LoadMap(nextMap);

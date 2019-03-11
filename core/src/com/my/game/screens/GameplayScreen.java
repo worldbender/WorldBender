@@ -24,7 +24,6 @@ import org.json.JSONObject;
 import java.util.Map;
 
 public class GameplayScreen extends AbstractScreen{
-    private Texture bulletTexture;
     private static Map<String, Player> players;
     private GraphicMapHandler graphicMapHandler;
     public static Player currentPlayer;
@@ -248,6 +247,9 @@ public class GameplayScreen extends AbstractScreen{
         }
         if(Gdx.input.isKeyPressed(Input.Keys.M)){
             MusicPlayer.playOpponentDieSound();
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            currentPlayer.KEY_SPACE = true;
         }
     }
 

@@ -5,8 +5,11 @@ import server.connection.GameController;
 import server.opponents.AOpponent;
 
 import java.awt.*;
+import java.util.Date;
 
 public class ChaserAI extends AOpponentAI {
+    private long lastTimeOpponentHasChangedTargetToChase = 0L;
+    private long chaseCooldown = 3000L;
 
     public ChaserAI(AOpponent opponent, GameController gameController, boolean isChangeable) {
         super(opponent, gameController, isChangeable);
@@ -18,7 +21,9 @@ public class ChaserAI extends AOpponentAI {
             this.changeAI();
         }
         chasePlayer(deltaTime);
-        choosePlayerToChaseIfTimeComes();
+        if(!this.additionalFlag){
+            choosePlayerToChaseIfTimeComes();
+        }
     }
 
     @Override
@@ -54,7 +59,7 @@ public class ChaserAI extends AOpponentAI {
 
     private void choosePlayerToChaseIfTimeComes(){
         double distance;
-        if(opponent.shouldOpponentChangeChaseTarget()){
+        if(this.shouldOpponentChangeChaseTarget()){
             opponent.setIdOfChasedPlayer("");
             double savedDistance = Float.POSITIVE_INFINITY;
             for (User user : this.usersInRoom) {
@@ -78,5 +83,15 @@ public class ChaserAI extends AOpponentAI {
             }
         }
         return false;
+    }
+    public boolean shouldOpponentChangeChaseTarget(){
+        boolean result = false;
+        Date date= new Date();
+        long time = date.getTime();
+        if(time - this.lastTimeOpponentHasChangedTargetToChase > this.chaseCooldown){
+            result = true;
+            this.lastTimeOpponentHasChangedTargetToChase = time;
+        }
+        return result;
     }
 }

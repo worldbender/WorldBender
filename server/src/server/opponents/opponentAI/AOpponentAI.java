@@ -19,6 +19,7 @@ public abstract class AOpponentAI implements IOpponentAI {
     protected OpponentList opponentList;
     protected PickupList pickupList;
     protected boolean isChangeable;
+    public boolean additionalFlag = false;
 
     public AOpponentAI(AOpponent opponent, GameController gameController, boolean isChangeable){
         this.opponent = opponent;
@@ -39,6 +40,15 @@ public abstract class AOpponentAI implements IOpponentAI {
 
     @Override
     public abstract void changeAI();
+
+    @Override
+    public void setAdditionalFlag(boolean additionalFlag){
+        this.additionalFlag = additionalFlag;
+    }
+    @Override
+    public boolean getAdditionalFlag(){
+        return additionalFlag;
+    }
 
     public boolean isChangeable() {
         return isChangeable;

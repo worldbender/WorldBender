@@ -5,6 +5,9 @@ import server.LogicMap.LogicMapHandler;
 import server.bullets.AtackFabric;
 import server.bullets.BulletList;
 import server.connection.GameController;
+import server.powers.AgroTaker;
+import server.powers.IPower;
+import server.powers.PowerFabric;
 
 import javax.jws.soap.SOAPBinding;
 import java.awt.*;
@@ -37,6 +40,7 @@ public class Player {
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
     private float scale = Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
     private User user;
+    private IPower power;
     public boolean KEY_W = false;
     public boolean KEY_S = false;
     public boolean KEY_A = false;
@@ -45,6 +49,7 @@ public class Player {
     public boolean DOWN_ARROW = false;
     public boolean LEFT_ARROW = false;
     public boolean RIGHT_ARROW = false;
+    public boolean KEY_SPACE = false;
     private LogicMapHandler map;
     private BulletList bulletList;
     private CopyOnWriteArrayList<User> usersInRoom;
@@ -63,6 +68,7 @@ public class Player {
         this.bulletList = gameController.bulletList;
         this.usersInRoom = gameController.usersInRoom;
         this.gameController = gameController;
+        this.power = new AgroTaker(gameController, this);
     }
 
     public void update(CopyOnWriteArrayList<User> usersInRoom, double deltaTime) {
@@ -70,6 +76,8 @@ public class Player {
         if((this.UP_ARROW || this.DOWN_ARROW || this.LEFT_ARROW || this.RIGHT_ARROW) && this.canPlayerShoot()){
             shoot();
         }
+
+        this.power.act(deltaTime);
     }
 
     private void handleMovementKeys(CopyOnWriteArrayList<User> usersInRoom, double deltaTime){
@@ -179,6 +187,9 @@ public class Player {
         this.DOWN_ARROW = wsad.getBoolean("down");
         this.LEFT_ARROW = wsad.getBoolean("left");
         this.RIGHT_ARROW = wsad.getBoolean("right");
+    }
+    public void setSpecialKeys(JSONObject specialKeys){
+        this.KEY_SPACE = specialKeys.getBoolean("space");
     }
 
     public int getHp() {
