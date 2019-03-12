@@ -1,6 +1,5 @@
 package com.my.game.opponents;
 
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

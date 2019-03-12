@@ -1,10 +1,8 @@
 package server;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Game;
 import server.connection.TcpServer;
 import server.connection.UdpServer;
-
 import java.io.IOException;
 
 class Server implements ApplicationListener {
@@ -20,6 +18,7 @@ class Server implements ApplicationListener {
             tcpServer = new TcpServer();
             tcpServer.start();
             udpServer.start();
+            System.out.println("Server is running.");
         } catch (IOException e) {
             System.out.println("Porty zajęte, prawdopodobnie serwer już jest włączony!");
         }

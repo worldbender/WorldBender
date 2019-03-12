@@ -1,8 +1,8 @@
 package server.pickups;
 
+import org.json.JSONObject;
 import server.User;
 import server.connection.TcpServer;
-
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PickupList {
@@ -17,13 +17,25 @@ public class PickupList {
         pickup.setId(id);
         id++;
         pickups.add(pickup);
-        String msg = "createPickup:" + (int)pickup.getX() + ":" + (int)pickup.getY() + ":" + pickup.getId() + ":" + pickup.getType() + ":";
-        TcpServer.sendTcpMsgToAllUsersInRoom(msg, users);
+
+        JSONObject obj = new JSONObject()
+                .put("msg", "createPickup")
+                .put("content", new JSONObject()
+                        .put("x", pickup.getX())
+                        .put("y", pickup.getY())
+                        .put("id", pickup.getId())
+                        .put("type", pickup.getType())
+                );
+        TcpServer.sendTcpMsgToAllUsersInRoom(obj, users);
     }
     public void deletePickup(APickup pickup){
         pickups.remove(pickup);
-        String msg = "deletePickup:" + pickup.getId() + ":";
-        TcpServer.sendTcpMsgToAllUsersInRoom(msg, users);
+        JSONObject obj = new JSONObject()
+                .put("msg", "deletePickup")
+                .put("content", new JSONObject()
+                        .put("id", pickup.getId())
+                );
+        TcpServer.sendTcpMsgToAllUsersInRoom(obj, users);
     }
 
     public CopyOnWriteArrayList<APickup> getPickups(){return this.pickups;}

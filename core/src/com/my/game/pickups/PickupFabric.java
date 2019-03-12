@@ -13,6 +13,9 @@ public class PickupFabric {
             case "SadOnion":
                 result = new SadOnion(x, y, id);
                 break;
+            case "Warp":
+                result = new Warp(x, y, id);
+                break;
             case "Mana":
                //TODO make mana pickup
                 break;

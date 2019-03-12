@@ -1,16 +1,15 @@
 package com.my.game.connection;
 
-import com.my.game.bullets.ABullet;
-import com.my.game.bullets.BulletFabric;
 import com.my.game.bullets.BulletList;
 import com.my.game.opponents.OpponentList;
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.Map;
-
 
 public class UdpPacketReceiver implements Runnable {
     private DatagramSocket socket;
@@ -19,7 +18,7 @@ public class UdpPacketReceiver implements Runnable {
 
     UdpPacketReceiver(DatagramSocket socket) {
         this.socket = socket;
-        buf = new byte[1024];
+        buf = new byte[4096];
         players = PlayerList.getInstance();
     }
 
@@ -27,31 +26,40 @@ public class UdpPacketReceiver implements Runnable {
         return players;
     }
 
-    private void setPlayersData(String received) {
-        String[] splitedArray = received.split(":");
+    private void setPlayersData(JSONArray received) {
+
         for (Player player : players.values()) {
-            if (player.getName().equals(splitedArray[1])) {
-                player.setPosition(Integer.parseInt(splitedArray[2]), Integer.parseInt(splitedArray[3]));
-                player.setHp(Integer.parseInt(splitedArray[4]));
-                player.setActiveMovementKey(splitedArray[5]);
-                player.setMoving(Boolean.parseBoolean(splitedArray[6]));
+            for(int i = 0 ; i < received.length() ; i++){
+                JSONObject receivedPlayer = received.getJSONObject(i);
+                if (player.getName().equals(receivedPlayer.getString("name"))) {
+                    player.setPosition(receivedPlayer.getInt("x"), receivedPlayer.getInt("y"));
+                    player.setHp(receivedPlayer.getInt("hp"));
+                    player.setActiveMovementKey(receivedPlayer.getString("key"));
+                    player.setMoving(receivedPlayer.getBoolean("isMoving"));
+                }
             }
         }
     }
-    private void setBulletsPositions(String date){
-        String[] splitedDate = date.split(":");
-        int bulletId = Integer.parseInt(splitedDate[1]);
-        double bulletX = Double.parseDouble(splitedDate[2]);
-        double bulletY = Double.parseDouble(splitedDate[3]);
-        BulletList.setBulletPosition(bulletId, (int)bulletX, (int)bulletY);
+    private void setBulletsPositions(JSONArray bullets){
+        for(int i = 0 ; i < bullets.length() ; i++){
+            JSONObject receivedBullet = bullets.getJSONObject(i);
+            int bulletId = receivedBullet.getInt("id");
+            double bulletX = receivedBullet.getInt("x");
+            double bulletY = receivedBullet.getInt("y");
+            BulletList.setBulletPosition(bulletId, (int)bulletX, (int)bulletY);
+        }
     }
-    private void setOpponentsData(String date){
-        String[] splitedDate = date.split(":");
-        int opponentId = Integer.parseInt(splitedDate[1]);
-        int opponentX = Integer.parseInt(splitedDate[2]);
-        int opponentY = Integer.parseInt(splitedDate[3]);
-        int opponentHp = Integer.parseInt(splitedDate[4]);
-        OpponentList.setOpponentData(opponentId, opponentX, opponentY, opponentHp);
+    private void setOpponentsData(JSONArray opponents){
+
+        for(int i = 0 ; i < opponents.length() ; i++){
+            JSONObject receivedOpponent = opponents.getJSONObject(i);
+            int opponentId = receivedOpponent.getInt("id");
+            int opponentX = receivedOpponent.getInt("x");
+            int opponentY = receivedOpponent.getInt("y");
+            int opponentHp = receivedOpponent.getInt("hp");
+            OpponentList.setOpponentData(opponentId, opponentX, opponentY, opponentHp);
+        }
+
     }
 
     public void run() {
@@ -60,16 +68,14 @@ public class UdpPacketReceiver implements Runnable {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
-                //System.out.println(received);
-                String[] splitedArray = received.split(":");
+                JSONObject json = new JSONObject(received);
 
-                switch (splitedArray[0]) {
-                    case "updatePosition":
-                        setPlayersData(received); break;
-                    case "updateBulletPosition":
-                        setBulletsPositions(received); break;
-                    case "updateOpponentData":
-                        setOpponentsData(received); break;
+                switch (json.getString("msg")) {
+                    case "game":
+                        JSONObject gameJson = (JSONObject) json.get("content");
+                        setPlayersData(gameJson.getJSONArray("players"));
+                        setBulletsPositions(gameJson.getJSONArray("bullets"));
+                        setOpponentsData(gameJson.getJSONArray("opponents")); break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();

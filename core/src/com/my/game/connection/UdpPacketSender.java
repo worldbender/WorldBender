@@ -1,6 +1,7 @@
 package com.my.game.connection;
 
 import com.my.game.Properties;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class UdpPacketSender implements Runnable {
-    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortUdp"));
+    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
     private DatagramSocket socket;
     private String hostname;
 
@@ -20,8 +21,8 @@ public class UdpPacketSender implements Runnable {
         this.hostname = hostname;
     }
 
-    public void sendMessage(String s) {
-        byte buf[] = s.getBytes();
+    public void sendMessage(JSONObject s) {
+        byte buf[] = s.toString().getBytes();
         InetAddress address;
         try {
             address = InetAddress.getByName(hostname);
@@ -42,7 +43,7 @@ public class UdpPacketSender implements Runnable {
                 while (!in.ready()) {
                     Thread.sleep(10);
                 }
-                sendMessage(in.readLine());
+                //sendMessage(in.readLine());
             } catch (Exception e) {
                 System.err.println(e);
                 e.printStackTrace();

@@ -3,12 +3,13 @@ package server.opponents;
 import server.LogicMap.LogicMapHandler;
 import server.User;
 import server.bullets.BulletList;
+import server.connection.GameController;
 import server.pickups.PickupList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Poe extends AOpponent{
-    public Poe(){
-        super();
+    public Poe(GameController gameController){
+        super(gameController);
         this.setType("Poe");
         this.setWidth(60);
         this.setHeight(75);
@@ -16,10 +17,15 @@ public class Poe extends AOpponent{
     }
 
     @Override
-    public void update(double deltaTime, LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, BulletList bulletList, OpponentList opponentList, PickupList pickupList) {
-        super.update(deltaTime, map, usersInRoom, bulletList, opponentList, pickupList);
-        this.chasePlayer(usersInRoom, deltaTime, map, opponentList);
-        this.handleOpponentShoot(usersInRoom, bulletList);
-        this.choosePlayerToChaseIfTimeComes(usersInRoom);
+    public void update(double deltaTime) {
+        super.update(deltaTime);
+        this.chasePlayer(deltaTime);
+        this.handleOpponentShoot();
+        this.choosePlayerToChaseIfTimeComes();
+    }
+    @Override
+    protected void handleOpponentDeath(){
+        super.handleOpponentDeath();
+        this.dropRandomPickup();
     }
 }

@@ -1,9 +1,6 @@
 package com.my.game.screens;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.my.game.WBGame;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -11,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.my.game.screens.dialogs.ErrorDialog;
 import com.my.game.screens.dialogs.JoinRoomDialog;
+import org.json.JSONObject;
 
 public class MenuScreen extends AbstractScreen{
     private boolean isRoomFull = false;
@@ -19,9 +17,6 @@ public class MenuScreen extends AbstractScreen{
 
     public MenuScreen(WBGame game) {
         super(game);
-        if(!WBGame.connectionStatus) {
-            this.create();
-        }
     }
 
     public MenuScreen(WBGame game, boolean isRoomFull, boolean roomExists) {
@@ -35,7 +30,8 @@ public class MenuScreen extends AbstractScreen{
         this.inGame = inGame;
     }
 
-    public void create() {
+    public void createConnection() {
+        showScreenMessage("Connecting ...");
         try{
             WBGame.connection.createConnection();
             System.out.println("Nawiązano połączenie z serwerem");
@@ -86,7 +82,9 @@ public class MenuScreen extends AbstractScreen{
         newRoom.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                WBGame.connection.tcp.sendMessage("newRoom:" + WBGame.connection.socket.getLocalPort());
+                WBGame.connection.tcp.sendMessage(new JSONObject()
+                        .put("msg", "newRoom")
+                        .put("content", new JSONObject().put("port", WBGame.connection.socket.getLocalPort())));
             }
         });
 
@@ -123,21 +121,13 @@ public class MenuScreen extends AbstractScreen{
 
     @Override
     public void render(float delta) {
+        super.render(delta);
+        drawBackground();
+
         if(!WBGame.connectionStatus){
-            game.changeScreen(WBGame.SPLASH);
-            try{
-                WBGame.connection.createConnection();
-                WBGame.connectionStatus = true;
-                game.changeScreen(WBGame.MENU);
-            }catch(Exception e){
-                System.out.println("Nie nawiązano połączenia");
-            }
+            this.createConnection();
         }
         else {
-            super.render(delta);
-
-            drawBackground();
-
             stage.act();
             stage.draw();
         }

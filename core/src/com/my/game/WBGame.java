@@ -27,7 +27,7 @@ public class WBGame extends Game {
     public final static int ROOM = 6;
     public final static int ROOM_OWNER = 7;
     private int currentRoom = 0;
-    public final static String SERVER_ADDRESS = Properties.loadConfigFile("ip");
+    public final static String SERVER_ADDRESS = Properties.loadConfigFile("IP");
     public final static boolean IS_DEBUG_VERSION = true;
 //    public final static int APPLICATION = 2;
 
@@ -40,8 +40,6 @@ public class WBGame extends Game {
     private boolean paused;
 
     public WBGame(){
-        MyAssetManager.loadAllAssets();
-//        MyAssetManager.manager.finishLoading();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         RES_WIDTH = screenSize.width;
         RES_HEIGHT = screenSize.height;
@@ -51,8 +49,17 @@ public class WBGame extends Game {
 
     @Override
     public void create () {
+        MyAssetManager.loadAllAssets();
+        MyAssetManager.manager.finishLoading();
+//        while(!MyAssetManager.manager.update())
+//            System.out.println(MyAssetManager.manager.getProgress() * 100 + " %");
         this.connection = new Connection(this);
         this.setScreen(new SplashScreen(this));
+    }
+
+    public void dispose () {
+        super.dispose();
+        MyAssetManager.dispose();
     }
 
     public boolean isPaused() {
@@ -99,11 +106,14 @@ public class WBGame extends Game {
     }
 
     public void switchScreenMode(){
-        Boolean fullScreen = Gdx.graphics.isFullscreen();
+        boolean fullScreen = Gdx.graphics.isFullscreen();
         Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
         if (fullScreen)
             Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
         else
             Gdx.graphics.setFullscreenMode(currentMode);
+    }
+    public GameplayScreen getGameplayScreen(){
+        return this.gameplayScreen;
     }
 }

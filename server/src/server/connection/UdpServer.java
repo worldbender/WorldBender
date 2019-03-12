@@ -1,11 +1,9 @@
 package server.connection;
 
+import org.json.JSONObject;
 import server.rooms.Room;
 import server.rooms.RoomList;
-import server.bullets.ABullet;
-import server.bullets.BulletFabric;
 import server.*;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -16,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UdpServer extends Thread {
-    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PortUdp"));
+    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
     private final static int BUFFER = 1024;
     private static DatagramSocket socket;
     private List<Room> rooms;
@@ -42,23 +40,19 @@ public class UdpServer extends Thread {
         }
     }
 
-    private void updatePlayersState(String id, String content){
+    private void updatePlayersState(String id, JSONObject content){
         User currentUser = existingUsers.get(id);
-        String splitedContetnt[] = content.split(":");
-        boolean isMoving = Boolean.parseBoolean(splitedContetnt[1]);
-        String direction = splitedContetnt[2];
+        boolean isMoving = content.getBoolean("isMoving");
+        String direction = content.getString("key");
         currentUser.getPlayer().setMoving(isMoving);
-        currentUser.getPlayer().setWSAD(splitedContetnt[3]);
+        currentUser.getPlayer().setWSAD((JSONObject)content.get("wsad"));
         currentUser.getPlayer().setActiveMovementKey(direction);
     }
 
-    private void createBullet(String id, String content){
-        String[] splitedContent = content.split(":");
+    private void createBullet(String id){
         User currentUser = existingUsers.get(id);
-        Room currentRoom = RoomList.getUserRoom(id);
-        currentUser.getPlayer().setActiveMovementKeyByAngle(splitedContent[1]);
         if(currentUser.getPlayer().canPlayerShoot()){
-            currentUser.getPlayer().shoot(currentRoom.getBulletList(), Float.parseFloat(splitedContent[1]));
+            currentUser.getPlayer().shoot();
         }
     }
 
@@ -73,10 +67,10 @@ public class UdpServer extends Thread {
         InetAddress clientAddress = packet.getAddress();
         int clientPort = packet.getPort();
         String id = clientAddress.toString() + "," + clientPort;
-        String[] splitedArray = content.split(":");
-        switch (splitedArray[0]){
-            case "createBullet": createBullet(id, content); break;
-            case "playerState": updatePlayersState(id, content); break;
+        JSONObject json = new JSONObject(content);
+        switch (json.getString("msg")){
+            case "createBullet": createBullet(id); break;
+            case "playerState": updatePlayersState(id, (JSONObject) json.get("content")); break;
         }
     }
 

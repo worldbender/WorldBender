@@ -1,15 +1,11 @@
 package server.connection;
 
-
+import org.json.JSONObject;
 import server.rooms.Room;
 import server.rooms.RoomList;
 import com.badlogic.gdx.Gdx;
 import server.ExistingUsers;
 import server.User;
-import server.opponents.AOpponent;
-import server.opponents.OpponentFabric;
-import server.opponents.OpponentList;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -46,7 +42,6 @@ public class TcpClientThread extends Thread{
         try {
             while ((message = in.readLine()) != null) {
                 readMessage(message);
-                System.out.println(message);
             }
             out.close();
             in.close();
@@ -54,31 +49,35 @@ public class TcpClientThread extends Thread{
         } catch (IOException e) { }
         existingUsers.get(user.getConnectionId()).setConnection(false);
         for (User current : existingUsers.values()) {
-            current.getThread().sendMessage("dc:"+user.getName());
+            current.getThread().sendMessage(new JSONObject()
+                    .put("msg", "disconnect")
+                    .put("content", new JSONObject().put("name", user.getName())));
         }
         System.out.println("TCP Connection lost with " + clientSocket.getPort());
     }
 
-    public void sendMessage(String message){
-        out.println(message);
+    public void sendMessage(JSONObject message){
+        out.println(message.toString());
     }
 
     public void readMessage(String message){
-        String[] splitedArray = message.split(":");
-        switch (splitedArray[0]){
-            case "udpPort": newUser(splitedArray[1]); break;
-            case "newRoom": newRoom(splitedArray[1]); break;
-            case "joinRoom": joinRoom(splitedArray[1], splitedArray[2]); break;
-            case "leaveRoom": leaveRoom(splitedArray[1]); break;
-            case "startGame": startGame(splitedArray[1]); break;
+        JSONObject json = new JSONObject(message);
+        JSONObject contentJSON = (JSONObject) json.get("content");
+
+        switch (json.getString("msg")){
+            case "udpPort": newUser(contentJSON.getInt("port")); break;
+            case "newRoom": newRoom(); break;
+            case "joinRoom": joinRoom(contentJSON.getInt("id")); break;
+            case "leaveRoom": leaveRoom(); break;
+            case "startGame": startGame(); break;
         }
     }
 
-    public void newUser(String udpPort){
+    public void newUser(int udpPort){
         String id = clientSocket.getInetAddress().toString() + "," + udpPort;
         this.user.setAddress(clientSocket.getInetAddress());
         this.user.setTcpPort(clientSocket.getPort());
-        this.user.setUdpPort(Integer.valueOf(udpPort));
+        this.user.setUdpPort(udpPort);
         this.user.setConnectionId(id);
         this.user.setName("player"+ existingUsers.size());
 
@@ -86,97 +85,62 @@ public class TcpClientThread extends Thread{
         existingUsers.get(user.getConnectionId()).setThread(this);
     }
 
-    private void initUser(User initedUser, Room room){
-        //ten pakiet wysylamy do naszego gracza z jego poczatkowa pozycja
-        sendMessage("init:" +
-                initedUser.getName() + ":" +
-                initedUser.getPlayer().getX() + ":" +
-                initedUser.getPlayer().getY() + ":true");
-
-        //te pakiety wysyłamy do innych graczy z informacja ze gracz dolaczyl do gry
-        for (User currentUser : room.getUsersInRoom()) {
-            currentUser.getThread().sendMessage("newPlayer:player" + (existingUsers.size()-1));
-        }
-
-        //TODO
-        //Rozsyłamy informacje graczom, kto jest właścicielem pokoju
-//        for (User currentUser : room.getUsersInRoom()) {
-//            currentUser.getThread().sendMessage("owner:" + room.getRoomOwner().getName());
-//        }
-
-        //Rozsyłamy informacje o istniejacych potworkach do nowego gracza
-        for(AOpponent opponent : room.getOpponentList().getOpponents()){
-            sendMessage("createOpponent:" +
-                    opponent.getType() + ":" +
-                    opponent.getId());
-        }
-
-        //te pakiety wysylamy do naszego gracza z pozycjami juz istniejacych graczy
-        for (User currentUser : room.getUsersInRoom()) {
-            String message = "init:" +
-                    currentUser.getName() + ":" +
-                    currentUser.getPlayer().getX() + ":" +
-                    currentUser.getPlayer().getY() + ":false";
-
-            if (currentUser.hasConnection())
-                sendMessage(message);
-        }
-    }
-
     //TODO: lepsze nadawanie id pokoi
-    private void newRoom(String udpPort){
-        String id = clientSocket.getInetAddress().toString() + "," + udpPort;
-        User user = existingUsers.get(id);
-        Room room = new Room(rooms.size(), user);
-
-        initUser(user, room);
-        room.addUserToRoom(user);
+    private void newRoom(){
+        Room room = new Room(rooms.size(), this.user);
+        room.addUserToRoom(this.user);
 
         Gdx.app.postRunnable(() -> TcpServer.createGameController(room));
 
-        sendMessage("createdRoom:" + user.getName() + ":" + room.getId());
+        sendMessage(new JSONObject()
+                .put("msg", "createdRoom")
+                .put("content", new JSONObject().put("name", user.getName()).put("id", room.getId())));
     }
 
-    private void joinRoom(String udpPort, String roomToJoin){
+    private void joinRoom(int roomId){
         boolean roomExists = false;
-        String id = clientSocket.getInetAddress().toString() + "," + udpPort;
-        User user = existingUsers.get(id);
-        int roomId = Integer.parseInt(roomToJoin);
-
         for(Room room : rooms){
             if(room.getId() == roomId) {
                 roomExists = true;
-                initUser(user, room);
                 if(room.checkIfUserCanJoinRoom()) {
                     room.addUserToRoom(user);
-                    sendMessage("joinedRoom:" + user.getName() + ":" + room.getId());
+                    sendMessage(new JSONObject()
+                            .put("msg", "joinedRoom")
+                            .put("content", new JSONObject().put("name", user.getName()).put("id", room.getId())));
                 }
-                else sendMessage("fullRoom:" + user.getName());
+                else
+                    sendMessage(new JSONObject()
+                            .put("msg", "fullRoom")
+                            .put("content", new JSONObject().put("id", room.getId())));
                 break;
             }
         }
 
         if(!roomExists)
-            sendMessage("roomDoesNotExist:" + user.getName());
+            sendMessage(new JSONObject()
+                    .put("msg", "roomDoesNotExist")
+                    .put("content", new JSONObject().put("name", user.getName())));
     }
 
-    private void leaveRoom(String udpPort){
-        String id = clientSocket.getInetAddress().toString() + "," + udpPort;
-        User user = existingUsers.get(id);
-        Room currentRoom = RoomList.getUserRoom(id);
-
-        currentRoom.deleteUserFromRoom(user);
+    private void leaveRoom(){
+        Room currentRoom = RoomList.getUserRoom(this.user.getConnectionId());
+        currentRoom.deleteUserFromRoom(this.user);
     }
 
-    private void startGame(String udpPort){
-        String id = clientSocket.getInetAddress().toString() + "," + udpPort;
-        User user = existingUsers.get(id);
-        Room currentRoom = RoomList.getUserRoom(id);
-
+    private void startGame(){
+        Room currentRoom = RoomList.getUserRoom(this.user.getConnectionId());
         initGame(currentRoom);
 
+        JSONObject content = new JSONObject().put("owner", user.getName()).put("opponents", currentRoom.getGameController().getOpponentsData()).put("players", currentRoom.getGameController().getPlayersData());
+
+        JSONObject msg = new JSONObject()
+                .put("msg", "startGame");
+
+
         for(User currentUser : currentRoom.getUsersInRoom()){
-            currentUser.getThread().sendMessage("startGame:" + user.getName()); //TODO: ewentualna poprawka wysyłanego info
+            content.put("current",currentUser.getName());
+            msg.put("content", content);
+            currentUser.getThread().sendMessage(msg);
         }
 
         currentRoom.setGameStarted(true);
@@ -184,6 +148,9 @@ public class TcpClientThread extends Thread{
 
     //TODO: przejściowa wersja, do ogarnięcia
     private void initGame(Room room){
+        for(User user : room.getUsersInRoom()){
+            user.initializePlayer(room.getGameController());
+        }
         room.getGameController().setPlayersPosition();
         room.getGameController().spawnAllOpponents();
     }

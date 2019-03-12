@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.my.game.UtilitySingletons.ShapeDrawer;
 import com.my.game.UtilitySingletons.StringDrawer;
 import com.my.game.screens.GameplayScreen;
+import org.json.JSONObject;
 
 
 public class Player extends APlayer {
@@ -14,6 +15,7 @@ public class Player extends APlayer {
     public static Animation<TextureRegion> upWalkAnimation;
     public static Animation<TextureRegion> rightWalkAnimation;
     public static Animation<TextureRegion> leftWalkAnimation;
+    public static TextureRegion headRegion;
     private float scale = 2f;
     private String activeMovementKey = "";
     private boolean isMoving = false;
@@ -21,12 +23,13 @@ public class Player extends APlayer {
     public boolean KEY_S = true;
     public boolean KEY_A = false;
     public boolean KEY_D = false;
+    public boolean UP_ARROW = false;
+    public boolean DOWN_ARROW = false;
+    public boolean LEFT_ARROW = false;
+    public boolean RIGHT_ARROW = false;
 
-    public Player(){
-
-    }
-    public Player(String name, String x, String y) {
-        this(name, Integer.parseInt(x), Integer.parseInt(y));
+    public Player(String name){
+        this(name, 0, 0);
     }
 
     public Player(String name, int x, int y) {
@@ -38,7 +41,6 @@ public class Player extends APlayer {
 
     public void draw(SpriteBatch batch, float stateTime) {
         this.drawCharacter(batch, stateTime);
-        this.drawHp(batch);
         this.drawName(batch);
     }
 
@@ -108,22 +110,23 @@ public class Player extends APlayer {
         StringDrawer.drawHp(batch, this.getName(), (int) this.getX(), (int) this.getY() + (int)this.getHeight());
     }
 
-    public String getPlayerState(){
-        StringBuilder result = new StringBuilder();
-        result.append(this.isMoving);
-        result.append(":");
-        result.append(this.activeMovementKey);
-        result.append(":");
-        result.append(this.KEY_W);
-        result.append(",");
-        result.append(this.KEY_S);
-        result.append(",");
-        result.append(this.KEY_A);
-        result.append(",");
-        result.append(this.KEY_D);
-        result.append(",");
-        result.append(":");
-        return result.toString();
+    public JSONObject getPlayerState(){
+
+        JSONObject result =  new JSONObject()
+                .put("isMoving", this.isMoving)
+                .put("key", this.activeMovementKey)
+                .put("wsad", new JSONObject()
+                            .put("w", this.KEY_W)
+                            .put("s", this.KEY_S)
+                            .put("d", this.KEY_D)
+                            .put("a", this.KEY_A)
+                            .put("up", this.UP_ARROW)
+                            .put("down", this.DOWN_ARROW)
+                            .put("left", this.LEFT_ARROW)
+                            .put("right", this.RIGHT_ARROW)
+                );
+
+        return result;
     }
 
     public boolean isCurrentPlayer() {
@@ -151,10 +154,14 @@ public class Player extends APlayer {
         isMoving = moving;
     }
 
-    public void resetWSAD(){
+    public void resetkeys(){
         this.KEY_W = false;
         this.KEY_S = false;
         this.KEY_A = false;
         this.KEY_D = false;
+        this.UP_ARROW = false;
+        this.DOWN_ARROW = false;
+        this.LEFT_ARROW = false;
+        this.RIGHT_ARROW = false;
     }
 }

@@ -9,6 +9,9 @@ public class MyAssetManager {
 
     public static final AssetManager manager = new AssetManager();
 
+    //bullets
+    public final static String granat = "bullets/granat.png";
+
     //playerTexture
     public final static String down = "isaac/downIsaac.png";
     public final static String left = "isaac/leftWalkIsaac.png";
@@ -24,6 +27,7 @@ public class MyAssetManager {
     public final static String hp 		= "pickups/hp.png";
     public final static String InnerEye 		= "pickups/InnerEye.png";
     public final static String SadOnion 		= "pickups/SadOnion.png";
+    public final static String warp 		= "pickups/warp.png";
 
     //sounds
     public final static String hpup 		= "sounds/hpup.wav";
@@ -40,7 +44,9 @@ public class MyAssetManager {
     private final static String sgx_ui_png 		= "skin/sgx-ui.png";
 
 
-
+    public static void loadBullets(){
+        manager.load(granat, Texture.class);
+    }
 
     public static void loadPlayerTexture(){
         manager.load(down, Texture.class);
@@ -56,9 +62,10 @@ public class MyAssetManager {
     }
 
     public static void loadPickups(){
-        manager.load(hpup, Texture.class);
+        manager.load(hp, Texture.class);
         manager.load(InnerEye, Texture.class);
         manager.load(SadOnion, Texture.class);
+        manager.load(warp, Texture.class);
     }
 
     public static void loadMusic(){
@@ -71,24 +78,19 @@ public class MyAssetManager {
     }
 
     public static void loadAllAssets(){
-        manager.load(down, Texture.class);
-        manager.load(left, Texture.class);
-        manager.load(right, Texture.class);
-        manager.load(up, Texture.class);
-        manager.load(nietzsche, Texture.class);
-        manager.load(poe, Texture.class);
-        manager.load(schopen, Texture.class);
-        manager.load(hp, Texture.class);
-        manager.load(InnerEye, Texture.class);
-        manager.load(SadOnion, Texture.class);
-        manager.load(hpup, Sound.class);
-        manager.load(meow, Sound.class);
-        manager.load(sound1, Sound.class);
+        loadBullets();
+        loadMusic();
+        loadOpponents();
+        loadPickups();
+        loadPlayerTexture();
+        loadSkins();
     }
 
 
     public static void dispose(){
         manager.dispose();
     }
+
+
 
 }

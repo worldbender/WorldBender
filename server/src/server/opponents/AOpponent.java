@@ -1,18 +1,15 @@
 package server.opponents;
 
 import server.LogicMap.LogicMapHandler;
-import server.Player;
 import server.User;
 import server.bullets.ABullet;
 import server.bullets.BulletFabric;
 import server.bullets.BulletList;
+import server.connection.GameController;
 import server.pickups.PickupFabric;
 import server.pickups.PickupList;
-
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -32,36 +29,48 @@ public abstract class AOpponent {
     private long lastTimeOpponentHasChandedTargetToChase= 0L;
     private boolean isDead = false;
     private String idOfChasedPlayer = "";
+    protected LogicMapHandler map;
+    protected CopyOnWriteArrayList<User> usersInRoom;
+    protected BulletList bulletList;
+    protected OpponentList opponentList;
+    protected PickupList pickupList;
+    protected GameController gameController;
 
-    protected AOpponent(){
+    protected AOpponent(GameController gameController){
+        this.map = gameController.logicMapHandler;
+        this.usersInRoom = gameController.usersInRoom;
+        this.bulletList = gameController.bulletList;
+        this.opponentList = gameController.opponentList;
+        this.pickupList = gameController.pickupList;
+        this.gameController = gameController;
     }
 
-    public void update(double deltaTime, LogicMapHandler map, CopyOnWriteArrayList<User> usersInRoom, BulletList bulletList, OpponentList opponentList, PickupList pickupList){
-        checkIfOpponentShouldDie(opponentList, pickupList);
+    public void update(double deltaTime){
+        checkIfOpponentShouldDie();
     }
 
-    protected void handleOpponentShoot(CopyOnWriteArrayList<User> usersInRoom, BulletList bulletList){
+    protected void handleOpponentShoot(){
         double distance;
         float angle;
         if(this.canOpponentShoot()){
-            for (User user : usersInRoom) {
+            for (User user : this.usersInRoom) {
                 distance = Math.sqrt((Math.abs(user.getPlayer().getCenterY() - this.getCenterY())) * (Math.abs(user.getPlayer().getCenterY() - this.getCenterY())) +
                         (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()) * (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()))));
                 if (distance < this.getViewRange()) {
                     angle = (float) (Math.atan2(user.getPlayer().getCenterY() - this.getCenterY(), this.getCenterX() - user.getPlayer().getCenterX()));
-                    ABullet newBullet = BulletFabric.createBullet("Tear", this.getCenterX(), this.getCenterY(), -angle + (float) Math.PI, true);
-                    bulletList.addBullet(newBullet);
+                    ABullet newBullet = BulletFabric.createBullet("Tear", this.getCenterX(), this.getCenterY(), -angle + (float) Math.PI, true, this.gameController);
+                    this.bulletList.addBullet(newBullet);
                 }
             }
         }
     }
 
-    protected void choosePlayerToChaseIfTimeComes(CopyOnWriteArrayList<User> usersInRoom){
+    protected void choosePlayerToChaseIfTimeComes(){
         double distance;
         if(this.shouldOpponentChangeChaseTarget()){
             this.setIdOfChasedPlayer("");
             double savedDistance = Float.POSITIVE_INFINITY;
-            for (User user : usersInRoom) {
+            for (User user : this.usersInRoom) {
                 distance = Math.sqrt((Math.abs(user.getPlayer().getCenterY() - this.getCenterY())) * (Math.abs(user.getPlayer().getCenterY() - this.getCenterY())) +
                         (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()) * (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()))));
                 if (distance < this.getViewRange() && distance < savedDistance) {
@@ -72,17 +81,17 @@ public abstract class AOpponent {
         }
     }
 
-    protected void chasePlayer(CopyOnWriteArrayList<User> usersInRoom, double deltaTime, LogicMapHandler map, OpponentList opponentList){
+    protected void chasePlayer(double deltaTime){
         float angle;
         double newX;
         double newY;
-        for (User user : usersInRoom) {
+        for (User user : this.usersInRoom) {
             if(user.getName().equals(this.getIdOfChasedPlayer())){
                 angle = (float) (Math.atan2(user.getPlayer().getCenterY() - this.getCenterY(), this.getCenterX() - user.getPlayer().getCenterX()));
                 newX = this.getX() + (deltaTime * Math.cos(-angle + (float) Math.PI) * this.getSpeed());
                 newY = this.getY() + (deltaTime * Math.sin(-angle + (float) Math.PI) * this.getSpeed());
                 Rectangle newPosRectangle = new Rectangle((int)newX, (int)newY, this.getWidth(), this.getHeight());
-                if(!this.isOpponentCollidesWithMap(newPosRectangle, map) && !this.isOpponentCollidesWithOpponents(newPosRectangle, opponentList)){
+                if(!this.isOpponentCollidesWithMap(newPosRectangle) && !this.isOpponentCollidesWithOpponents(newPosRectangle)){
                     this.setX(newX);
                     this.setY(newY);
                 }
@@ -90,10 +99,10 @@ public abstract class AOpponent {
         }
     }
 
-    public boolean isOpponentCollidesWithOpponents(Rectangle rectangle, OpponentList opponentList){
+    public boolean isOpponentCollidesWithOpponents(Rectangle rectangle){
         boolean result = false;
 
-        for(AOpponent opponent : opponentList.getOpponents()){
+        for(AOpponent opponent : this.opponentList.getOpponents()){
             if(opponent != this){
                 if(opponent.getBounds().intersects(rectangle)){
                     result = true;
@@ -103,15 +112,15 @@ public abstract class AOpponent {
         return result;
     }
 
-    public boolean isOpponentCollidesWithMap(Rectangle rec, LogicMapHandler map){
-        return map.isRectangleCollidesWithMap(rec);
+    public boolean isOpponentCollidesWithMap(Rectangle rec){
+        return this.map.isRectangleCollidesWithMap(rec);
     }
 
     public Rectangle getBounds(){
         return new Rectangle((int)this.x, (int)this.y, this.width, this.height);
     }
 
-    public void doDamage(int damage, OpponentList opponentList){
+    public void doDamage(int damage){
         this.hp -= damage;
     }
     public boolean canOpponentShoot(){
@@ -135,29 +144,31 @@ public abstract class AOpponent {
         return result;
     }
 
-    private void handleOpponentDeath(OpponentList opponentList, PickupList pickupList){
-        opponentList.removeOpponent(this);
-        opponentList.addDeadAOpponentsTrashList(this);
+    protected void handleOpponentDeath(){
+        this.opponentList.deleteOpponent(this);
+    }
+
+    public void dropRandomPickup(){
         int randomInt = Math.abs(new Random().nextInt()%3);
         switch (randomInt){
             case 0:
-                pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"Hp"));
+                this.pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"Hp"));
                 break;
             case 1:
-                pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"InnerEye"));
+                this.pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"InnerEye"));
                 break;
             case 2:
-                pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"SadOnion"));
+                this.pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"SadOnion"));
                 break;
         }
     }
 
-    private void checkIfOpponentShouldDie(OpponentList opponentList, PickupList pickupList){
+    private void checkIfOpponentShouldDie(){
         if(this.getHp() <= 0){
             this.isDead = true;
         }
         if(this.isDead){
-            handleOpponentDeath(opponentList, pickupList);
+            handleOpponentDeath();
         }
     }
 

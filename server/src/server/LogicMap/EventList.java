@@ -1,20 +1,23 @@
 package server.LogicMap;
 
+import server.connection.GameController;
 import server.opponents.AOpponent;
 import server.opponents.OpponentFabric;
 import server.opponents.OpponentList;
-
 import java.awt.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EventList {
-    private CopyOnWriteArrayList<EventBlock> eventList = new CopyOnWriteArrayList<EventBlock>();
-    public EventList(){
-
+    private CopyOnWriteArrayList<EventBlock> passiveEventList = new CopyOnWriteArrayList<EventBlock>();
+    private CopyOnWriteArrayList<EventBlock> activeEventList = new CopyOnWriteArrayList<EventBlock>();
+    private String nextMap;
+    private GameController gameController;
+    public EventList(GameController gameController){
+        this.gameController = gameController;
     }
     public Point getNextPlayerSpawnPoint(){
         Point resultPoint = new Point();
-        for (EventBlock eventBlock : eventList){
+        for (EventBlock eventBlock : passiveEventList){
             if(eventBlock.getKey().equals("spawn") && eventBlock.getValue().equals("player") && !eventBlock.isHappened()){
                 resultPoint.setLocation(
                         eventBlock.getX(),
@@ -28,18 +31,29 @@ public class EventList {
     }
 
     public void spawnAllOpponents(OpponentList opponentList){
-        for (EventBlock eventBlock : eventList){
+        for (EventBlock eventBlock : passiveEventList){
             if(eventBlock.getKey().equals("enemy") && !eventBlock.isHappened()){
                 String opponentType = eventBlock.getValue();
-                AOpponent newOpponent = OpponentFabric.createOpponent(opponentType);
+                AOpponent newOpponent = OpponentFabric.createOpponent(opponentType, this.gameController);
                 newOpponent.setX(eventBlock.getX());
                 newOpponent.setY(eventBlock.getY());
-                opponentList.addOpponent(newOpponent);
+                opponentList.createOpponent(newOpponent);
                 eventBlock.setHappened(true);
             }
         }
     }
-    public void add(EventBlock eventBlock){
-        this.eventList.add(eventBlock);
+    public void addPassiveEvent(EventBlock eventBlock){
+        this.passiveEventList.add(eventBlock);
+    }
+    public void addActiveEvent(EventBlock eventBlock){
+        this.activeEventList.add(eventBlock);
+    }
+
+    public String getNextMap() {
+        return nextMap;
+    }
+
+    public void setNextMap(String nextMap) {
+        this.nextMap = nextMap;
     }
 }

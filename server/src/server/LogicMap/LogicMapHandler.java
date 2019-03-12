@@ -7,14 +7,10 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import server.LogicMap.ABlock;
-import server.LogicMap.EventBlock;
-import server.LogicMap.SoftBlock;
-import server.LogicMap.SolidBlock;
+import server.Properties;
+import server.connection.GameController;
 
 import java.awt.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LogicMapHandler {
     private TiledMap map;
@@ -26,10 +22,13 @@ public class LogicMapHandler {
     private final String MAP_FILE_FORMAT = ".tmx";
     private ABlock[][] logicMap = new ABlock[mapWidth][mapHeight];
     private EventList eventList;
+    private GameController gameController;
 
-    public LogicMapHandler() {
-        this.map = new TmxMapLoader().load("maps/t9.tmx");
-        this.eventList = new EventList();
+    public LogicMapHandler(GameController gameController) {
+        String startMap = Properties.loadConfigFile("START_MAP");
+        this.map = new TmxMapLoader().load("maps/" + startMap + ".tmx");
+        this.eventList = new EventList(gameController);
+        this.gameController = gameController;
         this.constructLogicMap();
         this.constructEventObjects();
     }
@@ -42,6 +41,7 @@ public class LogicMapHandler {
     public void LoadMap(String mapName) {
         String pathToMap = BASE_PATH_TO_MAP + mapName + MAP_FILE_FORMAT;
         map = new TmxMapLoader().load(pathToMap);
+        this.eventList = new EventList(this.gameController);
         constructLogicMap();
         constructEventObjects();
     }
@@ -76,23 +76,29 @@ public class LogicMapHandler {
         MapObjects mapObjects = eventLayer.getObjects();
         RectangleMapObject rectangleMapObject;
         for(MapObject object : mapObjects){
-            if(object.getProperties().containsKey("spawn")){
-                rectangleMapObject = (RectangleMapObject)(object);
-                eventList.add(new EventBlock(
-                        (int)rectangleMapObject.getRectangle().getX(),
-                        (int)rectangleMapObject.getRectangle().getY(),
-                        "spawn",
-                        object.getProperties().get("spawn").toString())
-                );
-            }
-            if(object.getProperties().containsKey("enemy")){
-                rectangleMapObject = (RectangleMapObject)(object);
-                eventList.add(new EventBlock(
-                        (int)rectangleMapObject.getRectangle().getX(),
-                        (int)rectangleMapObject.getRectangle().getY(),
-                        "enemy",
-                        object.getProperties().get("enemy").toString())
-                );
+            if(object.getProperties().containsKey("active")){
+                if(object.getProperties().containsKey("warp")){
+                    eventList.setNextMap(object.getProperties().get("warp").toString());
+                }
+            } else {
+                if(object.getProperties().containsKey("spawn")){
+                    rectangleMapObject = (RectangleMapObject)(object);
+                    eventList.addPassiveEvent(new EventBlock(
+                            (int)rectangleMapObject.getRectangle().getX(),
+                            (int)rectangleMapObject.getRectangle().getY(),
+                            "spawn",
+                            object.getProperties().get("spawn").toString())
+                    );
+                }
+                if(object.getProperties().containsKey("enemy")){
+                    rectangleMapObject = (RectangleMapObject)(object);
+                    eventList.addPassiveEvent(new EventBlock(
+                            (int)rectangleMapObject.getRectangle().getX(),
+                            (int)rectangleMapObject.getRectangle().getY(),
+                            "enemy",
+                            object.getProperties().get("enemy").toString())
+                    );
+                }
             }
         }
     }

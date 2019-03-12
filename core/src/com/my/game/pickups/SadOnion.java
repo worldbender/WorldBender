@@ -2,9 +2,10 @@ package com.my.game.pickups;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.my.game.MyAssetManager;
 
 public class SadOnion extends APickup{
-    public static Texture texture;
+    public static Texture texture = MyAssetManager.manager.get(MyAssetManager.SadOnion);
     public SadOnion(int x, int y, int id){
         super(x, y, id, "SadOnion");
     }

@@ -1,12 +1,16 @@
 package com.my.game.connection;
 
 import com.my.game.WBGame;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 public class Connection {
-    InetAddress IPAddress;
+    public InetAddress IPAddress;
     private String hostName = WBGame.SERVER_ADDRESS;
     public DatagramSocket socket;
     public TCPConnection tcp;
@@ -41,7 +45,12 @@ public class Connection {
         tcp = new TCPConnection(hostName, game);
         tcpThread = new Thread(tcp);
         tcpThread.start();
-        tcp.sendMessage("udpPort:" + socket.getLocalPort());
+
+        tcp.sendMessage(
+                new JSONObject()
+                        .put("msg", "udpPort")
+                        .put("content", new JSONObject().put("port", socket.getLocalPort()))
+        );
     }
 
 
@@ -52,6 +61,5 @@ public class Connection {
         senderThread = new Thread(sender);
         receiverThread.start();
         senderThread.start();
-        sender.sendMessage("greetings:me");
     }
 }

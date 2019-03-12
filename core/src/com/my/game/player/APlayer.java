@@ -1,6 +1,5 @@
 package com.my.game.player;
 
-import com.badlogic.gdx.graphics.Texture;
 import java.awt.*;
 
 public abstract class APlayer extends Rectangle {
