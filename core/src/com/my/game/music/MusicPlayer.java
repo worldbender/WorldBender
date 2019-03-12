@@ -2,47 +2,35 @@ package com.my.game.music;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 
 public class MusicPlayer {
-    private Music music;
-    private static Music staticMusic;
-    //instance version
+    private static Music music;
+    private static Sound hpUpSound;
+    private static Sound opponentDieSound;
+
     public MusicPlayer(){
+
+    }
+
+    public static void initSounds(){
+        hpUpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hpup.wav"));
+        opponentDieSound = Gdx.audio.newSound(Gdx.files.internal("sounds/meow.mp3"));
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/sound1.mp3"));
     }
-    public MusicPlayer(String pathToMusic){
-        Music music = Gdx.audio.newMusic(Gdx.files.internal(pathToMusic));
+
+    public static void playBackgroundMusic(){
+        music.play();
     }
-    public void playMusic(String pathToMusic){
-        music = Gdx.audio.newMusic(Gdx.files.internal(pathToMusic));
-    }
-    public void playMusic(){
-        //music.play();
-    }
-    public void setVolume(float volume){
-        music.setVolume(volume);
-    }
-    //Static version
-    public static void initMusic(){
-        staticMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/sound1.mp3"));
-    }
-    public static void initMusic(String pathToString){
-        staticMusic = Gdx.audio.newMusic(Gdx.files.internal(pathToString));
-    }
-    public static void playStaticMusic(){
-        staticMusic.setVolume(0.5f);
-        staticMusic.play();
-    }
+
     public static void playHpUpSound(){
-        staticMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/hpup.wav"));
-        staticMusic.play();
+        hpUpSound.stop();
+        hpUpSound.play();
     }
+
     public static void playOpponentDieSound(){
-        staticMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/meow.mp3"));
-        staticMusic.setVolume(0.1f);
-        staticMusic.play();
+        opponentDieSound.stop();
+        opponentDieSound.play();
     }
-    public static void setStaticVolume(float volume){
-        staticMusic.setVolume(volume);
-    }
+
 }

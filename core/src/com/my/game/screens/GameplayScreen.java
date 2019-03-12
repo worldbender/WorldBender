@@ -73,8 +73,7 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void loadData() {
-        playerTexture = new Texture("cat.png");
-        bulletTexture = new Texture("granat.png");
+
         Schopenheuer.texture = new Texture("opponents/schopen.png");
         Nietzsche.texture = new Texture("opponents/nietzsche.png");
         Poe.texture = new Texture("opponents/poe.png");

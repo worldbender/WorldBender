@@ -10,30 +10,30 @@ public class MyAssetManager {
     public static final AssetManager manager = new AssetManager();
 
     //playerTexture
-    private final static String down = "isaac/downIsaac.png";
-    private final static String left = "isaac/leftWalkIsaac.png";
-    private final static String right = "isaac/rightWalkIsaac.png";
-    private final static String up = "isaac/upIsaac.png";
+    public final static String down = "isaac/downIsaac.png";
+    public final static String left = "isaac/leftWalkIsaac.png";
+    public final static String right = "isaac/rightWalkIsaac.png";
+    public final static String up = "isaac/upIsaac.png";
 
     //opponents
-    private final static String nietzsche 		= "opponents/nietzsche.png";
-    private final static String poe 		= "opponents/poe.png";
-    private final static String schopen 		= "opponents/schopen.png";
+    public final static String nietzsche 		= "opponents/nietzsche.png";
+    public final static String poe 		= "opponents/poe.png";
+    public final static String schopen 		= "opponents/schopen.png";
 
     //pickups
-    private final static String hp 		= "pickups/hp.png";
-    private final static String InnerEye 		= "pickups/InnerEye.png";
-    private final static String SadOnion 		= "pickups/SadOnion.png";
+    public final static String hp 		= "pickups/hp.png";
+    public final static String InnerEye 		= "pickups/InnerEye.png";
+    public final static String SadOnion 		= "pickups/SadOnion.png";
 
     //sounds
-    private final static String hpup 		= "sounds/hpup.wav";
-    private final static String meow 		= "sounds/meow.mp3";
-    private final static String sound1 		= "sounds/sound1.mp3";
+    public final static String hpup 		= "sounds/hpup.wav";
+    public final static String meow 		= "sounds/meow.mp3";
+    public final static String sound1 		= "sounds/sound1.mp3";
 
     //skins
-    private final static String font_export 		= "skin/font-export.fnt";
-    private final static String font_medium_export 		= "skin/font-medium-export.fnt";
-    private final static String font_small_export 		= "skin/font-small-export.fnt";
+    public final static String font_export 		= "skin/font-export.fnt";
+    public final static String font_medium_export 		= "skin/font-medium-export.fnt";
+    public final static String font_small_export 		= "skin/font-small-export.fnt";
     private final static String font_title_export   ="skin/font-title-export.fnt";
     private final static String sgx_ui_atlas 		= "skin/sgx-ui.atlas";
     private final static String sgx_ui_json 		= "skin/sgx-ui.json";
@@ -62,7 +62,7 @@ public class MyAssetManager {
     }
 
     public static void loadMusic(){
-        manager.load(hp, Sound.class);
+        manager.load(hpup, Sound.class);
         manager.load(meow, Sound.class);
         manager.load(sound1, Sound.class);
     }
@@ -81,8 +81,14 @@ public class MyAssetManager {
         manager.load(hp, Texture.class);
         manager.load(InnerEye, Texture.class);
         manager.load(SadOnion, Texture.class);
-        manager.load(hp, Sound.class);
+        manager.load(hpup, Sound.class);
         manager.load(meow, Sound.class);
         manager.load(sound1, Sound.class);
     }
+
+
+    public static void dispose(){
+        manager.dispose();
+    }
+
 }
