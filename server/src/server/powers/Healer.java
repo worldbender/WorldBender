@@ -5,12 +5,11 @@ import server.Player;
 import server.User;
 import server.bullets.BulletList;
 import server.connection.GameController;
-import server.opponents.AOpponent;
 import server.opponents.OpponentList;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class AgroTaker extends APower {
+public class Healer extends APower {
     private LogicMapHandler map;
     private BulletList bulletList;
     private CopyOnWriteArrayList<User> usersInRoom;
@@ -18,7 +17,7 @@ public class AgroTaker extends APower {
     private OpponentList opponentList;
     private Player player;
 
-    public AgroTaker(GameController gameController, Player player){
+    public Healer(GameController gameController, Player player){
         this.map = gameController.logicMapHandler;
         this.bulletList = gameController.bulletList;
         this.usersInRoom = gameController.usersInRoom;
@@ -28,19 +27,19 @@ public class AgroTaker extends APower {
         this.setCooldown(2000L);
         this.setLastTimePowerWasUsed(0L);
     }
+
     @Override
     public void act(double deltaTime) {
         if(this.canAct()){
-            double distance;
-            for(AOpponent opponent : this.opponentList.getOpponents()){
-                distance = Math.sqrt((Math.abs(player.getCenterY() - opponent.getCenterY())) * (Math.abs(player.getCenterY() - opponent.getCenterY())) +
-                        (Math.abs(opponent.getCenterX() - player.getCenterX()) * (Math.abs(opponent.getCenterX() - player.getCenterX()))));
-                if(distance < 2000){
-                    opponent.setOpponentAI("Chaser");
-                    opponent.setIdOfChasedPlayer(player.getUser().getName());
-                    opponent.getOpponentAI().setAdditionalFlag(true);
-                }
-            }
+            this.usersInRoom.stream()
+                    .map(user -> user.getPlayer())
+                    .forEach(player -> {
+                        final double distance = Math.sqrt((Math.abs(this.player.getCenterY() - player.getCenterY())) * (Math.abs(this.player.getCenterY() - player.getCenterY())) +
+                                (Math.abs(player.getCenterX() - this.player.getCenterX()) * (Math.abs(player.getCenterX() - this.player.getCenterX()))));
+                        if(distance < 2000){
+                            player.setHp(player.getHp() + 5);
+                        }
+                    });
         }
     }
 

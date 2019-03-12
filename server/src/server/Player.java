@@ -5,11 +5,10 @@ import server.LogicMap.LogicMapHandler;
 import server.bullets.AtackFabric;
 import server.bullets.BulletList;
 import server.connection.GameController;
-import server.powers.AgroTaker;
+import server.powers.Healer;
 import server.powers.IPower;
 import server.powers.PowerFabric;
 
-import javax.jws.soap.SOAPBinding;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,7 +67,7 @@ public class Player {
         this.bulletList = gameController.bulletList;
         this.usersInRoom = gameController.usersInRoom;
         this.gameController = gameController;
-        this.power = new AgroTaker(gameController, this);
+        this.power = PowerFabric.createPower("AgroTaker", gameController, this);
     }
 
     public void update(CopyOnWriteArrayList<User> usersInRoom, double deltaTime) {

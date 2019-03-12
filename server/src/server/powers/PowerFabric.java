@@ -10,6 +10,9 @@ public class PowerFabric {
             case "AgroTaker":
                 resultPower = new AgroTaker(gameController, player);
                 break;
+            case "Healer":
+                resultPower = new Healer(gameController, player);
+                break;
             default:
                 resultPower = new EmptyPower();
                 break;
