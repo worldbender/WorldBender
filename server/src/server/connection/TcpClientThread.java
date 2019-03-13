@@ -131,7 +131,10 @@ public class TcpClientThread extends Thread{
         Room currentRoom = RoomList.getUserRoom(this.user.getConnectionId());
         initGame(currentRoom);
 
-        JSONObject content = new JSONObject().put("owner", user.getName()).put("opponents", currentRoom.getGameController().getOpponentsData()).put("players", currentRoom.getGameController().getPlayersData());
+        JSONObject content = new JSONObject()
+                .put("owner", user.getName())
+                .put("opponents", currentRoom.getGameController().getOpponentsData())
+                .put("players", currentRoom.getGameController().getPlayersData());
 
         JSONObject msg = new JSONObject()
                 .put("msg", "startGame");
@@ -139,6 +142,7 @@ public class TcpClientThread extends Thread{
 
         for(User currentUser : currentRoom.getUsersInRoom()){
             content.put("current",currentUser.getName());
+            content.put("playerType", currentUser.getPlayer().getPlayerType());
             msg.put("content", content);
             currentUser.getThread().sendMessage(msg);
         }
@@ -149,7 +153,8 @@ public class TcpClientThread extends Thread{
 
     //TODO: przejściowa wersja, do ogarnięcia
     private void initGame(Room room){
-        String USER_TYPE = "Water";
+        //TODO Here server must know what character user is
+        String USER_TYPE = "Ground";
         for(User user : room.getUsersInRoom()){
             user.initializePlayer(room.getGameController(), USER_TYPE);
         }

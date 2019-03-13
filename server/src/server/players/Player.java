@@ -34,6 +34,7 @@ public class Player {
     private String headDirection = "DOWN";
     private String bulletType = "SpectralTear";
     private String weaponType = "Normal";
+    private String playerType;
     private ArrayList<String> collectedItems;
     private boolean isMoving = false;
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
@@ -325,5 +326,13 @@ public class Player {
 
     public void setHeadDirection(String headDirection) {
         this.headDirection = headDirection;
+    }
+
+    public String getPlayerType() {
+        return playerType;
+    }
+
+    public void setPlayerType(String playerType) {
+        this.playerType = playerType;
     }
 }

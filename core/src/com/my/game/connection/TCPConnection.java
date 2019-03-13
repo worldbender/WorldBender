@@ -127,7 +127,7 @@ public class TCPConnection extends Thread {
         JSONArray playersJSON = contentJSON.getJSONArray("players");
         for (int i = 0; i < playersJSON.length(); i++) {
             JSONObject player = playersJSON.getJSONObject(i);
-            Player newPlayer = PlayerFabric.createPlayer("Ground", player.getString("name"));
+            Player newPlayer = PlayerFabric.createPlayer(contentJSON.getString("playerType"), player.getString("name"));
             if (player.getString("name").equals(contentJSON.getString("current"))) {
                 newPlayer.setCurrentPlayer(true);
                 GameplayScreen.currentPlayer = newPlayer;

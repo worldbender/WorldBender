@@ -10,13 +10,12 @@ import com.my.game.screens.GameplayScreen;
 import org.json.JSONObject;
 
 
-public class Player extends APlayer {
+public abstract class Player extends APlayer {
     public static double maxHp = 100;
     public static Animation<TextureRegion> downWalkAnimation;
     public static Animation<TextureRegion> upWalkAnimation;
     public static Animation<TextureRegion> rightWalkAnimation;
     public static Animation<TextureRegion> leftWalkAnimation;
-    public static Animation<TextureRegion> heads;
     private float scale = java.lang.Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
     private String activeMovementKey = "DOWN";
     private String headDirection = "DOWN";
@@ -98,16 +97,16 @@ public class Player extends APlayer {
     private void drawHead(SpriteBatch batch){
         switch (this.headDirection){
             case "UP":
-                drawAnimationCharacter(batch, heads.getKeyFrames()[2]);
+                drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[2]);
                 break;
             case "DOWN":
-                drawAnimationCharacter(batch, heads.getKeyFrames()[0]);
+                drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[0]);
                 break;
             case "LEFT":
-                drawAnimationCharacter(batch, heads.getKeyFrames()[3]);
+                drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[3]);
                 break;
             case "RIGHT":
-                drawAnimationCharacter(batch, heads.getKeyFrames()[1]);
+                drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[1]);
                 break;
             default:
                 break;
@@ -190,4 +189,6 @@ public class Player extends APlayer {
     public void setHeadDirection(String headDirection) {
         this.headDirection = headDirection;
     }
+
+    protected abstract Animation<TextureRegion> getHeads();
 }

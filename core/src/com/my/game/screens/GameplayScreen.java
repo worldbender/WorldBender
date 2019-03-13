@@ -39,10 +39,7 @@ public class GameplayScreen extends AbstractScreen{
     private int mapHeight;
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
-    public static final int PLAYER_HEAD_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_HEAD_WIDTH"));
-    public static final int PLAYER_HEAD_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_HEAD_HEIGHT"));
-    public static final int NUMBER_OF_PLAYER_ANIMATION_FRAMES = 5;
-    private float stateTime;
+    private float stateTime = 0f;
     private Hud hud;
 
     public GameplayScreen(WBGame game) {
@@ -71,42 +68,11 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     public void create() {
-        this.loadData();
         this.init();
         MusicPlayer.initSounds();
         if(!Boolean.parseBoolean(Properties.loadConfigFile("DEBUG_MODE"))){
             MusicPlayer.playBackgroundMusic();
         }
-    }
-
-    private void loadData() {
-        Tear.tearTexture = new Texture("bullets/granat.png");
-        SpectralTear.spectralTearTexture = new Texture("bullets/spectralTear.png");
-        Texture heads = new Texture("isaac/prof.png");
-        Player.heads = getAnimationFrom1DPicture(heads, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
-        Texture warpAnimation = new Texture("pickups/warpAnimated.png");
-        Warp.warpAnimation = getAnimationFrom1DPicture(warpAnimation, 64, 64, 9);
-        Texture walkSheet = MyAssetManager.manager.get(MyAssetManager.down);
-        Texture upWalkSheet = MyAssetManager.manager.get(MyAssetManager.up);
-        Texture leftSheet = MyAssetManager.manager.get(MyAssetManager.left);
-        Texture rightSheet = MyAssetManager.manager.get(MyAssetManager.right);
-        Player.downWalkAnimation = getAnimationFrom1DPicture(walkSheet, PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
-        Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
-        Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, 10);
-        Player.leftWalkAnimation = getAnimationFrom1DPicture(leftSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
-        Player.heads = getAnimationFrom1DPicture(heads, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
-        stateTime = 0f;
-        Player.headRegion = new TextureRegion(heads, 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
-    }
-
-    //TODO This method should be in asset manager
-    private Animation<TextureRegion> getAnimationFrom1DPicture(Texture texture, int textureWidth, int textureHeight, int numberOfAnimationFrames){
-        TextureRegion[][] arrayOfWalks = TextureRegion.split(texture, textureWidth, textureHeight);
-        TextureRegion[] walkFrames = new TextureRegion[numberOfAnimationFrames];
-        for (int i = 0; i < numberOfAnimationFrames; i++) {
-            walkFrames[i] = arrayOfWalks[0][i];
-        }
-        return new Animation<TextureRegion>(0.7f, walkFrames);
     }
 
     private void init() {

@@ -8,5 +8,6 @@ public class Water extends Player{
     public Water(User user, GameController gameController){
         super(user, gameController);
         this.power = PowerFabric.createPower("Healer", gameController, this);
+        this.setPlayerType("Water");
     }
 }

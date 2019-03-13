@@ -8,5 +8,6 @@ public class Ground extends Player {
     public Ground(User user, GameController gameController){
         super(user, gameController);
         this.power = PowerFabric.createPower("AggroTaker", gameController, this);
+        this.setPlayerType("Ground");
     }
 }
