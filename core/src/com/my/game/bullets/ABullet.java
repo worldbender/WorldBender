@@ -1,8 +1,12 @@
 package com.my.game.bullets;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.my.game.MyAssetManager;
+
+import static com.my.game.MyAssetManager.granat;
 
 public class ABullet {
     private int x;
@@ -11,7 +15,7 @@ public class ABullet {
     private int height;
     private int id;
     private float angle;
-    private Texture texture;
+    public static Texture texture = MyAssetManager.manager.get(granat);
     public void draw(SpriteBatch spriteBatch){
         float angle = ((this.getAngle() - (float)(Math.PI/2))*(float)(180f/Math.PI));
         spriteBatch.draw(

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.my.game.MyAssetManager;
 import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
@@ -20,13 +21,15 @@ import com.my.game.player.PlayerList;
 import com.my.game.WBGame;
 import com.my.game.music.MusicPlayer;
 import org.json.JSONObject;
+import com.my.game.MyAssetManager;
 
 import java.util.Map;
+
+import static com.my.game.MyAssetManager.granat;
 
 public class GameplayScreen extends AbstractScreen{
 
     private Texture playerTexture;
-    private Texture bulletTexture;
     private static Map<String, Player> players;
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
@@ -79,23 +82,14 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void loadData() {
-        playerTexture = new Texture("cat.png");
-        bulletTexture = new Texture("granat.png");
-        Schopenheuer.texture = new Texture("opponents/schopen.png");
-        Nietzsche.texture = new Texture("opponents/nietzsche.png");
-        Poe.texture = new Texture("opponents/poe.png");
-        Texture walkSheet = new Texture("isaac/downIsaac.png");
-        Texture upWalkSheet = new Texture("isaac/upIsaac.png");
-        Texture leftSheet = new Texture("isaac/leftWalkIsaac.png");
-        Texture rightSheet = new Texture("isaac/rightWalkIsaac.png");
+        Texture walkSheet = MyAssetManager.manager.get(MyAssetManager.down);
+        Texture upWalkSheet = MyAssetManager.manager.get(MyAssetManager.up);
+        Texture leftSheet = MyAssetManager.manager.get(MyAssetManager.left);
+        Texture rightSheet = MyAssetManager.manager.get(MyAssetManager.right);
         Player.downWalkAnimation = getAnimationFrom1DPicture(walkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
         Player.leftWalkAnimation = getAnimationFrom1DPicture(leftSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
-        HpPickup.texture = new Texture("pickups/hp.png");
-        InnerEye.texture = new Texture("pickups/InnerEye.png");
-        SadOnion.texture = new Texture("pickups/SadOnion.png");
-        Warp.texture = new Texture("pickups/warp.png");
         stateTime = 0f;
         Player.headRegion = new TextureRegion(walkSheet, 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
     }
@@ -145,7 +139,7 @@ public class GameplayScreen extends AbstractScreen{
             hud.setHealthBarValue(player.getName(), player.getHp());
         }
         for(ABullet bullet : BulletList.getBullets()){
-            bullet.setTexture(bulletTexture);
+            bullet.setTexture(MyAssetManager.manager.get(granat));
             bullet.draw(spriteBatch);
         }
         for(AOpponent opponent : OpponentList.getOpponents()){

@@ -49,8 +49,17 @@ public class WBGame extends Game {
 
     @Override
     public void create () {
+        MyAssetManager.loadAllAssets();
+        MyAssetManager.manager.finishLoading();
+//        while(!MyAssetManager.manager.update())
+//            System.out.println(MyAssetManager.manager.getProgress() * 100 + " %");
         this.connection = new Connection(this);
         this.setScreen(new SplashScreen(this));
+    }
+
+    public void dispose () {
+        super.dispose();
+        MyAssetManager.dispose();
     }
 
     public boolean isPaused() {
