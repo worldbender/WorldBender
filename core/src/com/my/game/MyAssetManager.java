@@ -3,11 +3,16 @@ package com.my.game;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 
 public class MyAssetManager {
 
     public static final AssetManager manager = new AssetManager();
+
+    //bars
+    public final static String healthBar = "bars/healthBar.png";
 
     //bullets
     public final static String granat = "bullets/granat.png";
@@ -29,19 +34,24 @@ public class MyAssetManager {
     public final static String SadOnion 		= "pickups/SadOnion.png";
     public final static String warp 		= "pickups/warp.png";
 
+    //screenImages
+    public final static String tree 		= "screenImages/tree.jpg";
+
     //sounds
     public final static String hpup 		= "sounds/hpup.wav";
     public final static String meow 		= "sounds/meow.mp3";
     public final static String sound1 		= "sounds/sound1.mp3";
 
-    //skins
+    //fonts
     public final static String font_export 		= "skin/font-export.fnt";
     public final static String font_medium_export 		= "skin/font-medium-export.fnt";
     public final static String font_small_export 		= "skin/font-small-export.fnt";
-    private final static String font_title_export   ="skin/font-title-export.fnt";
-    private final static String sgx_ui_atlas 		= "skin/sgx-ui.atlas";
-    private final static String sgx_ui_json 		= "skin/sgx-ui.json";
-    private final static String sgx_ui_png 		= "skin/sgx-ui.png";
+    public final static String font_title_export   ="skin/font-title-export.fnt";
+
+    //skins
+    public final static String sgx_ui_atlas 		= "skin/sgx-ui.atlas";
+    public final static String sgx_ui_json 		= "skin/sgx-ui.json";
+    public final static String sgx_ui_png 		= "skin/sgx-ui.png";
 
 
     public static void loadBullets(){
@@ -74,7 +84,24 @@ public class MyAssetManager {
         manager.load(sound1, Sound.class);
     }
 
+
+    public static void loadBars(){
+        manager.load(healthBar, Texture.class);
+    }
+
     public static void loadSkins(){
+        manager.load(sgx_ui_json, Skin.class);
+    }
+
+    public static void loadFonts(){
+        manager.load(font_export, BitmapFont.class);
+        manager.load(font_medium_export, BitmapFont.class);
+        manager.load(font_small_export, BitmapFont.class);
+        manager.load(font_title_export, BitmapFont.class);
+    }
+
+    public static void loadScreenImages(){
+        manager.load(tree, Texture.class);
     }
 
     public static void loadAllAssets(){
@@ -84,13 +111,15 @@ public class MyAssetManager {
         loadPickups();
         loadPlayerTexture();
         loadSkins();
+        loadBars();
+        loadScreenImages();
+//        loadFonts();
     }
 
 
     public static void dispose(){
         manager.dispose();
     }
-
 
 
 }
