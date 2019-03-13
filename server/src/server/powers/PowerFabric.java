@@ -1,14 +1,14 @@
 package server.powers;
 
-import server.Player;
+import server.players.Player;
 import server.connection.GameController;
 
 public class PowerFabric {
     public static IPower createPower(String type, GameController gameController, Player player) {
         IPower resultPower;
         switch (type) {
-            case "AgroTaker":
-                resultPower = new AgroTaker(gameController, player);
+            case "AggroTaker":
+                resultPower = new AggroTaker(gameController, player);
                 break;
             case "Healer":
                 resultPower = new Healer(gameController, player);

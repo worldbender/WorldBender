@@ -1,6 +1,6 @@
 package server.pickups;
 
-import server.Player;
+import server.players.Player;
 
 public class SadOnion extends APickup{
     public SadOnion(int x, int y){

@@ -1,11 +1,12 @@
-package server;
+package server.players;
 
 import org.json.JSONObject;
 import server.LogicMap.LogicMapHandler;
+import server.Properties;
+import server.User;
 import server.bullets.AtackFabric;
 import server.bullets.BulletList;
 import server.connection.GameController;
-import server.powers.Healer;
 import server.powers.IPower;
 import server.powers.PowerFabric;
 
@@ -39,7 +40,7 @@ public class Player {
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
     private float scale = Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
     private User user;
-    private IPower power;
+    protected IPower power;
     public boolean KEY_W = false;
     public boolean KEY_S = false;
     public boolean KEY_A = false;
@@ -67,7 +68,6 @@ public class Player {
         this.bulletList = gameController.bulletList;
         this.usersInRoom = gameController.usersInRoom;
         this.gameController = gameController;
-        this.power = PowerFabric.createPower("AgroTaker", gameController, this);
     }
 
     public void update(CopyOnWriteArrayList<User> usersInRoom, double deltaTime) {

@@ -84,11 +84,11 @@ public class GameplayScreen extends AbstractScreen{
         Texture walkSheet = new Texture("isaac/downIsaacHeadless2.png");
         Texture upWalkSheet = new Texture("isaac/upIsaacHeadless2.png");
         Texture leftSheet = new Texture("isaac/leftWalkIsaacHeadless.png");
-        Texture rightSheet = new Texture("isaac/rightWalkIsaacHeadless.png");
+        Texture rightSheet = new Texture("isaac/rightWalkIsaacHeadless2.png");
         Texture heads = new Texture("isaac/prof.png");
         Player.downWalkAnimation = getAnimationFrom1DPicture(walkSheet, PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
-        Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
+        Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, 10);
         Player.leftWalkAnimation = getAnimationFrom1DPicture(leftSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
         Player.heads = getAnimationFrom1DPicture(heads, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
         HpPickup.texture = new Texture("pickups/hp.png");
@@ -108,7 +108,7 @@ public class GameplayScreen extends AbstractScreen{
         for (int i = 0; i < numberOfAnimationFrames; i++) {
             walkFrames[i] = arrayOfWalks[0][i];
         }
-        return new Animation<TextureRegion>(0.1f, walkFrames);
+        return new Animation<TextureRegion>(0.7f, walkFrames);
     }
 
     private void init() {

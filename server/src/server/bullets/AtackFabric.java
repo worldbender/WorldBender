@@ -1,6 +1,6 @@
 package server.bullets;
 
-import server.Player;
+import server.players.Player;
 import server.connection.GameController;
 
 public class AtackFabric {

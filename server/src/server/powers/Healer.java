@@ -1,7 +1,7 @@
 package server.powers;
 
 import server.LogicMap.LogicMapHandler;
-import server.Player;
+import server.players.Player;
 import server.User;
 import server.bullets.BulletList;
 import server.connection.GameController;

@@ -1,6 +1,6 @@
 package server.pickups;
 
-import server.Player;
+import server.players.Player;
 
 public class HpPickup extends APickup {
     public HpPickup(int x, int y){

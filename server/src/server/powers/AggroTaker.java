@@ -1,7 +1,7 @@
 package server.powers;
 
 import server.LogicMap.LogicMapHandler;
-import server.Player;
+import server.players.Player;
 import server.User;
 import server.bullets.BulletList;
 import server.connection.GameController;
@@ -10,7 +10,7 @@ import server.opponents.OpponentList;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class AgroTaker extends APower {
+public class AggroTaker extends APower {
     private LogicMapHandler map;
     private BulletList bulletList;
     private CopyOnWriteArrayList<User> usersInRoom;
@@ -18,7 +18,7 @@ public class AgroTaker extends APower {
     private OpponentList opponentList;
     private Player player;
 
-    public AgroTaker(GameController gameController, Player player){
+    public AggroTaker(GameController gameController, Player player){
         this.map = gameController.logicMapHandler;
         this.bulletList = gameController.bulletList;
         this.usersInRoom = gameController.usersInRoom;

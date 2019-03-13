@@ -1,6 +1,6 @@
 package server.pickups;
 
-import server.Player;
+import server.players.Player;
 
 public class Warp extends APickup {
     public Warp(int x, int y){

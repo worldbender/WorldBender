@@ -124,12 +124,6 @@ public class Player extends APlayer {
         );
     }
 
-    private void drawHp(SpriteBatch batch) {
-        batch.end();
-        ShapeDrawer.drawHp(batch, (int)this.getHeight(), (int) this.getX(), (int) this.getY(), this.getHp(), (int) Player.maxHp);
-        batch.begin();
-    }
-
     private void drawName(SpriteBatch batch) {
         StringDrawer.drawHp(batch, this.getName(), (int) this.getX(), (int) this.getY() + (int)this.getHeight());
     }

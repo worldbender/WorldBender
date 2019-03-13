@@ -149,8 +149,9 @@ public class TcpClientThread extends Thread{
 
     //TODO: przejściowa wersja, do ogarnięcia
     private void initGame(Room room){
+        String USER_TYPE = "Water";
         for(User user : room.getUsersInRoom()){
-            user.initializePlayer(room.getGameController());
+            user.initializePlayer(room.getGameController(), USER_TYPE);
         }
         room.getGameController().setPlayersPosition();
         room.getGameController().spawnAllOpponents();
