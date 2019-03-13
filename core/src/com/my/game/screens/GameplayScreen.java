@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.my.game.MyAssetManager;
 import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
@@ -23,7 +24,10 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
+import static com.my.game.MyAssetManager.granat;
+
 public class GameplayScreen extends AbstractScreen{
+
     private static Map<String, Player> players;
     private GraphicMapHandler graphicMapHandler;
     public static Player currentPlayer;
@@ -78,25 +82,19 @@ public class GameplayScreen extends AbstractScreen{
     private void loadData() {
         Tear.tearTexture = new Texture("bullets/granat.png");
         SpectralTear.spectralTearTexture = new Texture("bullets/spectralTear.png");
-        Schopenheuer.texture = new Texture("opponents/schopen.png");
-        Nietzsche.texture = new Texture("opponents/nietzsche.png");
-        Poe.texture = new Texture("opponents/poe.png");
-        Texture walkSheet = new Texture("isaac/downIsaacHeadless2.png");
-        Texture upWalkSheet = new Texture("isaac/upIsaacHeadless2.png");
-        Texture leftSheet = new Texture("isaac/leftWalkIsaacHeadless.png");
-        Texture rightSheet = new Texture("isaac/rightWalkIsaacHeadless2.png");
         Texture heads = new Texture("isaac/prof.png");
+        Player.heads = getAnimationFrom1DPicture(heads, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
+        Texture warpAnimation = new Texture("pickups/warpAnimated.png");
+        Warp.warpAnimation = getAnimationFrom1DPicture(warpAnimation, 64, 64, 9);
+        Texture walkSheet = MyAssetManager.manager.get(MyAssetManager.down);
+        Texture upWalkSheet = MyAssetManager.manager.get(MyAssetManager.up);
+        Texture leftSheet = MyAssetManager.manager.get(MyAssetManager.left);
+        Texture rightSheet = MyAssetManager.manager.get(MyAssetManager.right);
         Player.downWalkAnimation = getAnimationFrom1DPicture(walkSheet, PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, 10);
         Player.leftWalkAnimation = getAnimationFrom1DPicture(leftSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
         Player.heads = getAnimationFrom1DPicture(heads, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
-        HpPickup.texture = new Texture("pickups/hp.png");
-        InnerEye.texture = new Texture("pickups/InnerEye.png");
-        SadOnion.texture = new Texture("pickups/SadOnion.png");
-        Warp.texture = new Texture("pickups/warp.png");
-        Texture warpAnimation = new Texture("pickups/warpAnimated.png");
-        Warp.warpAnimation = getAnimationFrom1DPicture(warpAnimation, 64, 64, 9);
         stateTime = 0f;
         Player.headRegion = new TextureRegion(heads, 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
     }

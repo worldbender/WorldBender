@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.my.game.MyAssetManager;
 import com.my.game.WBGame;
 import com.my.game.player.Player;
 
@@ -86,14 +87,14 @@ public class Hud implements Disposable {
         healthBars.put(player.getName(), healthBar);
     }
 
-    //TODO zmienic jak bedzie AssetManager
+    //TODO zmienic jak bedzie AssetManager - poprawione LZ
     private void initHudTextures(){
-        Skin skin = new Skin(Gdx.files.internal("skin/sgx-ui.json"));
+        Skin skin = MyAssetManager.manager.get(MyAssetManager.sgx_ui_json);
         BitmapFont font = skin.getFont("small");
         labelStyle = new LabelStyle();
         labelStyle.font = font;
         labelStyle.fontColor = Color.BLACK;
-        healthBarTexture = new Texture("healthBar.png");
+        healthBarTexture = MyAssetManager.manager.get(MyAssetManager.healthBar);
         playerHeadTexture = new TextureRegion(Player.headRegion);
         healthBarStyle = new ProgressBarStyle();
         healthBarStyle.background = new TextureRegionDrawable(new TextureRegion(healthBarTexture, healthBarTexture.getHeight(), 0, healthBarTexture.getWidth() - healthBarTexture.getHeight() - 5, healthBarTexture.getHeight()));

@@ -9,17 +9,16 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import com.my.game.MyAssetManager;
 import com.my.game.WBGame;
 
 public abstract class AbstractScreen implements Screen {
     protected WBGame game;
 
-    protected Skin skin = new Skin(Gdx.files.internal("skin/sgx-ui.json"));
+    protected Skin skin = MyAssetManager.manager.get(MyAssetManager.sgx_ui_json);
     protected Stage stage;
     protected OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
@@ -36,7 +35,7 @@ public abstract class AbstractScreen implements Screen {
         stage = new Stage(new StretchViewport(WBGame.WIDTH, WBGame.HEIGHT, camera));
         spriteBatch = new SpriteBatch();
         Gdx.input.setInputProcessor(stage);
-        splashImg = new Texture("tree.jpg");
+        splashImg = MyAssetManager.manager.get(MyAssetManager.tree);
     }
 
     private void createCamera() {
@@ -89,7 +88,6 @@ public abstract class AbstractScreen implements Screen {
     }
 
     protected void showScreenMessage(String message){
-        Skin skin = new Skin(Gdx.files.internal("skin/sgx-ui.json"));
         BitmapFont font = skin.getFont("title");
         GlyphLayout glyphLayout = new GlyphLayout(font,message);
         float fontX = WBGame.WIDTH/2F - glyphLayout.width/2F;

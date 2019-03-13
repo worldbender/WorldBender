@@ -3,6 +3,7 @@ package com.my.game.music;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.my.game.MyAssetManager;
 
 public class MusicPlayer {
     private static Music music;
@@ -17,19 +18,18 @@ public class MusicPlayer {
     }
 
     public static void initSounds(){
-        hpUpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hpup.wav"));
-        opponentDieSound = Gdx.audio.newSound(Gdx.files.internal("sounds/meow.mp3"));
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music1.mp3"));
         music2 = Gdx.audio.newMusic(Gdx.files.internal("sounds/music2.mp3"));
         music3 = Gdx.audio.newMusic(Gdx.files.internal("sounds/music3.mp3"));
         music4 = Gdx.audio.newMusic(Gdx.files.internal("sounds/music4.mp3"));
+        hpUpSound = MyAssetManager.manager.get(MyAssetManager.hpup);
+        opponentDieSound = MyAssetManager.manager.get(MyAssetManager.meow);
     }
 
     public static void playBackgroundMusic(){
         music.stop();
         music.play();
 
-        //Waiting for asset manager
         music.setOnCompletionListener(music -> {
             music.stop();
             music2.stop();
@@ -63,3 +63,4 @@ public class MusicPlayer {
     }
 
 }
+
