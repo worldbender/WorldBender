@@ -1,7 +1,7 @@
 package server.bullets;
 
 import server.LogicMap.LogicMapHandler;
-import server.Player;
+import server.players.Player;
 import server.User;
 import server.connection.GameController;
 import server.opponents.AOpponent;
@@ -46,20 +46,20 @@ public class ABullet {
         this.checkIfBulletShouldDie();
     }
 
-    private void handleAllBulletCollisions(double deltaTime, CopyOnWriteArrayList<User> usersInRoom, Rectangle bounds, double newX, double newY){
+    protected void handleAllBulletCollisions(double deltaTime, CopyOnWriteArrayList<User> usersInRoom, Rectangle bounds, double newX, double newY){
         this.handleBulletCollisionWithMap(bounds);
         this.handleBulletCollisionWithOpponents(bounds);
         this.handleBulletCollisionWithPlayers(bounds, usersInRoom);
         this.handleBulletShift(newX, newY, deltaTime);
     }
 
-    private void handleBulletCollisionWithMap( Rectangle bounds){
+    protected void handleBulletCollisionWithMap( Rectangle bounds){
         if(this.map.isRectangleCollidesWithMap(bounds)){
             this.isDead = true;
         }
     }
 
-    private void handleBulletCollisionWithOpponents(Rectangle rec){
+    protected void handleBulletCollisionWithOpponents(Rectangle rec){
         for(AOpponent opponent : this.opponentList.getOpponents()){
             if(rec.intersects(opponent.getBounds()) && !this.isHostile()){
                 opponent.doDamage(this.attack);
@@ -68,7 +68,7 @@ public class ABullet {
         }
     }
 
-    private void handleBulletCollisionWithPlayers(Rectangle rec, CopyOnWriteArrayList<User> usersInRoom){
+    protected void handleBulletCollisionWithPlayers(Rectangle rec, CopyOnWriteArrayList<User> usersInRoom){
         Player player;
         for(User user : usersInRoom){
             player = user.getPlayer();
@@ -79,7 +79,7 @@ public class ABullet {
         }
     }
 
-    private void handleBulletShift(double newX, double newY, double deltaTime){
+    protected void handleBulletShift(double newX, double newY, double deltaTime){
         this.setX(newX);
         this.setY(newY);
         decrementRange(deltaTime);

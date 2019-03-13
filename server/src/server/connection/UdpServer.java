@@ -43,18 +43,14 @@ public class UdpServer extends Thread {
     private void updatePlayersState(String id, JSONObject content){
         User currentUser = existingUsers.get(id);
         boolean isMoving = content.getBoolean("isMoving");
-        String direction = content.getString("key");
+        String activeMovementKey = content.getString("activeMovementKey");
         currentUser.getPlayer().setMoving(isMoving);
+        currentUser.getPlayer().setSpecialKeys((JSONObject)content.get("specialKeys"));
         currentUser.getPlayer().setWSAD((JSONObject)content.get("wsad"));
-        currentUser.getPlayer().setActiveMovementKey(direction);
+        currentUser.getPlayer().setActiveMovementKey(activeMovementKey);
+        currentUser.getPlayer().setHeadDirection(content.getString("headDirection"));
     }
 
-    private void createBullet(String id){
-        User currentUser = existingUsers.get(id);
-        if(currentUser.getPlayer().canPlayerShoot()){
-            currentUser.getPlayer().shoot();
-        }
-    }
 
     public static void sendUdpMsgToAllUsersInRoom(String msg, CopyOnWriteArrayList<User> usersInRoom){
         for(User user : usersInRoom){
@@ -69,7 +65,6 @@ public class UdpServer extends Thread {
         String id = clientAddress.toString() + "," + clientPort;
         JSONObject json = new JSONObject(content);
         switch (json.getString("msg")){
-            case "createBullet": createBullet(id); break;
             case "playerState": updatePlayersState(id, (JSONObject) json.get("content")); break;
         }
     }

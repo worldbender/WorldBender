@@ -1,41 +1,40 @@
 package com.my.game.bullets;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.my.game.MyAssetManager;
 
-import static com.my.game.MyAssetManager.granat;
-
-public class ABullet {
+abstract public class ABullet {
     private int x;
     private int y;
     private int width;
     private int height;
     private int id;
     private float angle;
-    public static Texture texture = MyAssetManager.manager.get(granat);
-    public void draw(SpriteBatch spriteBatch){
+    private Texture texture;
+
+    abstract public void draw(SpriteBatch spriteBatch);
+
+    protected void drawBullet(SpriteBatch spriteBatch, Texture texture){
         float angle = ((this.getAngle() - (float)(Math.PI/2))*(float)(180f/Math.PI));
         spriteBatch.draw(
-                new TextureRegion(this.texture),
+                new TextureRegion(texture),
                 x,
                 y,
-                this.texture.getWidth()/2f,
-                this.texture.getHeight()/2f,
-                this.texture.getWidth(),
-                this.texture.getHeight(),
+                texture.getWidth()/2f,
+                texture.getHeight()/2f,
+                texture.getWidth(),
+                texture.getHeight(),
                 1f,
                 1f,
                 angle
         );
     }
+
     public void setPosition(int x, int y){
         this.setX(x);
         this.setY(y);
     }
-
 
     public void setX(int x) {
         this.x = x;

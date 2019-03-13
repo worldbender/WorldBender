@@ -131,7 +131,10 @@ public class TcpClientThread extends Thread{
         Room currentRoom = RoomList.getUserRoom(this.user.getConnectionId());
         initGame(currentRoom);
 
-        JSONObject content = new JSONObject().put("owner", user.getName()).put("opponents", currentRoom.getGameController().getOpponentsData()).put("players", currentRoom.getGameController().getPlayersData());
+        JSONObject content = new JSONObject()
+                .put("owner", user.getName())
+                .put("opponents", currentRoom.getGameController().getOpponentsData())
+                .put("players", currentRoom.getGameController().getPlayersData());
 
         JSONObject msg = new JSONObject()
                 .put("msg", "startGame");
@@ -139,17 +142,21 @@ public class TcpClientThread extends Thread{
 
         for(User currentUser : currentRoom.getUsersInRoom()){
             content.put("current",currentUser.getName());
+            content.put("playerType", currentUser.getPlayer().getPlayerType());
             msg.put("content", content);
             currentUser.getThread().sendMessage(msg);
         }
 
         currentRoom.setGameStarted(true);
+        currentRoom.getGameController().hasStarted = true;
     }
 
     //TODO: przejściowa wersja, do ogarnięcia
     private void initGame(Room room){
+        //TODO Here server must know what character user is
+        String USER_TYPE = "Ground";
         for(User user : room.getUsersInRoom()){
-            user.initializePlayer(room.getGameController());
+            user.initializePlayer(room.getGameController(), USER_TYPE);
         }
         room.getGameController().setPlayersPosition();
         room.getGameController().spawnAllOpponents();

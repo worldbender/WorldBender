@@ -2,6 +2,9 @@ package server;
 
 import server.connection.GameController;
 import server.connection.TcpClientThread;
+import server.players.Player;
+import server.players.PlayersFabric;
+
 import java.net.InetAddress;
 
 public class User {
@@ -29,8 +32,8 @@ public class User {
         this.connection = true;
     }
 
-    public void initializePlayer(GameController gameController){
-        this.player = new Player(this, gameController);
+    public void initializePlayer(GameController gameController, String playerType){
+        this.player = PlayersFabric.createPlayer(playerType, this, gameController);
     }
 
     public String getConnectionId(){

@@ -7,6 +7,9 @@ public class BulletFabric {
             case "Tear":
                 resultBullet = new Tear(id, angle);
                 break;
+            case "SpectralTear":
+                resultBullet = new SpectralTear(id, angle);
+                break;
         }
         return resultBullet;
     }

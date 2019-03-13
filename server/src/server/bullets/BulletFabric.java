@@ -9,6 +9,9 @@ public class BulletFabric {
             case "Tear":
                 resultBullet = new Tear(x, y, angle, hostile, gameController);
                 break;
+            case "SpectralTear":
+                resultBullet = new SpectralTear(x, y, angle, hostile, gameController);
+                break;
         }
         return resultBullet;
     }

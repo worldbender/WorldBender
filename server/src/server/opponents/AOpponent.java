@@ -6,6 +6,9 @@ import server.bullets.ABullet;
 import server.bullets.BulletFabric;
 import server.bullets.BulletList;
 import server.connection.GameController;
+import server.opponents.opponentAI.ChaserAI;
+import server.opponents.opponentAI.IOpponentAI;
+import server.opponents.opponentAI.OpponentAIFabric;
 import server.pickups.PickupFabric;
 import server.pickups.PickupList;
 import java.awt.*;
@@ -25,10 +28,10 @@ public abstract class AOpponent {
     private int hp;
     private long shootCooldown = 1000L;
     private long lastTimePlayerHasShot = 0L;
-    private long chaseCooldown = 2000L;
-    private long lastTimeOpponentHasChandedTargetToChase= 0L;
+    protected IOpponentAI opponentAI;
     private boolean isDead = false;
     private String idOfChasedPlayer = "";
+    private String bulletType;
     protected LogicMapHandler map;
     protected CopyOnWriteArrayList<User> usersInRoom;
     protected BulletList bulletList;
@@ -58,42 +61,8 @@ public abstract class AOpponent {
                         (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()) * (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()))));
                 if (distance < this.getViewRange()) {
                     angle = (float) (Math.atan2(user.getPlayer().getCenterY() - this.getCenterY(), this.getCenterX() - user.getPlayer().getCenterX()));
-                    ABullet newBullet = BulletFabric.createBullet("Tear", this.getCenterX(), this.getCenterY(), -angle + (float) Math.PI, true, this.gameController);
+                    ABullet newBullet = BulletFabric.createBullet(this.getBulletType(), this.getCenterX(), this.getCenterY(), -angle + (float) Math.PI, true, this.gameController);
                     this.bulletList.addBullet(newBullet);
-                }
-            }
-        }
-    }
-
-    protected void choosePlayerToChaseIfTimeComes(){
-        double distance;
-        if(this.shouldOpponentChangeChaseTarget()){
-            this.setIdOfChasedPlayer("");
-            double savedDistance = Float.POSITIVE_INFINITY;
-            for (User user : this.usersInRoom) {
-                distance = Math.sqrt((Math.abs(user.getPlayer().getCenterY() - this.getCenterY())) * (Math.abs(user.getPlayer().getCenterY() - this.getCenterY())) +
-                        (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()) * (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()))));
-                if (distance < this.getViewRange() && distance < savedDistance) {
-                    this.setIdOfChasedPlayer(user.getName());
-                    savedDistance = distance;
-                }
-            }
-        }
-    }
-
-    protected void chasePlayer(double deltaTime){
-        float angle;
-        double newX;
-        double newY;
-        for (User user : this.usersInRoom) {
-            if(user.getName().equals(this.getIdOfChasedPlayer())){
-                angle = (float) (Math.atan2(user.getPlayer().getCenterY() - this.getCenterY(), this.getCenterX() - user.getPlayer().getCenterX()));
-                newX = this.getX() + (deltaTime * Math.cos(-angle + (float) Math.PI) * this.getSpeed());
-                newY = this.getY() + (deltaTime * Math.sin(-angle + (float) Math.PI) * this.getSpeed());
-                Rectangle newPosRectangle = new Rectangle((int)newX, (int)newY, this.getWidth(), this.getHeight());
-                if(!this.isOpponentCollidesWithMap(newPosRectangle) && !this.isOpponentCollidesWithOpponents(newPosRectangle)){
-                    this.setX(newX);
-                    this.setY(newY);
                 }
             }
         }
@@ -110,6 +79,10 @@ public abstract class AOpponent {
             }
         }
         return result;
+    }
+
+    public void setOpponentAI(String type){
+        this.opponentAI = OpponentAIFabric.createOpponentAI("Chaser",this, gameController, false);
     }
 
     public boolean isOpponentCollidesWithMap(Rectangle rec){
@@ -130,16 +103,6 @@ public abstract class AOpponent {
         if(time - this.lastTimePlayerHasShot > this.shootCooldown){
             result = true;
             this.lastTimePlayerHasShot = time;
-        }
-        return result;
-    }
-    public boolean shouldOpponentChangeChaseTarget(){
-        boolean result = false;
-        Date date= new Date();
-        long time = date.getTime();
-        if(time - this.lastTimeOpponentHasChandedTargetToChase > this.chaseCooldown){
-            result = true;
-            this.lastTimeOpponentHasChandedTargetToChase = time;
         }
         return result;
     }
@@ -244,22 +207,6 @@ public abstract class AOpponent {
         this.viewRange = viewRange;
     }
 
-    public long getChaseCooldown() {
-        return chaseCooldown;
-    }
-
-    public void setChaseCooldown(long chaseCooldown) {
-        this.chaseCooldown = chaseCooldown;
-    }
-
-    public long getLastTimeOpponentHasChandedTargetToChase() {
-        return lastTimeOpponentHasChandedTargetToChase;
-    }
-
-    public void setLastTimeOpponentHasChandedTargetToChase(long lastTimeOpponentHasChandedTargetToChase) {
-        this.lastTimeOpponentHasChandedTargetToChase = lastTimeOpponentHasChandedTargetToChase;
-    }
-
     public String getIdOfChasedPlayer() {
         return idOfChasedPlayer;
     }
@@ -274,5 +221,21 @@ public abstract class AOpponent {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public String getBulletType() {
+        return bulletType;
+    }
+
+    public void setBulletType(String bulletType) {
+        this.bulletType = bulletType;
+    }
+
+    public IOpponentAI getOpponentAI() {
+        return opponentAI;
+    }
+
+    public void setOpponentAI(IOpponentAI opponentAI) {
+        this.opponentAI = opponentAI;
     }
 }

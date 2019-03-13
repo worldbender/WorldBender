@@ -14,6 +14,7 @@ import com.my.game.pickups.APickup;
 import com.my.game.pickups.PickupFabric;
 import com.my.game.pickups.PickupList;
 import com.my.game.player.Player;
+import com.my.game.player.PlayerFabric;
 import com.my.game.player.PlayerList;
 import com.my.game.Properties;
 import com.my.game.screens.GameplayScreen;
@@ -109,14 +110,7 @@ public class TCPConnection extends Thread {
                 Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_NO_ROOM));
                 break;
             case "changeLevel":
-                System.out.println(contentJSON);
-                JSONArray opponents = contentJSON.getJSONArray("opponents");
-                for (int i = 0; i < opponents.length(); i++) {
-                    JSONObject opponent = opponents.getJSONObject(i);
-                    AOpponent newOpponent = OpponentFabric.createOpponent(opponent.getString("type"), opponent.getInt("id"));
-                    OpponentList.addOpponent(newOpponent);
-                }
-                game.getGameplayScreen().changeLevel(contentJSON.getString("map"));
+                this.changeLevel(contentJSON);
                 break;
         }
     }
@@ -133,12 +127,34 @@ public class TCPConnection extends Thread {
         JSONArray playersJSON = contentJSON.getJSONArray("players");
         for (int i = 0; i < playersJSON.length(); i++) {
             JSONObject player = playersJSON.getJSONObject(i);
-            Player p = new Player(player.getString("name"));
+            Player newPlayer = PlayerFabric.createPlayer(contentJSON.getString("playerType"), player.getString("name"));
             if (player.getString("name").equals(contentJSON.getString("current"))) {
-                p.setCurrentPlayer(true);
-                GameplayScreen.currentPlayer = p;
+                newPlayer.setCurrentPlayer(true);
+                GameplayScreen.currentPlayer = newPlayer;
             }
-            players.put(player.getString("name"), p);
+            players.put(player.getString("name"), newPlayer);
         }
+    }
+
+    private void changeLevel(JSONObject contentJSON){
+        System.out.println(contentJSON);
+        JSONArray opponents = contentJSON.getJSONArray("opponents");
+        JSONArray playersFromServer = contentJSON.getJSONArray("players");
+
+        for (Player player : players.values()) {
+            for (int i = 0; i < playersFromServer.length(); i++) {
+                JSONObject receivedPlayer = playersFromServer.getJSONObject(i);
+                if (player.getName().equals(receivedPlayer.getString("name"))) {
+                    player.setPosition(receivedPlayer.getInt("x"), receivedPlayer.getInt("y"));
+                }
+            }
+        }
+
+        for (int i = 0; i < opponents.length(); i++) {
+            JSONObject opponent = opponents.getJSONObject(i);
+            AOpponent newOpponent = OpponentFabric.createOpponent(opponent.getString("type"), opponent.getInt("id"));
+            OpponentList.addOpponent(newOpponent);
+        }
+        game.getGameplayScreen().changeLevel(contentJSON.getString("map"));
     }
 }

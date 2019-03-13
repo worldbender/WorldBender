@@ -3,21 +3,23 @@ package com.my.game.player;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.my.game.Properties;
 import com.my.game.UtilitySingletons.ShapeDrawer;
 import com.my.game.UtilitySingletons.StringDrawer;
 import com.my.game.screens.GameplayScreen;
 import org.json.JSONObject;
 
 
-public class Player extends APlayer {
+public abstract class Player extends APlayer {
     public static double maxHp = 100;
     public static Animation<TextureRegion> downWalkAnimation;
     public static Animation<TextureRegion> upWalkAnimation;
     public static Animation<TextureRegion> rightWalkAnimation;
     public static Animation<TextureRegion> leftWalkAnimation;
+    private float scale = java.lang.Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
+    private String activeMovementKey = "DOWN";
+    private String headDirection = "DOWN";
     public static TextureRegion headRegion;
-    private float scale = 2f;
-    private String activeMovementKey = "";
     private boolean isMoving = false;
     public boolean KEY_W = false;
     public boolean KEY_S = true;
@@ -27,6 +29,7 @@ public class Player extends APlayer {
     public boolean DOWN_ARROW = false;
     public boolean LEFT_ARROW = false;
     public boolean RIGHT_ARROW = false;
+    public boolean KEY_SPACE = false;
 
     public Player(String name){
         this(name, 0, 0);
@@ -41,6 +44,7 @@ public class Player extends APlayer {
 
     public void draw(SpriteBatch batch, float stateTime) {
         this.drawCharacter(batch, stateTime);
+        this.drawHead(batch);
         this.drawName(batch);
     }
 
@@ -80,10 +84,29 @@ public class Player extends APlayer {
                 drawAnimationCharacter(batch, downWalkAnimation.getKeyFrames()[0]);
                 break;
             case "LEFT":
-                drawAnimationCharacter(batch, leftWalkAnimation.getKeyFrames()[9]);
+                drawAnimationCharacter(batch, leftWalkAnimation.getKeyFrames()[5]);
                 break;
             case "RIGHT":
-                drawAnimationCharacter(batch, rightWalkAnimation.getKeyFrames()[9]);
+                drawAnimationCharacter(batch, rightWalkAnimation.getKeyFrames()[5]);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void drawHead(SpriteBatch batch){
+        switch (this.headDirection){
+            case "UP":
+                drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[2]);
+                break;
+            case "DOWN":
+                drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[0]);
+                break;
+            case "LEFT":
+                drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[3]);
+                break;
+            case "RIGHT":
+                drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[1]);
                 break;
             default:
                 break;
@@ -100,21 +123,18 @@ public class Player extends APlayer {
         );
     }
 
-    private void drawHp(SpriteBatch batch) {
-        batch.end();
-        ShapeDrawer.drawHp(batch, (int)this.getHeight(), (int) this.getX(), (int) this.getY(), this.getHp(), (int) Player.maxHp);
-        batch.begin();
-    }
-
     private void drawName(SpriteBatch batch) {
         StringDrawer.drawHp(batch, this.getName(), (int) this.getX(), (int) this.getY() + (int)this.getHeight());
     }
 
     public JSONObject getPlayerState(){
-
         JSONObject result =  new JSONObject()
                 .put("isMoving", this.isMoving)
-                .put("key", this.activeMovementKey)
+                .put("activeMovementKey", this.activeMovementKey)
+                .put("headDirection", this.headDirection)
+                .put("specialKeys", new JSONObject()
+                        .put("space", this.KEY_SPACE)
+                )
                 .put("wsad", new JSONObject()
                             .put("w", this.KEY_W)
                             .put("s", this.KEY_S)
@@ -163,5 +183,12 @@ public class Player extends APlayer {
         this.DOWN_ARROW = false;
         this.LEFT_ARROW = false;
         this.RIGHT_ARROW = false;
+        this.KEY_SPACE = false;
     }
+
+    public void setHeadDirection(String headDirection) {
+        this.headDirection = headDirection;
+    }
+
+    protected abstract Animation<TextureRegion> getHeads();
 }

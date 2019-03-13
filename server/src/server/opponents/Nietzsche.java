@@ -4,6 +4,7 @@ import server.LogicMap.LogicMapHandler;
 import server.User;
 import server.bullets.BulletList;
 import server.connection.GameController;
+import server.opponents.opponentAI.IdlerAI;
 import server.pickups.PickupList;
 import java.awt.*;
 import java.util.Random;
@@ -17,19 +18,14 @@ public class Nietzsche extends AOpponent {
         this.setHeight(250);
         this.setHp(500);
         this.setViewRange(800.0);
+        this.setBulletType("Tear");
+        this.opponentAI = new IdlerAI(this, gameController, false);
     }
 
     @Override
     public void update(double deltaTime) {
         super.update(deltaTime);
-        Random generator = new Random();
-        int newX = (int)this.getX() + generator.nextInt()%3;
-        int newY = (int)this.getY() + generator.nextInt()%3;
-        Rectangle newPosRectangle = new Rectangle(newX, newY, this.getWidth(), this.getHeight());
-        if(!isOpponentCollidesWithMap(newPosRectangle)){
-            this.setX(newX);
-            this.setY(newY);
-        }
+        this.opponentAI.behave(deltaTime);
         this.handleOpponentShoot();
     }
 

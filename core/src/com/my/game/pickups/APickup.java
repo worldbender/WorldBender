@@ -13,7 +13,7 @@ public abstract class APickup {
         this.id = id;
         this.type = type;
     }
-    public abstract void draw(SpriteBatch spriteBatch);
+    public abstract void draw(SpriteBatch spriteBatch, float stateTime);
 
     public int getX() {
         return x;
