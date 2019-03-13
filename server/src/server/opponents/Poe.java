@@ -1,11 +1,8 @@
 package server.opponents;
 
-import server.LogicMap.LogicMapHandler;
-import server.User;
-import server.bullets.BulletList;
 import server.connection.GameController;
-import server.pickups.PickupList;
-import java.util.concurrent.CopyOnWriteArrayList;
+import server.opponents.opponentAI.ChaserAI;
+import server.opponents.opponentAI.IdlerAI;
 
 public class Poe extends AOpponent{
     public Poe(GameController gameController){
@@ -14,14 +11,15 @@ public class Poe extends AOpponent{
         this.setWidth(60);
         this.setHeight(75);
         this.setHp(100);
+        this.setBulletType("SpectralTear");
+        this.opponentAI = new IdlerAI(this, gameController, true);
     }
 
     @Override
     public void update(double deltaTime) {
         super.update(deltaTime);
-        this.chasePlayer(deltaTime);
+        this.opponentAI.behave(deltaTime);
         this.handleOpponentShoot();
-        this.choosePlayerToChaseIfTimeComes();
     }
     @Override
     protected void handleOpponentDeath(){

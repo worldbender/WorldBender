@@ -27,11 +27,11 @@ public class OpponentList {
         return opponents;
     }
     public static void removeOpponentById(int id){
-        for(AOpponent opponent : opponents){
-            if(opponent.getId() == id){
-                opponent.die();
-                opponents.remove(opponent);
-            }
-        }
+        opponents.stream()
+                .filter(oppoennt -> oppoennt.getId() == id)
+                .forEach(opponent -> {
+                    opponent.die();
+                    opponents.remove(opponent);
+                });
     }
 }

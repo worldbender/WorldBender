@@ -11,7 +11,7 @@ public class InnerEye extends APickup{
     }
 
     @Override
-    public void draw(SpriteBatch spriteBatch) {
+    public void draw(SpriteBatch spriteBatch, float stateTime) {
         spriteBatch.draw(InnerEye.texture, this.getX(), this.getY());
     }
 }

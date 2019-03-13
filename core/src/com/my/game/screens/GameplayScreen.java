@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.my.game.MyAssetManager;
 import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
+import com.my.game.bullets.SpectralTear;
+import com.my.game.bullets.Tear;
 import com.my.game.mapRenderer.GraphicMapHandler;
 import com.my.game.opponents.*;
 import com.my.game.pickups.*;
@@ -21,7 +21,6 @@ import com.my.game.player.PlayerList;
 import com.my.game.WBGame;
 import com.my.game.music.MusicPlayer;
 import org.json.JSONObject;
-import com.my.game.MyAssetManager;
 
 import java.util.Map;
 
@@ -29,10 +28,7 @@ import static com.my.game.MyAssetManager.granat;
 
 public class GameplayScreen extends AbstractScreen{
 
-    private Texture playerTexture;
     private static Map<String, Player> players;
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer render;
     private GraphicMapHandler graphicMapHandler;
     public static Player currentPlayer;
     private int numerOfXTiles;
@@ -43,10 +39,7 @@ public class GameplayScreen extends AbstractScreen{
     private int mapHeight;
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
-    public static final int PLAYER_HEAD_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_HEAD_WIDTH"));
-    public static final int PLAYER_HEAD_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_HEAD_HEIGHT"));
-    public static final int NUMBER_OF_PLAYER_ANIMATION_FRAMES = 5;
-    private float stateTime;
+    private float stateTime = 0f;
     private Hud hud;
 
     public GameplayScreen(WBGame game) {
@@ -75,33 +68,11 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     public void create() {
-        this.loadData();
         this.init();
         MusicPlayer.initSounds();
-        MusicPlayer.playBackgroundMusic();
-    }
-
-    private void loadData() {
-        Texture walkSheet = MyAssetManager.manager.get(MyAssetManager.down);
-        Texture upWalkSheet = MyAssetManager.manager.get(MyAssetManager.up);
-        Texture leftSheet = MyAssetManager.manager.get(MyAssetManager.left);
-        Texture rightSheet = MyAssetManager.manager.get(MyAssetManager.right);
-        Player.downWalkAnimation = getAnimationFrom1DPicture(walkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
-        Player.upWalkAnimation = getAnimationFrom1DPicture(upWalkSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
-        Player.rightWalkAnimation = getAnimationFrom1DPicture(rightSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
-        Player.leftWalkAnimation = getAnimationFrom1DPicture(leftSheet, PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
-        stateTime = 0f;
-        Player.headRegion = new TextureRegion(walkSheet, 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
-    }
-
-    //TODO This method should be in asset manager
-    private Animation<TextureRegion> getAnimationFrom1DPicture(Texture texture, int textureWidth, int textureHeight, int numberOfAnimationFrames){
-        TextureRegion[][] arrayOfWalks = TextureRegion.split(texture, textureWidth, textureHeight);
-        TextureRegion[] walkFrames = new TextureRegion[numberOfAnimationFrames];
-        for (int i = 0; i < numberOfAnimationFrames; i++) {
-            walkFrames[i] = arrayOfWalks[0][i];
+        if(!Boolean.parseBoolean(Properties.loadConfigFile("DEBUG_MODE"))){
+            MusicPlayer.playBackgroundMusic();
         }
-        return new Animation<TextureRegion>(0.1f, walkFrames);
     }
 
     private void init() {
@@ -139,14 +110,13 @@ public class GameplayScreen extends AbstractScreen{
             hud.setHealthBarValue(player.getName(), player.getHp());
         }
         for(ABullet bullet : BulletList.getBullets()){
-            bullet.setTexture(MyAssetManager.manager.get(granat));
             bullet.draw(spriteBatch);
         }
         for(AOpponent opponent : OpponentList.getOpponents()){
             opponent.draw(spriteBatch);
         }
         for(APickup pickup : PickupList.getPickups()){
-            pickup.draw(spriteBatch);
+            pickup.draw(spriteBatch, stateTime);
         }
     }
 
@@ -190,48 +160,44 @@ public class GameplayScreen extends AbstractScreen{
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             currentPlayer.setMoving(true);
             currentPlayer.setActiveMovementKey("LEFT");
+            currentPlayer.setHeadDirection("LEFT");
             currentPlayer.KEY_A = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             currentPlayer.setMoving(true);
             currentPlayer.setActiveMovementKey("RIGHT");
+            currentPlayer.setHeadDirection("RIGHT");
             currentPlayer.KEY_D = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             currentPlayer.setMoving(true);
             currentPlayer.setActiveMovementKey("UP");
+            currentPlayer.setHeadDirection("UP");
             currentPlayer.KEY_W = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             currentPlayer.setMoving(true);
             currentPlayer.setActiveMovementKey("DOWN");
+            currentPlayer.setHeadDirection("DOWN");
             currentPlayer.KEY_S = true;
         }
     }
 
     private void handleArrowKeys(){
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            this.sendMessageToServer(new JSONObject()
-                    .put("msg", "createBullet"));
-            currentPlayer.setActiveMovementKey("LEFT");
+            currentPlayer.setHeadDirection("LEFT");
             currentPlayer.LEFT_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.sendMessageToServer(new JSONObject()
-                    .put("msg", "createBullet"));
-            currentPlayer.setActiveMovementKey("RIGHT");
+            currentPlayer.setHeadDirection("RIGHT");
             currentPlayer.RIGHT_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            this.sendMessageToServer(new JSONObject()
-                    .put("msg", "createBullet"));
-            currentPlayer.setActiveMovementKey("UP");
+            currentPlayer.setHeadDirection("UP");
             currentPlayer.UP_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            this.sendMessageToServer(new JSONObject()
-                    .put("msg", "createBullet"));
-            currentPlayer.setActiveMovementKey("DOWN");
+            currentPlayer.setHeadDirection("DOWN");
             currentPlayer.DOWN_ARROW = true;
         }
     }
@@ -245,6 +211,9 @@ public class GameplayScreen extends AbstractScreen{
         }
         if(Gdx.input.isKeyPressed(Input.Keys.M)){
             MusicPlayer.playOpponentDieSound();
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            currentPlayer.KEY_SPACE = true;
         }
     }
 

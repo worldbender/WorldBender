@@ -1,6 +1,6 @@
 package server.pickups;
 
-import server.Player;
+import server.players.Player;
 
 public class InnerEye extends APickup{
     public InnerEye(int x, int y){

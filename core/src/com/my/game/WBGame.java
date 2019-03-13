@@ -43,8 +43,8 @@ public class WBGame extends Game {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         RES_WIDTH = screenSize.width;
         RES_HEIGHT = screenSize.height;
-        WIDTH = 1600;
-        HEIGHT = 900;
+        WIDTH = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_WIDTH"));
+        HEIGHT = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_HEIGHT"));
     }
 
     @Override

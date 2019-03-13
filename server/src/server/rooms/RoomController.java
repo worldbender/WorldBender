@@ -76,12 +76,15 @@ public class RoomController {
         }
 
         currentRoom.setGameStarted(true);
+        currentRoom.getGameController().hasStarted = true;
     }
 
     //TODO: przejściowa wersja, do ogarnięcia
     public void initGame(Room room){
+        //TODO Here server must know what character user is
+        String USER_TYPE = "Ground";
         for(User user : room.getUsersInRoom()){
-            user.initializePlayer(room.getGameController());
+            user.initializePlayer(room.getGameController(), USER_TYPE);
         }
         room.getGameController().setPlayersPosition();
         room.getGameController().spawnAllOpponents();
