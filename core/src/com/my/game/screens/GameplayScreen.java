@@ -110,7 +110,7 @@ public class GameplayScreen extends AbstractScreen{
             hud.setHealthBarValue(player.getName(), player.getHp());
         }
         for(ABullet bullet : BulletList.getBullets()){
-            bullet.draw(spriteBatch);
+            bullet.draw(spriteBatch, stateTime);
         }
         for(AOpponent opponent : OpponentList.getOpponents()){
             opponent.draw(spriteBatch);

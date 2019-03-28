@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.my.game.bullets.FireRing;
 import com.my.game.pickups.Warp;
 import com.my.game.player.Ground;
 import com.my.game.player.Player;
@@ -28,6 +29,7 @@ public class MyAssetManager {
     //bullets
     public final static String granat = "bullets/granat.png";
     public final static String spectralTear = "bullets/spectralTear.png";
+    public final static String fireRingTexture = "bullets/fireRing.png";
 
     //playerTexture
     public final static String downWalk = "characters/downIsaacHeadless2.png";
@@ -71,6 +73,7 @@ public class MyAssetManager {
     public static void loadBullets(){
         manager.load(granat, Texture.class);
         manager.load(spectralTear, Texture.class);
+        manager.load(fireRingTexture, Texture.class);
     }
 
     public static void loadPlayerTexture(){
@@ -123,6 +126,7 @@ public class MyAssetManager {
         Player.upWalkAnimation = getAnimationFrom1DPicture(manager.get(upWalk), PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.rightWalkAnimation = getAnimationFrom1DPicture(manager.get(rightWalk), PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, 10);
         Player.leftWalkAnimation = getAnimationFrom1DPicture(manager.get(leftWalk), PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
+        FireRing.fireRingAnimation = getAnimationFrom1DPicture(manager.get(fireRingTexture), 64, 64, 10);
         Ground.heads = getAnimationFrom1DPicture(manager.get(profHeads), PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
         Water.heads = getAnimationFrom1DPicture(manager.get(blondiHeads), PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
         Warp.warpAnimation = getAnimationFrom1DPicture(manager.get(warpAnimation), 64, 64, 9);

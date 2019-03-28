@@ -4,11 +4,10 @@ import org.json.JSONObject;
 import server.LogicMap.LogicMapHandler;
 import server.Properties;
 import server.User;
-import server.bullets.AtackFabric;
+import server.bullets.AttackFactory;
 import server.bullets.BulletList;
 import server.connection.GameController;
 import server.powers.IPower;
-import server.powers.PowerFabric;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class Player {
     private long shootSpeedModificator = 1L;
     private String activeMovementKey = "DOWN";
     private String headDirection = "DOWN";
-    private String bulletType = "SpectralTear";
+    protected String bulletType = "SpectralTear";
     private String weaponType = "Normal";
     private String playerType;
     private ArrayList<String> collectedItems;
@@ -136,7 +135,7 @@ public class Player {
         if(this.RIGHT_ARROW){
             angle = 0f;
         }
-        AtackFabric.createAtack(this, this.bulletList, angle, gameController);
+        AttackFactory.createAtack(this, this.bulletList, angle, gameController);
     }
 
     public boolean canPlayerShoot() {

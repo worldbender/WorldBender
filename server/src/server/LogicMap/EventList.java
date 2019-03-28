@@ -2,7 +2,7 @@ package server.LogicMap;
 
 import server.connection.GameController;
 import server.opponents.AOpponent;
-import server.opponents.OpponentFabric;
+import server.opponents.OpponentFactory;
 import server.opponents.OpponentList;
 import java.awt.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,7 +34,7 @@ public class EventList {
         for (EventBlock eventBlock : passiveEventList){
             if(eventBlock.getKey().equals("enemy") && !eventBlock.isHappened()){
                 String opponentType = eventBlock.getValue();
-                AOpponent newOpponent = OpponentFabric.createOpponent(opponentType, this.gameController);
+                AOpponent newOpponent = OpponentFactory.createOpponent(opponentType, this.gameController);
                 newOpponent.setX(eventBlock.getX());
                 newOpponent.setY(eventBlock.getY());
                 opponentList.createOpponent(newOpponent);

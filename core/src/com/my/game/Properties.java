@@ -35,6 +35,11 @@ public class Properties {
     public static String loadConfigFile(String inputName) {
 
         java.util.Properties prop = new java.util.Properties();
+        try(FileInputStream input = new FileInputStream(PATH)){
+            prop.load(input);
+        }catch (IOException io){
+            io.printStackTrace();
+        }
         FileInputStream input = null;
         try {
             input = new FileInputStream(PATH);

@@ -7,10 +7,12 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Intersector;
 import server.Properties;
 import server.connection.GameController;
 
 import java.awt.*;
+import java.awt.geom.Area;
 
 public class LogicMapHandler {
     private TiledMap map;
@@ -108,18 +110,21 @@ public class LogicMapHandler {
 
     public boolean isRectangleCollidesWithMap(Rectangle rec){
         boolean result = false;
+        int numerOfXTiles = this.map.getProperties().get("width", Integer.class);
+        int numerOfYTiles = this.map.getProperties().get("height", Integer.class);
         ABlock currentBlock;
+
         int startObjTileX = ((int)rec.getX()/32) - 3;
         startObjTileX = startObjTileX < 0 ? 0 : startObjTileX;
 
         int endObjTileX = ((int)rec.getX()/32) + (int)Math.ceil(rec.width/32) + 3;
-        endObjTileX = endObjTileX > 100 ? 100 : endObjTileX;
+        endObjTileX = endObjTileX > numerOfXTiles ? numerOfXTiles : endObjTileX;
 
         int startObjTileY = ((int)rec.getY()/32) - 3;
         startObjTileY = startObjTileY < 0 ? 0 : startObjTileY;
 
         int endObjTileY = ((int)rec.getY()/32) + ((int)Math.ceil(rec.height/32)) + 3;
-        endObjTileY = endObjTileY > 100 ? 100 : endObjTileY;
+        endObjTileY = endObjTileY > numerOfYTiles ? numerOfYTiles : endObjTileY;
 
         for(int x = startObjTileX; x < endObjTileX; x++){
             for(int y = startObjTileY; y < endObjTileY; y++){

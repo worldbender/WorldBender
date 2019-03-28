@@ -3,7 +3,7 @@ package server;
 import server.connection.GameController;
 import server.connection.TcpClientThread;
 import server.players.Player;
-import server.players.PlayersFabric;
+import server.players.PlayersFactory;
 
 import java.net.InetAddress;
 
@@ -33,7 +33,7 @@ public class User {
     }
 
     public void initializePlayer(GameController gameController, String playerType){
-        this.player = PlayersFabric.createPlayer(playerType, this, gameController);
+        this.player = PlayersFactory.createPlayer(playerType, this, gameController);
     }
 
     public String getConnectionId(){
