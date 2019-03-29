@@ -16,6 +16,9 @@ public class PickupFactory {
             case "Warp":
                 result = new Warp(x, y, id);
                 break;
+            case "InvisibleWarp":
+                result = new InvisibleWarp(x, y, id);
+                break;
             case "Mana":
                //TODO make mana pickup
                 break;

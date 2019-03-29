@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.my.game.bullets.FireRing;
+import com.my.game.pickups.InvisibleWarp;
 import com.my.game.pickups.Warp;
 import com.my.game.player.Ground;
 import com.my.game.player.Player;
@@ -50,6 +51,7 @@ public class MyAssetManager {
     public final static String SadOnion = "pickups/SadOnion.png";
     public final static String warp = "pickups/warp.png";
     public final static String warpAnimation = "pickups/warpAnimated.png";
+    public final static String openDoorAnimation = "pickups/openDoors.png";
 
     //screenImages
     public final static String tree = "screenImages/tree.jpg";
@@ -97,6 +99,7 @@ public class MyAssetManager {
         manager.load(SadOnion, Texture.class);
         manager.load(warp, Texture.class);
         manager.load(warpAnimation, Texture.class);
+        manager.load(openDoorAnimation, Texture.class);
     }
 
     public static void loadMusic(){
@@ -130,6 +133,7 @@ public class MyAssetManager {
         Ground.heads = getAnimationFrom1DPicture(manager.get(profHeads), PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
         Water.heads = getAnimationFrom1DPicture(manager.get(blondiHeads), PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
         Warp.warpAnimation = getAnimationFrom1DPicture(manager.get(warpAnimation), 64, 64, 9);
+        InvisibleWarp.openDoorsAnimation = getAnimationFrom1DPicture(manager.get(openDoorAnimation), 64, 64, 4);
         Texture headsRegion = new Texture("characters/prof.png");
         Player.headRegion = new TextureRegion(headsRegion, 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
     }
