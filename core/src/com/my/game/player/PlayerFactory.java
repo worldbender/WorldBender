@@ -1,6 +1,6 @@
 package com.my.game.player;
 
-public class PlayerFabric {
+public class PlayerFactory {
     public static Player createPlayer(String type, String name) {
         Player resultPlayer;
         switch (type) {

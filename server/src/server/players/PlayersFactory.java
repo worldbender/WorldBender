@@ -3,7 +3,7 @@ package server.players;
 import server.User;
 import server.connection.GameController;
 
-public class PlayersFabric {
+public class PlayersFactory {
     public static Player createPlayer(String type, User user, GameController gameController) {
         Player resultPlayer;
         switch (type) {

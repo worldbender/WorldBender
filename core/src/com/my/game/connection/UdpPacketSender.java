@@ -38,17 +38,5 @@ public class UdpPacketSender implements Runnable {
 
 
     public void run() {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            try {
-                while (!in.ready()) {
-                    Thread.sleep(10);
-                }
-                //sendMessage(in.readLine());
-            } catch (Exception e) {
-                System.err.println(e);
-                e.printStackTrace();
-            }
-        }
     }
 }

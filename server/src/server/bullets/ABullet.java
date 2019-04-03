@@ -1,5 +1,8 @@
 package server.bullets;
 
+import com.badlogic.gdx.graphics.g2d.PolygonSprite;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import server.LogicMap.LogicMapHandler;
 import server.players.Player;
 import server.User;
@@ -7,6 +10,8 @@ import server.connection.GameController;
 import server.opponents.AOpponent;
 import server.opponents.OpponentList;
 import java.awt.*;
+import java.awt.geom.Area;
+import java.awt.geom.Point2D;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ABullet {
@@ -15,8 +20,8 @@ public class ABullet {
     private double angle;
     private int id;
     private int range;
-    private int width = 15;
-    private int height = 28;
+    protected int width = 15;
+    protected int height = 28;
     private String type;
     private double bulletSpeed = 1;
     private boolean isDead = false;
@@ -38,6 +43,13 @@ public class ABullet {
         this.gameController = gameController;
         this.map = gameController.logicMapHandler;
     }
+
+    public ABullet(int x, int y, double angle){
+        this.x = x;
+        this.y = y;
+        this.angle = angle;
+    }
+
     public void update(double deltaTime, CopyOnWriteArrayList<User> usersInRoom){
         double newX = this.getX() + (deltaTime * Math.cos(angle) * bulletSpeed);
         double newY = this.getY() + (deltaTime * Math.sin(angle) * bulletSpeed);
@@ -53,7 +65,7 @@ public class ABullet {
         this.handleBulletShift(newX, newY, deltaTime);
     }
 
-    protected void handleBulletCollisionWithMap( Rectangle bounds){
+    protected void handleBulletCollisionWithMap(Rectangle bounds){
         if(this.map.isRectangleCollidesWithMap(bounds)){
             this.isDead = true;
         }

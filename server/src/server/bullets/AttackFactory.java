@@ -3,12 +3,12 @@ package server.bullets;
 import server.players.Player;
 import server.connection.GameController;
 
-public class AtackFabric {
+public class AttackFactory {
     public static void createAtack(Player player, BulletList bulletList, float angle, GameController gameController){
         ABullet newBullet;
         switch (player.getWeaponType()) {
             case "Normal":
-                newBullet= BulletFabric.createBullet(
+                newBullet= BulletFactory.createBullet(
                         player.getBulletType(),
                         player.getCenterX(),
                         player.getCenterY(),
@@ -19,7 +19,7 @@ public class AtackFabric {
                 bulletList.addBullet(newBullet);
                 break;
             case "Triple":
-                newBullet = BulletFabric.createBullet(
+                newBullet = BulletFactory.createBullet(
                         player.getBulletType(),
                         player.getCenterX() + (int)(Math.cos(angle + (Math.PI/4.0))*20.0),
                         player.getCenterY() + (int)(Math.sin(angle + (Math.PI/4.0))*20.0),
@@ -28,7 +28,7 @@ public class AtackFabric {
                         gameController
                 );
                 bulletList.addBullet(newBullet);
-                newBullet = BulletFabric.createBullet(
+                newBullet = BulletFactory.createBullet(
                         player.getBulletType(),
                         player.getCenterX() + (int)(Math.cos(angle)*20.0),
                         player.getCenterY() + (int)(Math.sin(angle)*20.0),
@@ -37,7 +37,7 @@ public class AtackFabric {
                         gameController
                 );
                 bulletList.addBullet(newBullet);
-                newBullet = BulletFabric.createBullet(
+                newBullet = BulletFactory.createBullet(
                         player.getBulletType(),
                         player.getCenterX() + (int)(Math.cos(angle + (-Math.PI/4.0))*20.0),
                         player.getCenterY() + (int)(Math.sin(angle + (-Math.PI/4.0))*20.0),
@@ -48,7 +48,7 @@ public class AtackFabric {
                 bulletList.addBullet(newBullet);
                 break;
             case "SadOnion":
-                newBullet = BulletFabric.createBullet(
+                newBullet = BulletFactory.createBullet(
                         player.getBulletType(),
                         player.getCenterX() + (int)(Math.cos(angle + (Math.PI/4.0))*20.0),
                         player.getCenterY() + (int)(Math.sin(angle + (Math.PI/4.0))*20.0),
@@ -57,7 +57,7 @@ public class AtackFabric {
                         gameController
                 );
                 bulletList.addBullet(newBullet);
-                newBullet = BulletFabric.createBullet(
+                newBullet = BulletFactory.createBullet(
                         player.getBulletType(),
                         player.getCenterX() + (int)(Math.cos(angle)*20.0),
                         player.getCenterY() + (int)(Math.sin(angle)*20.0),
@@ -66,7 +66,7 @@ public class AtackFabric {
                         gameController
                 );
                 bulletList.addBullet(newBullet);
-                newBullet = BulletFabric.createBullet(
+                newBullet = BulletFactory.createBullet(
                         player.getBulletType(),
                         player.getCenterX() + (int)(Math.cos(angle + (-Math.PI/4.0))*20.0),
                         player.getCenterY() + (int)(Math.sin(angle + (-Math.PI/4.0))*20.0),

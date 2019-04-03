@@ -3,13 +3,12 @@ package server.opponents;
 import server.LogicMap.LogicMapHandler;
 import server.User;
 import server.bullets.ABullet;
-import server.bullets.BulletFabric;
+import server.bullets.BulletFactory;
 import server.bullets.BulletList;
 import server.connection.GameController;
-import server.opponents.opponentAI.ChaserAI;
 import server.opponents.opponentAI.IOpponentAI;
-import server.opponents.opponentAI.OpponentAIFabric;
-import server.pickups.PickupFabric;
+import server.opponents.opponentAI.OpponentAIFactory;
+import server.pickups.PickupFactory;
 import server.pickups.PickupList;
 import java.awt.*;
 import java.util.Date;
@@ -61,7 +60,7 @@ public abstract class AOpponent {
                         (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()) * (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()))));
                 if (distance < this.getViewRange()) {
                     angle = (float) (Math.atan2(user.getPlayer().getCenterY() - this.getCenterY(), this.getCenterX() - user.getPlayer().getCenterX()));
-                    ABullet newBullet = BulletFabric.createBullet(this.getBulletType(), this.getCenterX(), this.getCenterY(), -angle + (float) Math.PI, true, this.gameController);
+                    ABullet newBullet = BulletFactory.createBullet(this.getBulletType(), this.getCenterX(), this.getCenterY(), -angle + (float) Math.PI, true, this.gameController);
                     this.bulletList.addBullet(newBullet);
                 }
             }
@@ -82,7 +81,7 @@ public abstract class AOpponent {
     }
 
     public void setOpponentAI(String type){
-        this.opponentAI = OpponentAIFabric.createOpponentAI("Chaser",this, gameController, false);
+        this.opponentAI = OpponentAIFactory.createOpponentAI("Chaser",this, gameController, false);
     }
 
     public boolean isOpponentCollidesWithMap(Rectangle rec){
@@ -115,13 +114,13 @@ public abstract class AOpponent {
         int randomInt = Math.abs(new Random().nextInt()%3);
         switch (randomInt){
             case 0:
-                this.pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"Hp"));
+                this.pickupList.addPickup(PickupFactory.createPickup(this.getCenterX(), this.getCenterY(),"Hp"));
                 break;
             case 1:
-                this.pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"InnerEye"));
+                this.pickupList.addPickup(PickupFactory.createPickup(this.getCenterX(), this.getCenterY(),"InnerEye"));
                 break;
             case 2:
-                this.pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"SadOnion"));
+                this.pickupList.addPickup(PickupFactory.createPickup(this.getCenterX(), this.getCenterY(),"SadOnion"));
                 break;
         }
     }

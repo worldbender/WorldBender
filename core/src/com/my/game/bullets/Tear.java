@@ -16,7 +16,7 @@ public class Tear extends ABullet{
     }
 
     @Override
-    public void draw(SpriteBatch spriteBatch) {
+    public void draw(SpriteBatch spriteBatch, float stateTime) {
         this.drawBullet(spriteBatch, tearTexture);
     }
 }

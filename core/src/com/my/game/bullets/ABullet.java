@@ -11,24 +11,29 @@ abstract public class ABullet {
     private int height;
     private int id;
     private float angle;
-    private Texture texture;
 
-    abstract public void draw(SpriteBatch spriteBatch);
+
+    abstract public void draw(SpriteBatch spriteBatch, float stateTime);
 
     protected void drawBullet(SpriteBatch spriteBatch, Texture texture){
+        drawBullet(spriteBatch, new TextureRegion(texture));
+    }
+
+    protected void drawBullet(SpriteBatch spriteBatch, TextureRegion textureRegion){
         float angle = ((this.getAngle() - (float)(Math.PI/2))*(float)(180f/Math.PI));
         spriteBatch.draw(
-                new TextureRegion(texture),
+                textureRegion,
                 x,
                 y,
-                texture.getWidth()/2f,
-                texture.getHeight()/2f,
-                texture.getWidth(),
-                texture.getHeight(),
+                textureRegion.getRegionWidth()/2f,
+                textureRegion.getRegionHeight()/2f,
+                textureRegion.getRegionWidth(),
+                textureRegion.getRegionHeight(),
                 1f,
                 1f,
                 angle
         );
+
     }
 
     public void setPosition(int x, int y){
@@ -58,13 +63,6 @@ abstract public class ABullet {
 
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    public void setTexture(Texture texture) {
-        this.texture = texture;
-    }
-    public Texture getTexture(){
-        return this.texture;
     }
 
     public int getId() {

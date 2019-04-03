@@ -4,7 +4,7 @@ import server.connection.GameController;
 import server.opponents.AOpponent;
 import server.powers.IPower;
 
-public class OpponentAIFabric {
+public class OpponentAIFactory {
     public static IOpponentAI createOpponentAI(String type, AOpponent opponent, GameController gameController, boolean isChangable){
         IOpponentAI resultOpponentAI;
         switch (type){
