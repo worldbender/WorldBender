@@ -15,6 +15,7 @@ public class OpponentFactory {
             case "Poe":
                 resultOpponent = new Poe(gameController);
                 break;
+            default:
         }
         return resultOpponent;
     }

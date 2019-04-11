@@ -122,6 +122,7 @@ public abstract class AOpponent {
             case 2:
                 this.pickupList.addPickup(PickupFactory.createPickup(this.getCenterX(), this.getCenterY(),"SadOnion"));
                 break;
+            default:
         }
     }
 

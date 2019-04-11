@@ -47,7 +47,7 @@ public class Room {
 
     public void deleteUserFromRoom(User userToDelete){
         for(User user : usersInRoom){
-            if(user.getName() == userToDelete.getName())
+            if(user.getName().equals(userToDelete.getName()))
                 this.usersInRoom.remove(user);
         }
         if(this.getUsersInRoom().size() == 0) deleteRoom();

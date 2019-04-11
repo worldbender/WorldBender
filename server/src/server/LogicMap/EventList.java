@@ -8,8 +8,8 @@ import java.awt.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EventList {
-    private CopyOnWriteArrayList<EventBlock> passiveEventList = new CopyOnWriteArrayList<EventBlock>();
-    private CopyOnWriteArrayList<EventBlock> activeEventList = new CopyOnWriteArrayList<EventBlock>();
+    private CopyOnWriteArrayList<EventBlock> passiveEventList = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<EventBlock> activeEventList = new CopyOnWriteArrayList<>();
     private String nextMap;
     private GameController gameController;
     public EventList(GameController gameController){

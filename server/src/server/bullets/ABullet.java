@@ -1,8 +1,5 @@
 package server.bullets;
 
-import com.badlogic.gdx.graphics.g2d.PolygonSprite;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import server.LogicMap.LogicMapHandler;
 import server.players.Player;
 import server.User;
@@ -10,8 +7,6 @@ import server.connection.GameController;
 import server.opponents.AOpponent;
 import server.opponents.OpponentList;
 import java.awt.*;
-import java.awt.geom.Area;
-import java.awt.geom.Point2D;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ABullet {

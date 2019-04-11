@@ -76,6 +76,7 @@ public class AttackFactory {
                 );
                 bulletList.addBullet(newBullet);
                 break;
+            default:
         }
     }
 }

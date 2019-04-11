@@ -9,10 +9,8 @@ import static org.mockito.Mockito.mock;
 public class ServerCreator {
     public static void main (String[] arg) {
         HeadlessNativesLoader.load();
-        MockGraphics mockGraphics = new MockGraphics();
-        Gdx.graphics = mockGraphics;
-        HeadlessNet headlessNet = new HeadlessNet();
-        Gdx.net = headlessNet;
+        Gdx.graphics = new MockGraphics();
+        Gdx.net = new HeadlessNet();
         Gdx.gl = mock(GL20.class);
         HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
         new HeadlessApplication(new Server(), config);

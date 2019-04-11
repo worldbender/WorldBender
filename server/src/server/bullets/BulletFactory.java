@@ -15,6 +15,7 @@ public class BulletFactory {
             case "FireRing":
                 resultBullet = new FireRing(x, y, angle, hostile, gameController);
                 break;
+            default:
         }
         return resultBullet;
     }

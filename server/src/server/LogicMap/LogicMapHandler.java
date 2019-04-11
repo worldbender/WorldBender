@@ -173,7 +173,7 @@ public class LogicMapHandler {
         for(int x = startObjTileX; x < endObjTileX; x++){
             for(int y = startObjTileY; y < endObjTileY; y++){
                 currentBlock = this.getCertainTileByTileXY(x,y);
-                if(currentBlock.getBLockType() == "Solid"){
+                if(currentBlock.getBLockType().equals("Solid")){
                     if(rec.intersects(currentBlock.getRectangle())){
                         result = true;
                     }

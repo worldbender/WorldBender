@@ -36,7 +36,7 @@ public abstract class APickup {
     }
 
     public void setType(String type) {
-        type = type;
+        this.type = type;
     }
 
     public int getId() {
