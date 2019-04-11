@@ -6,8 +6,8 @@ public class OpponentFactory {
     public static AOpponent createOpponent(String opponentType, GameController gameController){
         AOpponent resultOpponent = null;
         switch (opponentType){
-            case "Schopenheuer":
-                resultOpponent = new Schopenheuer(gameController);
+            case "Schopenhauer":
+                resultOpponent = new Schopenhauer(gameController);
                 break;
             case "Nietzsche":
                 resultOpponent = new Nietzsche(gameController);

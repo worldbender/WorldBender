@@ -6,16 +6,16 @@ import com.my.game.MyAssetManager;
 
 import static com.my.game.MyAssetManager.schopen;
 
-public class Schopenheuer extends AOpponent {
+public class Schopenhauer extends AOpponent {
     public static Texture texture = MyAssetManager.manager.get(schopen);
-    public Schopenheuer(int id){
+    public Schopenhauer(int id){
         super(id);
     }
 
     @Override
     public void draw(SpriteBatch spriteBatch) {
-        spriteBatch.draw(Schopenheuer.texture, this.getX(), this.getY());
-        this.drawHp(spriteBatch, Schopenheuer.texture.getHeight());
-        this.drawName(spriteBatch, "Schopenhauer", Schopenheuer.texture.getHeight());
+        spriteBatch.draw(Schopenhauer.texture, this.getX(), this.getY());
+        this.drawHp(spriteBatch, Schopenhauer.texture.getHeight());
+        this.drawName(spriteBatch, "Schopenhauer", Schopenhauer.texture.getHeight());
     }
 }
