@@ -88,17 +88,17 @@ public class RoomScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-
+        //ignore
     }
 
     @Override
     public void resume() {
-
+        //ignore
     }
 
     @Override
     public void hide() {
-
+        //ignore
     }
 
     @Override

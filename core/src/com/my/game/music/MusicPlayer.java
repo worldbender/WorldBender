@@ -6,14 +6,13 @@ import com.badlogic.gdx.audio.Sound;
 import com.my.game.MyAssetManager;
 
 public class MusicPlayer {
+    private MusicPlayer(){}
     private static Music music;
     private static Music music2;
     private static Music music3;
     private static Music music4;
     private static Sound hpUpSound;
     private static Sound opponentDieSound;
-
-    public MusicPlayer(){ }
 
     public static void initSounds(){
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music1.mp3"));

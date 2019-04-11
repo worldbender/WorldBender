@@ -1,6 +1,7 @@
 package com.my.game.opponents;
 
 public class OpponentFactory {
+    private OpponentFactory(){}
     public static AOpponent createOpponent(String opponentType, int id){
         AOpponent resultOpponent = null;
         switch (opponentType){
@@ -13,6 +14,7 @@ public class OpponentFactory {
             case "Poe":
                 resultOpponent = new Poe(id);
                 break;
+            default:
         }
         return resultOpponent;
     }

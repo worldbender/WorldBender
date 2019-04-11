@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class UdpPacketSender implements Runnable {
     private static final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
@@ -27,8 +26,6 @@ public class UdpPacketSender implements Runnable {
             address = InetAddress.getByName(hostname);
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, PORT);
             socket.send(packet);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
