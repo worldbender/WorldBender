@@ -134,7 +134,7 @@ public class MyAssetManager {
         Water.heads = getAnimationFrom1DPicture(manager.get(BLOND_HEADS), PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
         Warp.warpAnimation = getAnimationFrom1DPicture(manager.get(WARP_ANIMATION), 64, 64, 9);
         InvisibleWarp.openDoorsAnimation = getAnimationFrom1DPicture(manager.get(OPEN_DOOR_ANIMATION), 64, 64, 4);
-        Player.headRegion = new TextureRegion(new Texture("characters/prof.png"), 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
+        Player.headRegion = new TextureRegion(new Texture(PROF_HEADS), 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
     }
 
     public static void loadScreenImages(){

@@ -9,7 +9,6 @@ public abstract class AOpponent{
     public String name = "Monster";
     private int x = 0;
     private int y = 0;
-    private int direction = 0;
     private boolean alive = false;
     private int hp = 500;
     private int maxHp = 500;

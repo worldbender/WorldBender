@@ -26,8 +26,8 @@ public class GameplayScreen extends AbstractScreen{
     private static Map<String, Player> players;
     private GraphicMapHandler graphicMapHandler;
     public static Player currentPlayer;
-    private int numerOfXTiles;
-    private int numerOfYTiles;
+    private int numberOfXTiles;
+    private int numberOfYTiles;
     private int tileWidth;
     private int tileHeight;
     private int mapWidth;
@@ -46,12 +46,12 @@ public class GameplayScreen extends AbstractScreen{
     public void changeLevel(String map){
         Gdx.app.postRunnable(() -> {
             this.graphicMapHandler.LoadMap(map);
-            this.numerOfXTiles = this.graphicMapHandler.getMap().getProperties().get("width", Integer.class);
-            this.numerOfYTiles = this.graphicMapHandler.getMap().getProperties().get("height", Integer.class);
+            this.numberOfXTiles = this.graphicMapHandler.getMap().getProperties().get("width", Integer.class);
+            this.numberOfYTiles = this.graphicMapHandler.getMap().getProperties().get("height", Integer.class);
             this.tileWidth = this.graphicMapHandler.getMap().getProperties().get("tilewidth", Integer.class);
             this.tileHeight = this.graphicMapHandler.getMap().getProperties().get("tileheight", Integer.class);
-            this.mapWidth = numerOfXTiles * tileWidth;
-            this.mapHeight = numerOfYTiles * tileHeight;
+            this.mapWidth = numberOfXTiles * tileWidth;
+            this.mapHeight = numberOfYTiles * tileHeight;
             camera.position.x = (float)currentPlayer.getX() < (this.mapWidth - WBGame.WIDTH/2f) ? WBGame.WIDTH/2f : (this.mapWidth - WBGame.WIDTH/2f);
             camera.position.y = (float)currentPlayer.getY() < (this.mapHeight - WBGame.HEIGHT/2f) ?  WBGame.HEIGHT/2f: (this.mapHeight - WBGame.HEIGHT/2f);
             this.graphicMapHandler.getRender().setView(camera);

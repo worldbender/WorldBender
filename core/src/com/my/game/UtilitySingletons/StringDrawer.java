@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class StringDrawer {
+    private StringDrawer(){}
     private static BitmapFont font = new BitmapFont();
     private static void drawString(SpriteBatch batch, String string, int x, int y){
         font.draw(batch, string, x, y);

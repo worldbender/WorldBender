@@ -1,6 +1,8 @@
 package com.my.game.connection;
 
 import com.my.game.WBGame;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 public class Connection {
+    private static Logger logger = LogManager.getLogger(Connection.class.getName());
     public InetAddress IPAddress;
     private String hostName = WBGame.SERVER_ADDRESS;
     public DatagramSocket socket;
@@ -26,7 +29,7 @@ public class Connection {
         try {
             socket = new DatagramSocket();
         } catch (SocketException e) {
-            e.printStackTrace();
+            logger.error(e.toString(), e);
         }
         try {
             IPAddress = InetAddress.getByName(WBGame.SERVER_ADDRESS);
