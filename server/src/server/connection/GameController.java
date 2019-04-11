@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GameController implements Runnable {
     private static Logger logger = LogManager.getLogger(GameController.class.getName());
     private static long deltaTime = 0L;
-    private final long MILISECONDS_BEETWEEN_FRAMES = 3L;
+    private final long MILLISECONDS_BETWEEN_FRAMES = 3L;
     private boolean flag = true;
     public boolean hasStarted = false;
     public LogicMapHandler logicMapHandler;
@@ -52,6 +52,7 @@ public class GameController implements Runnable {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 logger.error(e.toString(), e);
+                Thread.currentThread().interrupt();
             }
         }
 
@@ -72,11 +73,12 @@ public class GameController implements Runnable {
     }
 
     private void sleepIfNecessary() {
-        if (deltaTime < MILISECONDS_BEETWEEN_FRAMES) {
+        if (deltaTime < MILLISECONDS_BETWEEN_FRAMES) {
             try {
-                Thread.sleep(MILISECONDS_BEETWEEN_FRAMES - deltaTime);
+                Thread.sleep(MILLISECONDS_BETWEEN_FRAMES - deltaTime);
             } catch (InterruptedException e) {
                 logger.error(e.toString(), e);
+                Thread.currentThread().interrupt();
             }
         }
     }

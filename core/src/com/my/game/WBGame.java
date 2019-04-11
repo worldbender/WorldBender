@@ -13,10 +13,7 @@ public class WBGame extends Game {
 
     public static Connection connection;
     public static boolean connectionStatus = false;
-
     private GameplayScreen gameplayScreen;
-    private MenuScreen menuScreen;
-    private RoomScreen roomScreen;
 
     public static final int SPLASH = 0;
     public static final int MENU = 1;
@@ -26,13 +23,11 @@ public class WBGame extends Game {
     public static final int PLAY = 5;
     public static final int ROOM = 6;
     public static final int ROOM_OWNER = 7;
-    private int currentRoom = 0;
     public static final String SERVER_ADDRESS = Properties.loadConfigFile("IP");
-    public static final boolean IS_DEBUG_VERSION = true;
 
     public static final String GAME_NAME = "World Bender";
-    public static int WIDTH;
-    public static int HEIGHT;
+    public static int WIDTH = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_WIDTH"));
+    public static int HEIGHT = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_HEIGHT"));
     public static int RES_WIDTH;
     public static int RES_HEIGHT;
 
@@ -42,20 +37,17 @@ public class WBGame extends Game {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         RES_WIDTH = screenSize.width;
         RES_HEIGHT = screenSize.height;
-        WIDTH = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_WIDTH"));
-        HEIGHT = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_HEIGHT"));
     }
 
     @Override
     public void create () {
         MyAssetManager.loadAllAssets();
         MyAssetManager.manager.finishLoading();
-//        while(!MyAssetManager.manager.update())
-//            System.out.println(MyAssetManager.manager.getProgress() * 100 + " %");
         this.connection = new Connection(this);
         this.setScreen(new SplashScreen(this));
     }
 
+    @Override
     public void dispose () {
         super.dispose();
         MyAssetManager.dispose();
@@ -90,6 +82,7 @@ public class WBGame extends Game {
                 if(gameplayScreen == null) gameplayScreen = new GameplayScreen(this);
                 this.setScreen(gameplayScreen);
                 break;
+            default:
         }
     }
 
@@ -101,6 +94,7 @@ public class WBGame extends Game {
             case ROOM:
                 this.setScreen(new RoomScreen(this, roomId));
                 break;
+            default:
         }
     }
 

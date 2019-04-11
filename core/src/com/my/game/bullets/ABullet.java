@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-abstract public class ABullet {
+public abstract class ABullet {
     private int x;
     private int y;
     private int width;
@@ -12,7 +12,7 @@ abstract public class ABullet {
     private int id;
     private float angle;
 
-    abstract public void draw(SpriteBatch spriteBatch, float stateTime);
+    public abstract void draw(SpriteBatch spriteBatch, float stateTime);
 
     protected void drawBullet(SpriteBatch spriteBatch, Texture texture) {
         drawBullet(spriteBatch, new TextureRegion(texture));

@@ -32,7 +32,7 @@ public class RoomList {
         User currentUser = existingUsers.get(id);
         for(Room room : rooms){
             for(User user : room.getUsersInRoom()){
-                if(user.getConnectionId() == currentUser.getConnectionId()) return room;
+                if(user.getConnectionId().equals(currentUser.getConnectionId())) return room;
             }
         }
         return null;

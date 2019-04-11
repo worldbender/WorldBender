@@ -15,6 +15,7 @@ import com.my.game.player.Player;
 import com.my.game.player.Water;
 
 public class MyAssetManager {
+    private MyAssetManager(){}
 
     public static final AssetManager manager = new AssetManager();
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
@@ -27,7 +28,7 @@ public class MyAssetManager {
     public static final String HEALTH_BAR = "bars/healthBar.png";
 
     //bullets
-    public static final String GRANATE = "bullets/granat.png";
+    public static final String GRENADE = "bullets/granat.png";
     public static final String SPECTRAL_TEAR = "bullets/spectralTear.png";
     public static final String FIRE_RING_TEXTURE = "bullets/fireRing.png";
 
@@ -72,7 +73,7 @@ public class MyAssetManager {
 
 
     public static void loadBullets(){
-        manager.load(GRANATE, Texture.class);
+        manager.load(GRENADE, Texture.class);
         manager.load(SPECTRAL_TEAR, Texture.class);
         manager.load(FIRE_RING_TEXTURE, Texture.class);
     }
@@ -133,8 +134,7 @@ public class MyAssetManager {
         Water.heads = getAnimationFrom1DPicture(manager.get(BLOND_HEADS), PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
         Warp.warpAnimation = getAnimationFrom1DPicture(manager.get(WARP_ANIMATION), 64, 64, 9);
         InvisibleWarp.openDoorsAnimation = getAnimationFrom1DPicture(manager.get(OPEN_DOOR_ANIMATION), 64, 64, 4);
-        Texture headsRegion = new Texture("characters/prof.png");
-        Player.headRegion = new TextureRegion(headsRegion, 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
+        Player.headRegion = new TextureRegion(new Texture("characters/prof.png"), 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
     }
 
     public static void loadScreenImages(){
@@ -165,6 +165,6 @@ public class MyAssetManager {
         for (int i = 0; i < numberOfAnimationFrames; i++) {
             walkFrames[i] = arrayOfWalks[0][i];
         }
-        return new Animation<TextureRegion>(0.1f, walkFrames);
+        return new Animation<>(0.1f, walkFrames);
     }
 }

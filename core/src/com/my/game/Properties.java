@@ -6,29 +6,20 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 public class Properties {
+    private Properties(){}
 
     private static final String PATH = "../../config.properties";
 
     public static void createConfigFile() {
         java.util.Properties prop = new java.util.Properties();
-        FileOutputStream output = null;
-        try {
+        try (FileOutputStream output = new FileOutputStream(PATH)) {
             prop.put("IP","localhost");
             prop.put("PORT_TCP", "10008");
             prop.put("PORT_UDP", "7331");
 
-            output = new FileOutputStream(PATH);
             prop.store(output, "program settings");
         } catch (Exception io) {
             io.printStackTrace();
-        } finally {
-            if (output != null) {
-                try {
-                    output.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
@@ -40,20 +31,11 @@ public class Properties {
         }catch (IOException io){
             io.printStackTrace();
         }
-        FileInputStream input = null;
-        try {
-            input = new FileInputStream(PATH);
+
+        try (FileInputStream input = new FileInputStream(PATH)) {
             prop.load(input);
         } catch (IOException io) {
             io.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return prop.getProperty(inputName);
     }
@@ -61,9 +43,7 @@ public class Properties {
     public static void displayConfigFile(){
 
         java.util.Properties prop = new java.util.Properties();
-        FileInputStream input = null;
-        try {
-            input  = new FileInputStream(PATH);
+        try (FileInputStream input = new FileInputStream(PATH)){
             prop.load(input);
 
             Enumeration<?> e = prop.propertyNames();
@@ -75,14 +55,6 @@ public class Properties {
 
         } catch (IOException io) {
             io.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 }

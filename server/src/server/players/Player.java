@@ -59,7 +59,7 @@ public class Player {
         this.setWidth((int) (PLAYER_TEXTURE_WIDTH * scale));
         this.setHeight((int) (PLAYER_TEXTURE_HEIGHT * scale));
         this.user = user;
-        this.collectedItems = new ArrayList<String>();
+        this.collectedItems = new ArrayList<>();
     }
 
     public Player(User user, GameController gameController){
