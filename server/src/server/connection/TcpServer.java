@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TcpServer extends Thread{
     private static Logger logger = LogManager.getLogger(TcpServer.class.getName());
-    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_TCP"));
+    private static final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_TCP"));
     private ServerSocket serverSocket;
     private static Thread senderThread;
     private static GameController sender;

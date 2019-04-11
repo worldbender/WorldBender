@@ -17,8 +17,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UdpServer extends Thread {
     private static Logger logger = LogManager.getLogger(UdpServer.class.getName());
-    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
-    private final static int BUFFER = 1024;
+    private static final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
+    private static final int BUFFER = 1024;
     private static DatagramSocket socket;
     private List<Room> rooms;
     private Map<String, User> existingUsers;

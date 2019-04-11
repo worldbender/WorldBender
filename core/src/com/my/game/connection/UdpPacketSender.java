@@ -3,16 +3,14 @@ package com.my.game.connection;
 import com.my.game.Properties;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class UdpPacketSender implements Runnable {
-    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
+    private static final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
     private DatagramSocket socket;
     private String hostname;
     byte buf[];

@@ -25,51 +25,51 @@ public class MyAssetManager {
     public static final int NUMBER_OF_PLAYER_ANIMATION_FRAMES = 5;
 
     //bars
-    public final static String healthBar = "bars/healthBar.png";
+    public static final String healthBar = "bars/healthBar.png";
 
     //bullets
-    public final static String granat = "bullets/granat.png";
-    public final static String spectralTear = "bullets/spectralTear.png";
-    public final static String fireRingTexture = "bullets/fireRing.png";
+    public static final String granat = "bullets/granat.png";
+    public static final String spectralTear = "bullets/spectralTear.png";
+    public static final String fireRingTexture = "bullets/fireRing.png";
 
     //playerTexture
-    public final static String downWalk = "characters/downIsaacHeadless2.png";
-    public final static String leftWalk = "characters/leftWalkIsaacHeadless.png";
-    public final static String rightWalk = "characters/rightWalkIsaacHeadless2.png";
-    public final static String upWalk = "characters/upIsaacHeadless2.png";
-    public final static String profHeads = "characters/prof.png";
-    public final static String blondiHeads = "characters/blondi.png";
+    public static final String downWalk = "characters/downIsaacHeadless2.png";
+    public static final String leftWalk = "characters/leftWalkIsaacHeadless.png";
+    public static final String rightWalk = "characters/rightWalkIsaacHeadless2.png";
+    public static final String upWalk = "characters/upIsaacHeadless2.png";
+    public static final String profHeads = "characters/prof.png";
+    public static final String blondiHeads = "characters/blondi.png";
 
     //opponents
-    public final static String nietzsche = "opponents/nietzsche.png";
-    public final static String poe = "opponents/poe.png";
-    public final static String schopen = "opponents/schopen.png";
+    public static final String nietzsche = "opponents/nietzsche.png";
+    public static final String poe = "opponents/poe.png";
+    public static final String schopen = "opponents/schopen.png";
 
     //pickups
-    public final static String hp = "pickups/hp.png";
-    public final static String InnerEye = "pickups/InnerEye.png";
-    public final static String SadOnion = "pickups/SadOnion.png";
-    public final static String warp = "pickups/warp.png";
-    public final static String warpAnimation = "pickups/warpAnimated.png";
-    public final static String openDoorAnimation = "pickups/openDoors.png";
+    public static final String hp = "pickups/hp.png";
+    public static final String InnerEye = "pickups/InnerEye.png";
+    public static final String SadOnion = "pickups/SadOnion.png";
+    public static final String warp = "pickups/warp.png";
+    public static final String warpAnimation = "pickups/warpAnimated.png";
+    public static final String openDoorAnimation = "pickups/openDoors.png";
 
     //screenImages
-    public final static String tree = "screenImages/tree.jpg";
+    public static final String tree = "screenImages/tree.jpg";
 
     //sounds
-    public final static String hpup = "sounds/hpup.wav";
-    public final static String meow = "sounds/meow.mp3";
+    public static final String hpup = "sounds/hpup.wav";
+    public static final String meow = "sounds/meow.mp3";
 
     //fonts
-    public final static String font_export = "skin/font-export.fnt";
-    public final static String font_medium_export = "skin/font-medium-export.fnt";
-    public final static String font_small_export = "skin/font-small-export.fnt";
-    public final static String font_title_export ="skin/font-title-export.fnt";
+    public static final String font_export = "skin/font-export.fnt";
+    public static final String font_medium_export = "skin/font-medium-export.fnt";
+    public static final String font_small_export = "skin/font-small-export.fnt";
+    public static final String font_title_export ="skin/font-title-export.fnt";
 
     //skins
-    public final static String sgx_ui_atlas = "skin/sgx-ui.atlas";
-    public final static String sgx_ui_json = "skin/sgx-ui.json";
-    public final static String sgx_ui_png = "skin/sgx-ui.png";
+    public static final String sgx_ui_atlas = "skin/sgx-ui.atlas";
+    public static final String sgx_ui_json = "skin/sgx-ui.json";
+    public static final String sgx_ui_png = "skin/sgx-ui.png";
 
 
     public static void loadBullets(){

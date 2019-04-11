@@ -18,20 +18,19 @@ public class WBGame extends Game {
     private MenuScreen menuScreen;
     private RoomScreen roomScreen;
 
-    public final static int SPLASH = 0;
-    public final static int MENU = 1;
-    public final static int MENU_FULL_ROOM = 2;
-    public final static int MENU_NO_ROOM = 3;
-    public final static int MENU_IN_GAME = 4;
-    public final static int PLAY = 5;
-    public final static int ROOM = 6;
-    public final static int ROOM_OWNER = 7;
+    public static final int SPLASH = 0;
+    public static final int MENU = 1;
+    public static final int MENU_FULL_ROOM = 2;
+    public static final int MENU_NO_ROOM = 3;
+    public static final int MENU_IN_GAME = 4;
+    public static final int PLAY = 5;
+    public static final int ROOM = 6;
+    public static final int ROOM_OWNER = 7;
     private int currentRoom = 0;
-    public final static String SERVER_ADDRESS = Properties.loadConfigFile("IP");
-    public final static boolean IS_DEBUG_VERSION = true;
-//    public final static int APPLICATION = 2;
+    public static final String SERVER_ADDRESS = Properties.loadConfigFile("IP");
+    public static final boolean IS_DEBUG_VERSION = true;
 
-    public final static String GAME_NAME = "World Bender";
+    public static final String GAME_NAME = "World Bender";
     public static int WIDTH;
     public static int HEIGHT;
     public static int RES_WIDTH;
