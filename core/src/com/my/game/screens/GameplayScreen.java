@@ -3,16 +3,10 @@ package com.my.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.my.game.MyAssetManager;
 import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
-import com.my.game.bullets.SpectralTear;
-import com.my.game.bullets.Tear;
 import com.my.game.mapRenderer.GraphicMapHandler;
 import com.my.game.opponents.*;
 import com.my.game.pickups.*;
@@ -23,8 +17,6 @@ import com.my.game.music.MusicPlayer;
 import org.json.JSONObject;
 
 import java.util.Map;
-
-import static com.my.game.MyAssetManager.granat;
 
 public class GameplayScreen extends AbstractScreen{
 
@@ -151,7 +143,7 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void handleInput() {
-        currentPlayer.resetkeys();
+        currentPlayer.resetKeys();
         this.handleMovementKeys();
         this.handleArrowKeys();
         this.handleSpecialKeys();

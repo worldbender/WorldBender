@@ -1,4 +1,4 @@
-package com.my.game.UtilitySingletons;
+package com.my.game.utilitySingletons;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

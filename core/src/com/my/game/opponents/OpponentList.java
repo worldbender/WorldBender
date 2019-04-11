@@ -4,10 +4,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class OpponentList {
-    private static CopyOnWriteArrayList<AOpponent> opponents=new CopyOnWriteArrayList<AOpponent>();
-    private OpponentList(){
+    private static CopyOnWriteArrayList<AOpponent> opponents=new CopyOnWriteArrayList<>();
+    private OpponentList(){ }
 
-    }
     public static void addOpponent(AOpponent opponent){
         opponents.add(opponent);
     }

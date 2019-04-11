@@ -13,6 +13,7 @@ public class BulletFactory {
             case "FireRing":
                 resultBullet = new FireRing(id, angle);
                 break;
+            default:
         }
         return resultBullet;
     }

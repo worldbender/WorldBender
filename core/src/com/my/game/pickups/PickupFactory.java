@@ -22,6 +22,7 @@ public class PickupFactory {
             case "Mana":
                //TODO make mana pickup
                 break;
+            default:
         }
         return result;
     }

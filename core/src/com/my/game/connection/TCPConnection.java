@@ -111,6 +111,7 @@ public class TCPConnection extends Thread {
             case "changeLevel":
                 this.changeLevel(contentJSON);
                 break;
+            default:
         }
     }
 

@@ -26,16 +26,16 @@ public class GraphicMapHandler {
 
     public TiledMap getMap(){return this.map;}
     public OrthogonalTiledMapRenderer getRender(){return this.render;}
-    public int getNumerOfXTiles(){
+    public int getNumberOfXTiles(){
         return getMap().getProperties().get("width", Integer.class);
     }
-    public int getNumerOfYTiles(){
+    public int getNumberOfYTiles(){
         return getMap().getProperties().get("height", Integer.class);
     }
     public int getMapWidth(){
-        return this.getNumerOfXTiles() * tileWidth;
+        return this.getNumberOfXTiles() * tileWidth;
     }
     public int getMapHeight(){
-        return this.getNumerOfYTiles() * tileHeight;
+        return this.getNumberOfYTiles() * tileHeight;
     }
 }

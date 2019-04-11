@@ -21,7 +21,7 @@ public class Connection {
     private Thread tcpThread;
     private WBGame game;
 
-    public Connection(WBGame game){
+    public Connection(WBGame game) {
         this.game = game;
         try {
             socket = new DatagramSocket();
@@ -41,7 +41,7 @@ public class Connection {
         initUdp();
     }
 
-    private void initTcp() throws IOException{
+    private void initTcp() throws IOException {
         tcp = new TCPConnection(hostName, game);
         tcpThread = new Thread(tcp);
         tcpThread.start();
@@ -54,7 +54,7 @@ public class Connection {
     }
 
 
-    private void initUdp(){
+    private void initUdp() {
         receiver = new UdpPacketReceiver(socket);
         sender = new UdpPacketSender(socket, hostName);
         receiverThread = new Thread(receiver);

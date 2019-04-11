@@ -13,9 +13,7 @@ public class MusicPlayer {
     private static Sound hpUpSound;
     private static Sound opponentDieSound;
 
-    public MusicPlayer(){
-
-    }
+    public MusicPlayer(){ }
 
     public static void initSounds(){
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music1.mp3"));
