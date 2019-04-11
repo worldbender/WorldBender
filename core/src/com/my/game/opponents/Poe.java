@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.my.game.MyAssetManager;
 
-import static com.my.game.MyAssetManager.poe;
+import static com.my.game.MyAssetManager.POE;
 
 public class Poe extends AOpponent {
-    public static Texture texture = MyAssetManager.manager.get(poe);
+    public static Texture texture = MyAssetManager.manager.get(POE);
     public Poe(int id){
         super(id);
         this.setHp(100);

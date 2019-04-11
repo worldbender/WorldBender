@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.my.game.MyAssetManager;
 
-import static com.my.game.MyAssetManager.schopen;
+import static com.my.game.MyAssetManager.SCHOPEN;
 
 public class Schopenhauer extends AOpponent {
-    public static Texture texture = MyAssetManager.manager.get(schopen);
+    public static Texture texture = MyAssetManager.manager.get(SCHOPEN);
     public Schopenhauer(int id){
         super(id);
     }

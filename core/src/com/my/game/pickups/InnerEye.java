@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.my.game.MyAssetManager;
 
 public class InnerEye extends APickup{
-    public static Texture texture = MyAssetManager.manager.get(MyAssetManager.InnerEye);
+    public static Texture texture = MyAssetManager.manager.get(MyAssetManager.INNER_EYE);
     public InnerEye(int x, int y, int id){
         super(x, y, id, "InnerEye");
     }

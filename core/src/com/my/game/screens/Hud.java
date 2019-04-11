@@ -1,6 +1,5 @@
 package com.my.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -89,12 +88,12 @@ public class Hud implements Disposable {
 
     //TODO zmienic jak bedzie AssetManager - poprawione LZ
     private void initHudTextures(){
-        Skin skin = MyAssetManager.manager.get(MyAssetManager.sgx_ui_json);
+        Skin skin = MyAssetManager.manager.get(MyAssetManager.SGX_UI_JSON);
         BitmapFont font = skin.getFont("small");
         labelStyle = new LabelStyle();
         labelStyle.font = font;
         labelStyle.fontColor = Color.BLACK;
-        healthBarTexture = MyAssetManager.manager.get(MyAssetManager.healthBar);
+        healthBarTexture = MyAssetManager.manager.get(MyAssetManager.HEALTH_BAR);
         playerHeadTexture = new TextureRegion(Player.headRegion);
         healthBarStyle = new ProgressBarStyle();
         healthBarStyle.background = new TextureRegionDrawable(new TextureRegion(healthBarTexture, healthBarTexture.getHeight(), 0, healthBarTexture.getWidth() - healthBarTexture.getHeight() - 5, healthBarTexture.getHeight()));

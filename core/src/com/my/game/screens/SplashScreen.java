@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.my.game.WBGame;
 
 public class SplashScreen extends AbstractScreen{
-    private Texture splashImg;
 
     public SplashScreen(final WBGame game) {
         super(game);

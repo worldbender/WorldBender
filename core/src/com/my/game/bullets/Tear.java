@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.my.game.MyAssetManager;
 
-import static com.my.game.MyAssetManager.granat;
+import static com.my.game.MyAssetManager.GRANATE;
 
 public class Tear extends ABullet{
-    public static Texture tearTexture = MyAssetManager.manager.get(granat);
+    public static Texture tearTexture = MyAssetManager.manager.get(GRANATE);
     public Tear(int id, float angle){
         this.setId(id);
         this.setX(-50);

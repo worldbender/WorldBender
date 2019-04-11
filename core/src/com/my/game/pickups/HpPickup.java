@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.my.game.MyAssetManager;
 
-import static com.my.game.MyAssetManager.hp;
+import static com.my.game.MyAssetManager.HP;
 
 public class HpPickup extends APickup {
-    public static Texture texture = MyAssetManager.manager.get(hp);
+    public static Texture texture = MyAssetManager.manager.get(HP);
     public HpPickup(int x, int y, int id){
         super(x, y, id, "Hp");
     }
