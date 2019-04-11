@@ -1,14 +1,18 @@
 package com.my.game;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 
 public class Properties {
-    private Properties(){}
-
+    private static Logger logger = LogManager.getLogger(Properties.class.getName());
     private static final String PATH = "../../config.properties";
+
+    private Properties(){}
 
     public static void createConfigFile() {
         java.util.Properties prop = new java.util.Properties();
@@ -19,7 +23,7 @@ public class Properties {
 
             prop.store(output, "program settings");
         } catch (Exception io) {
-            io.printStackTrace();
+            logger.error(io.toString(), io);
         }
     }
 
@@ -29,13 +33,13 @@ public class Properties {
         try(FileInputStream input = new FileInputStream(PATH)){
             prop.load(input);
         }catch (IOException io){
-            io.printStackTrace();
+            logger.error(io.toString(), io);
         }
 
         try (FileInputStream input = new FileInputStream(PATH)) {
             prop.load(input);
         } catch (IOException io) {
-            io.printStackTrace();
+            logger.error(io.toString(), io);
         }
         return prop.getProperty(inputName);
     }
@@ -54,7 +58,7 @@ public class Properties {
             }
 
         } catch (IOException io) {
-            io.printStackTrace();
+            logger.error(io.toString(), io);
         }
     }
 }

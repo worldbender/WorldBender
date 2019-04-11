@@ -14,12 +14,15 @@ import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
 import com.my.game.WBGame;
 import com.my.game.music.MusicPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import java.util.Map;
 
 public class GameplayScreen extends AbstractScreen{
 
+    private static Logger logger = LogManager.getLogger(GameplayScreen.class.getName());
     private static Map<String, Player> players;
     private GraphicMapHandler graphicMapHandler;
     public static Player currentPlayer;
@@ -138,7 +141,7 @@ public class GameplayScreen extends AbstractScreen{
         try {
             WBGame.connection.sender.sendMessage(message);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString(), e);
         }
     }
 

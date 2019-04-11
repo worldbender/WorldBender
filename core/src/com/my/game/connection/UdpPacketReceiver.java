@@ -4,6 +4,8 @@ import com.my.game.bullets.BulletList;
 import com.my.game.opponents.OpponentList;
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,6 +14,8 @@ import java.net.DatagramSocket;
 import java.util.Map;
 
 public class UdpPacketReceiver implements Runnable {
+    private static Logger logger = LogManager.getLogger(UdpPacketSender.class.getName());
+
     private DatagramSocket socket;
     private byte buf[];
     private static Map<String, Player> players;
@@ -76,7 +80,7 @@ public class UdpPacketReceiver implements Runnable {
                         setOpponentsData(gameJson.getJSONArray("opponents")); break;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
             }
         }
     }
