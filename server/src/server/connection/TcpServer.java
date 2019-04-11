@@ -1,5 +1,7 @@
 package server.connection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import server.Properties;
 import server.User;
@@ -10,6 +12,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TcpServer extends Thread{
+    private static Logger logger = LogManager.getLogger(TcpServer.class.getName());
     private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_TCP"));
     private ServerSocket serverSocket;
     private static Thread senderThread;
@@ -28,7 +31,7 @@ public class TcpServer extends Thread{
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.toString(), e);
         }
         finally
         {
@@ -37,7 +40,7 @@ public class TcpServer extends Thread{
             }
             catch (IOException e)
             {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
             }
         }
     }

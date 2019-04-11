@@ -1,5 +1,7 @@
 package server.connection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import server.rooms.Room;
 import server.rooms.RoomList;
@@ -14,6 +16,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UdpServer extends Thread {
+    private static Logger logger = LogManager.getLogger(UdpServer.class.getName());
     private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
     private final static int BUFFER = 1024;
     private static DatagramSocket socket;
@@ -35,7 +38,7 @@ public class UdpServer extends Thread {
                 socket.receive(packet);
                 readPackage(packet, buf);
             } catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
             }
         }
     }
@@ -77,7 +80,7 @@ public class UdpServer extends Thread {
             try {
                 socket.send(packet);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
             }
         }
     }

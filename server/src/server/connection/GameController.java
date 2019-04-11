@@ -1,5 +1,7 @@
 package server.connection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import server.bullets.BulletList;
@@ -17,6 +19,7 @@ import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameController implements Runnable {
+    private static Logger logger = LogManager.getLogger(GameController.class.getName());
     private static long deltaTime = 0L;
     private final long MILISECONDS_BEETWEEN_FRAMES = 3L;
     private boolean flag = true;
@@ -48,7 +51,7 @@ public class GameController implements Runnable {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
             }
         }
 
@@ -73,7 +76,7 @@ public class GameController implements Runnable {
             try {
                 Thread.sleep(MILISECONDS_BEETWEEN_FRAMES - deltaTime);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
             }
         }
     }

@@ -1,11 +1,14 @@
 package server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Properties {
-
+    private static Logger logger = LogManager.getLogger(Properties.class.getName());
     private static final String PATH = "../../config.properties";
 
     public static void createConfigFile() {
@@ -18,13 +21,13 @@ public class Properties {
 
             output = new FileOutputStream(PATH);
         } catch (Exception io) {
-            io.printStackTrace();
+            logger.error(io.toString(), io);
         } finally {
             if (output != null) {
                 try {
                     output.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error(e.toString(), e);
                 }
             }
         }
@@ -44,7 +47,7 @@ public class Properties {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error(e.toString(), e);
                 }
             }
         }
