@@ -26,7 +26,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Map;
 
-public class TCPConnection extends Thread {
+public class TCPConnection implements Runnable {
     private static Logger logger = LogManager.getLogger(TCPConnection.class.getName());
 
     private WBGame game;
@@ -46,6 +46,7 @@ public class TCPConnection extends Thread {
         players = PlayerList.getInstance();
     }
 
+    @Override
     public void run() {
         String message;
         while (true) {
