@@ -9,7 +9,7 @@ import com.my.game.screens.SplashScreen;
 
 public class WBGame extends Game {
 
-    public static Connection connection;
+    private static Connection connection;
     public static boolean connectionStatus = false;
     private GameplayScreen gameplayScreen;
 
@@ -30,6 +30,10 @@ public class WBGame extends Game {
     public static final int HEIGHT = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_HEIGHT"));
 
     private boolean paused;
+
+    public static Connection getConnection(){
+        return connection;
+    }
 
     @Override
     public void create () {

@@ -5,10 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BulletList {
     private static CopyOnWriteArrayList<ABullet> bullets=new CopyOnWriteArrayList<>();
-    public static int id = 0;
-    private BulletList(){
-
-    }
+    private BulletList(){ }
     public static List<ABullet> getBullets(){
         return bullets;
     }

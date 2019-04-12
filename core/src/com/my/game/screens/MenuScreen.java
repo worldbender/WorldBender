@@ -33,7 +33,7 @@ public class MenuScreen extends AbstractScreen{
     public void createConnection() {
         showScreenMessage("Connecting ...");
         try{
-            WBGame.connection.createConnection();
+            WBGame.getConnection().createConnection();
             System.out.println("Nawiązano połączenie z serwerem");
             WBGame.connectionStatus = true;
         }catch(Exception e){
@@ -82,9 +82,9 @@ public class MenuScreen extends AbstractScreen{
         newRoom.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                WBGame.connection.getTcp().sendMessage(new JSONObject()
+                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                         .put("msg", "newRoom")
-                        .put("content", new JSONObject().put("port", WBGame.connection.getSocket().getLocalPort())));
+                        .put("content", new JSONObject().put("port", WBGame.getConnection().getSocket().getLocalPort())));
             }
         });
 
