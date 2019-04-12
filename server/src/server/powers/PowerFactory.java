@@ -3,7 +3,7 @@ package server.powers;
 import server.players.Player;
 import server.connection.GameController;
 
-public class PowerFabric {
+public class PowerFactory {
     public static IPower createPower(String type, GameController gameController, Player player) {
         IPower resultPower;
         switch (type) {

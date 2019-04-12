@@ -8,10 +8,10 @@ public abstract class APickup{
     private double x;
     private double y;
     private int id;
-    private boolean isSent = false;
-    private boolean isDead = false;
     private final int WIDTH = 64;
     private final int HEIGHT = 64;
+    private boolean isBlocked = false;
+    private String direction = "up";
     public APickup(){
     }
 
@@ -53,19 +53,19 @@ public abstract class APickup{
         this.id = id;
     }
 
-    public boolean isSent() {
-        return isSent;
+    public boolean isBlocked() {
+        return isBlocked;
     }
 
-    public void setSent(boolean sent) {
-        isSent = sent;
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 
-    public boolean isDead() {
-        return isDead;
+    public String getDirection() {
+        return direction;
     }
 
-    public void setDead(boolean dead) {
-        isDead = dead;
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 }

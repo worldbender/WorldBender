@@ -15,6 +15,7 @@ public class UdpPacketSender implements Runnable {
     private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
     private DatagramSocket socket;
     private String hostname;
+    byte buf[];
 
     UdpPacketSender(DatagramSocket socket, String hostname) {
         this.socket = socket;
@@ -22,7 +23,7 @@ public class UdpPacketSender implements Runnable {
     }
 
     public void sendMessage(JSONObject s) {
-        byte buf[] = s.toString().getBytes();
+        buf = s.toString().getBytes();
         InetAddress address;
         try {
             address = InetAddress.getByName(hostname);
@@ -37,17 +38,5 @@ public class UdpPacketSender implements Runnable {
 
 
     public void run() {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            try {
-                while (!in.ready()) {
-                    Thread.sleep(10);
-                }
-                //sendMessage(in.readLine());
-            } catch (Exception e) {
-                System.err.println(e);
-                e.printStackTrace();
-            }
-        }
     }
 }

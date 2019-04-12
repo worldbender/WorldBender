@@ -2,7 +2,7 @@ package server.opponents;
 
 import server.connection.GameController;
 import server.opponents.opponentAI.IdlerAI;
-import server.pickups.PickupFabric;
+import server.pickups.PickupFactory;
 
 public class Schopenheuer extends AOpponent{
     public Schopenheuer(GameController gameController){
@@ -24,6 +24,6 @@ public class Schopenheuer extends AOpponent{
     @Override
     protected void handleOpponentDeath(){
         super.handleOpponentDeath();
-        this.pickupList.addPickup(PickupFabric.createPickup(this.getCenterX(), this.getCenterY(),"Warp"));
+        this.pickupList.addPickup(PickupFactory.createPickup(this.getCenterX(), this.getCenterY(),"Warp"));
     }
 }

@@ -1,6 +1,7 @@
 package server.opponents;
 
 import org.json.JSONObject;
+import server.LogicMap.LogicMapHandler;
 import server.User;
 import server.connection.GameController;
 import server.connection.TcpServer;
@@ -11,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class OpponentList {
     private CopyOnWriteArrayList<AOpponent> opponents = new CopyOnWriteArrayList<AOpponent>();
     private CopyOnWriteArrayList<User> usersInRoom;
+    private LogicMapHandler logicMapHandler;
     public int id = 0;
 
     public OpponentList(){
@@ -18,6 +20,7 @@ public class OpponentList {
 
     public void initializeWithGameController(GameController gameController){
         this.usersInRoom = gameController.usersInRoom;
+        this.logicMapHandler = gameController.logicMapHandler;
     }
 
     public List<AOpponent> getOpponents(){
@@ -36,5 +39,12 @@ public class OpponentList {
                 .put("msg", "deleteOpponent")
                 .put("content", new JSONObject().put("id", opponent.getId()));
         TcpServer.sendTcpMsgToAllUsersInRoom(message, this.usersInRoom);
+        this.checkIfShouldOpenDoors();
+    }
+
+    public void checkIfShouldOpenDoors(){
+        if(opponents.isEmpty()){
+            this.logicMapHandler.openDoors();
+        }
     }
 }

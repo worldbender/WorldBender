@@ -40,6 +40,8 @@ com_crashlytics_export_strings.xml
 .classpath
 .project
 .metadata/
+classes/
+/classses/
 /android/bin/
 /core/bin/
 /desktop/bin/

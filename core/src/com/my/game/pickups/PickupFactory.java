@@ -1,6 +1,6 @@
 package com.my.game.pickups;
 
-public class PickupFabric {
+public class PickupFactory {
     public static APickup createPickup(int x, int y, int id, String type){
         APickup result = null;
         switch (type){
@@ -15,6 +15,9 @@ public class PickupFabric {
                 break;
             case "Warp":
                 result = new Warp(x, y, id);
+                break;
+            case "InvisibleWarp":
+                result = new InvisibleWarp(x, y, id);
                 break;
             case "Mana":
                //TODO make mana pickup

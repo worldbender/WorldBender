@@ -7,10 +7,16 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Intersector;
 import server.Properties;
 import server.connection.GameController;
+import server.opponents.OpponentList;
+import server.pickups.APickup;
+import server.pickups.PickupFactory;
+import server.pickups.PickupList;
 
 import java.awt.*;
+import java.awt.geom.Area;
 
 public class LogicMapHandler {
     private TiledMap map;
@@ -21,13 +27,16 @@ public class LogicMapHandler {
     private final String BASE_PATH_TO_MAP = "maps/";
     private final String MAP_FILE_FORMAT = ".tmx";
     private ABlock[][] logicMap = new ABlock[mapWidth][mapHeight];
+    private PickupList pickupList;
     private EventList eventList;
+    private OpponentList opponentList;
     private GameController gameController;
 
     public LogicMapHandler(GameController gameController) {
         String startMap = Properties.loadConfigFile("START_MAP");
         this.map = new TmxMapLoader().load("maps/" + startMap + ".tmx");
         this.eventList = new EventList(gameController);
+        this.pickupList = gameController.pickupList;
         this.gameController = gameController;
         this.constructLogicMap();
         this.constructEventObjects();
@@ -50,9 +59,11 @@ public class LogicMapHandler {
      */
     public void constructLogicMap() {
         TiledMapTileLayer collisionLayer = (TiledMapTileLayer) (this.getMap().getLayers().get("CollisionLayer"));
+        TiledMapTileLayer collisionLayer2 = (TiledMapTileLayer) (this.getMap().getLayers().get("CollisionLayer2"));
         for (int xTileIndex = 0; xTileIndex < this.getNumerOfXTiles(); xTileIndex++) {
             for (int yTileIndex = 0; yTileIndex < this.getNumerOfYTiles(); yTileIndex++) {
-                if (collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("blocked")) {
+                if (collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("blocked") ||
+                        collisionLayer2.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("blocked")) {
                     logicMap[xTileIndex][yTileIndex] = new SolidBlock(
                             (xTileIndex * this.tileWidth),
                             (yTileIndex * this.tileHeight),
@@ -67,6 +78,19 @@ public class LogicMapHandler {
                             this.tileHeight
                     );
                 }
+                if(collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("door")){
+                    logicMap[xTileIndex][yTileIndex] = new SolidBlock(
+                            (xTileIndex * this.tileWidth),
+                            (yTileIndex * this.tileHeight),
+                            this.tileWidth,
+                            this.tileHeight,
+                            true
+                    );
+                    if(collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("portal")){
+                        logicMap[xTileIndex][yTileIndex].setPortal(true);
+                        logicMap[xTileIndex][yTileIndex].setPortalDirection(collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().get("portal").toString());
+                    }
+                }
             }
         }
     }
@@ -80,6 +104,7 @@ public class LogicMapHandler {
                 if(object.getProperties().containsKey("warp")){
                     eventList.setNextMap(object.getProperties().get("warp").toString());
                 }
+
             } else {
                 if(object.getProperties().containsKey("spawn")){
                     rectangleMapObject = (RectangleMapObject)(object);
@@ -102,24 +127,48 @@ public class LogicMapHandler {
             }
         }
     }
+
+    public void openDoors(){
+        for (int xTileIndex = 0; xTileIndex < this.getNumerOfXTiles(); xTileIndex++) {
+            for (int yTileIndex = 0; yTileIndex < this.getNumerOfYTiles(); yTileIndex++) {
+                if(logicMap[xTileIndex][yTileIndex].isDoor()){
+                    logicMap[xTileIndex][yTileIndex].setBlockType("Soft");
+                    if(logicMap[xTileIndex][yTileIndex].isPortal()){
+                        APickup pickup = PickupFactory.createPickup(
+                                (xTileIndex * this.tileWidth),
+                                (yTileIndex * this.tileHeight),
+                                "InvisibleWarp"
+                        );
+                        pickup.setDirection(logicMap[xTileIndex][yTileIndex].getPortalDirection());
+                        pickup.setBlocked(false);
+                        this.pickupList.addPickup(pickup);
+                    }
+                }
+            }
+        }
+    }
+
     public Point getNextPlayerSpawnPoint(){
         return this.eventList.getNextPlayerSpawnPoint();
     }
 
     public boolean isRectangleCollidesWithMap(Rectangle rec){
         boolean result = false;
+        int numerOfXTiles = this.map.getProperties().get("width", Integer.class);
+        int numerOfYTiles = this.map.getProperties().get("height", Integer.class);
         ABlock currentBlock;
+
         int startObjTileX = ((int)rec.getX()/32) - 3;
         startObjTileX = startObjTileX < 0 ? 0 : startObjTileX;
 
         int endObjTileX = ((int)rec.getX()/32) + (int)Math.ceil(rec.width/32) + 3;
-        endObjTileX = endObjTileX > 100 ? 100 : endObjTileX;
+        endObjTileX = endObjTileX > numerOfXTiles ? numerOfXTiles : endObjTileX;
 
         int startObjTileY = ((int)rec.getY()/32) - 3;
         startObjTileY = startObjTileY < 0 ? 0 : startObjTileY;
 
         int endObjTileY = ((int)rec.getY()/32) + ((int)Math.ceil(rec.height/32)) + 3;
-        endObjTileY = endObjTileY > 100 ? 100 : endObjTileY;
+        endObjTileY = endObjTileY > numerOfYTiles ? numerOfYTiles : endObjTileY;
 
         for(int x = startObjTileX; x < endObjTileX; x++){
             for(int y = startObjTileY; y < endObjTileY; y++){

@@ -31,8 +31,8 @@ public class GameController implements Runnable {
     public GameController(Room room) {
         this.room = room;
         this.usersInRoom = room.getUsersInRoom();
-        this.logicMapHandler = new LogicMapHandler(this);
         this.pickupList = new PickupList(usersInRoom);
+        this.logicMapHandler = new LogicMapHandler(this);
         this.bulletList = room.getBulletList();
         this.opponentList = room.getOpponentList();
         this.opponentList.initializeWithGameController(this);
@@ -106,7 +106,7 @@ public class GameController implements Runnable {
     private void updatePickups() {
         for (APickup pickup : this.pickupList.getPickups()) {
             for (User user : this.usersInRoom) {
-                if (pickup.getBounds().intersects(user.getPlayer().getBounds())) {
+                if (pickup.getBounds().intersects(user.getPlayer().getBounds()) && !pickup.isBlocked()) {
                     pickup.modifyPlayer(user.getPlayer());
                     this.pickupList.deletePickup(pickup);
                 }

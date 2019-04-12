@@ -2,7 +2,7 @@ package server.bullets;
 
 import server.connection.GameController;
 
-public class BulletFabric {
+public class BulletFactory {
     public static ABullet createBullet(String bulletType, int x, int y, float angle, boolean hostile, GameController gameController){
         ABullet resultBullet = null;
         switch (bulletType){
@@ -11,6 +11,9 @@ public class BulletFabric {
                 break;
             case "SpectralTear":
                 resultBullet = new SpectralTear(x, y, angle, hostile, gameController);
+                break;
+            case "FireRing":
+                resultBullet = new FireRing(x, y, angle, hostile, gameController);
                 break;
         }
         return resultBullet;

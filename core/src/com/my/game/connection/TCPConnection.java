@@ -1,20 +1,19 @@
 package com.my.game.connection;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Json;
 import com.my.game.WBGame;
 import com.my.game.bullets.ABullet;
-import com.my.game.bullets.BulletFabric;
+import com.my.game.bullets.BulletFactory;
 import com.my.game.bullets.BulletList;
 import com.my.game.music.MusicPlayer;
 import com.my.game.opponents.AOpponent;
-import com.my.game.opponents.OpponentFabric;
+import com.my.game.opponents.OpponentFactory;
 import com.my.game.opponents.OpponentList;
 import com.my.game.pickups.APickup;
-import com.my.game.pickups.PickupFabric;
+import com.my.game.pickups.PickupFactory;
 import com.my.game.pickups.PickupList;
 import com.my.game.player.Player;
-import com.my.game.player.PlayerFabric;
+import com.my.game.player.PlayerFactory;
 import com.my.game.player.PlayerList;
 import com.my.game.Properties;
 import com.my.game.screens.GameplayScreen;
@@ -69,7 +68,7 @@ public class TCPConnection extends Thread {
                 startGame(contentJSON);
                 break;
             case "createBullet":
-                ABullet newBullet = BulletFabric.createBullet(contentJSON.getString("type"),contentJSON.getInt("id"), contentJSON.getFloat("angle"));
+                ABullet newBullet = BulletFactory.createBullet(contentJSON.getString("type"),contentJSON.getInt("id"), contentJSON.getFloat("angle"));
                 BulletList.addBullet(newBullet); break;
             case "deleteBullet":
                 BulletList.removeBulletById(contentJSON.getInt("id")); break;
@@ -81,7 +80,7 @@ public class TCPConnection extends Thread {
                 OpponentList.removeOpponentById(contentJSON.getInt("id"));
                 break;
             case "createPickup":
-                APickup pickup = PickupFabric.createPickup(
+                APickup pickup = PickupFactory.createPickup(
                         contentJSON.getInt("x"),
                         contentJSON.getInt("y"),
                         contentJSON.getInt("id"),
@@ -120,14 +119,14 @@ public class TCPConnection extends Thread {
         JSONArray opponents = contentJSON.getJSONArray("opponents");
         for (int i = 0; i < opponents.length(); i++) {
             JSONObject opponent = opponents.getJSONObject(i);
-            AOpponent newOpponent = OpponentFabric.createOpponent(opponent.getString("type"), opponent.getInt("id"));
+            AOpponent newOpponent = OpponentFactory.createOpponent(opponent.getString("type"), opponent.getInt("id"));
             OpponentList.addOpponent(newOpponent);
         }
 
         JSONArray playersJSON = contentJSON.getJSONArray("players");
         for (int i = 0; i < playersJSON.length(); i++) {
             JSONObject player = playersJSON.getJSONObject(i);
-            Player newPlayer = PlayerFabric.createPlayer(contentJSON.getString("playerType"), player.getString("name"));
+            Player newPlayer = PlayerFactory.createPlayer(contentJSON.getString("playerType"), player.getString("name"));
             if (player.getString("name").equals(contentJSON.getString("current"))) {
                 newPlayer.setCurrentPlayer(true);
                 GameplayScreen.currentPlayer = newPlayer;
@@ -152,7 +151,7 @@ public class TCPConnection extends Thread {
 
         for (int i = 0; i < opponents.length(); i++) {
             JSONObject opponent = opponents.getJSONObject(i);
-            AOpponent newOpponent = OpponentFabric.createOpponent(opponent.getString("type"), opponent.getInt("id"));
+            AOpponent newOpponent = OpponentFactory.createOpponent(opponent.getString("type"), opponent.getInt("id"));
             OpponentList.addOpponent(newOpponent);
         }
         game.getGameplayScreen().changeLevel(contentJSON.getString("map"));

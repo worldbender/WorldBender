@@ -5,6 +5,9 @@ import java.awt.*;
 public abstract class ABlock {
     protected Rectangle rectangle;
     protected String blockType;
+    private boolean isDoor = false;
+    private boolean isPortal = false;
+    private String portalDirection = "up";
     protected ABlock(){
 
     }
@@ -30,5 +33,29 @@ public abstract class ABlock {
     }
     public Rectangle getRectangle(){
         return this.rectangle;
+    }
+
+    public boolean isDoor() {
+        return isDoor;
+    }
+
+    public void setDoor(boolean door) {
+        isDoor = door;
+    }
+
+    public boolean isPortal() {
+        return isPortal;
+    }
+
+    public void setPortal(boolean portal) {
+        isPortal = portal;
+    }
+
+    public String getPortalDirection() {
+        return portalDirection;
+    }
+
+    public void setPortalDirection(String portalDirection) {
+        this.portalDirection = portalDirection;
     }
 }

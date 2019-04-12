@@ -63,7 +63,9 @@ public class RoomController {
         Room currentRoom = RoomList.getUserRoom(user.getConnectionId());
         initGame(currentRoom);
 
-        JSONObject content = new JSONObject().put("owner", user.getName()).put("opponents", currentRoom.getGameController().getOpponentsData()).put("players", currentRoom.getGameController().getPlayersData());
+        JSONObject content = new JSONObject().put("owner", user.getName())
+                .put("opponents", currentRoom.getGameController().getOpponentsData())
+                .put("players", currentRoom.getGameController().getPlayersData());
 
         JSONObject msg = new JSONObject()
                 .put("msg", "startGame");

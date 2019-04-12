@@ -1,6 +1,6 @@
 package com.my.game.opponents;
 
-public class OpponentFabric {
+public class OpponentFactory {
     public static AOpponent createOpponent(String opponentType, int id){
         AOpponent resultOpponent = null;
         switch (opponentType){
