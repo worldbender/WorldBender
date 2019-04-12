@@ -71,10 +71,8 @@ public abstract class AOpponent {
         boolean result = false;
 
         for(AOpponent opponent : this.opponentList.getOpponents()){
-            if(opponent != this){
-                if(opponent.getBounds().intersects(rectangle)){
-                    result = true;
-                }
+            if(opponent != this && opponent.getBounds().intersects(rectangle)){
+                result = true;
             }
         }
         return result;

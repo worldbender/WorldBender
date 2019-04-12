@@ -20,13 +20,11 @@ public class UdpServer extends Thread {
     private static final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
     private static final int BUFFER = 1024;
     private static DatagramSocket socket;
-    private List<Room> rooms;
     private Map<String, User> existingUsers;
 
     public UdpServer() throws IOException {
-        this.socket = new DatagramSocket(PORT);
+        socket = new DatagramSocket(PORT);
         this.existingUsers = ExistingUsers.getInstance();
-        this.rooms = RoomList.getInstance();
     }
 
     public void run() {
@@ -69,6 +67,7 @@ public class UdpServer extends Thread {
         JSONObject json = new JSONObject(content);
         switch (json.getString("msg")){
             case "playerState": updatePlayersState(id, (JSONObject) json.get("content")); break;
+            default:
         }
     }
 

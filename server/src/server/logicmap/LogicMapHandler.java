@@ -9,7 +9,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import server.Properties;
 import server.connection.GameController;
-import server.opponents.OpponentList;
 import server.pickups.APickup;
 import server.pickups.PickupFactory;
 import server.pickups.PickupList;
@@ -18,17 +17,18 @@ import java.awt.*;
 
 public class LogicMapHandler {
     private TiledMap map;
-    private final int mapWidth = 100;
-    private final int mapHeight = 100;
-    private final int tileWidth = 32;
-    private final int tileHeight = 32;
-    private final String BASE_PATH_TO_MAP = "maps/";
-    private final String MAP_FILE_FORMAT = ".tmx";
-    private ABlock[][] logicMap = new ABlock[mapWidth][mapHeight];
+    private static final int MAP_WIDTH = 100;
+    private static final int MAP_HEIGHT = 100;
+    private static final int TILE_WIDTH = 32;
+    private static final int TILE_HEIGHT = 32;
+    private static final String BASE_PATH_TO_MAP = "maps/";
+    private static final String MAP_FILE_FORMAT = ".tmx";
+    private ABlock[][] logicMap = new ABlock[MAP_WIDTH][MAP_HEIGHT];
     private PickupList pickupList;
     private EventList eventList;
-    private OpponentList opponentList;
     private GameController gameController;
+    private static final String ENEMY = "enemy";
+    private static final String SPAWN = "spawn";
 
     public LogicMapHandler(GameController gameController) {
         String startMap = Properties.loadConfigFile("START_MAP");
@@ -63,25 +63,25 @@ public class LogicMapHandler {
                 if (collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("blocked") ||
                         collisionLayer2.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("blocked")) {
                     logicMap[xTileIndex][yTileIndex] = new SolidBlock(
-                            (xTileIndex * this.tileWidth),
-                            (yTileIndex * this.tileHeight),
-                            this.tileWidth,
-                            this.tileHeight
+                            (xTileIndex * this.TILE_WIDTH),
+                            (yTileIndex * this.TILE_HEIGHT),
+                            this.TILE_WIDTH,
+                            this.TILE_HEIGHT
                     );
                 } else {
                     logicMap[xTileIndex][yTileIndex] = new SoftBlock(
-                            (xTileIndex * this.tileWidth),
-                            (yTileIndex * this.tileHeight),
-                            this.tileWidth,
-                            this.tileHeight
+                            (xTileIndex * this.TILE_WIDTH),
+                            (yTileIndex * this.TILE_HEIGHT),
+                            this.TILE_WIDTH,
+                            this.TILE_HEIGHT
                     );
                 }
                 if(collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("door")){
                     logicMap[xTileIndex][yTileIndex] = new SolidBlock(
-                            (xTileIndex * this.tileWidth),
-                            (yTileIndex * this.tileHeight),
-                            this.tileWidth,
-                            this.tileHeight,
+                            (xTileIndex * this.TILE_WIDTH),
+                            (yTileIndex * this.TILE_HEIGHT),
+                            this.TILE_WIDTH,
+                            this.TILE_HEIGHT,
                             true
                     );
                     if(collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("portal")){
@@ -104,22 +104,22 @@ public class LogicMapHandler {
                 }
 
             } else {
-                if(object.getProperties().containsKey("spawn")){
+                if(object.getProperties().containsKey(SPAWN)){
                     rectangleMapObject = (RectangleMapObject)(object);
                     eventList.addPassiveEvent(new EventBlock(
                             (int)rectangleMapObject.getRectangle().getX(),
                             (int)rectangleMapObject.getRectangle().getY(),
-                            "spawn",
-                            object.getProperties().get("spawn").toString())
+                            SPAWN,
+                            object.getProperties().get(SPAWN).toString())
                     );
                 }
-                if(object.getProperties().containsKey("enemy")){
+                if(object.getProperties().containsKey(ENEMY)){
                     rectangleMapObject = (RectangleMapObject)(object);
                     eventList.addPassiveEvent(new EventBlock(
                             (int)rectangleMapObject.getRectangle().getX(),
                             (int)rectangleMapObject.getRectangle().getY(),
-                            "enemy",
-                            object.getProperties().get("enemy").toString())
+                            ENEMY,
+                            object.getProperties().get(ENEMY).toString())
                     );
                 }
             }
@@ -133,8 +133,8 @@ public class LogicMapHandler {
                     logicMap[xTileIndex][yTileIndex].setBlockType("Soft");
                     if(logicMap[xTileIndex][yTileIndex].isPortal()){
                         APickup pickup = PickupFactory.createPickup(
-                                (xTileIndex * this.tileWidth),
-                                (yTileIndex * this.tileHeight),
+                                (xTileIndex * this.TILE_WIDTH),
+                                (yTileIndex * this.TILE_HEIGHT),
                                 "InvisibleWarp"
                         );
                         pickup.setDirection(logicMap[xTileIndex][yTileIndex].getPortalDirection());
@@ -171,10 +171,8 @@ public class LogicMapHandler {
         for(int x = startObjTileX; x < endObjTileX; x++){
             for(int y = startObjTileY; y < endObjTileY; y++){
                 currentBlock = this.getCertainTileByTileXY(x,y);
-                if(currentBlock.getBLockType().equals("Solid")){
-                    if(rec.intersects(currentBlock.getRectangle())){
-                        result = true;
-                    }
+                if(currentBlock.getBLockType().equals("Solid") && rec.intersects(currentBlock.getRectangle())){
+                    result = true;
                 }
             }
         }
@@ -188,8 +186,8 @@ public class LogicMapHandler {
      */
     public ABlock getCertainTileByPoint(int x, int y) {
         ABlock resultBlock;
-        int indexOfBlockInMapMatrixX = (int)Math.floor(((double)x / (double)tileWidth));
-        int indexOfBlockInMapMatrixY = (int)Math.floor(((double)y / (double)tileHeight));
+        int indexOfBlockInMapMatrixX = (int)Math.floor(((double)x / (double) TILE_WIDTH));
+        int indexOfBlockInMapMatrixY = (int)Math.floor(((double)y / (double) TILE_HEIGHT));
         resultBlock = logicMap[indexOfBlockInMapMatrixX][indexOfBlockInMapMatrixY];
         return resultBlock;
     }
@@ -218,11 +216,11 @@ public class LogicMapHandler {
     }
 
     public int getMapWidth() {
-        return this.getNumerOfXTiles() * tileWidth;
+        return this.getNumerOfXTiles() * TILE_WIDTH;
     }
 
     public int getMapHeight() {
-        return this.getNumerOfYTiles() * tileHeight;
+        return this.getNumerOfYTiles() * TILE_HEIGHT;
     }
 
     public EventList getEventList(){

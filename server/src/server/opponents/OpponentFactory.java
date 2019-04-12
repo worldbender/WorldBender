@@ -3,6 +3,7 @@ package server.opponents;
 import server.connection.GameController;
 
 public class OpponentFactory {
+    private OpponentFactory(){}
     public static AOpponent createOpponent(String opponentType, GameController gameController){
         AOpponent resultOpponent = null;
         switch (opponentType){
