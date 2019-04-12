@@ -3,6 +3,7 @@ package server.bullets;
 import server.connection.GameController;
 
 public class BulletFactory {
+    private BulletFactory(){}
     public static ABullet createBullet(String bulletType, int x, int y, float angle, boolean hostile, GameController gameController){
         ABullet resultBullet = null;
         switch (bulletType){

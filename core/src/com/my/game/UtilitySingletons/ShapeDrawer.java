@@ -12,7 +12,7 @@ public class ShapeDrawer {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.RED);
         if((double)accualHp/maxHp > 0.0){
-            shapeRenderer.rect(x - 10, y, 10, (float)(textureHeight * ((double)accualHp/maxHp)));
+            shapeRenderer.rect((float)x - 10, y, 10, (float)(textureHeight * ((double)accualHp/maxHp)));
         }
         shapeRenderer.end();
     }

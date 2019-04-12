@@ -139,7 +139,7 @@ public class GameplayScreen extends AbstractScreen{
 
     private void sendMessageToServer(JSONObject message){
         try {
-            WBGame.connection.sender.sendMessage(message);
+            WBGame.connection.getSender().sendMessage(message);
         } catch (Exception e) {
             logger.error(e.toString(), e);
         }

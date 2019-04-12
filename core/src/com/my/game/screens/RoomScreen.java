@@ -47,9 +47,9 @@ public class RoomScreen extends AbstractScreen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                WBGame.connection.tcp.sendMessage(new JSONObject()
+                WBGame.connection.getTcp().sendMessage(new JSONObject()
                         .put("msg", "leaveRoom")
-                        .put("content", new JSONObject().put("port", WBGame.connection.socket.getLocalPort())));
+                        .put("content", new JSONObject().put("port", WBGame.connection.getSocket().getLocalPort())));
                 game.changeScreen(WBGame.MENU);
             }
         });
@@ -58,9 +58,9 @@ public class RoomScreen extends AbstractScreen {
             newGame.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    WBGame.connection.tcp.sendMessage(new JSONObject()
+                    WBGame.connection.getTcp().sendMessage(new JSONObject()
                             .put("msg", "startGame")
-                            .put("content", new JSONObject().put("port", WBGame.connection.socket.getLocalPort())));
+                            .put("content", new JSONObject().put("port", WBGame.connection.getSocket().getLocalPort())));
                 }
             });
         }

@@ -80,7 +80,7 @@ public class Hud implements Disposable {
         stack.addActor(playerIcon);
 
         table.add(stack).width(healthBarTexture.getHeight()).height(healthBarTexture.getHeight());
-        table.add(healthBar).width(healthBarTexture.getWidth()- healthBarTexture.getHeight()).height(healthBarTexture.getHeight());
+        table.add(healthBar).width((float)healthBarTexture.getWidth()- healthBarTexture.getHeight()).height(healthBarTexture.getHeight());
 
         table.row();
         healthBars.put(player.getName(), healthBar);

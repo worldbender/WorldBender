@@ -7,8 +7,6 @@ import com.my.game.connection.Connection;
 import com.my.game.screens.*;
 import com.my.game.screens.SplashScreen;
 
-import java.awt.*;
-
 public class WBGame extends Game {
 
     public static Connection connection;
@@ -26,24 +24,16 @@ public class WBGame extends Game {
     public static final String SERVER_ADDRESS = Properties.loadConfigFile("IP");
 
     public static final String GAME_NAME = "World Bender";
-    public static int WIDTH = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_WIDTH"));
-    public static int HEIGHT = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_HEIGHT"));
-    public static int RES_WIDTH;
-    public static int RES_HEIGHT;
+    public static final int WIDTH = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_WIDTH"));
+    public static final int HEIGHT = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_HEIGHT"));
 
     private boolean paused;
-
-    public WBGame(){
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        RES_WIDTH = screenSize.width;
-        RES_HEIGHT = screenSize.height;
-    }
 
     @Override
     public void create () {
         MyAssetManager.loadAllAssets();
         MyAssetManager.manager.finishLoading();
-        this.connection = new Connection(this);
+        connection = new Connection(this);
         this.setScreen(new SplashScreen(this));
     }
 

@@ -39,7 +39,7 @@ public class JoinRoomDialog extends Dialog {
         int id;
         try{
             id = Integer.parseInt(newTf.getText());
-            WBGame.connection.tcp.sendMessage(new JSONObject()
+            WBGame.connection.getTcp().sendMessage(new JSONObject()
                     .put("msg", "joinRoom")
                     .put("content", new JSONObject().put("id", id)
                     ));

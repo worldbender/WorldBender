@@ -205,7 +205,7 @@ public class GameController implements Runnable {
         for (APickup pickup : this.pickupList.getPickups()) {
             this.pickupList.deletePickup(pickup);
         }
-        this.logicMapHandler.LoadMap(nextMap);
+        this.logicMapHandler.loadMap(nextMap);
         this.setPlayersPosition();
         this.spawnAllOpponents();
 

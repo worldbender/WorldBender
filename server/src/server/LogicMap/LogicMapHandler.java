@@ -47,7 +47,7 @@ public class LogicMapHandler {
      *
      * @param mapName Name of map without path to folder or format. Just name of map.
      */
-    public void LoadMap(String mapName) {
+    public void loadMap(String mapName) {
         String pathToMap = BASE_PATH_TO_MAP + mapName + MAP_FILE_FORMAT;
         map = new TmxMapLoader().load(pathToMap);
         this.eventList = new EventList(this.gameController);
@@ -161,13 +161,13 @@ public class LogicMapHandler {
         int startObjTileX = ((int)rec.getX()/32) - 3;
         startObjTileX = startObjTileX < 0 ? 0 : startObjTileX;
 
-        int endObjTileX = ((int)rec.getX()/32) + (int)Math.ceil(rec.width/32) + 3;
+        int endObjTileX = ((int)rec.getX()/32) + (int)Math.ceil((double)rec.width/32) + 3;
         endObjTileX = endObjTileX > numerOfXTiles ? numerOfXTiles : endObjTileX;
 
         int startObjTileY = ((int)rec.getY()/32) - 3;
         startObjTileY = startObjTileY < 0 ? 0 : startObjTileY;
 
-        int endObjTileY = ((int)rec.getY()/32) + ((int)Math.ceil(rec.height/32)) + 3;
+        int endObjTileY = ((int)rec.getY()/32) + ((int)Math.ceil((double)rec.height/32)) + 3;
         endObjTileY = endObjTileY > numerOfYTiles ? numerOfYTiles : endObjTileY;
 
         for(int x = startObjTileX; x < endObjTileX; x++){

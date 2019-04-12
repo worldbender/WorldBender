@@ -7,18 +7,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class Connection {
     private static Logger logger = LogManager.getLogger(Connection.class.getName());
-    public InetAddress IPAddress;
     private String hostName = WBGame.SERVER_ADDRESS;
-    public DatagramSocket socket;
-    public TCPConnection tcp;
-    public UdpPacketReceiver receiver;
-    public UdpPacketSender sender;
+    private DatagramSocket socket;
+    private TCPConnection tcp;
+    private UdpPacketReceiver receiver;
+    private UdpPacketSender sender;
     private Thread receiverThread;
     private Thread senderThread;
     private Thread tcpThread;
@@ -31,12 +28,6 @@ public class Connection {
         } catch (SocketException e) {
             logger.error(e.toString(), e);
         }
-        try {
-            IPAddress = InetAddress.getByName(WBGame.SERVER_ADDRESS);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void createConnection() throws IOException {
@@ -64,5 +55,17 @@ public class Connection {
         senderThread = new Thread(sender);
         receiverThread.start();
         senderThread.start();
+    }
+
+    public DatagramSocket getSocket(){
+        return this.socket;
+    }
+
+    public TCPConnection getTcp(){
+        return this.tcp;
+    }
+
+    public UdpPacketSender getSender(){
+        return this.sender;
     }
 }

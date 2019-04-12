@@ -151,7 +151,6 @@ public class MyAssetManager {
         loadBars();
         loadScreenImages();
         loadAnimations();
-//        loadFonts();
     }
 
 
