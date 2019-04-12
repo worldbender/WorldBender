@@ -63,7 +63,7 @@ public class IdlerAI extends AOpponentAI {
     private boolean isPlayerInRange(){
         double distance;
         for (User user : this.usersInRoom) {
-            distance = Math.sqrt((Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) * (Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) +
+            distance = Math.sqrt((double)(Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) * (Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) +
                     (Math.abs(opponent.getCenterX() - user.getPlayer().getCenterX()) * (Math.abs(opponent.getCenterX() - user.getPlayer().getCenterX()))));
             if (distance < opponent.getViewRange()) {
                 return true;

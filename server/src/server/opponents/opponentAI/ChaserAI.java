@@ -45,7 +45,7 @@ public class ChaserAI extends AOpponentAI {
         double newY;
         for (User user : this.usersInRoom) {
             if(user.getName().equals(opponent.getIdOfChasedPlayer())){
-                angle = (float) (Math.atan2(user.getPlayer().getCenterY() - opponent.getCenterY(), opponent.getCenterX() - user.getPlayer().getCenterX()));
+                angle = (float) (Math.atan2((double)user.getPlayer().getCenterY() - opponent.getCenterY(), (double)opponent.getCenterX() - user.getPlayer().getCenterX()));
                 newX = opponent.getX() + (deltaTime * Math.cos(-angle + (float) Math.PI) * opponent.getSpeed());
                 newY = opponent.getY() + (deltaTime * Math.sin(-angle + (float) Math.PI) * opponent.getSpeed());
                 Rectangle newPosRectangle = new Rectangle((int)newX, (int)newY, opponent.getWidth(), opponent.getHeight());
@@ -63,7 +63,7 @@ public class ChaserAI extends AOpponentAI {
             opponent.setIdOfChasedPlayer("");
             double savedDistance = Float.POSITIVE_INFINITY;
             for (User user : this.usersInRoom) {
-                distance = Math.sqrt((Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) * (Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) +
+                distance = Math.sqrt((double)(Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) * (Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) +
                         (Math.abs(opponent.getCenterX() - user.getPlayer().getCenterX()) * (Math.abs(opponent.getCenterX() - user.getPlayer().getCenterX()))));
                 if (distance < opponent.getViewRange() && distance < savedDistance) {
                     opponent.setIdOfChasedPlayer(user.getName());
@@ -76,7 +76,7 @@ public class ChaserAI extends AOpponentAI {
     private boolean isPlayerInRange(){
         double distance;
         for (User user : this.usersInRoom) {
-            distance = Math.sqrt((Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) * (Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) +
+            distance = Math.sqrt((double)(Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) * (Math.abs(user.getPlayer().getCenterY() - opponent.getCenterY())) +
                     (Math.abs(opponent.getCenterX() - user.getPlayer().getCenterX()) * (Math.abs(opponent.getCenterX() - user.getPlayer().getCenterX()))));
             if (distance < opponent.getViewRange()) {
                 return true;

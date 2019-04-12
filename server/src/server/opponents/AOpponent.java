@@ -56,10 +56,10 @@ public abstract class AOpponent {
         float angle;
         if(this.canOpponentShoot()){
             for (User user : this.usersInRoom) {
-                distance = Math.sqrt((Math.abs(user.getPlayer().getCenterY() - this.getCenterY())) * (Math.abs(user.getPlayer().getCenterY() - this.getCenterY())) +
+                distance = Math.sqrt((double)(Math.abs(user.getPlayer().getCenterY() - this.getCenterY())) * (Math.abs(user.getPlayer().getCenterY() - this.getCenterY())) +
                         (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()) * (Math.abs(this.getCenterX() - user.getPlayer().getCenterX()))));
                 if (distance < this.getViewRange()) {
-                    angle = (float) (Math.atan2(user.getPlayer().getCenterY() - this.getCenterY(), this.getCenterX() - user.getPlayer().getCenterX()));
+                    angle = (float) (Math.atan2((float)user.getPlayer().getCenterY() - this.getCenterY(), (double)this.getCenterX() - user.getPlayer().getCenterX()));
                     ABullet newBullet = BulletFactory.createBullet(this.getBulletType(), this.getCenterX(), this.getCenterY(), -angle + (float) Math.PI, true, this.gameController);
                     this.bulletList.addBullet(newBullet);
                 }
