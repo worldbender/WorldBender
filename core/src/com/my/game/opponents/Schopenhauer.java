@@ -7,15 +7,15 @@ import com.my.game.MyAssetManager;
 import static com.my.game.MyAssetManager.SCHOPEN;
 
 public class Schopenhauer extends AOpponent {
-    public static Texture texture = MyAssetManager.manager.get(SCHOPEN);
+    private static final Texture TEXTURE = MyAssetManager.manager.get(SCHOPEN);
     public Schopenhauer(int id){
         super(id);
     }
 
     @Override
     public void draw(SpriteBatch spriteBatch) {
-        spriteBatch.draw(Schopenhauer.texture, this.getX(), this.getY());
-        this.drawHp(spriteBatch, Schopenhauer.texture.getHeight());
-        this.drawName(spriteBatch, "Schopenhauer", Schopenhauer.texture.getHeight());
+        spriteBatch.draw(Schopenhauer.TEXTURE, this.getX(), this.getY());
+        this.drawHp(spriteBatch, Schopenhauer.TEXTURE.getHeight());
+        this.drawName(spriteBatch, "Schopenhauer", Schopenhauer.TEXTURE.getHeight());
     }
 }

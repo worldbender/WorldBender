@@ -7,13 +7,13 @@ import com.my.game.MyAssetManager;
 import static com.my.game.MyAssetManager.HP;
 
 public class HpPickup extends APickup {
-    public static Texture texture = MyAssetManager.manager.get(HP);
+    private static final Texture TEXTURE = MyAssetManager.manager.get(HP);
     public HpPickup(int x, int y, int id){
         super(x, y, id, "Hp");
     }
 
     @Override
     public void draw(SpriteBatch spriteBatch, float stateTime) {
-        spriteBatch.draw(HpPickup.texture, this.getX(), this.getY());
+        spriteBatch.draw(HpPickup.TEXTURE, this.getX(), this.getY());
     }
 }

@@ -33,15 +33,6 @@ public abstract class AOpponentAI implements IOpponentAI {
     }
 
     @Override
-    public abstract void behave(double deltaTime);
-
-    @Override
-    public abstract boolean shouldChangeAI();
-
-    @Override
-    public abstract void changeAI();
-
-    @Override
     public void setAdditionalFlag(boolean additionalFlag){
         this.additionalFlag = additionalFlag;
     }

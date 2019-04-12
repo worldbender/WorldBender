@@ -8,9 +8,9 @@ import java.awt.*;
 import java.util.Random;
 
 public class IdlerAI extends AOpponentAI {
-    private double movementVextorX;
-    private double movementVextorY;
-    private final double speedModifier = 0.02;
+    private double movementVectorX;
+    private double movementVectorY;
+    private static final double SPEED_MODIFIER = 0.02;
 
     private Random randomGenerator = new Random();
     public IdlerAI(AOpponent opponent, GameController gameController, boolean isChangeable) {
@@ -39,25 +39,25 @@ public class IdlerAI extends AOpponentAI {
     }
 
     private void moveTowardDestinationPoint(double deltaTime){
-        double diffX = deltaTime * this.movementVextorX * (opponent.getSpeed() * this.speedModifier);
-        double diffY = deltaTime * this.movementVextorY * (opponent.getSpeed() * this.speedModifier);
+        double diffX = deltaTime * this.movementVectorX * (opponent.getSpeed() * this.SPEED_MODIFIER);
+        double diffY = deltaTime * this.movementVectorY * (opponent.getSpeed() * this.SPEED_MODIFIER);
         double newX = opponent.getX() + diffX;
         double newY = opponent.getY() + diffY;
         Rectangle newPosRectangle = new Rectangle((int)newX, (int)newY, opponent.getWidth(), opponent.getHeight());
         if(!opponent.isOpponentCollidesWithMap(newPosRectangle) && !opponent.isOpponentCollidesWithOpponents(newPosRectangle)){
             opponent.setX(newX);
             opponent.setY(newY);
-            this.movementVextorX -= diffX;
-            this.movementVextorY -= diffY;
+            this.movementVectorX -= diffX;
+            this.movementVectorY -= diffY;
         }
         else{
-            this.movementVextorX = 0.0;
-            this.movementVextorY = 0.0;
+            this.movementVectorX = 0.0;
+            this.movementVectorY = 0.0;
         }
     }
 
     private boolean shouldChoseNewVector(){
-        return Math.round(Math.abs(this.movementVextorX)) == 0.0 && Math.round(Math.abs(this.movementVextorY)) == 0.0;
+        return Math.round(Math.abs(this.movementVectorX)) == 0.0 && Math.round(Math.abs(this.movementVectorY)) == 0.0;
     }
 
     private boolean isPlayerInRange(){
@@ -74,8 +74,8 @@ public class IdlerAI extends AOpponentAI {
 
     private void choseRandomDestinationPoint(){
         Rectangle newPointRectangle = new Rectangle();
-        this.movementVextorX = 0.0;
-        this.movementVextorY = 0.0;
+        this.movementVectorX = 0.0;
+        this.movementVectorY = 0.0;
         newPointRectangle.width = 1;
         newPointRectangle.height = 1;
 
@@ -87,8 +87,8 @@ public class IdlerAI extends AOpponentAI {
             newPointRectangle.setLocation((int)(opponent.getX() + newDestinationX), (int)(opponent.getY() + newDestinationY));
             boolean isNewPointCollidesWithMap = map.isRectangleCollidesWithMap(newPointRectangle);
             if(!isNewPointCollidesWithMap){
-                this.movementVextorX = newDestinationX;
-                this.movementVextorY = newDestinationY;
+                this.movementVectorX = newDestinationX;
+                this.movementVectorY = newDestinationY;
                 break;
             }
         }

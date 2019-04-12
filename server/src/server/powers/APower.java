@@ -6,12 +6,6 @@ public abstract class APower implements IPower {
     protected long cooldown;
     protected long lastTimePowerWasUsed;
 
-    @Override
-    abstract public void act(double deltaTime);
-
-    @Override
-    abstract public boolean canAct();
-
     protected boolean hasCoolDownPassed(){
         boolean result = false;
         Date date = new Date();

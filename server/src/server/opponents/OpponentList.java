@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class OpponentList {
-    private CopyOnWriteArrayList<AOpponent> opponents = new CopyOnWriteArrayList<AOpponent>();
+    private CopyOnWriteArrayList<AOpponent> opponents = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<User> usersInRoom;
     private LogicMapHandler logicMapHandler;
     public int id = 0;

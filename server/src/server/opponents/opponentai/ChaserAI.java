@@ -28,10 +28,7 @@ public class ChaserAI extends AOpponentAI {
 
     @Override
     public boolean shouldChangeAI(){
-        if(opponent.getIdOfChasedPlayer().equals("") && !this.isPlayerInRange()){
-            return true;
-        }
-        return false;
+        return (opponent.getIdOfChasedPlayer().equals("") && !this.isPlayerInRange());
     }
 
     @Override

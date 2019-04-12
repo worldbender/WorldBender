@@ -8,8 +8,8 @@ public abstract class APickup{
     private double x;
     private double y;
     private int id;
-    private final int WIDTH = 64;
-    private final int HEIGHT = 64;
+    private static final int WIDTH = 64;
+    private static final int HEIGHT = 64;
     private boolean isBlocked = false;
     private String direction = "up";
     public APickup(){
@@ -18,7 +18,7 @@ public abstract class APickup{
     public abstract void modifyPlayer(Player player);
 
     public Rectangle getBounds(){
-        return new Rectangle((int)this.getX(), (int)this.getY(), this.WIDTH, this.HEIGHT);
+        return new Rectangle((int)this.getX(), (int)this.getY(), WIDTH, HEIGHT);
     }
 
     public String getType() {
