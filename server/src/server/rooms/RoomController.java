@@ -71,6 +71,7 @@ public class RoomController {
 
         for(User currentUser : currentRoom.getUsersInRoom()){
             content.put("current",currentUser.getName());
+            content.put("playerType", currentUser.getPlayer().getPlayerType());
             msg.put("content", content);
             currentUser.getThread().sendMessage(msg);
         }
