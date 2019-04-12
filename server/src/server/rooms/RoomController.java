@@ -61,7 +61,20 @@ public class RoomController {
 
     public void leaveRoom(User user){
         Room currentRoom = RoomList.getUserRoom(user.getConnectionId());
-        currentRoom.deleteUserFromRoom(user);
+
+        if(currentRoom.isUserAnOwner(user)){
+            currentRoom.deleteUserFromRoom(user);
+
+            for(User currentUser : currentRoom.getUsersInRoom()){
+                currentUser.getThread().sendMessage(new JSONObject()
+                        .put("msg", "ownerLeftRoom")
+                        .put("content", new JSONObject()
+                                .put("id", currentRoom.getId())));
+            }
+
+            currentRoom.deleteRoom();
+        }
+        else currentRoom.deleteUserFromRoom(user);
     }
 
     public void startGame(User user){

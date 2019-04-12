@@ -46,11 +46,10 @@ public class Room {
     }
 
     public void deleteUserFromRoom(User userToDelete){
-        for(User user : usersInRoom){
-            if(user.getName() == userToDelete.getName())
+        for (User user : this.usersInRoom) {
+            if (user.getConnectionId() == userToDelete.getConnectionId())
                 this.usersInRoom.remove(user);
         }
-        if(this.getUsersInRoom().size() == 0 || isUserAnOwner(userToDelete)) deleteRoom();
     }
 
     public int getId(){
@@ -85,7 +84,7 @@ public class Room {
         this.roomOwner = roomOwner;
     }
 
-    private boolean isUserAnOwner(User user){
+    public boolean isUserAnOwner(User user){
         if(user.getConnectionId() == getRoomOwner().getConnectionId()) return true;
         return false;
     }
@@ -98,7 +97,11 @@ public class Room {
         rooms.add(this);
     }
 
-    private void deleteRoom(){
+    public void deleteRoom(){
+        for(User user : usersInRoom){
+            this.usersInRoom.remove(user);
+        }
+
         for(Room room : rooms){
             if(room.getId() == this.getId()) {
                 room.getGameController().stopThread();
