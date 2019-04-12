@@ -17,16 +17,17 @@ public class RoomController {
         this.rooms = RoomList.getInstance();
     }
 
-    //TODO: lepsze nadawanie id pokoi
     public void newRoom(User user){
-        Room room = new Room(rooms.size(), user);
+        Room room = new Room(RoomList.getNextRoomId(), user);
         room.addUserToRoom(user);
 
         Gdx.app.postRunnable(() -> TcpServer.createGameController(room));
 
         clientThread.sendMessage(new JSONObject()
                 .put("msg", "createdRoom")
-                .put("content", new JSONObject().put("name", user.getName()).put("id", room.getId())));
+                .put("content", new JSONObject()
+                        .put("name", user.getName())
+                        .put("id", room.getId())));
     }
 
     public void joinRoom(User user, int roomId){
@@ -38,12 +39,15 @@ public class RoomController {
                     room.addUserToRoom(user);
                     clientThread.sendMessage(new JSONObject()
                             .put("msg", "joinedRoom")
-                            .put("content", new JSONObject().put("name", user.getName()).put("id", room.getId())));
+                            .put("content", new JSONObject()
+                                    .put("name", user.getName())
+                                    .put("id", room.getId())));
                 }
                 else
                     clientThread.sendMessage(new JSONObject()
                             .put("msg", "fullRoom")
-                            .put("content", new JSONObject().put("id", room.getId())));
+                            .put("content", new JSONObject()
+                                    .put("id", room.getId())));
                 break;
             }
         }
@@ -51,7 +55,8 @@ public class RoomController {
         if(!roomExists)
             clientThread.sendMessage(new JSONObject()
                     .put("msg", "roomDoesNotExist")
-                    .put("content", new JSONObject().put("name", user.getName())));
+                    .put("content", new JSONObject()
+                            .put("id", roomId)));
     }
 
     public void leaveRoom(User user){

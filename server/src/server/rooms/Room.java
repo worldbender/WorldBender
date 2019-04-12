@@ -50,7 +50,7 @@ public class Room {
             if(user.getName() == userToDelete.getName())
                 this.usersInRoom.remove(user);
         }
-        if(this.getUsersInRoom().size() == 0) deleteRoom();
+        if(this.getUsersInRoom().size() == 0 || isUserAnOwner(userToDelete)) deleteRoom();
     }
 
     public int getId(){
@@ -83,6 +83,11 @@ public class Room {
 
     private void setRoomOwner(User roomOwner) {
         this.roomOwner = roomOwner;
+    }
+
+    private boolean isUserAnOwner(User user){
+        if(user.getConnectionId() == getRoomOwner().getConnectionId()) return true;
+        return false;
     }
 
     public void setGameStarted(boolean gameStarted) {
