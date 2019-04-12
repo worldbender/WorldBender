@@ -100,6 +100,10 @@ public class TCPConnection extends Thread {
                 System.out.println("Joined room ID: " + contentJSON.getInt("id"));
                 Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM, contentJSON.getInt("id")));
                 break;
+            case "ownerLeftRoom":
+                System.out.println("Left room ID: " + contentJSON.getInt("id"));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_OWNER_LEFT));
+                break;
             case "fullRoom":
                 System.out.println("Room is full: " + contentJSON.getInt("id"));
                 Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_FULL_ROOM));

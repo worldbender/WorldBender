@@ -23,9 +23,10 @@ public class WBGame extends Game {
     public final static int MENU_FULL_ROOM = 2;
     public final static int MENU_NO_ROOM = 3;
     public final static int MENU_IN_GAME = 4;
-    public final static int PLAY = 5;
-    public final static int ROOM = 6;
-    public final static int ROOM_OWNER = 7;
+    public final static int MENU_OWNER_LEFT = 5;
+    public final static int PLAY = 6;
+    public final static int ROOM = 7;
+    public final static int ROOM_OWNER = 8;
     private int currentRoom = 0;
     public final static String SERVER_ADDRESS = Properties.loadConfigFile("IP");
     public final static boolean IS_DEBUG_VERSION = true;
@@ -83,6 +84,9 @@ public class WBGame extends Game {
                 break;
             case MENU_NO_ROOM:
                 this.setScreen(new MenuScreen(this, false, false));
+                break;
+            case MENU_OWNER_LEFT:
+                this.setScreen(new MenuScreen(this, true, false));
                 break;
             case MENU_IN_GAME:
                 this.setScreen(new MenuScreen(this, true));
