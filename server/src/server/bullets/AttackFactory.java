@@ -4,7 +4,8 @@ import server.players.Player;
 import server.connection.GameController;
 
 public class AttackFactory {
-    public static void createAtack(Player player, BulletList bulletList, float angle, GameController gameController){
+    private AttackFactory(){}
+    public static void createAttack(Player player, BulletList bulletList, float angle, GameController gameController){
         ABullet newBullet;
         switch (player.getWeaponType()) {
             case "Normal":

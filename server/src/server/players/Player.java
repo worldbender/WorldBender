@@ -135,7 +135,7 @@ public class Player {
         if(this.RIGHT_ARROW){
             angle = 0f;
         }
-        AttackFactory.createAtack(this, this.bulletList, angle, gameController);
+        AttackFactory.createAttack(this, this.bulletList, angle, gameController);
     }
 
     public boolean canPlayerShoot() {

@@ -49,7 +49,7 @@ public class TcpClientThread extends Thread{
             in.close();
             clientSocket.close();
         } catch (IOException e) {
-            //logger.error(e.toString(), e);
+            //thread stopped
         }
         existingUsers.get(user.getConnectionId()).setConnection(false);
         for (User current : existingUsers.values()) {
@@ -74,6 +74,7 @@ public class TcpClientThread extends Thread{
             case "joinRoom": this.roomController.joinRoom(this.user, contentJSON.getInt("id")); break;
             case "leaveRoom":  this.roomController.leaveRoom(this.user); break;
             case "startGame": this.roomController.startGame(this.user); break;
+            default:
         }
     }
 

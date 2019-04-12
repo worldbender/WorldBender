@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Properties {
+    private Properties(){}
     private static Logger logger = LogManager.getLogger(Properties.class.getName());
     private static final String PATH = "../../config.properties";
 

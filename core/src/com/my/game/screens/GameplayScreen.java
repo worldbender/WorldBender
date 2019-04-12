@@ -36,6 +36,10 @@ public class GameplayScreen extends AbstractScreen{
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
     private float stateTime = 0f;
     private Hud hud;
+    private static final String LEFT = "LEFT";
+    private static final String RIGHT = "RIGHT";
+    private static final String UP = "UP";
+    private static final String DOWN = "DOWN";
 
     public GameplayScreen(WBGame game) {
         super(game);
@@ -156,45 +160,45 @@ public class GameplayScreen extends AbstractScreen{
         currentPlayer.setMoving(false);
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             currentPlayer.setMoving(true);
-            currentPlayer.setActiveMovementKey("LEFT");
-            currentPlayer.setHeadDirection("LEFT");
+            currentPlayer.setActiveMovementKey(LEFT);
+            currentPlayer.setHeadDirection(LEFT);
             currentPlayer.KEY_A = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             currentPlayer.setMoving(true);
-            currentPlayer.setActiveMovementKey("RIGHT");
-            currentPlayer.setHeadDirection("RIGHT");
+            currentPlayer.setActiveMovementKey(RIGHT);
+            currentPlayer.setHeadDirection(RIGHT);
             currentPlayer.KEY_D = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             currentPlayer.setMoving(true);
-            currentPlayer.setActiveMovementKey("UP");
-            currentPlayer.setHeadDirection("UP");
+            currentPlayer.setActiveMovementKey(UP);
+            currentPlayer.setHeadDirection(UP);
             currentPlayer.KEY_W = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             currentPlayer.setMoving(true);
-            currentPlayer.setActiveMovementKey("DOWN");
-            currentPlayer.setHeadDirection("DOWN");
+            currentPlayer.setActiveMovementKey(DOWN);
+            currentPlayer.setHeadDirection(DOWN);
             currentPlayer.KEY_S = true;
         }
     }
 
     private void handleArrowKeys(){
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            currentPlayer.setHeadDirection("LEFT");
+            currentPlayer.setHeadDirection(LEFT);
             currentPlayer.LEFT_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            currentPlayer.setHeadDirection("RIGHT");
+            currentPlayer.setHeadDirection(RIGHT);
             currentPlayer.RIGHT_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            currentPlayer.setHeadDirection("UP");
+            currentPlayer.setHeadDirection(UP);
             currentPlayer.UP_ARROW = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            currentPlayer.setHeadDirection("DOWN");
+            currentPlayer.setHeadDirection(DOWN);
             currentPlayer.DOWN_ARROW = true;
         }
     }
