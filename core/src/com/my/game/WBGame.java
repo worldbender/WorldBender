@@ -13,14 +13,16 @@ public class WBGame extends Game {
     public static boolean connectionStatus = false;
     private GameplayScreen gameplayScreen;
 
+
     public static final int SPLASH = 0;
     public static final int MENU = 1;
     public static final int MENU_FULL_ROOM = 2;
     public static final int MENU_NO_ROOM = 3;
     public static final int MENU_IN_GAME = 4;
-    public static final int PLAY = 5;
-    public static final int ROOM = 6;
-    public static final int ROOM_OWNER = 7;
+    public static final int MENU_OWNER_LEFT = 5;
+    public static final int PLAY = 6;
+    public static final int ROOM = 7;
+    public static final int ROOM_OWNER = 8;
     public static final String SERVER_ADDRESS = Properties.loadConfigFile("IP");
 
     public static final String GAME_NAME = "World Bender";
@@ -64,6 +66,9 @@ public class WBGame extends Game {
                 break;
             case MENU_NO_ROOM:
                 this.setScreen(new MenuScreen(this, false, false));
+                break;
+            case MENU_OWNER_LEFT:
+                this.setScreen(new MenuScreen(this, true, false));
                 break;
             case MENU_IN_GAME:
                 this.setScreen(new MenuScreen(this, true));

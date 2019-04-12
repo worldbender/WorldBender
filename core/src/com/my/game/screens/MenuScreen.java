@@ -109,12 +109,15 @@ public class MenuScreen extends AbstractScreen{
             }
         });
 
+        if(isRoomFull && !roomExists){
+            new ErrorDialog(skin, stage, "Room owner left!");
+        }
 
-        if(isRoomFull){
+        if(isRoomFull && roomExists){
             new ErrorDialog(skin, stage, "Game already started or room is full!");
         }
 
-        if(!roomExists){
+        if(!roomExists && !isRoomFull){
             new ErrorDialog(skin, stage, "Room with this ID doesn't exist!");
         }
     }

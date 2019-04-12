@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RoomList {
+    private static int nextRoomId = 1;
     private static List<Room> rooms;
     private static Map<String, User> existingUsers = ExistingUsers.getInstance();
 
@@ -36,6 +37,10 @@ public class RoomList {
             }
         }
         return null;
+    }
+
+    public static int getNextRoomId() {
+        return nextRoomId++;
     }
 
 }
