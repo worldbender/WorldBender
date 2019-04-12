@@ -1,7 +1,7 @@
 package server.opponents;
 
 import server.connection.GameController;
-import server.opponents.opponentAI.IdlerAI;
+import server.opponents.opponentai.IdlerAI;
 import server.pickups.PickupFactory;
 
 public class Schopenhauer extends AOpponent{

@@ -1,7 +1,7 @@
 package server.players;
 
 import org.json.JSONObject;
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.Properties;
 import server.User;
 import server.bullets.AttackFactory;

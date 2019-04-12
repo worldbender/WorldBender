@@ -1,4 +1,4 @@
-package server.opponents.opponentAI;
+package server.opponents.opponentai;
 
 import server.User;
 import server.connection.GameController;

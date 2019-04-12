@@ -1,8 +1,8 @@
 package com.my.game.opponents;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.my.game.utilitySingletons.ShapeDrawer;
-import com.my.game.utilitySingletons.StringDrawer;
+import com.my.game.utilitysingletons.ShapeDrawer;
+import com.my.game.utilitysingletons.StringDrawer;
 import com.my.game.music.MusicPlayer;
 
 public abstract class AOpponent{

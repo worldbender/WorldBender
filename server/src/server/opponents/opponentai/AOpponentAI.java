@@ -1,6 +1,6 @@
-package server.opponents.opponentAI;
+package server.opponents.opponentai;
 
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.User;
 import server.bullets.BulletList;
 import server.connection.GameController;

@@ -1,4 +1,4 @@
-package server.opponents.opponentAI;
+package server.opponents.opponentai;
 
 public interface IOpponentAI {
     void behave(double deltaTime);

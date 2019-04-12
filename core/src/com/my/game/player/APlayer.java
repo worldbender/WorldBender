@@ -6,7 +6,6 @@ public abstract class APlayer extends Rectangle {
     protected String name;
     protected boolean currentPlayer = false;
     private int hp;
-    public APlayer(){ }
 
     public void setPosition(int x, int y){
         this.setX(x);

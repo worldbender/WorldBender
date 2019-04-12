@@ -25,7 +25,7 @@ import java.util.Map;
 public class Hud implements Disposable {
     private Stage stage;
     private SpriteBatch spriteBatch;
-    private final int PROGRESS_BAR_HEIGHT = 12;
+    private static final int PROGRESS_BAR_HEIGHT = 12;
     private Table table;
 
     private Map<String, ProgressBar> healthBars = new HashMap<>();

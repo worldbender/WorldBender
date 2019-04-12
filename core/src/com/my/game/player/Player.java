@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.my.game.Properties;
 import com.my.game.screens.GameplayScreen;
-import com.my.game.utilitySingletons.StringDrawer;
+import com.my.game.utilitysingletons.StringDrawer;
 import org.json.JSONObject;
 
 
@@ -15,7 +15,6 @@ public abstract class Player extends APlayer {
     public static Animation<TextureRegion> upWalkAnimation;
     public static Animation<TextureRegion> rightWalkAnimation;
     public static Animation<TextureRegion> leftWalkAnimation;
-    private float scale = java.lang.Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
     private String activeMovementKey = "DOWN";
     private String headDirection = "DOWN";
     public static TextureRegion headRegion;
@@ -29,6 +28,10 @@ public abstract class Player extends APlayer {
     public boolean LEFT_ARROW = false;
     public boolean RIGHT_ARROW = false;
     public boolean KEY_SPACE = false;
+    private static final String RIGHT = "RIGHT";
+    private static final String LEFT = "LEFT";
+    private static final String UP = "UP";
+    private static final String DOWN = "DOWN";
 
     public Player(String name) {
         this(name, 0, 0);
@@ -37,7 +40,8 @@ public abstract class Player extends APlayer {
     public Player(String name, int x, int y) {
         super();
         this.name = name;
-        this.setSize((int) (GameplayScreen.PLAYER_TEXTURE_WIDTH * this.scale), (int) (GameplayScreen.PLAYER_TEXTURE_HEIGHT * this.scale));
+        float scale = java.lang.Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
+        this.setSize((int) (GameplayScreen.PLAYER_TEXTURE_WIDTH * scale), (int) (GameplayScreen.PLAYER_TEXTURE_HEIGHT * scale));
         this.setPosition(x, y);
     }
 
@@ -57,16 +61,16 @@ public abstract class Player extends APlayer {
 
     private void drawMoving(SpriteBatch batch, float stateTime) {
         switch (activeMovementKey) {
-            case "UP":
+            case UP:
                 drawAnimationCharacter(batch, upWalkAnimation.getKeyFrame(stateTime, true));
                 break;
-            case "DOWN":
+            case DOWN:
                 drawAnimationCharacter(batch, downWalkAnimation.getKeyFrame(stateTime, true));
                 break;
-            case "LEFT":
+            case LEFT:
                 drawAnimationCharacter(batch, leftWalkAnimation.getKeyFrame(stateTime, true));
                 break;
-            case "RIGHT":
+            case RIGHT:
                 drawAnimationCharacter(batch, rightWalkAnimation.getKeyFrame(stateTime, true));
                 break;
             default:
@@ -76,16 +80,16 @@ public abstract class Player extends APlayer {
 
     private void drawStanding(SpriteBatch batch, float stateTime) {
         switch (activeMovementKey) {
-            case "UP":
+            case UP:
                 drawAnimationCharacter(batch, upWalkAnimation.getKeyFrames()[0]);
                 break;
-            case "DOWN":
+            case DOWN:
                 drawAnimationCharacter(batch, downWalkAnimation.getKeyFrames()[0]);
                 break;
-            case "LEFT":
+            case LEFT:
                 drawAnimationCharacter(batch, leftWalkAnimation.getKeyFrames()[5]);
                 break;
-            case "RIGHT":
+            case RIGHT:
                 drawAnimationCharacter(batch, rightWalkAnimation.getKeyFrames()[5]);
                 break;
             default:
@@ -95,16 +99,16 @@ public abstract class Player extends APlayer {
 
     private void drawHead(SpriteBatch batch) {
         switch (this.headDirection) {
-            case "UP":
+            case UP:
                 drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[2]);
                 break;
-            case "DOWN":
+            case DOWN:
                 drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[0]);
                 break;
-            case "LEFT":
+            case LEFT:
                 drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[3]);
                 break;
-            case "RIGHT":
+            case RIGHT:
                 drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[1]);
                 break;
             default:

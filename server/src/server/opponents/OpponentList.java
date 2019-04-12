@@ -1,7 +1,7 @@
 package server.opponents;
 
 import org.json.JSONObject;
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.User;
 import server.connection.GameController;
 import server.connection.TcpServer;

@@ -1,4 +1,4 @@
-package server.LogicMap;
+package server.logicmap;
 
 public class SoftBlock extends ABlock {
     public SoftBlock(int x1, int y1, int width, int height) {

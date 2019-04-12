@@ -9,7 +9,7 @@ import server.opponents.OpponentList;
 import server.pickups.APickup;
 import server.pickups.PickupList;
 import server.rooms.Room;
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.User;
 import server.bullets.ABullet;
 import server.opponents.AOpponent;

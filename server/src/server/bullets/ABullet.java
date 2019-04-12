@@ -1,6 +1,6 @@
 package server.bullets;
 
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.players.Player;
 import server.User;
 import server.connection.GameController;

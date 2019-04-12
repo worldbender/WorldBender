@@ -1,4 +1,4 @@
-package server.LogicMap;
+package server.logicmap;
 
 public class SolidBlock extends ABlock {
     public SolidBlock(int x1, int y1, int width, int height) {

@@ -1,14 +1,7 @@
 package server.opponents;
 
-import server.LogicMap.LogicMapHandler;
-import server.User;
-import server.bullets.BulletList;
 import server.connection.GameController;
-import server.opponents.opponentAI.IdlerAI;
-import server.pickups.PickupList;
-import java.awt.*;
-import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
+import server.opponents.opponentai.IdlerAI;
 
 public class Nietzsche extends AOpponent {
     public Nietzsche(GameController gameController) {

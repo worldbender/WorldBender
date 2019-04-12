@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.my.game.Properties;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletList;
-import com.my.game.mapRenderer.GraphicMapHandler;
+import com.my.game.maprenderer.GraphicMapHandler;
 import com.my.game.opponents.*;
 import com.my.game.pickups.*;
 import com.my.game.player.Player;

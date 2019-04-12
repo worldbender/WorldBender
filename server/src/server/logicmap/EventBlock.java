@@ -1,4 +1,4 @@
-package server.LogicMap;
+package server.logicmap;
 
 public class EventBlock extends ABlock{
     private int x;

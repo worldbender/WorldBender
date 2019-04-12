@@ -78,6 +78,7 @@ public class UdpPacketReceiver implements Runnable {
                         setPlayersData(gameJson.getJSONArray("players"));
                         setBulletsPositions(gameJson.getJSONArray("bullets"));
                         setOpponentsData(gameJson.getJSONArray("opponents")); break;
+                    default:
                 }
             } catch (Exception e) {
                 logger.error(e.toString(), e);

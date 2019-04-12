@@ -1,4 +1,4 @@
-package com.my.game.utilitySingletons;
+package com.my.game.utilitysingletons;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

@@ -1,13 +1,13 @@
 package server.opponents;
 
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.User;
 import server.bullets.ABullet;
 import server.bullets.BulletFactory;
 import server.bullets.BulletList;
 import server.connection.GameController;
-import server.opponents.opponentAI.IOpponentAI;
-import server.opponents.opponentAI.OpponentAIFactory;
+import server.opponents.opponentai.IOpponentAI;
+import server.opponents.opponentai.OpponentAIFactory;
 import server.pickups.PickupFactory;
 import server.pickups.PickupList;
 import java.awt.*;
