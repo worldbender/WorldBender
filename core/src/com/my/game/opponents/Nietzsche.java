@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.my.game.MyAssetManager;
 
-import static com.my.game.MyAssetManager.nietzsche;
+import static com.my.game.MyAssetManager.NIETZSCHE;
 
 public class Nietzsche extends AOpponent {
-    public static Texture texture = MyAssetManager.manager.get(nietzsche);
+    private static final Texture TEXTURE = MyAssetManager.manager.get(NIETZSCHE);
     public Nietzsche(int id){
         super(id);
         this.setHp(500);
@@ -15,9 +15,9 @@ public class Nietzsche extends AOpponent {
     }
     @Override
     public void draw(SpriteBatch spriteBatch) {
-        spriteBatch.draw(Nietzsche.texture, this.getX(), this.getY());
-        this.drawHp(spriteBatch, Nietzsche.texture.getHeight());
-        this.drawName(spriteBatch, "Nietzsche", Nietzsche.texture.getHeight());
+        spriteBatch.draw(Nietzsche.TEXTURE, this.getX(), this.getY());
+        this.drawHp(spriteBatch, Nietzsche.TEXTURE.getHeight());
+        this.drawName(spriteBatch, "Nietzsche", Nietzsche.TEXTURE.getHeight());
     }
 
 }

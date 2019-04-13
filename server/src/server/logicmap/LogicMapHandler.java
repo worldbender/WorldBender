@@ -1,4 +1,4 @@
-package server.LogicMap;
+package server.logicmap;
 
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -7,30 +7,28 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Intersector;
 import server.Properties;
 import server.connection.GameController;
-import server.opponents.OpponentList;
 import server.pickups.APickup;
 import server.pickups.PickupFactory;
 import server.pickups.PickupList;
 
 import java.awt.*;
-import java.awt.geom.Area;
 
 public class LogicMapHandler {
     private TiledMap map;
-    private final int mapWidth = 100;
-    private final int mapHeight = 100;
-    private final int tileWidth = 32;
-    private final int tileHeight = 32;
-    private final String BASE_PATH_TO_MAP = "maps/";
-    private final String MAP_FILE_FORMAT = ".tmx";
-    private ABlock[][] logicMap = new ABlock[mapWidth][mapHeight];
+    private static final int MAP_WIDTH = 100;
+    private static final int MAP_HEIGHT = 100;
+    private static final int TILE_WIDTH = 32;
+    private static final int TILE_HEIGHT = 32;
+    private static final String BASE_PATH_TO_MAP = "maps/";
+    private static final String MAP_FILE_FORMAT = ".tmx";
+    private ABlock[][] logicMap = new ABlock[MAP_WIDTH][MAP_HEIGHT];
     private PickupList pickupList;
     private EventList eventList;
-    private OpponentList opponentList;
     private GameController gameController;
+    private static final String ENEMY = "enemy";
+    private static final String SPAWN = "spawn";
 
     public LogicMapHandler(GameController gameController) {
         String startMap = Properties.loadConfigFile("START_MAP");
@@ -47,7 +45,7 @@ public class LogicMapHandler {
      *
      * @param mapName Name of map without path to folder or format. Just name of map.
      */
-    public void LoadMap(String mapName) {
+    public void loadMap(String mapName) {
         String pathToMap = BASE_PATH_TO_MAP + mapName + MAP_FILE_FORMAT;
         map = new TmxMapLoader().load(pathToMap);
         this.eventList = new EventList(this.gameController);
@@ -60,30 +58,30 @@ public class LogicMapHandler {
     public void constructLogicMap() {
         TiledMapTileLayer collisionLayer = (TiledMapTileLayer) (this.getMap().getLayers().get("CollisionLayer"));
         TiledMapTileLayer collisionLayer2 = (TiledMapTileLayer) (this.getMap().getLayers().get("CollisionLayer2"));
-        for (int xTileIndex = 0; xTileIndex < this.getNumerOfXTiles(); xTileIndex++) {
-            for (int yTileIndex = 0; yTileIndex < this.getNumerOfYTiles(); yTileIndex++) {
+        for (int xTileIndex = 0; xTileIndex < this.getNumberOfXTiles(); xTileIndex++) {
+            for (int yTileIndex = 0; yTileIndex < this.getNumberOfYTiles(); yTileIndex++) {
                 if (collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("blocked") ||
                         collisionLayer2.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("blocked")) {
                     logicMap[xTileIndex][yTileIndex] = new SolidBlock(
-                            (xTileIndex * this.tileWidth),
-                            (yTileIndex * this.tileHeight),
-                            this.tileWidth,
-                            this.tileHeight
+                            (xTileIndex * TILE_WIDTH),
+                            (yTileIndex * TILE_HEIGHT),
+                            TILE_WIDTH,
+                            TILE_HEIGHT
                     );
                 } else {
                     logicMap[xTileIndex][yTileIndex] = new SoftBlock(
-                            (xTileIndex * this.tileWidth),
-                            (yTileIndex * this.tileHeight),
-                            this.tileWidth,
-                            this.tileHeight
+                            (xTileIndex * TILE_WIDTH),
+                            (yTileIndex * TILE_HEIGHT),
+                            TILE_WIDTH,
+                            TILE_HEIGHT
                     );
                 }
                 if(collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("door")){
                     logicMap[xTileIndex][yTileIndex] = new SolidBlock(
-                            (xTileIndex * this.tileWidth),
-                            (yTileIndex * this.tileHeight),
-                            this.tileWidth,
-                            this.tileHeight,
+                            (xTileIndex * TILE_WIDTH),
+                            (yTileIndex * TILE_HEIGHT),
+                            TILE_WIDTH,
+                            TILE_HEIGHT,
                             true
                     );
                     if(collisionLayer.getCell(xTileIndex, yTileIndex).getTile().getProperties().containsKey("portal")){
@@ -106,22 +104,22 @@ public class LogicMapHandler {
                 }
 
             } else {
-                if(object.getProperties().containsKey("spawn")){
+                if(object.getProperties().containsKey(SPAWN)){
                     rectangleMapObject = (RectangleMapObject)(object);
                     eventList.addPassiveEvent(new EventBlock(
                             (int)rectangleMapObject.getRectangle().getX(),
                             (int)rectangleMapObject.getRectangle().getY(),
-                            "spawn",
-                            object.getProperties().get("spawn").toString())
+                            SPAWN,
+                            object.getProperties().get(SPAWN).toString())
                     );
                 }
-                if(object.getProperties().containsKey("enemy")){
+                if(object.getProperties().containsKey(ENEMY)){
                     rectangleMapObject = (RectangleMapObject)(object);
                     eventList.addPassiveEvent(new EventBlock(
                             (int)rectangleMapObject.getRectangle().getX(),
                             (int)rectangleMapObject.getRectangle().getY(),
-                            "enemy",
-                            object.getProperties().get("enemy").toString())
+                            ENEMY,
+                            object.getProperties().get(ENEMY).toString())
                     );
                 }
             }
@@ -129,14 +127,14 @@ public class LogicMapHandler {
     }
 
     public void openDoors(){
-        for (int xTileIndex = 0; xTileIndex < this.getNumerOfXTiles(); xTileIndex++) {
-            for (int yTileIndex = 0; yTileIndex < this.getNumerOfYTiles(); yTileIndex++) {
+        for (int xTileIndex = 0; xTileIndex < this.getNumberOfXTiles(); xTileIndex++) {
+            for (int yTileIndex = 0; yTileIndex < this.getNumberOfYTiles(); yTileIndex++) {
                 if(logicMap[xTileIndex][yTileIndex].isDoor()){
                     logicMap[xTileIndex][yTileIndex].setBlockType("Soft");
                     if(logicMap[xTileIndex][yTileIndex].isPortal()){
                         APickup pickup = PickupFactory.createPickup(
-                                (xTileIndex * this.tileWidth),
-                                (yTileIndex * this.tileHeight),
+                                (xTileIndex * TILE_WIDTH),
+                                (yTileIndex * TILE_HEIGHT),
                                 "InvisibleWarp"
                         );
                         pickup.setDirection(logicMap[xTileIndex][yTileIndex].getPortalDirection());
@@ -161,22 +159,20 @@ public class LogicMapHandler {
         int startObjTileX = ((int)rec.getX()/32) - 3;
         startObjTileX = startObjTileX < 0 ? 0 : startObjTileX;
 
-        int endObjTileX = ((int)rec.getX()/32) + (int)Math.ceil(rec.width/32) + 3;
+        int endObjTileX = ((int)rec.getX()/32) + (int)Math.ceil((double)rec.width/32) + 3;
         endObjTileX = endObjTileX > numerOfXTiles ? numerOfXTiles : endObjTileX;
 
         int startObjTileY = ((int)rec.getY()/32) - 3;
         startObjTileY = startObjTileY < 0 ? 0 : startObjTileY;
 
-        int endObjTileY = ((int)rec.getY()/32) + ((int)Math.ceil(rec.height/32)) + 3;
+        int endObjTileY = ((int)rec.getY()/32) + ((int)Math.ceil((double)rec.height/32)) + 3;
         endObjTileY = endObjTileY > numerOfYTiles ? numerOfYTiles : endObjTileY;
 
         for(int x = startObjTileX; x < endObjTileX; x++){
             for(int y = startObjTileY; y < endObjTileY; y++){
                 currentBlock = this.getCertainTileByTileXY(x,y);
-                if(currentBlock.getBLockType() == "Solid"){
-                    if(rec.intersects(currentBlock.getRectangle())){
-                        result = true;
-                    }
+                if(currentBlock.getBLockType().equals("Solid") && rec.intersects(currentBlock.getRectangle())){
+                    result = true;
                 }
             }
         }
@@ -190,8 +186,8 @@ public class LogicMapHandler {
      */
     public ABlock getCertainTileByPoint(int x, int y) {
         ABlock resultBlock;
-        int indexOfBlockInMapMatrixX = (int)Math.floor(((double)x / (double)tileWidth));
-        int indexOfBlockInMapMatrixY = (int)Math.floor(((double)y / (double)tileHeight));
+        int indexOfBlockInMapMatrixX = (int)Math.floor(((double)x / (double) TILE_WIDTH));
+        int indexOfBlockInMapMatrixY = (int)Math.floor(((double)y / (double) TILE_HEIGHT));
         resultBlock = logicMap[indexOfBlockInMapMatrixX][indexOfBlockInMapMatrixY];
         return resultBlock;
     }
@@ -211,20 +207,20 @@ public class LogicMapHandler {
         return this.map;
     }
 
-    public int getNumerOfXTiles() {
+    public int getNumberOfXTiles() {
         return getMap().getProperties().get("width", Integer.class);
     }
 
-    public int getNumerOfYTiles() {
+    public int getNumberOfYTiles() {
         return getMap().getProperties().get("height", Integer.class);
     }
 
     public int getMapWidth() {
-        return this.getNumerOfXTiles() * tileWidth;
+        return this.getNumberOfXTiles() * TILE_WIDTH;
     }
 
     public int getMapHeight() {
-        return this.getNumerOfYTiles() * tileHeight;
+        return this.getNumberOfYTiles() * TILE_HEIGHT;
     }
 
     public EventList getEventList(){

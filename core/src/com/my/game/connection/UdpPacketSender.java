@@ -1,23 +1,23 @@
 package com.my.game.connection;
 
 import com.my.game.Properties;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
-public class UdpPacketSender implements Runnable {
-    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
+public class UdpPacketSender implements Runnable{
+    private static Logger logger = LogManager.getLogger(UdpPacketSender.class.getName());
+    private static final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
     private DatagramSocket socket;
     private String hostname;
     byte buf[];
 
-    UdpPacketSender(DatagramSocket socket, String hostname) {
+    public UdpPacketSender(DatagramSocket socket, String hostname) {
         this.socket = socket;
         this.hostname = hostname;
     }
@@ -29,14 +29,13 @@ public class UdpPacketSender implements Runnable {
             address = InetAddress.getByName(hostname);
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, PORT);
             socket.send(packet);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.toString(), e);
         }
     }
 
-
+    @Override
     public void run() {
+        //ignore
     }
 }

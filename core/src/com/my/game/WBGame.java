@@ -7,57 +7,43 @@ import com.my.game.connection.Connection;
 import com.my.game.screens.*;
 import com.my.game.screens.SplashScreen;
 
-import java.awt.*;
-
 public class WBGame extends Game {
 
-    public static Connection connection;
+    private static Connection connection;
     public static boolean connectionStatus = false;
-
     private GameplayScreen gameplayScreen;
-    private MenuScreen menuScreen;
-    private RoomScreen roomScreen;
 
-    public final static int SPLASH = 0;
-    public final static int MENU = 1;
-    public final static int MENU_FULL_ROOM = 2;
-    public final static int MENU_NO_ROOM = 3;
-    public final static int MENU_IN_GAME = 4;
-    public final static int MENU_OWNER_LEFT = 5;
-    public final static int PLAY = 6;
-    public final static int ROOM = 7;
-    public final static int ROOM_OWNER = 8;
-    private int currentRoom = 0;
-    public final static String SERVER_ADDRESS = Properties.loadConfigFile("IP");
-    public final static boolean IS_DEBUG_VERSION = true;
-//    public final static int APPLICATION = 2;
 
-    public final static String GAME_NAME = "World Bender";
-    public static int WIDTH;
-    public static int HEIGHT;
-    public static int RES_WIDTH;
-    public static int RES_HEIGHT;
+    public static final int SPLASH = 0;
+    public static final int MENU = 1;
+    public static final int MENU_FULL_ROOM = 2;
+    public static final int MENU_NO_ROOM = 3;
+    public static final int MENU_IN_GAME = 4;
+    public static final int MENU_OWNER_LEFT = 5;
+    public static final int PLAY = 6;
+    public static final int ROOM = 7;
+    public static final int ROOM_OWNER = 8;
+    public static final String SERVER_ADDRESS = Properties.loadConfigFile("IP");
+
+    public static final String GAME_NAME = "World Bender";
+    public static final int WIDTH = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_WIDTH"));
+    public static final int HEIGHT = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_HEIGHT"));
 
     private boolean paused;
 
-    public WBGame(){
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        RES_WIDTH = screenSize.width;
-        RES_HEIGHT = screenSize.height;
-        WIDTH = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_WIDTH"));
-        HEIGHT = Integer.parseInt(Properties.loadConfigFile("SEE_RANGE_HEIGHT"));
+    public static Connection getConnection(){
+        return connection;
     }
 
     @Override
     public void create () {
         MyAssetManager.loadAllAssets();
         MyAssetManager.manager.finishLoading();
-//        while(!MyAssetManager.manager.update())
-//            System.out.println(MyAssetManager.manager.getProgress() * 100 + " %");
-        this.connection = new Connection(this);
+        connection = new Connection(this);
         this.setScreen(new SplashScreen(this));
     }
 
+    @Override
     public void dispose () {
         super.dispose();
         MyAssetManager.dispose();
@@ -95,6 +81,7 @@ public class WBGame extends Game {
                 if(gameplayScreen == null) gameplayScreen = new GameplayScreen(this);
                 this.setScreen(gameplayScreen);
                 break;
+            default:
         }
     }
 
@@ -106,6 +93,7 @@ public class WBGame extends Game {
             case ROOM:
                 this.setScreen(new RoomScreen(this, roomId));
                 break;
+            default:
         }
     }
 

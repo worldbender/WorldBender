@@ -1,6 +1,6 @@
 package server.powers;
 
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.players.Player;
 import server.User;
 import server.bullets.BulletList;
@@ -35,7 +35,7 @@ public class Healer extends APower {
                     .map(user -> user.getPlayer())
                     .forEach(player -> {
                         final double distance = Math.sqrt((Math.abs(this.player.getCenterY() - player.getCenterY())) * (Math.abs(this.player.getCenterY() - player.getCenterY())) +
-                                (Math.abs(player.getCenterX() - this.player.getCenterX()) * (Math.abs(player.getCenterX() - this.player.getCenterX()))));
+                                (double)(Math.abs(player.getCenterX() - this.player.getCenterX()) * (Math.abs(player.getCenterX() - this.player.getCenterX()))));
                         if(distance < 2000){
                             player.setHp(player.getHp() + 5);
                         }

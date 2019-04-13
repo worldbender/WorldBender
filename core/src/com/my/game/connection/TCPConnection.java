@@ -17,6 +17,8 @@ import com.my.game.player.PlayerFactory;
 import com.my.game.player.PlayerList;
 import com.my.game.Properties;
 import com.my.game.screens.GameplayScreen;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -24,7 +26,9 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Map;
 
-public class TCPConnection extends Thread {
+public class TCPConnection implements Runnable {
+    private static Logger logger = LogManager.getLogger(TCPConnection.class.getName());
+
     private WBGame game;
     private final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_TCP"));
     private String hostname;
@@ -42,6 +46,7 @@ public class TCPConnection extends Thread {
         players = PlayerList.getInstance();
     }
 
+    @Override
     public void run() {
         String message;
         while (true) {
@@ -50,7 +55,7 @@ public class TCPConnection extends Thread {
                     readMessage(message);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
             }
         }
     }
@@ -115,6 +120,7 @@ public class TCPConnection extends Thread {
             case "changeLevel":
                 this.changeLevel(contentJSON);
                 break;
+            default:
         }
     }
 

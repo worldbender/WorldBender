@@ -1,4 +1,4 @@
-package server.LogicMap;
+package server.logicmap;
 
 import java.awt.*;
 

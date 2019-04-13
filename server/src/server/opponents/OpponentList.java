@@ -1,7 +1,7 @@
 package server.opponents;
 
 import org.json.JSONObject;
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.User;
 import server.connection.GameController;
 import server.connection.TcpServer;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class OpponentList {
-    private CopyOnWriteArrayList<AOpponent> opponents = new CopyOnWriteArrayList<AOpponent>();
+    private CopyOnWriteArrayList<AOpponent> opponents = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<User> usersInRoom;
     private LogicMapHandler logicMapHandler;
     public int id = 0;

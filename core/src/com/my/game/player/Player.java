@@ -4,19 +4,16 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.my.game.Properties;
-import com.my.game.UtilitySingletons.ShapeDrawer;
-import com.my.game.UtilitySingletons.StringDrawer;
 import com.my.game.screens.GameplayScreen;
+import com.my.game.utilitysingletons.StringDrawer;
 import org.json.JSONObject;
 
 
 public abstract class Player extends APlayer {
-    public static double maxHp = 100;
     public static Animation<TextureRegion> downWalkAnimation;
     public static Animation<TextureRegion> upWalkAnimation;
     public static Animation<TextureRegion> rightWalkAnimation;
     public static Animation<TextureRegion> leftWalkAnimation;
-    private float scale = java.lang.Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
     private String activeMovementKey = "DOWN";
     private String headDirection = "DOWN";
     public static TextureRegion headRegion;
@@ -30,15 +27,20 @@ public abstract class Player extends APlayer {
     public boolean LEFT_ARROW = false;
     public boolean RIGHT_ARROW = false;
     public boolean KEY_SPACE = false;
+    private static final String RIGHT = "RIGHT";
+    private static final String LEFT = "LEFT";
+    private static final String UP = "UP";
+    private static final String DOWN = "DOWN";
 
-    public Player(String name){
+    public Player(String name) {
         this(name, 0, 0);
     }
 
     public Player(String name, int x, int y) {
         super();
         this.name = name;
-        this.setSize((int)(GameplayScreen.PLAYER_TEXTURE_WIDTH * this.scale), (int)(GameplayScreen.PLAYER_TEXTURE_HEIGHT * this.scale));
+        float scale = java.lang.Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
+        this.setSize((int) (GameplayScreen.PLAYER_TEXTURE_WIDTH * scale), (int) (GameplayScreen.PLAYER_TEXTURE_HEIGHT * scale));
         this.setPosition(x, y);
     }
 
@@ -48,26 +50,26 @@ public abstract class Player extends APlayer {
         this.drawName(batch);
     }
 
-    private void drawCharacter(SpriteBatch batch, float stateTime){
-        if(this.isMoving){
+    private void drawCharacter(SpriteBatch batch, float stateTime) {
+        if (this.isMoving) {
             this.drawMoving(batch, stateTime);
         } else {
             this.drawStanding(batch, stateTime);
         }
     }
 
-    private void drawMoving(SpriteBatch batch, float stateTime){
+    private void drawMoving(SpriteBatch batch, float stateTime) {
         switch (activeMovementKey) {
-            case "UP":
+            case UP:
                 drawAnimationCharacter(batch, upWalkAnimation.getKeyFrame(stateTime, true));
                 break;
-            case "DOWN":
+            case DOWN:
                 drawAnimationCharacter(batch, downWalkAnimation.getKeyFrame(stateTime, true));
                 break;
-            case "LEFT":
+            case LEFT:
                 drawAnimationCharacter(batch, leftWalkAnimation.getKeyFrame(stateTime, true));
                 break;
-            case "RIGHT":
+            case RIGHT:
                 drawAnimationCharacter(batch, rightWalkAnimation.getKeyFrame(stateTime, true));
                 break;
             default:
@@ -75,18 +77,18 @@ public abstract class Player extends APlayer {
         }
     }
 
-    private void drawStanding(SpriteBatch batch, float stateTime){
+    private void drawStanding(SpriteBatch batch, float stateTime) {
         switch (activeMovementKey) {
-            case "UP":
+            case UP:
                 drawAnimationCharacter(batch, upWalkAnimation.getKeyFrames()[0]);
                 break;
-            case "DOWN":
+            case DOWN:
                 drawAnimationCharacter(batch, downWalkAnimation.getKeyFrames()[0]);
                 break;
-            case "LEFT":
+            case LEFT:
                 drawAnimationCharacter(batch, leftWalkAnimation.getKeyFrames()[5]);
                 break;
-            case "RIGHT":
+            case RIGHT:
                 drawAnimationCharacter(batch, rightWalkAnimation.getKeyFrames()[5]);
                 break;
             default:
@@ -94,18 +96,18 @@ public abstract class Player extends APlayer {
         }
     }
 
-    private void drawHead(SpriteBatch batch){
-        switch (this.headDirection){
-            case "UP":
+    private void drawHead(SpriteBatch batch) {
+        switch (this.headDirection) {
+            case UP:
                 drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[2]);
                 break;
-            case "DOWN":
+            case DOWN:
                 drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[0]);
                 break;
-            case "LEFT":
+            case LEFT:
                 drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[3]);
                 break;
-            case "RIGHT":
+            case RIGHT:
                 drawAnimationCharacter(batch, this.getHeads().getKeyFrames()[1]);
                 break;
             default:
@@ -113,7 +115,7 @@ public abstract class Player extends APlayer {
         }
     }
 
-    private void drawAnimationCharacter(SpriteBatch batch, TextureRegion textureRegion){
+    private void drawAnimationCharacter(SpriteBatch batch, TextureRegion textureRegion) {
         batch.draw(
                 textureRegion,
                 (int) this.getX(),
@@ -124,11 +126,11 @@ public abstract class Player extends APlayer {
     }
 
     private void drawName(SpriteBatch batch) {
-        StringDrawer.drawHp(batch, this.getName(), (int) this.getX(), (int) this.getY() + (int)this.getHeight());
+        StringDrawer.drawHp(batch, this.getName(), (int) this.getX(), (int) this.getY() + (int) this.getHeight());
     }
 
-    public JSONObject getPlayerState(){
-        JSONObject result =  new JSONObject()
+    public JSONObject getPlayerState() {
+        return new JSONObject()
                 .put("isMoving", this.isMoving)
                 .put("activeMovementKey", this.activeMovementKey)
                 .put("headDirection", this.headDirection)
@@ -136,17 +138,15 @@ public abstract class Player extends APlayer {
                         .put("space", this.KEY_SPACE)
                 )
                 .put("wsad", new JSONObject()
-                            .put("w", this.KEY_W)
-                            .put("s", this.KEY_S)
-                            .put("d", this.KEY_D)
-                            .put("a", this.KEY_A)
-                            .put("up", this.UP_ARROW)
-                            .put("down", this.DOWN_ARROW)
-                            .put("left", this.LEFT_ARROW)
-                            .put("right", this.RIGHT_ARROW)
+                        .put("w", this.KEY_W)
+                        .put("s", this.KEY_S)
+                        .put("d", this.KEY_D)
+                        .put("a", this.KEY_A)
+                        .put("up", this.UP_ARROW)
+                        .put("down", this.DOWN_ARROW)
+                        .put("left", this.LEFT_ARROW)
+                        .put("right", this.RIGHT_ARROW)
                 );
-
-        return result;
     }
 
     public boolean isCurrentPlayer() {
@@ -162,7 +162,7 @@ public abstract class Player extends APlayer {
     }
 
     public void setActiveMovementKey(String activeMovementKey) {
-        if(!activeMovementKey.equals(""))
+        if (!activeMovementKey.equals(""))
             this.activeMovementKey = activeMovementKey;
     }
 
@@ -174,7 +174,7 @@ public abstract class Player extends APlayer {
         isMoving = moving;
     }
 
-    public void resetkeys(){
+    public void resetKeys() {
         this.KEY_W = false;
         this.KEY_S = false;
         this.KEY_A = false;

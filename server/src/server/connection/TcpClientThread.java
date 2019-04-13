@@ -1,5 +1,7 @@
 package server.connection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import server.ExistingUsers;
 import server.User;
@@ -13,6 +15,7 @@ import java.net.Socket;
 import java.util.Map;
 
 public class TcpClientThread extends Thread{
+    private static Logger logger = LogManager.getLogger(TcpClientThread.class.getName());
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
@@ -29,7 +32,7 @@ public class TcpClientThread extends Thread{
             out = new PrintWriter(clientSocket.getOutputStream(),true);
             in = new BufferedReader(new InputStreamReader( clientSocket.getInputStream()));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.toString(), e);
         }
     }
 
@@ -45,7 +48,9 @@ public class TcpClientThread extends Thread{
             out.close();
             in.close();
             clientSocket.close();
-        } catch (IOException e) { }
+        } catch (IOException e) {
+            //thread stopped
+        }
         existingUsers.get(user.getConnectionId()).setConnection(false);
         for (User current : existingUsers.values()) {
             current.getThread().sendMessage(new JSONObject()
@@ -69,6 +74,7 @@ public class TcpClientThread extends Thread{
             case "joinRoom": this.roomController.joinRoom(this.user, contentJSON.getInt("id")); break;
             case "leaveRoom":  this.roomController.leaveRoom(this.user); break;
             case "startGame": this.roomController.startGame(this.user); break;
+            default:
         }
     }
 

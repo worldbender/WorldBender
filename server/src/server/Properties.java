@@ -1,52 +1,37 @@
 package server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Properties {
-
+    private Properties(){}
+    private static Logger logger = LogManager.getLogger(Properties.class.getName());
     private static final String PATH = "../../config.properties";
 
     public static void createConfigFile() {
         java.util.Properties prop = new java.util.Properties();
-        FileOutputStream output = null;
-        try {
+        try (FileOutputStream output = new FileOutputStream(PATH)) {
             prop.put("IP","localhost");
             prop.put("PORT_TCP", "10008");
             prop.put("PORT_UDP", "7331");
 
-            output = new FileOutputStream(PATH);
+            prop.store(output, "");
         } catch (Exception io) {
-            io.printStackTrace();
-        } finally {
-            if (output != null) {
-                try {
-                    output.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            logger.error(io.toString(), io);
         }
     }
 
     public static String loadConfigFile(String inputName) {
 
         java.util.Properties prop = new java.util.Properties();
-        FileInputStream input = null;
-        try {
-            input = new FileInputStream(PATH);
+        try (FileInputStream input = new FileInputStream(PATH)) {
             prop.load(input);
         } catch (IOException io) {
-            io.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            logger.error(io.toString(), io);
         }
         return prop.getProperty(inputName);
     }

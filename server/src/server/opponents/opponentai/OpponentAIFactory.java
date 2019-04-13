@@ -1,8 +1,7 @@
-package server.opponents.opponentAI;
+package server.opponents.opponentai;
 
 import server.connection.GameController;
 import server.opponents.AOpponent;
-import server.powers.IPower;
 
 public class OpponentAIFactory {
     public static IOpponentAI createOpponentAI(String type, AOpponent opponent, GameController gameController, boolean isChangable){

@@ -35,10 +35,7 @@ public class Room {
     }
 
     public boolean checkIfUserCanJoinRoom(){
-        if(this.getUsersInRoom().size() < limitOfPlayers && !this.gameStarted) {
-            return true;
-        }
-        else return false;
+        return (this.getUsersInRoom().size() < limitOfPlayers && !this.gameStarted);
     }
 
     public void addUserToRoom(User user){
@@ -47,7 +44,7 @@ public class Room {
 
     public void deleteUserFromRoom(User userToDelete){
         for (User user : this.usersInRoom) {
-            if (user.getConnectionId() == userToDelete.getConnectionId())
+            if (user.getConnectionId().equals(userToDelete.getConnectionId()))
                 this.usersInRoom.remove(user);
         }
     }
@@ -85,8 +82,7 @@ public class Room {
     }
 
     public boolean isUserAnOwner(User user){
-        if(user.getConnectionId() == getRoomOwner().getConnectionId()) return true;
-        return false;
+        return user.getConnectionId().equals(getRoomOwner().getConnectionId());
     }
 
     public void setGameStarted(boolean gameStarted) {

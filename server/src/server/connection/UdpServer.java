@@ -1,29 +1,27 @@
 package server.connection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-import server.rooms.Room;
-import server.rooms.RoomList;
 import server.*;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UdpServer extends Thread {
-    private final static int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
-    private final static int BUFFER = 1024;
+    private static Logger logger = LogManager.getLogger(UdpServer.class.getName());
+    private static final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
+    private static final int BUFFER = 1024;
     private static DatagramSocket socket;
-    private List<Room> rooms;
     private Map<String, User> existingUsers;
 
     public UdpServer() throws IOException {
-        this.socket = new DatagramSocket(PORT);
+        socket = new DatagramSocket(PORT);
         this.existingUsers = ExistingUsers.getInstance();
-        this.rooms = RoomList.getInstance();
     }
 
     public void run() {
@@ -35,7 +33,7 @@ public class UdpServer extends Thread {
                 socket.receive(packet);
                 readPackage(packet, buf);
             } catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
             }
         }
     }
@@ -66,6 +64,7 @@ public class UdpServer extends Thread {
         JSONObject json = new JSONObject(content);
         switch (json.getString("msg")){
             case "playerState": updatePlayersState(id, (JSONObject) json.get("content")); break;
+            default:
         }
     }
 
@@ -77,7 +76,7 @@ public class UdpServer extends Thread {
             try {
                 socket.send(packet);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
             }
         }
     }

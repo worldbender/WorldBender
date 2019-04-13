@@ -497,7 +497,7 @@
   </object>
   <object id="18" x="2491" y="2209.33">
    <properties>
-    <property name="enemy" value="Schopenheuer"/>
+    <property name="enemy" value="Schopenhauer"/>
    </properties>
   </object>
  </objectgroup>

@@ -361,7 +361,7 @@
   </object>
   <object id="18" x="728" y="2984">
    <properties>
-    <property name="enemy" value="Schopenheuer"/>
+    <property name="enemy" value="Schopenhauer"/>
    </properties>
   </object>
   <object id="19" x="2952" y="3004" width="188" height="156">

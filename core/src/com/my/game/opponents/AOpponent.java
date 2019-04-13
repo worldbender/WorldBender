@@ -1,15 +1,14 @@
 package com.my.game.opponents;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.my.game.UtilitySingletons.ShapeDrawer;
-import com.my.game.UtilitySingletons.StringDrawer;
+import com.my.game.utilitysingletons.ShapeDrawer;
+import com.my.game.utilitysingletons.StringDrawer;
 import com.my.game.music.MusicPlayer;
 
 public abstract class AOpponent{
     public String name = "Monster";
     private int x = 0;
     private int y = 0;
-    private int direction = 0;
     private boolean alive = false;
     private int hp = 500;
     private int maxHp = 500;

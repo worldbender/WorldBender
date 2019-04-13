@@ -4,11 +4,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BulletList {
-    private static CopyOnWriteArrayList<ABullet> bullets=new CopyOnWriteArrayList<ABullet>();
-    public static int id = 0;
-    private BulletList(){
-
-    }
+    private static CopyOnWriteArrayList<ABullet> bullets=new CopyOnWriteArrayList<>();
+    private BulletList(){ }
     public static List<ABullet> getBullets(){
         return bullets;
     }

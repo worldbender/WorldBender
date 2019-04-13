@@ -18,7 +18,7 @@ import com.my.game.WBGame;
 public abstract class AbstractScreen implements Screen {
     protected WBGame game;
 
-    protected Skin skin = MyAssetManager.manager.get(MyAssetManager.sgx_ui_json);
+    protected Skin skin = MyAssetManager.manager.get(MyAssetManager.SGX_UI_JSON);
     protected Stage stage;
     protected OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
@@ -35,7 +35,7 @@ public abstract class AbstractScreen implements Screen {
         stage = new Stage(new StretchViewport(WBGame.WIDTH, WBGame.HEIGHT, camera));
         spriteBatch = new SpriteBatch();
         Gdx.input.setInputProcessor(stage);
-        splashImg = MyAssetManager.manager.get(MyAssetManager.tree);
+        splashImg = MyAssetManager.manager.get(MyAssetManager.TREE);
     }
 
     private void createCamera() {

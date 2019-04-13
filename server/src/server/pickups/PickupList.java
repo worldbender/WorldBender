@@ -6,7 +6,7 @@ import server.connection.TcpServer;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PickupList {
-    private CopyOnWriteArrayList<APickup> pickups = new CopyOnWriteArrayList<APickup>();
+    private CopyOnWriteArrayList<APickup> pickups = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<User> users;
     private static int id = 0;
     public PickupList(CopyOnWriteArrayList<User> users){

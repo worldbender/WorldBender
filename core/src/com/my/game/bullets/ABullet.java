@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-abstract public class ABullet {
+public abstract class ABullet {
     private int x;
     private int y;
     private int width;
@@ -12,21 +12,20 @@ abstract public class ABullet {
     private int id;
     private float angle;
 
+    public abstract void draw(SpriteBatch spriteBatch, float stateTime);
 
-    abstract public void draw(SpriteBatch spriteBatch, float stateTime);
-
-    protected void drawBullet(SpriteBatch spriteBatch, Texture texture){
+    protected void drawBullet(SpriteBatch spriteBatch, Texture texture) {
         drawBullet(spriteBatch, new TextureRegion(texture));
     }
 
-    protected void drawBullet(SpriteBatch spriteBatch, TextureRegion textureRegion){
-        float angle = ((this.getAngle() - (float)(Math.PI/2))*(float)(180f/Math.PI));
+    protected void drawBullet(SpriteBatch spriteBatch, TextureRegion textureRegion) {
+        float angle = ((this.getAngle() - (float) (Math.PI / 2)) * (float) (180f / Math.PI));
         spriteBatch.draw(
                 textureRegion,
                 x,
                 y,
-                textureRegion.getRegionWidth()/2f,
-                textureRegion.getRegionHeight()/2f,
+                textureRegion.getRegionWidth() / 2f,
+                textureRegion.getRegionHeight() / 2f,
                 textureRegion.getRegionWidth(),
                 textureRegion.getRegionHeight(),
                 1f,
@@ -36,7 +35,7 @@ abstract public class ABullet {
 
     }
 
-    public void setPosition(int x, int y){
+    public void setPosition(int x, int y) {
         this.setX(x);
         this.setY(y);
     }

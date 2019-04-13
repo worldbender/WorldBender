@@ -47,9 +47,9 @@ public class RoomScreen extends AbstractScreen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                WBGame.connection.tcp.sendMessage(new JSONObject()
+                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                         .put("msg", "leaveRoom")
-                        .put("content", new JSONObject().put("port", WBGame.connection.socket.getLocalPort())));
+                        .put("content", new JSONObject().put("port", WBGame.getConnection().getSocket().getLocalPort())));
                 game.changeScreen(WBGame.MENU);
             }
         });
@@ -58,9 +58,9 @@ public class RoomScreen extends AbstractScreen {
             newGame.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    WBGame.connection.tcp.sendMessage(new JSONObject()
+                    WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                             .put("msg", "startGame")
-                            .put("content", new JSONObject().put("port", WBGame.connection.socket.getLocalPort())));
+                            .put("content", new JSONObject().put("port", WBGame.getConnection().getSocket().getLocalPort())));
                 }
             });
         }
@@ -88,20 +88,17 @@ public class RoomScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
-
+        //ignore
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
-
+        //ignore
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
-
+        //ignore
     }
 
     @Override

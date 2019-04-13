@@ -1,8 +1,7 @@
 package server.opponents;
 
 import server.connection.GameController;
-import server.opponents.opponentAI.ChaserAI;
-import server.opponents.opponentAI.IdlerAI;
+import server.opponents.opponentai.IdlerAI;
 
 public class Poe extends AOpponent{
     public Poe(GameController gameController){

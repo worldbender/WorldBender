@@ -1,6 +1,6 @@
 package server.powers;
 
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.players.Player;
 import server.User;
 import server.bullets.BulletList;
@@ -34,7 +34,7 @@ public class AggroTaker extends APower {
             double distance;
             for(AOpponent opponent : this.opponentList.getOpponents()){
                 distance = Math.sqrt((Math.abs(player.getCenterY() - opponent.getCenterY())) * (Math.abs(player.getCenterY() - opponent.getCenterY())) +
-                        (Math.abs(opponent.getCenterX() - player.getCenterX()) * (Math.abs(opponent.getCenterX() - player.getCenterX()))));
+                        (double)(Math.abs(opponent.getCenterX() - player.getCenterX()) * (Math.abs(opponent.getCenterX() - player.getCenterX()))));
                 if(distance < 2000){
                     opponent.setOpponentAI("Chaser");
                     opponent.setIdOfChasedPlayer(player.getUser().getName());

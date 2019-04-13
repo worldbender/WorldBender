@@ -1,6 +1,7 @@
 package com.my.game.pickups;
 
 public class PickupFactory {
+    private PickupFactory(){}
     public static APickup createPickup(int x, int y, int id, String type){
         APickup result = null;
         switch (type){
@@ -22,6 +23,7 @@ public class PickupFactory {
             case "Mana":
                //TODO make mana pickup
                 break;
+            default:
         }
         return result;
     }

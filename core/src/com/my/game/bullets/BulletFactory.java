@@ -1,6 +1,7 @@
 package com.my.game.bullets;
 
 public class BulletFactory {
+    private BulletFactory(){}
     public static ABullet createBullet(String bulletType, int id, float angle){
         ABullet resultBullet = null;
         switch (bulletType){
@@ -13,6 +14,7 @@ public class BulletFactory {
             case "FireRing":
                 resultBullet = new FireRing(id, angle);
                 break;
+            default:
         }
         return resultBullet;
     }

@@ -3,9 +3,8 @@ package com.my.game.pickups;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PickupList {
-    private static CopyOnWriteArrayList<APickup> pickups=new CopyOnWriteArrayList<APickup>();
-    private PickupList(){
-    }
+    private static CopyOnWriteArrayList<APickup> pickups=new CopyOnWriteArrayList<>();
+    private PickupList(){ }
 
     public static void addPickup(APickup pickup){
         pickups.add(pickup);

@@ -1,4 +1,4 @@
-package com.my.game.mapRenderer;
+package com.my.game.maprenderer;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -8,10 +8,10 @@ import com.my.game.Properties;
 public class GraphicMapHandler {
     private TiledMap map;
     private OrthogonalTiledMapRenderer render;
-    private final int tileWidth = 32;
-    private final int tileHeight = 32;
-    private final String BASE_PATH_TO_MAP = "maps/";
-    private final String MAP_FILE_FORMAT = ".tmx";
+    private static final int TILE_WIDTH = 32;
+    private static final int TILE_HEIGHT = 32;
+    private static final String BASE_PATH_TO_MAP = "maps/";
+    private static final String MAP_FILE_FORMAT = ".tmx";
     public GraphicMapHandler() {
         String startMap = Properties.loadConfigFile("START_MAP");
         map = new TmxMapLoader().load("maps/" + startMap+ ".tmx");
@@ -26,16 +26,16 @@ public class GraphicMapHandler {
 
     public TiledMap getMap(){return this.map;}
     public OrthogonalTiledMapRenderer getRender(){return this.render;}
-    public int getNumerOfXTiles(){
+    public int getNumberOfXTiles(){
         return getMap().getProperties().get("width", Integer.class);
     }
-    public int getNumerOfYTiles(){
+    public int getNumberOfYTiles(){
         return getMap().getProperties().get("height", Integer.class);
     }
     public int getMapWidth(){
-        return this.getNumerOfXTiles() * tileWidth;
+        return this.getNumberOfXTiles() * TILE_WIDTH;
     }
     public int getMapHeight(){
-        return this.getNumerOfYTiles() * tileHeight;
+        return this.getNumberOfYTiles() * TILE_HEIGHT;
     }
 }

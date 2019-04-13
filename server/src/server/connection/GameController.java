@@ -1,5 +1,7 @@
 package server.connection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import server.bullets.BulletList;
@@ -7,7 +9,7 @@ import server.opponents.OpponentList;
 import server.pickups.APickup;
 import server.pickups.PickupList;
 import server.rooms.Room;
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.User;
 import server.bullets.ABullet;
 import server.opponents.AOpponent;
@@ -17,8 +19,9 @@ import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameController implements Runnable {
+    private static Logger logger = LogManager.getLogger(GameController.class.getName());
     private static long deltaTime = 0L;
-    private final long MILISECONDS_BEETWEEN_FRAMES = 3L;
+    private final long MILLISECONDS_BETWEEN_FRAMES = 3L;
     private boolean flag = true;
     public boolean hasStarted = false;
     public LogicMapHandler logicMapHandler;
@@ -48,7 +51,8 @@ public class GameController implements Runnable {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
+                Thread.currentThread().interrupt();
             }
         }
 
@@ -69,11 +73,12 @@ public class GameController implements Runnable {
     }
 
     private void sleepIfNecessary() {
-        if (deltaTime < MILISECONDS_BEETWEEN_FRAMES) {
+        if (deltaTime < MILLISECONDS_BETWEEN_FRAMES) {
             try {
-                Thread.sleep(MILISECONDS_BEETWEEN_FRAMES - deltaTime);
+                Thread.sleep(MILLISECONDS_BETWEEN_FRAMES - deltaTime);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -200,7 +205,7 @@ public class GameController implements Runnable {
         for (APickup pickup : this.pickupList.getPickups()) {
             this.pickupList.deletePickup(pickup);
         }
-        this.logicMapHandler.LoadMap(nextMap);
+        this.logicMapHandler.loadMap(nextMap);
         this.setPlayersPosition();
         this.spawnAllOpponents();
 

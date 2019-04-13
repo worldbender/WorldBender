@@ -1,6 +1,6 @@
-package server.opponents.opponentAI;
+package server.opponents.opponentai;
 
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.User;
 import server.bullets.BulletList;
 import server.connection.GameController;
@@ -31,15 +31,6 @@ public abstract class AOpponentAI implements IOpponentAI {
         this.gameController = gameController;
         this.isChangeable = isChangeable;
     }
-
-    @Override
-    public abstract void behave(double deltaTime);
-
-    @Override
-    public abstract boolean shouldChangeAI();
-
-    @Override
-    public abstract void changeAI();
 
     @Override
     public void setAdditionalFlag(boolean additionalFlag){

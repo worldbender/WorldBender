@@ -1,13 +1,13 @@
 package server.opponents;
 
 import server.connection.GameController;
-import server.opponents.opponentAI.IdlerAI;
+import server.opponents.opponentai.IdlerAI;
 import server.pickups.PickupFactory;
 
-public class Schopenheuer extends AOpponent{
-    public Schopenheuer(GameController gameController){
+public class Schopenhauer extends AOpponent{
+    public Schopenhauer(GameController gameController){
         super(gameController);
-        this.setType("Schopenheuer");
+        this.setType("Schopenhauer");
         this.setWidth(288);
         this.setHeight(286);
         this.setHp(500);

@@ -1,7 +1,7 @@
 package server.players;
 
 import org.json.JSONObject;
-import server.LogicMap.LogicMapHandler;
+import server.logicmap.LogicMapHandler;
 import server.Properties;
 import server.User;
 import server.bullets.AttackFactory;
@@ -59,7 +59,7 @@ public class Player {
         this.setWidth((int) (PLAYER_TEXTURE_WIDTH * scale));
         this.setHeight((int) (PLAYER_TEXTURE_HEIGHT * scale));
         this.user = user;
-        this.collectedItems = new ArrayList<String>();
+        this.collectedItems = new ArrayList<>();
     }
 
     public Player(User user, GameController gameController){
@@ -135,7 +135,7 @@ public class Player {
         if(this.RIGHT_ARROW){
             angle = 0f;
         }
-        AttackFactory.createAtack(this, this.bulletList, angle, gameController);
+        AttackFactory.createAttack(this, this.bulletList, angle, gameController);
     }
 
     public boolean canPlayerShoot() {

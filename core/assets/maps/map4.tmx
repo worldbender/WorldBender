@@ -913,7 +913,7 @@
   </object>
   <object id="7" x="701" y="383">
    <properties>
-    <property name="enemy" value="Schopenheuer"/>
+    <property name="enemy" value="Schopenhauer"/>
    </properties>
   </object>
   <object id="10" x="1379" y="756">
