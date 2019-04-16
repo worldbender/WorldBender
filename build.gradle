@@ -86,13 +86,24 @@ project(":server") {
         compile 'org.json:json:20180813'
         compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
         compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+        testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
+        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+
+        test {
+            useJUnitPlatform()
+            testLogging.showStandardStreams = true
+            failFast = false
+            onOutput { descriptor, event ->
+                logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message )
+            }
+            testLogging {
+                events "PASSED", "STARTED", "FAILED", "SKIPPED"
+            }
+
+        }
     }
 }
 
 tasks.eclipse.doLast {
     delete ".project"
 }
-
-
