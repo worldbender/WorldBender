@@ -1,5 +1,6 @@
 package com.my.game.screens;
 
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.my.game.WBGame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -54,6 +55,8 @@ public class MenuScreen extends AbstractScreen{
         TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
         TextButton resume = new TextButton("Resume", skin);
+        SelectBox selectCharacter = new SelectBox(skin);
+        selectCharacter.setItems("Ground", "Water");
 
         //add buttons to table
         if(inGame){
@@ -64,6 +67,8 @@ public class MenuScreen extends AbstractScreen{
             table.add(newRoom).fillX().uniformX();
             table.row().pad(10, 0, 0, 0);
             table.add(joinRoom).fillX().uniformX();
+            table.row().pad(10, 0, 0, 0);
+            table.add(selectCharacter).fillX().uniformX();
             table.row().pad(10, 0, 0, 0);
         }
         table.add(preferences).fillX().uniformX();
@@ -84,14 +89,16 @@ public class MenuScreen extends AbstractScreen{
             public void changed(ChangeEvent event, Actor actor) {
                 WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                         .put("msg", "newRoom")
-                        .put("content", new JSONObject().put("port", WBGame.getConnection().getSocket().getLocalPort())));
+                        .put("content", new JSONObject().put("port", WBGame.getConnection().getSocket().getLocalPort()))
+                        .put("character", selectCharacter.getSelected().toString()));
+
             }
         });
 
         joinRoom.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                new JoinRoomDialog(skin, stage);
+                new JoinRoomDialog(skin, stage, selectCharacter.getSelected().toString());
             }
         });
 
