@@ -170,7 +170,6 @@ class ABulletTest {
         
     }
     
-    
     @Test
     void testGetAttack() {
         int expected = bulletExample1.getAttack();

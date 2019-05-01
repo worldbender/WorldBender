@@ -72,7 +72,15 @@ project(":core") {
 }
 
 project(":server") {
-    apply plugin: "java"
+
+
+
+    apply plugin: JavaPlugin
+    apply plugin: JacocoPlugin
+    
+//
+//    apply plugin: "java"
+//    apply plugin: "jacoco"
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -111,3 +119,4 @@ project(":server") {
 tasks.eclipse.doLast {
     delete ".project"
 }
+

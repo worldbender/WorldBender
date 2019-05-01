@@ -149,7 +149,7 @@ public class GameController implements Runnable {
         return opponentsList;
     }
 
-    private JSONArray getBulletsData() {
+    public JSONArray getBulletsData() {
 
         JSONArray bulletsList = new JSONArray();
 
