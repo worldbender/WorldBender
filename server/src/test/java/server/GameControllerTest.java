@@ -1,6 +1,8 @@
 package server;
 
-import com.badlogic.gdx.utils.Json;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +11,7 @@ import server.bullets.ABullet;
 import server.bullets.Tear;
 import server.connection.GameController;
 
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static sun.plugin2.os.windows.OSVERSIONINFOA.size;
 
 public class GameControllerTest {
 	GameController gameController;
@@ -43,18 +47,18 @@ public class GameControllerTest {
 	void checkBulletsData(){
 		Tear tear0 = mock(Tear.class);
 		when(tear0.getId()).thenReturn(0);
-		when(tear0.getX()).thenReturn((double) 0.0);
-		when(tear0.getY()).thenReturn((double) 0.0);
+		when(tear0.getX()).thenReturn(0.0);
+		when(tear0.getY()).thenReturn(0.0);
 		
 		Tear tear1 = mock(Tear.class);
 		when(tear1.getId()).thenReturn(1);
-		when(tear1.getX()).thenReturn((double) 1.0);
-		when(tear1.getY()).thenReturn((double) 1.0);
+		when(tear1.getX()).thenReturn(1.0);
+		when(tear1.getY()).thenReturn(1.0);
 		
 		Tear tear2 = mock(Tear.class);
 		when(tear2.getId()).thenReturn(2);
-		when(tear2.getX()).thenReturn((double) 2.0);
-		when(tear2.getY()).thenReturn((double) 2.0);
+		when(tear2.getX()).thenReturn(2.0);
+		when(tear2.getY()).thenReturn(2.0);
 		
 		CopyOnWriteArrayList<ABullet> bullets = new CopyOnWriteArrayList<>();
 		bullets.add(tear0);
@@ -73,10 +77,10 @@ public class GameControllerTest {
 		}
 		
 		
-		
-		assertThat(bulletsList, is(equalTo(gameController.getBulletsData())));
+		JSONAssert.assertEquals(gameController.getBulletsData(), bulletsList, JSONCompareMode.STRICT);
 		
 	
 	}
+
 	
 }

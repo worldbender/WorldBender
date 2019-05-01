@@ -94,6 +94,7 @@ project(":server") {
         compile 'org.json:json:20180813'
         compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
         compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
+        testCompile group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
         testCompile("org.assertj:assertj-core:3.11.1")
         testCompile("org.assertj:assertj-guava:3.2.0")
         testCompile "org.mockito:mockito-core:1.+"
