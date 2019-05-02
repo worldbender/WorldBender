@@ -17,6 +17,11 @@ import server.rooms.Room;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +30,7 @@ public class GameControllerTest {
 	GameController gameController;
 	
 	@BeforeEach
-	void setUp(){
+	void setUp() {
 		Room room = mock(Room.class);                                           //do konstruktora
 		LogicMapHandler logicMapHandler = mock(LogicMapHandler.class);          //do konstruktora
 		BulletList bulletList = mock(BulletList.class);                         //do testowanej metody
@@ -37,14 +42,13 @@ public class GameControllerTest {
 		when(room.getBulletList()).thenReturn(bulletList);
 		
 		gameController = new GameController(room, logicMapHandler);             //inicjalizuje za pomocą nowego konstruktora
-																				//Można tak??????????????????????????????
+		//Można tak??????????????????????????????
 		
 	}
 	
 	
-	
 	@Test
-	void checkBulletsData(){
+	void checkBulletsData() {
 		JSONArray bulletsData = gameController.getBulletsData(); //Wywołuje testowaną meodę w pramaterze przekazano jej tą samą CopyOnWriteArrayList<ABullet>
 		
 		CopyOnWriteArrayList<ABullet> bullets = getaBullets();  //Biorę tę samą listę i przerabiam ją na JSONArray
@@ -63,13 +67,33 @@ public class GameControllerTest {
 		
 		JSONAssert.assertEquals(bulletsData, bulletsList, JSONCompareMode.STRICT); //Sprawdzam czy Jsony są takie same
 		
-	
+		
 	}
 	
 	
-	/***********************************HELPETS METHODS************************************/
+	@Test
+	void checkIfInJSONArrayIsNotEmpty() {
+		JSONArray bulletsData = gameController.getBulletsData();
+		boolean actual = bulletsData.isEmpty();
+		
+		assertFalse(actual);
+	}
 	
-	private CopyOnWriteArrayList<ABullet> getaBullets() {
+	@Test
+	void checkIfInJSONArrayHasTheSameSizeLikeListOfBullets() {
+		JSONArray bulletsData = gameController.getBulletsData();
+		CopyOnWriteArrayList<ABullet> bullets = getaBullets();
+		int expected = bullets.size();
+		int actual = bulletsData.length();
+		
+		
+		assertEquals(actual, expected);
+	}
+		
+		
+		/***********************************HELPETS METHODS************************************/
+		
+		private CopyOnWriteArrayList<ABullet> getaBullets () {
 		Tear tear0 = mock(Tear.class);
 		when(tear0.getId()).thenReturn(0);
 		when(tear0.getX()).thenReturn(0.0);
@@ -91,5 +115,6 @@ public class GameControllerTest {
 		bullets.add(tear2);
 		return bullets;
 	}
+	
 	
 }
