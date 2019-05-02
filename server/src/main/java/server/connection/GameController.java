@@ -41,6 +41,14 @@ public class GameController implements Runnable {
         this.opponentList.initializeWithGameController(this);
         this.room.setGameController(this);
     }
+    public GameController(Room room, LogicMapHandler logicMapHandler) {
+        this.room = room;
+        this.usersInRoom = room.getUsersInRoom();
+        this.pickupList = new PickupList(usersInRoom);
+        this.logicMapHandler = logicMapHandler;
+        this.bulletList = room.getBulletList();
+        this.opponentList = room.getOpponentList();
+    }
 
     public void run() {
         long timeBefore;
