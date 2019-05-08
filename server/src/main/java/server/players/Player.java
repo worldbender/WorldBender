@@ -36,9 +36,9 @@ public class Player {
     private String playerType;
     private ArrayList<String> collectedItems;
     private boolean isMoving = false;
-    public static  int PLAYER_TEXTURE_WIDTH ;//= Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
-    public static  int PLAYER_TEXTURE_HEIGHT;//= Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
-    private float scale;// = Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
+    private int PLAYER_TEXTURE_WIDTH ;
+    private int PLAYER_TEXTURE_HEIGHT;
+    private float scale;
     private User user;
     protected IPower power;
     public boolean KEY_W = false;

@@ -86,7 +86,6 @@ public class Hud implements Disposable {
         healthBars.put(player.getName(), healthBar);
     }
 
-    //TODO zmienic jak bedzie AssetManager - poprawione LZ
     private void initHudTextures(){
         Skin skin = MyAssetManager.manager.get(MyAssetManager.SGX_UI_JSON);
         BitmapFont font = skin.getFont("small");
