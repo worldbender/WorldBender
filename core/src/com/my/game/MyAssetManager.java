@@ -34,7 +34,7 @@ public class MyAssetManager {
 
     //playerTexture
     public static final String DOWN_WALK = "characters/downIsaacHeadless2.png";
-    public static final String LEFT_WALK = "characters/leftWalkIsaacHeadless.png";
+    public static final String LEFT_WALK = "characters/leftWalkIsaacHeadless2.png";
     public static final String RIGHT_WALK = "characters/rightWalkIsaacHeadless2.png";
     public static final String UP_WALK = "characters/upIsaacHeadless2.png";
     public static final String PROF_HEADS = "characters/prof.png";
@@ -128,7 +128,7 @@ public class MyAssetManager {
         Player.downWalkAnimation = getAnimationFrom1DPicture(manager.get(DOWN_WALK), PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.upWalkAnimation = getAnimationFrom1DPicture(manager.get(UP_WALK), PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, NUMBER_OF_PLAYER_ANIMATION_FRAMES);
         Player.rightWalkAnimation = getAnimationFrom1DPicture(manager.get(RIGHT_WALK), PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, 10);
-        Player.leftWalkAnimation = getAnimationFrom1DPicture(manager.get(LEFT_WALK), PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 10);
+        Player.leftWalkAnimation = getAnimationFrom1DPicture(manager.get(LEFT_WALK), PLAYER_TEXTURE_WIDTH*2, PLAYER_TEXTURE_HEIGHT*2, 10);
         FireRing.fireRingAnimation = getAnimationFrom1DPicture(manager.get(FIRE_RING_TEXTURE), 64, 64, 10);
         Ground.heads = getAnimationFrom1DPicture(manager.get(PROF_HEADS), PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
         Water.heads = getAnimationFrom1DPicture(manager.get(BLOND_HEADS), PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
