@@ -1,25 +1,25 @@
 package server;
 
-
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import server.bullets.ABullet;
 import server.bullets.BulletList;
 import server.bullets.Tear;
 import server.connection.GameController;
 import server.logicmap.LogicMapHandler;
+import server.opponents.AOpponent;
+import server.opponents.OpponentList;
+import server.opponents.Poe;
+import server.players.Player;
 import server.rooms.Room;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
@@ -27,35 +27,140 @@ import static org.mockito.Mockito.when;
 
 public class GameControllerTest {
 	
-	GameController gameController;
+	private Room room;
+	private GameController gameController;
+	private LogicMapHandler logicMapHandler;
+	private BulletList bulletList;
+	private CopyOnWriteArrayList<ABullet> bullets;
+	private OpponentList opponentList;
+	private CopyOnWriteArrayList<AOpponent> opponents;
+	private CopyOnWriteArrayList<User> users;
+	private Player player;
 	
 	@BeforeEach
 	void setUp() {
-		Room room = mock(Room.class);                                           //do konstruktora
-		LogicMapHandler logicMapHandler = mock(LogicMapHandler.class);          //do konstruktora
-		BulletList bulletList = mock(BulletList.class);                         //do testowanej metody
+		room = mock(Room.class);
+		logicMapHandler = mock(LogicMapHandler.class);
+		bulletList = mock(BulletList.class);
+		bullets = getPreparedBullets();
+		users = getPreparedPlayers();
+		player = mock(Player.class);
 		
-		CopyOnWriteArrayList<ABullet> bullets = getaBullets();                  //metoda tworząca listę przykładowych pocisków
-		
-		
-		when(bulletList.getBullets()).thenReturn(bullets);
 		when(room.getBulletList()).thenReturn(bulletList);
+		when(bulletList.getBullets()).thenReturn(bullets);
 		
-		gameController = new GameController(room, logicMapHandler);             //inicjalizuje za pomocą nowego konstruktora
-		//Można tak??????????????????????????????
+		opponentList = mock(OpponentList.class);
+		opponents = getPreparedOpponenets();
 		
+		when(room.getOpponentList()).thenReturn(opponentList);
+		when(opponentList.getOpponents()).thenReturn(opponents);
+		
+		when(room.getUsersInRoom()).thenReturn(users);
+		
+		gameController = new GameController(room, logicMapHandler);
 	}
-	
 	
 	@Test
 	void checkBulletsData() {
-		JSONArray bulletsData = gameController.getBulletsData(); //Wywołuje testowaną meodę w pramaterze przekazano jej tą samą CopyOnWriteArrayList<ABullet>
+		JSONAssert.assertEquals(getPreparedBulletsJSON(), gameController.getBulletsData(), JSONCompareMode.STRICT);
+	}
+	
+	@Test
+	void checkIfJSONArrayOfBulletsIsNotEmpty() {
+		JSONArray bulletsData = gameController.getBulletsData();
 		
-		CopyOnWriteArrayList<ABullet> bullets = getaBullets();  //Biorę tę samą listę i przerabiam ją na JSONArray
+		assertFalse(bulletsData.isEmpty());
+	}
+	
+	@Test
+	void checkIfJSONArrayHasTheSameSizeLikeListOfBullets() {
+		assertEquals(getPreparedBullets().size(), gameController.getBulletsData().length());
+	}
+	
+	@Test
+	void checkOpponentsData() {
+		JSONAssert.assertEquals(getPreparedOpponentsJSON(), gameController.getOpponentsData(), JSONCompareMode.STRICT);
+	}
+	
+	@Test
+	void checkIfJSONArrayOfOpponentsIsNotEmpty() {
+		JSONArray opponentsData = gameController.getOpponentsData();
 		
+		assertFalse(opponentsData.isEmpty());
+	}
+	
+	@Test
+	void checkIfJSONArrayHasTheSameSizeLikeListOfPlayers() {
+		assertEquals(getPreparedPlayers().size(), gameController.getPlayersData().length());
+	}
+	@Test
+	void checkPlayersData() {
+		JSONAssert.assertEquals(getPreparedPlayersJSON(), gameController.getPlayersData(), JSONCompareMode.STRICT);
+	}
+	
+	@Test
+	void checkIfJSONArrayOfPlayersIsNotEmpty() {
+		JSONArray playersData = gameController.getPlayersData();
+		
+		assertFalse(playersData.isEmpty());
+	}
+	
+	@Test
+	void checkIfJSONArrayHasTheSameSizeLikeListOfOpponents() {
+		assertEquals(getPreparedBullets().size(), gameController.getBulletsData().length());
+	}
+	
+	private CopyOnWriteArrayList<User> getPreparedPlayers() {
+		CopyOnWriteArrayList<User> users = new CopyOnWriteArrayList<>();
+		for (int i = 0; i < 3; i++) {
+			User user = mock(User.class);
+			Player player = mock(Player.class);
+			when(user.getPlayer()).thenReturn(player);
+			when(user.getName()).thenReturn("player");
+			when(player.getX()).thenReturn((double) i);
+			when(player.getY()).thenReturn((double) i);
+			when(player.getHp()).thenReturn(i);
+			when(player.getActiveMovementKey()).thenReturn("DOWN");
+			when(player.getHeadDirection()).thenReturn("DOWN");
+			when(player.isMoving()).thenReturn(true);
+			users.add(user);
+		}
+		return users;
+	}
+	
+	
+	
+	private CopyOnWriteArrayList<AOpponent> getPreparedOpponenets() {
+		CopyOnWriteArrayList<AOpponent> opponents = new CopyOnWriteArrayList<>();
+		for (int i = 0; i < 3; i++) {
+			Poe poe = mock(Poe.class);
+			when(poe.getId()).thenReturn(i);
+			when(poe.getX()).thenReturn((double) i);
+			when(poe.getY()).thenReturn((double) i);
+			when(poe.getHp()).thenReturn(i);
+			when(poe.getType()).thenReturn("Poe");
+			opponents.add(poe);
+		}
+		return opponents;
+	}
+	
+	
+	private CopyOnWriteArrayList<ABullet> getPreparedBullets() {
+		CopyOnWriteArrayList<ABullet> bullets = new CopyOnWriteArrayList<>();
+		for (int i = 0; i < 3; i++) {
+			Tear tear = mock(Tear.class);
+			when(tear.getId()).thenReturn(i);
+			when(tear.getX()).thenReturn((double) i);
+			when(tear.getY()).thenReturn((double) i);
+			bullets.add(tear);
+		}
+		return bullets;
+	}
+	
+	private String getPreparedBulletsJSON() {
 		JSONArray bulletsList = new JSONArray();
 		
-		for (ABullet bullet : bullets) {
+		for (ABullet bullet : this.getPreparedBullets()) {
 			JSONObject bulletData = new JSONObject()
 					.put("id", bullet.getId())
 					.put("x", bullet.getX())
@@ -63,58 +168,53 @@ public class GameControllerTest {
 			
 			bulletsList.put(bulletData);
 		}
-		
-		
-		JSONAssert.assertEquals(bulletsData, bulletsList, JSONCompareMode.STRICT); //Sprawdzam czy Jsony są takie same
-		
-		
+		return bulletsList.toString();
 	}
 	
-	
-	@Test
-	void checkIfInJSONArrayIsNotEmpty() {
-		JSONArray bulletsData = gameController.getBulletsData();
-		boolean actual = bulletsData.isEmpty();
+	private String getPreparedOpponentsJSON() {
+		JSONArray opponentsList = new JSONArray();
 		
-		assertFalse(actual);
+		for (AOpponent opponent : this.getPreparedOpponenets()) {
+			JSONObject opponentData = new JSONObject()
+					.put("id", opponent.getId())
+					.put("x", opponent.getX())
+					.put("y", opponent.getY())
+					.put("hp", opponent.getHp())
+					.put("type", opponent.getType());
+			
+			opponentsList.put(opponentData);
+		}
+		
+		return opponentsList.toString();
 	}
 	
-	@Test
-	void checkIfInJSONArrayHasTheSameSizeLikeListOfBullets() {
-		JSONArray bulletsData = gameController.getBulletsData();
-		CopyOnWriteArrayList<ABullet> bullets = getaBullets();
-		int expected = bullets.size();
-		int actual = bulletsData.length();
+	public JSONArray getPreparedPlayersJSON() {
 		
+		JSONArray playersList = new JSONArray();
 		
-		assertEquals(actual, expected);
-	}
+		for (User user : getPreparedPlayers()) {
+			JSONObject playerData = new JSONObject()
+					.put("name", user.getName())
+					.put("x", user.getPlayer().getX())
+					.put("y", user.getPlayer().getY())
+					.put("hp", user.getPlayer().getHp())
+					.put("activeMovementKey", user.getPlayer().getActiveMovementKey())
+					.put("headDirection", user.getPlayer().getHeadDirection())
+					.put("isMoving", user.getPlayer().isMoving());
+			
+			playersList.put(playerData);
+		}
 		
-		
-		/***********************************HELPETS METHODS************************************/
-		
-		private CopyOnWriteArrayList<ABullet> getaBullets () {
-		Tear tear0 = mock(Tear.class);
-		when(tear0.getId()).thenReturn(0);
-		when(tear0.getX()).thenReturn(0.0);
-		when(tear0.getY()).thenReturn(0.0);
-		
-		Tear tear1 = mock(Tear.class);
-		when(tear1.getId()).thenReturn(1);
-		when(tear1.getX()).thenReturn(1.0);
-		when(tear1.getY()).thenReturn(1.0);
-		
-		Tear tear2 = mock(Tear.class);
-		when(tear2.getId()).thenReturn(2);
-		when(tear2.getX()).thenReturn(2.0);
-		when(tear2.getY()).thenReturn(2.0);
-		
-		CopyOnWriteArrayList<ABullet> bullets = new CopyOnWriteArrayList<>();
-		bullets.add(tear0);
-		bullets.add(tear1);
-		bullets.add(tear2);
-		return bullets;
+		return playersList;
 	}
 	
-	
+	@AfterEach
+	void tearDown(){
+		gameController = null;
+		logicMapHandler = null;
+		bulletList = null;
+		bullets = null;
+		opponentList = null;
+		opponents = null;
+	}
 }

@@ -98,8 +98,16 @@ project(":server") {
         testCompile("org.assertj:assertj-core:3.11.1")
         testCompile("org.assertj:assertj-guava:3.2.0")
         testCompile "org.mockito:mockito-core:1.+"
+        testCompile group: 'org.easymock', name: 'easymock', version: '3.1'
+        testCompile group: 'net.bytebuddy', name: 'byte-buddy-agent', version: '1.9.12'
+        testCompile 'org.powermock:powermock-api-mockito:1.6.2'
+        testCompile 'org.powermock:powermock-module-junit4-rule-agent:1.6.2'
+        testCompile 'org.powermock:powermock-module-junit4-rule:1.6.2'
+        testCompile 'org.powermock:powermock-module-junit4:1.6.2'
+
         testImplementation 'org.hamcrest:hamcrest:2.1'
         testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
+        testImplementation 'org.mockito:mockito-core:2.7.22'
         testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
 
         test {
