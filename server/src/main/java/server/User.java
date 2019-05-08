@@ -15,17 +15,8 @@ public class User {
     private boolean connection;
     private Player player;
     private String name;
+    private String characterType;
     private TcpClientThread thread;
-
-    public User(InetAddress userAddress, Integer userTcpPort, Integer userUdpPort, String connectionId, String name){
-        this.userAddress = userAddress;
-        this.userTcpPort = userTcpPort;
-        this.userUdpPort = userUdpPort;
-        this.connectionId = connectionId;
-        this.name = name;
-        this.player = new Player(this);
-        this.connection = true;
-    }
 
     public User(){
         this.player = new Player(this);
@@ -100,4 +91,11 @@ public class User {
         this.thread = thread;
     }
 
+    public String getCharacterType() {
+        return characterType;
+    }
+
+    public void setCharacterType(String characterType) {
+        this.characterType = characterType;
+    }
 }

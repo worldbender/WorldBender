@@ -192,6 +192,19 @@ public class GameController implements Runnable {
 
         return playersList;
     }
+    public JSONArray getPlayersInitialData(){
+        JSONArray playersList = new JSONArray();
+
+        for (User user : usersInRoom) {
+            JSONObject playerData = new JSONObject()
+                    .put("name", user.getName())
+                    .put("playerType", user.getPlayer().getPlayerType());
+
+            playersList.put(playerData);
+        }
+
+        return playersList;
+    }
 
     public void setPlayersPosition() {
         for (User user : room.getUsersInRoom()) {
