@@ -56,7 +56,7 @@ public class Player {
     private GameController gameController;
 
     public Player(User user) {
-        init();
+        initPlayerTexturePrameters();
         this.setWidth((int) (PLAYER_TEXTURE_WIDTH * scale));
         this.setHeight((int) (PLAYER_TEXTURE_HEIGHT * scale));
         this.user = user;
@@ -66,7 +66,6 @@ public class Player {
     
     public Player(User user, GameController gameController){
         this(user);
-        init();
         this.map = gameController.logicMapHandler;
         this.bulletList = gameController.bulletList;
         this.usersInRoom = gameController.usersInRoom;
@@ -74,11 +73,12 @@ public class Player {
         
     }
     
-    private void init() {
+    private void initPlayerTexturePrameters() {
         this.PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
         this.PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
         this.scale = Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
     }
+    
 
     public void update(CopyOnWriteArrayList<User> usersInRoom, double deltaTime) {
         this.handleMovementKeys(usersInRoom, deltaTime);
