@@ -83,7 +83,7 @@ public class GameControllerTest {
 	
 	@Test
 	void checkIfJSONArrayHasTheSameSizeLikeListOfBullets() {
-		assertThat(getPreparedBullets().size()).isEqualTo(gameController.getBulletsData().length());
+		assertThat(gameController.getBulletsData().length()).isEqualTo(getPreparedBullets().size());
 	}
 	
 	//testing opponents
@@ -102,7 +102,7 @@ public class GameControllerTest {
 	
 	@Test
 	void checkIfJSONArrayHasTheSameSizeLikeListOfOpponents() {
-		assertThat(getPreparedOpponenets().size()).isEqualTo(gameController.getOpponentsData().length());
+		assertThat(gameController.getOpponentsData().length()).isEqualTo(getPreparedOpponenets().size());
 	}
 	
 	//testing player
@@ -120,7 +120,7 @@ public class GameControllerTest {
 	
 	@Test
 	void checkIfJSONArrayHasTheSameSizeLikeListOfPlayers() {
-		assertThat(getPreparedPlayers().size()).isEqualTo(gameController.getPlayersData().length());
+		assertThat(gameController.getPlayersData().length()).isEqualTo(getPreparedPlayers().size());
 	}
 	
 	//helpers methods
