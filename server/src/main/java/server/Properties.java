@@ -11,7 +11,6 @@ public class Properties {
     private Properties(){}
     private static Logger logger = LogManager.getLogger(Properties.class.getName());
     private static final String PATH = "../../config.properties";
-    private static final String TEST = "../../config.propertiesfortest";
     
     
     public static void createConfigFile() {
@@ -27,7 +26,7 @@ public class Properties {
     }
     public static void createConfigFileForTesting() {
         java.util.Properties prop = new java.util.Properties();
-        try (FileOutputStream output = new FileOutputStream(TEST)) {
+        try (FileOutputStream output = new FileOutputStream(PATH)) {
             prop.put("PLAYER_TEXTURE_WIDTH", "31");
             prop.put("PLAYER_TEXTURE_HEIGHT", "36");
             prop.put("PLAYER_SCALE", "2");
