@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class OpponentFactoryTest {
+public class OpponentFactoryTest {
 	
 	private GameController gameController;
 	
