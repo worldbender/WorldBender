@@ -22,6 +22,11 @@ public class User {
         this.player = new Player(this);
         this.connection = true;
     }
+    
+    public User(Player player){
+        this.player = new Player(this);
+        this.connection = true;
+    }
 
     public void initializePlayer(GameController gameController, String playerType){
         this.player = PlayersFactory.createPlayer(playerType, this, gameController);
