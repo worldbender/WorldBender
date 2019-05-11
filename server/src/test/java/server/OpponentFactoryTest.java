@@ -3,17 +3,16 @@ package server;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import server.bullets.BulletFactory;
 import server.connection.GameController;
 import server.opponents.*;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 public class OpponentFactoryTest {
 	
 	private GameController gameController;
+	AOpponent resultOpponent;
 	
 	
 	@BeforeEach
@@ -23,21 +22,21 @@ public class OpponentFactoryTest {
 	
 	@Test
 	void checkIfOpponentIsSchopenhauer() {
-		AOpponent resultOpponent = OpponentFactory.createOpponent("Schopenhauer", gameController);
+		resultOpponent = OpponentFactory.createOpponent("Schopenhauer", gameController);
 		assertThat(resultOpponent).isInstanceOfAny(Schopenhauer.class);
 		
 	}
 	
 	@Test
 	void checkIfOpponentIsNietzsche() {
-		AOpponent resultOpponent = OpponentFactory.createOpponent("Nietzsche", gameController);
+		resultOpponent = OpponentFactory.createOpponent("Nietzsche", gameController);
 		assertThat(resultOpponent).isInstanceOfAny(Nietzsche.class);
 		
 	}
 	
 	@Test
 	void checkIfOpponentIsPoe() {
-		AOpponent resultOpponent = OpponentFactory.createOpponent("Poe", gameController);
+		resultOpponent = OpponentFactory.createOpponent("Poe", gameController);
 		assertThat(resultOpponent).isInstanceOfAny(Poe.class);
 		
 	}
@@ -60,6 +59,7 @@ public class OpponentFactoryTest {
 	@AfterEach
 	void tearDown() {
 		gameController = null;
+		resultOpponent = null;
 	}
 	
 

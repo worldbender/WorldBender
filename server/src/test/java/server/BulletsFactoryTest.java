@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 public class BulletsFactoryTest {
 	
 	private GameController gameController;
-	
+	private ABullet resultBullet;
 	
 	@BeforeEach
 	void setUp() {
@@ -22,19 +22,19 @@ public class BulletsFactoryTest {
 
 	@Test
 	void checkIfBulletIsATear(){
-		ABullet resultBullet = BulletFactory.createBullet("Tear", 1,1,30.0f,true, gameController);
+		resultBullet = BulletFactory.createBullet("Tear", 1,1,30.0f,true, gameController);
 		assertThat(resultBullet).isInstanceOfAny(Tear.class);
 	}
 	
 	@Test
 	void checkIfBulletIsASpectralTear(){
-		ABullet resultBullet = BulletFactory.createBullet("SpectralTear", 1,1,30.0f,true, gameController);
+		resultBullet = BulletFactory.createBullet("SpectralTear", 1,1,30.0f,true, gameController);
 		assertThat(resultBullet).isInstanceOfAny(SpectralTear.class);
 	}
 	
 	@Test
 	void checkIfBulletIsAFireRing(){
-		ABullet resultBullet = BulletFactory.createBullet("FireRing", 1,1,30.0f,true, gameController);
+		resultBullet = BulletFactory.createBullet("FireRing", 1,1,30.0f,true, gameController);
 		assertThat(resultBullet).isInstanceOfAny(FireRing.class);
 	}
 	
@@ -52,17 +52,11 @@ public class BulletsFactoryTest {
 		});
 	}
 	
-//	@Test
-//	void checkIfIllegalArgumentExceptionException(){
-//		assertThatIllegalArgumentException().isThrownBy(() ->{
-//			BulletFactory.createBullet("Tear", -1,-20,30.0f,true, gameController);
-//		});
-//	}
-//
 	
 	@AfterEach
 	void tearDown() {
 		gameController = null;
+		resultBullet = null;
 	}
 	
 }
