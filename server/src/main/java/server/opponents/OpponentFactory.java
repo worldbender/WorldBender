@@ -17,6 +17,7 @@ public class OpponentFactory {
                 resultOpponent = new Poe(gameController);
                 break;
             default:
+                throw new IllegalArgumentException("There is no such opponent!");
         }
         return resultOpponent;
     }
