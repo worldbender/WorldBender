@@ -15,8 +15,6 @@ import com.my.game.player.Player;
 import com.my.game.player.Water;
 
 public class MyAssetManager {
-    private MyAssetManager(){}
-
     public static final AssetManager manager = new AssetManager();
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
@@ -70,6 +68,10 @@ public class MyAssetManager {
     public static final String SGX_UI_ATLAS = "skin/sgx-ui.atlas";
     public static final String SGX_UI_JSON = "skin/sgx-ui.json";
     public static final String SGX_UI_PNG = "skin/sgx-ui.png";
+
+    public static final String GAME_NAME = "screenImages/gameName.png";
+
+    private MyAssetManager(){}
 
 
     public static void loadBullets(){
@@ -139,6 +141,7 @@ public class MyAssetManager {
 
     public static void loadScreenImages(){
         manager.load(TREE, Texture.class);
+        manager.load(GAME_NAME, Texture.class);
     }
 
     public static void loadAllAssets(){

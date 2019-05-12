@@ -1,15 +1,17 @@
 package com.my.game.screens;
 
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Align;
 import com.my.game.WBGame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.my.game.screens.dialogs.ErrorDialog;
 import com.my.game.screens.dialogs.JoinRoomDialog;
 import org.json.JSONObject;
+
+import static com.my.game.MyAssetManager.GAME_NAME;
 
 public class MenuScreen extends AbstractScreen{
     private boolean isRoomFull = false;
@@ -44,10 +46,19 @@ public class MenuScreen extends AbstractScreen{
 
     @Override
     public void show() {
+        Texture texture = new Texture(GAME_NAME);
+        Image gameNameImage = new Image(texture);
+
         Table table = new Table();
-        table.setFillParent(true);
+        table.top().padTop(100).setFillParent(true);
         table.setDebug(false);
+
+        Table buttonsTable = new Table();
+        buttonsTable.setFillParent(true);
+        buttonsTable.setDebug(false);
+
         stage.addActor(table);
+        stage.addActor(buttonsTable);
 
         //create buttons
         TextButton newRoom = new TextButton("Create Room", skin);
@@ -57,24 +68,24 @@ public class MenuScreen extends AbstractScreen{
         TextButton resume = new TextButton("Resume", skin);
         SelectBox selectCharacter = new SelectBox(skin);
         selectCharacter.setItems("Ground", "Water");
-
         //add buttons to table
         if(inGame){
-            table.add(resume).fillX().uniformX();
-            table.row().pad(10, 0, 0, 0);
+            buttonsTable.add(resume).fillX().uniformX();
+            buttonsTable.row().pad(10, 0, 0, 0);
         }
         else {
-            table.add(newRoom).fillX().uniformX();
-            table.row().pad(10, 0, 0, 0);
-            table.add(joinRoom).fillX().uniformX();
-            table.row().pad(10, 0, 0, 0);
-            table.add(selectCharacter).fillX().uniformX();
-            table.row().pad(10, 0, 0, 0);
+            table.add(gameNameImage);
+            buttonsTable.add(newRoom).fillX().uniformX();
+            buttonsTable.row().pad(10, 0, 0, 0);
+            buttonsTable.add(joinRoom).fillX().uniformX();
+            buttonsTable.row().pad(10, 0, 0, 0);
+            buttonsTable.add(selectCharacter).fillX().uniformX();
+            buttonsTable.row().pad(10, 0, 0, 0);
         }
-        table.add(preferences).fillX().uniformX();
-        table.row().pad(10, 0, 0, 0);
-        table.add(exit).fillX().uniformX();
-        table.row();
+        buttonsTable.add(preferences).fillX().uniformX();
+        buttonsTable.row().pad(10, 0, 0, 0);
+        buttonsTable.add(exit).fillX().uniformX();
+        buttonsTable.row();
 
         // create button listeners
         preferences.addListener(new ChangeListener() {
