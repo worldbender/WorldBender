@@ -9,6 +9,7 @@ public class SadOnion extends APickup{
         this.setType("SadOnion");
     }
 
+    //TODO test this method
     @Override
     public void modifyPlayer(Player player) {
         if(!player.getWeaponType().equals("SadOnion")){

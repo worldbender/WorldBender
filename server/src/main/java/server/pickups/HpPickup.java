@@ -9,6 +9,8 @@ public class HpPickup extends APickup {
         this.setType("Hp");
     }
 
+
+    //TODO test this method
     @Override
     public void modifyPlayer(Player player) {
         if(player.getHp() < player.MAX_HP){
