@@ -1,8 +1,10 @@
-package server;
+package server.factories;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import server.Properties;
+import server.User;
 import server.connection.GameController;
 import server.players.Ground;
 import server.players.Player;
