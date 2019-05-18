@@ -48,7 +48,7 @@ public class RoomController {
                             .put("msg", "fullRoom")
                             .put("content", new JSONObject()
                                     .put("id", room.getId())
-                                    .put("character", user.getCharacterType())));
+                                    .put("playerType", user.getCharacterType())));
                 break;
             }
         }
@@ -58,7 +58,7 @@ public class RoomController {
                     .put("msg", "roomDoesNotExist")
                     .put("content", new JSONObject()
                             .put("id", roomId)
-                            .put("character", user.getCharacterType())));
+                            .put("playerType", user.getCharacterType())));
     }
 
     public void leaveRoom(User user){
@@ -72,7 +72,7 @@ public class RoomController {
                         .put("msg", "ownerLeftRoom")
                         .put("content", new JSONObject()
                                 .put("id", currentRoom.getId())
-                                .put("character", currentUser.getCharacterType())));
+                                .put("playerType", currentUser.getCharacterType())));
             }
 
             currentRoom.deleteRoom();
@@ -84,7 +84,8 @@ public class RoomController {
         Room currentRoom = RoomList.getUserRoom(user.getConnectionId());
         initGame(currentRoom);
 
-        JSONObject content = new JSONObject().put("owner", user.getName())
+        JSONObject content = new JSONObject()
+                .put("owner", user.getName())
                 .put("opponents", currentRoom.getGameController().getOpponentsData())
                 .put("players", currentRoom.getGameController().getPlayersInitialData());
 
@@ -101,6 +102,14 @@ public class RoomController {
 
         currentRoom.setGameStarted(true);
         currentRoom.getGameController().hasStarted = true;
+    }
+
+    public void getRoomList(User user){
+        clientThread.sendMessage(new JSONObject()
+                .put("msg", "roomList")
+                .put("content", new JSONObject()
+                        .put("playerType", user.getCharacterType())
+                        .put("rooms", RoomList.getRoomsData())));
     }
 
     //TODO: przejściowa wersja, do ogarnięcia

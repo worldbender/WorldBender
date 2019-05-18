@@ -90,7 +90,9 @@ public class MenuScreen extends AbstractScreen{
         roomList.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(WBGame.ROOM_LIST, selectCharacter.getSelected().toString(), 0);
+                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
+                                .put("msg", "getRoomList")
+                            .put("content", new JSONObject().put("character", selectCharacter.getSelected().toString())));
             }
         });
 

@@ -5,13 +5,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.my.game.WBGame;
 import com.my.game.rooms.Room;
 import com.my.game.screens.dialogs.ErrorDialog;
 import com.my.game.screens.dialogs.JoinRoomDialog;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RoomListScreen extends AbstractScreen {
@@ -22,13 +22,13 @@ public class RoomListScreen extends AbstractScreen {
     private String character;
     private int option;
 
-    public RoomListScreen(WBGame game, String character, int option) {
+    public RoomListScreen(WBGame game, List<Room> rooms, String character, int option) {
         super(game);
-        this.rooms = new ArrayList<>();
+        this.rooms = rooms;
         this.character = character;
         this.option = option;
 
-        fillFakeRooms();
+        //fillFakeRooms();
     }
 
     @Override
@@ -63,7 +63,9 @@ public class RoomListScreen extends AbstractScreen {
         refresh.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(WBGame.ROOM_LIST, character, 0);
+                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
+                        .put("msg", "getRoomList")
+                        .put("content", new JSONObject().put("character", character)));
             }
         });
 
@@ -71,6 +73,7 @@ public class RoomListScreen extends AbstractScreen {
         gameHeight = Gdx.graphics.getHeight();
 
         Table roomList = new Table();
+        roomList.align(Align.top);
         initRoomList(roomList);
 
         scrollPane = new ScrollPane(roomList, skin);
@@ -135,7 +138,6 @@ public class RoomListScreen extends AbstractScreen {
         roomList.add(new Label("", skin, "white")).expandX().fill();
         roomList.row();
 
-        //TODO: character injection
         for(Room room : rooms){
             final int id = Integer.parseInt(room.getRoomId());
             TextButton joinButton = new TextButton("Join", skin, "default");
@@ -158,15 +160,8 @@ public class RoomListScreen extends AbstractScreen {
                 joinButton.setTouchable(Touchable.disabled);
                 roomList.add(new Label(room.getGameStatus(), skin, "medium-red")).right().expandX().fillX();
             } else roomList.add(new Label(room.getGameStatus(), skin, "medium-green")).right().expandX().fillX();
-            roomList.add(joinButton).expandX().fill();
+            roomList.add(joinButton).top().expandX().fill();
             roomList.row();
-        }
-    }
-
-    //TODO: temporal method
-    private void fillFakeRooms(){
-        for (int i = 0; i < 100; i++) {
-            rooms.add(new Room(i, "Ziutek" + 2*i, i%5));
         }
     }
 }

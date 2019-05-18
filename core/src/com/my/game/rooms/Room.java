@@ -5,15 +5,19 @@ public class Room {
     private String roomOwner;
     private int roomId;
     private boolean canPlayerJoin = true;
-    private String gameStatus = "In Lobby";
+    private String status = "In Lobby";
 
-    public Room(int roomId, String roomOwner, int playersInRoom){
+    public Room(int roomId, String roomOwner, int playersInRoom, boolean gameStatus){
         this.roomId = roomId;
         this.roomOwner = roomOwner;
         this.playersInRoom = playersInRoom;
-        if(playersInRoom == 4) {
+        if(gameStatus){
             canPlayerJoin = false;
-            gameStatus = "In Game";
+            status = "In Game";
+        }
+        else if(playersInRoom == 4) {
+            canPlayerJoin = false;
+            status = "Full Room";
         }
     }
 
@@ -41,6 +45,6 @@ public class Room {
     }
 
     public String getGameStatus(){
-        return gameStatus;
+        return status;
     }
 }

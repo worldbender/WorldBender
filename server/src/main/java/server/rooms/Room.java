@@ -85,6 +85,10 @@ public class Room {
         return user.getConnectionId().equals(getRoomOwner().getConnectionId());
     }
 
+    public boolean getGameStarted(){
+        return gameStarted;
+    }
+
     public void setGameStarted(boolean gameStarted) {
         this.gameStarted = gameStarted;
     }

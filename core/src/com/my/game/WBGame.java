@@ -4,8 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.my.game.connection.Connection;
+import com.my.game.rooms.Room;
 import com.my.game.screens.*;
 import com.my.game.screens.SplashScreen;
+
+import java.util.List;
 
 public class WBGame extends Game {
 
@@ -85,10 +88,10 @@ public class WBGame extends Game {
         }
     }
 
-    public void changeScreen(int screen, String character, int option){
+    public void changeScreen(int screen, String character, int option, List<Room> rooms){
         switch(screen){
             case ROOM_LIST:
-                this.setScreen(new RoomListScreen(this, character, option));
+                this.setScreen(new RoomListScreen(this, rooms, character, option));
                 break;
             default:
         }
