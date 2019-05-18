@@ -23,6 +23,7 @@ public class WBGame extends Game {
     public static final int PLAY = 6;
     public static final int ROOM = 7;
     public static final int ROOM_OWNER = 8;
+    public static final int ROOM_LIST = 9;
     public static final String SERVER_ADDRESS = Properties.loadConfigFile("IP");
 
     public static final String GAME_NAME = "World Bender";
@@ -80,6 +81,9 @@ public class WBGame extends Game {
             case PLAY:
                 if(gameplayScreen == null) gameplayScreen = new GameplayScreen(this);
                 this.setScreen(gameplayScreen);
+                break;
+            case ROOM_LIST:
+                this.setScreen(new RoomListScreen(this));
                 break;
             default:
         }
