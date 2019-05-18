@@ -10,7 +10,6 @@ public class HpPickup extends APickup {
     }
 
 
-    //TODO test this method
     @Override
     public void modifyPlayer(Player player) {
         if(player.getHp() < player.MAX_HP){
