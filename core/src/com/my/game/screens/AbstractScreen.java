@@ -101,7 +101,7 @@ public abstract class AbstractScreen implements Screen {
     }
 
     protected void initTable(){
-        Table table = new Table();
+        table = new Table();
         table = table.bottom();
         table.setFillParent(true);
         table.setDebug(false);
