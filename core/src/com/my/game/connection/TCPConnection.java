@@ -134,11 +134,7 @@ public class TCPConnection implements Runnable {
     private void startGame(JSONObject contentJSON) {
         Gdx.app.postRunnable(() -> game.changeScreen(WBGame.PLAY));
         JSONArray opponents = contentJSON.getJSONArray("opponents");
-        for (int i = 0; i < opponents.length(); i++) {
-            JSONObject opponent = opponents.getJSONObject(i);
-            AOpponent newOpponent = OpponentFactory.createOpponent(opponent.getString("type"), opponent.getInt("id"));
-            OpponentList.addOpponent(newOpponent);
-        }
+        createOpponents(opponents);
 
         JSONArray playersJSON = contentJSON.getJSONArray("players");
         for (int i = 0; i < playersJSON.length(); i++) {
@@ -166,12 +162,17 @@ public class TCPConnection implements Runnable {
             }
         }
 
+        createOpponents(opponents);
+        game.getGameplayScreen().changeLevel(contentJSON.getString("map"));
+    }
+
+    private void createOpponents(JSONArray opponents){
         for (int i = 0; i < opponents.length(); i++) {
             JSONObject opponent = opponents.getJSONObject(i);
             AOpponent newOpponent = OpponentFactory.createOpponent(opponent.getString("type"), opponent.getInt("id"));
             OpponentList.addOpponent(newOpponent);
         }
-        game.getGameplayScreen().changeLevel(contentJSON.getString("map"));
+
     }
 
     private List<Room> parseRoomList(JSONObject contentJSON){

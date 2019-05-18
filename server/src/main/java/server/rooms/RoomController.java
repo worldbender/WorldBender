@@ -48,7 +48,8 @@ public class RoomController {
                             .put("msg", "fullRoom")
                             .put("content", new JSONObject()
                                     .put("id", room.getId())
-                                    .put("playerType", user.getCharacterType())));
+                                    .put("playerType", user.getCharacterType())
+                                    .put("rooms", RoomList.getRoomsData())));
                 break;
             }
         }
@@ -58,7 +59,8 @@ public class RoomController {
                     .put("msg", "roomDoesNotExist")
                     .put("content", new JSONObject()
                             .put("id", roomId)
-                            .put("playerType", user.getCharacterType())));
+                            .put("playerType", user.getCharacterType())
+                            .put("rooms", RoomList.getRoomsData())));
     }
 
     public void leaveRoom(User user){
@@ -72,7 +74,8 @@ public class RoomController {
                         .put("msg", "ownerLeftRoom")
                         .put("content", new JSONObject()
                                 .put("id", currentRoom.getId())
-                                .put("playerType", currentUser.getCharacterType())));
+                                .put("playerType", currentUser.getCharacterType())
+                                .put("rooms", RoomList.getRoomsData())));
             }
 
             currentRoom.deleteRoom();
