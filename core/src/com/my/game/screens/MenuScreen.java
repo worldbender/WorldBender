@@ -1,5 +1,6 @@
 package com.my.game.screens;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.my.game.WBGame;
 import com.badlogic.gdx.Gdx;
@@ -115,6 +116,12 @@ public class MenuScreen extends AbstractScreen{
     public void render(float delta) {
         super.render(delta);
         drawBackground();
+
+        if(inGame){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                game.changeScreen(WBGame.PLAY);
+            }
+        }
 
         if(!WBGame.connectionStatus){
             this.createConnection();

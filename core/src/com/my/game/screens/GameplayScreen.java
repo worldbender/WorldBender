@@ -205,7 +205,7 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void handleSpecialKeys(){
-        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             game.changeScreen(WBGame.MENU_IN_GAME);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){

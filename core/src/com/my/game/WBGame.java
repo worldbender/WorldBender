@@ -19,11 +19,11 @@ public class WBGame extends Game {
 
     public static final int SPLASH = 0;
     public static final int MENU = 1;
-    public static final int MENU_IN_GAME = 4;
-    public static final int PLAY = 6;
-    public static final int ROOM = 7;
-    public static final int ROOM_OWNER = 8;
-    public static final int ROOM_LIST = 9;
+    public static final int MENU_IN_GAME = 2;
+    public static final int PLAY = 3;
+    public static final int ROOM = 4;
+    public static final int ROOM_OWNER = 5;
+    public static final int ROOM_LIST = 6;
     public static final String SERVER_ADDRESS = Properties.loadConfigFile("IP");
 
     public static final String GAME_NAME = "World Bender";
