@@ -136,7 +136,7 @@ public class TCPConnection implements Runnable {
         JSONArray playersJSON = contentJSON.getJSONArray("players");
         for (int i = 0; i < playersJSON.length(); i++) {
             JSONObject player = playersJSON.getJSONObject(i);
-            Player newPlayer = PlayerFactory.createPlayer(contentJSON.getString("playerType"), player.getString("name"));
+            Player newPlayer = PlayerFactory.createPlayer(player.getString("playerType"), player.getString("name"));
             if (player.getString("name").equals(contentJSON.getString("current"))) {
                 newPlayer.setCurrentPlayer(true);
                 GameplayScreen.currentPlayer = newPlayer;

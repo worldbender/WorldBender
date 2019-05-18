@@ -83,7 +83,7 @@ public class RoomController {
 
         JSONObject content = new JSONObject().put("owner", user.getName())
                 .put("opponents", currentRoom.getGameController().getOpponentsData())
-                .put("players", currentRoom.getGameController().getPlayersData());
+                .put("players", currentRoom.getGameController().getPlayersInitialData());
 
         JSONObject msg = new JSONObject()
                 .put("msg", "startGame");
@@ -91,7 +91,7 @@ public class RoomController {
 
         for(User currentUser : currentRoom.getUsersInRoom()){
             content.put("current",currentUser.getName());
-            content.put("playerType", currentUser.getPlayer().getPlayerType());
+            content.put("playerType", currentUser.getCharacterType());
             msg.put("content", content);
             currentUser.getThread().sendMessage(msg);
         }
@@ -103,9 +103,9 @@ public class RoomController {
     //TODO: przejściowa wersja, do ogarnięcia
     public void initGame(Room room){
         //TODO Here server must know what character user is
-        String USER_TYPE = "Ground";
+        String USER_TYPE = "Water";
         for(User user : room.getUsersInRoom()){
-            user.initializePlayer(room.getGameController(), USER_TYPE);
+            user.initializePlayer(room.getGameController(), user.getCharacterType());
         }
         room.getGameController().setPlayersPosition();
         room.getGameController().spawnAllOpponents();
