@@ -47,7 +47,8 @@ public class RoomController {
                     clientThread.sendMessage(new JSONObject()
                             .put("msg", "fullRoom")
                             .put("content", new JSONObject()
-                                    .put("id", room.getId())));
+                                    .put("id", room.getId())
+                                    .put("character", user.getCharacterType())));
                 break;
             }
         }
@@ -56,7 +57,8 @@ public class RoomController {
             clientThread.sendMessage(new JSONObject()
                     .put("msg", "roomDoesNotExist")
                     .put("content", new JSONObject()
-                            .put("id", roomId)));
+                            .put("id", roomId)
+                            .put("character", user.getCharacterType())));
     }
 
     public void leaveRoom(User user){
@@ -69,7 +71,8 @@ public class RoomController {
                 currentUser.getThread().sendMessage(new JSONObject()
                         .put("msg", "ownerLeftRoom")
                         .put("content", new JSONObject()
-                                .put("id", currentRoom.getId())));
+                                .put("id", currentRoom.getId())
+                                .put("character", currentUser.getCharacterType())));
             }
 
             currentRoom.deleteRoom();
@@ -103,7 +106,6 @@ public class RoomController {
     //TODO: przejściowa wersja, do ogarnięcia
     public void initGame(Room room){
         //TODO Here server must know what character user is
-        String USER_TYPE = "Water";
         for(User user : room.getUsersInRoom()){
             user.initializePlayer(room.getGameController(), user.getCharacterType());
         }

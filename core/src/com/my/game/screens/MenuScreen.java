@@ -12,18 +12,10 @@ import com.my.game.screens.dialogs.JoinRoomDialog;
 import org.json.JSONObject;
 
 public class MenuScreen extends AbstractScreen{
-    private boolean isRoomFull = false;
-    private boolean roomExists = true;
     private boolean inGame = false;
 
     public MenuScreen(WBGame game) {
         super(game);
-    }
-
-    public MenuScreen(WBGame game, boolean isRoomFull, boolean roomExists) {
-        this(game);
-        this.isRoomFull = isRoomFull;
-        this.roomExists = roomExists;
     }
 
     public MenuScreen(WBGame game, boolean inGame) {
@@ -98,7 +90,7 @@ public class MenuScreen extends AbstractScreen{
         roomList.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(WBGame.ROOM_LIST, selectCharacter.getSelected().toString());
+                game.changeScreen(WBGame.ROOM_LIST, selectCharacter.getSelected().toString(), 0);
             }
         });
 
@@ -115,18 +107,6 @@ public class MenuScreen extends AbstractScreen{
                 Gdx.app.exit();
             }
         });
-
-        if(isRoomFull && !roomExists){
-            new ErrorDialog(skin, stage, "Room owner left!");
-        }
-
-        if(isRoomFull && roomExists){
-            new ErrorDialog(skin, stage, "Game already started or room is full!");
-        }
-
-        if(!roomExists && !isRoomFull){
-            new ErrorDialog(skin, stage, "Room with this ID doesn't exist!");
-        }
     }
 
     @Override

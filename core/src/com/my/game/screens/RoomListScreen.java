@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.my.game.WBGame;
 import com.my.game.rooms.Room;
+import com.my.game.screens.dialogs.ErrorDialog;
 import com.my.game.screens.dialogs.JoinRoomDialog;
 import org.json.JSONObject;
 
@@ -19,11 +20,13 @@ public class RoomListScreen extends AbstractScreen {
     private float gameWidth, gameHeight;
     private int bound = 400;
     private String character;
+    private int option;
 
-    public RoomListScreen(WBGame game, String character) {
+    public RoomListScreen(WBGame game, String character, int option) {
         super(game);
         this.rooms = new ArrayList<>();
         this.character = character;
+        this.option = option;
 
         fillFakeRooms();
     }
@@ -60,7 +63,7 @@ public class RoomListScreen extends AbstractScreen {
         refresh.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(WBGame.ROOM_LIST, character);
+                game.changeScreen(WBGame.ROOM_LIST, character, 0);
             }
         });
 
@@ -77,6 +80,19 @@ public class RoomListScreen extends AbstractScreen {
         scrollPane.setTransform(true);
 
         stage.addActor(scrollPane);
+
+        switch(option){
+            case 1:
+                new ErrorDialog(skin, stage, "Room owner left!");
+                break;
+            case 2:
+                new ErrorDialog(skin, stage, "Game already started or room is full!");
+                break;
+            case 3:
+                new ErrorDialog(skin, stage, "Room with this ID doesn't exist!");
+                break;
+            default:
+        }
     }
 
     @Override

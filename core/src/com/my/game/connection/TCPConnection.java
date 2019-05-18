@@ -107,15 +107,15 @@ public class TCPConnection implements Runnable {
                 break;
             case "ownerLeftRoom":
                 System.out.println("Left room ID: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_OWNER_LEFT));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("character"), 1));
                 break;
             case "fullRoom":
                 System.out.println("Room is full: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_FULL_ROOM));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("character"), 2));
                 break;
             case "roomDoesNotExist":
-                System.out.println("Room doesn't exist: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_NO_ROOM));
+                System.out.println("Room doesn't exist: " + contentJSON.getInt("id") + json);
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("character"), 3));
                 break;
             case "changeLevel":
                 this.changeLevel(contentJSON);

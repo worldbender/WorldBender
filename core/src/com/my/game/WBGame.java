@@ -16,10 +16,7 @@ public class WBGame extends Game {
 
     public static final int SPLASH = 0;
     public static final int MENU = 1;
-    public static final int MENU_FULL_ROOM = 2;
-    public static final int MENU_NO_ROOM = 3;
     public static final int MENU_IN_GAME = 4;
-    public static final int MENU_OWNER_LEFT = 5;
     public static final int PLAY = 6;
     public static final int ROOM = 7;
     public static final int ROOM_OWNER = 8;
@@ -66,15 +63,6 @@ public class WBGame extends Game {
             case MENU:
                 this.setScreen(new MenuScreen(this));
                 break;
-            case MENU_FULL_ROOM:
-                this.setScreen(new MenuScreen(this, true, true));
-                break;
-            case MENU_NO_ROOM:
-                this.setScreen(new MenuScreen(this, false, false));
-                break;
-            case MENU_OWNER_LEFT:
-                this.setScreen(new MenuScreen(this, true, false));
-                break;
             case MENU_IN_GAME:
                 this.setScreen(new MenuScreen(this, true));
                 break;
@@ -97,10 +85,10 @@ public class WBGame extends Game {
         }
     }
 
-    public void changeScreen(int screen, String character){
+    public void changeScreen(int screen, String character, int option){
         switch(screen){
             case ROOM_LIST:
-                this.setScreen(new RoomListScreen(this, character));
+                this.setScreen(new RoomListScreen(this, character, option));
                 break;
             default:
         }
