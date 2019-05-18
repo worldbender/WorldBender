@@ -10,7 +10,6 @@ public class InnerEye extends APickup{
     }
 
 
-    //TODO test this method
     @Override
     public void modifyPlayer(Player player) {
         if(!player.getWeaponType().equals("Triple")){

@@ -11,10 +11,9 @@ import server.players.Player;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-
-public class InnerEyeTest {
+public class SadOnionTest {
 	
-	private InnerEye innerEye;
+	private SadOnion sadOnion;
 	private Player player;
 	private User user;
 	private GameController gameController;
@@ -26,22 +25,22 @@ public class InnerEyeTest {
 		Properties.createConfigFileForTesting();
 		player = new Player(user,gameController);
 		
-		innerEye = new InnerEye(1,1);
+		sadOnion = new SadOnion(1,1);
 	}
 	
 	
 	@Test
-	void checkIfWeaponTypeHasBeenChangedToTriple() {
+	void checkIfWeaponTypeHasBeenChangedToSadOnion() {
 		player.setWeaponType("normal");
-		innerEye.modifyPlayer(player);
-		assertThat(player.getWeaponType()).isEqualTo("Triple");
+		sadOnion.modifyPlayer(player);
+		assertThat(player.getWeaponType()).isEqualTo("SadOnion");
 		
 	}
 	
 	
 	@Test
 	void checkIfShootSpeedModificatorHasBeenChangedTo2L() {
-		innerEye.modifyPlayer(player);
+		sadOnion.modifyPlayer(player);
 		assertThat(player.getShootSpeedModificator()).isEqualTo(2L);
 		
 	}
@@ -49,7 +48,7 @@ public class InnerEyeTest {
 	@Test
 	void checkIfTripleHasBeenAddedToItemsCollection() {
 		int before = player.getCollectedItems().size();
-		innerEye.modifyPlayer(player);
+		sadOnion.modifyPlayer(player);
 		int after = player.getCollectedItems().size();
 		assertThat(after).isEqualTo(before+1);
 		
@@ -57,7 +56,7 @@ public class InnerEyeTest {
 	
 	@AfterEach
 	void tearDown() {
-		innerEye = null;
+		sadOnion = null;
 		player = null;
 		user = null;
 		gameController = null;
