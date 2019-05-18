@@ -115,9 +115,7 @@ public class RoomController {
                         .put("rooms", RoomList.getRoomsData())));
     }
 
-    //TODO: przejściowa wersja, do ogarnięcia
     public void initGame(Room room){
-        //TODO Here server must know what character user is
         for(User user : room.getUsersInRoom()){
             user.initializePlayer(room.getGameController(), user.getCharacterType());
         }

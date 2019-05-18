@@ -18,7 +18,7 @@ public class RoomListScreen extends AbstractScreen {
     private List<Room> rooms;
     private ScrollPane scrollPane;
     private float gameWidth, gameHeight;
-    private int bound = 400;
+    private int boundRatio = 400;
     private String character;
     private int option;
 
@@ -27,8 +27,6 @@ public class RoomListScreen extends AbstractScreen {
         this.rooms = rooms;
         this.character = character;
         this.option = option;
-
-        //fillFakeRooms();
     }
 
     @Override
@@ -74,11 +72,12 @@ public class RoomListScreen extends AbstractScreen {
 
         Table roomList = new Table();
         roomList.align(Align.top);
-        initRoomList(roomList);
+
+        initRoomListTable(roomList);
 
         scrollPane = new ScrollPane(roomList, skin);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setBounds(bound, bound/2, gameWidth - 2*bound, gameHeight- bound);
+        scrollPane.setBounds(boundRatio, boundRatio/2, gameWidth - 2*boundRatio, gameHeight- boundRatio);
         scrollPane.setSmoothScrolling(false);
         scrollPane.setTransform(true);
 
@@ -130,7 +129,7 @@ public class RoomListScreen extends AbstractScreen {
         stage.dispose();
     }
 
-    private void initRoomList(Table roomList){
+    private void initRoomListTable(Table roomList){
         roomList.add(new Label("Room ID", skin, "white")).left().expandX().fillX();
         roomList.add(new Label("Room owner", skin, "white")).center().expandX().fillX();
         roomList.add(new Label("Players in room", skin, "white")).center().expandX().fillX();

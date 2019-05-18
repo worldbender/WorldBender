@@ -82,8 +82,9 @@ public class MenuScreen extends AbstractScreen{
             public void changed(ChangeEvent event, Actor actor) {
                 WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                         .put("msg", "newRoom")
-                        .put("content", new JSONObject().put("port", WBGame.getConnection().getSocket().getLocalPort()))
-                        .put("character", selectCharacter.getSelected().toString()));
+                        .put("content", new JSONObject()
+                                .put("port", WBGame.getConnection().getSocket().getLocalPort())
+                                .put("character", selectCharacter.getSelected().toString())));
 
             }
         });
@@ -92,8 +93,8 @@ public class MenuScreen extends AbstractScreen{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 WBGame.getConnection().getTcp().sendMessage(new JSONObject()
-                                .put("msg", "getRoomList")
-                            .put("content", new JSONObject().put("character", selectCharacter.getSelected().toString())));
+                        .put("msg", "getRoomList")
+                        .put("content", new JSONObject().put("character", selectCharacter.getSelected().toString())));
             }
         });
 

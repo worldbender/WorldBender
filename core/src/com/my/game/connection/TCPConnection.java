@@ -31,7 +31,6 @@ import java.util.Map;
 
 public class TCPConnection implements Runnable {
     private static Logger logger = LogManager.getLogger(TCPConnection.class.getName());
-
     private WBGame game;
     private final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_TCP"));
     private String hostname;
@@ -105,7 +104,7 @@ public class TCPConnection implements Runnable {
                 Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_OWNER, contentJSON.getInt("id")));
                 break;
             case "roomList":
-                System.out.println("Got room list");
+                System.out.println("Got room list:");
                 Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 0, parseRoomList(contentJSON)));
                 break;
             case "joinedRoom":
@@ -151,6 +150,8 @@ public class TCPConnection implements Runnable {
     private void changeLevel(JSONObject contentJSON){
         System.out.println(contentJSON);
         JSONArray opponents = contentJSON.getJSONArray("opponents");
+        createOpponents(opponents);
+
         JSONArray playersFromServer = contentJSON.getJSONArray("players");
 
         for (Player player : players.values()) {
@@ -162,7 +163,6 @@ public class TCPConnection implements Runnable {
             }
         }
 
-        createOpponents(opponents);
         game.getGameplayScreen().changeLevel(contentJSON.getString("map"));
     }
 
@@ -179,7 +179,6 @@ public class TCPConnection implements Runnable {
         List<Room> rooms = new ArrayList<>();
         System.out.println(contentJSON);
         JSONArray jsonRooms = contentJSON.getJSONArray("rooms");
-
 
         for (int i = 0; i < jsonRooms.length(); i++) {
             JSONObject room = jsonRooms.getJSONObject(i);
