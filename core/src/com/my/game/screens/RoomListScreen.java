@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.my.game.WBGame;
 import com.my.game.rooms.Room;
+import com.my.game.screens.dialogs.JoinRoomDialog;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -17,10 +18,12 @@ public class RoomListScreen extends AbstractScreen {
     private ScrollPane scrollPane;
     private float gameWidth, gameHeight;
     private int bound = 400;
+    private String character;
 
-    public RoomListScreen(WBGame game) {
+    public RoomListScreen(WBGame game, String character) {
         super(game);
-        rooms = new ArrayList<>();
+        this.rooms = new ArrayList<>();
+        this.character = character;
 
         fillFakeRooms();
     }
@@ -29,14 +32,24 @@ public class RoomListScreen extends AbstractScreen {
     public void show() {
         initTable();
 
+        TextButton joinRoomById = new TextButton("Join Room by ID", skin);
         TextButton refresh = new TextButton("Refresh List", skin);
         TextButton back = new TextButton("Back to Menu", skin);
 
+        table.add(joinRoomById).fillX().uniformX().bottom();
         table.add(refresh).fillX().uniformX().bottom();
         table.add(back).fillX().uniformX().bottom();
+        table.row().pad(30, 0, 30, 0);
+        table.add(new Label("", skin)).bottom();
         table.row().pad(50, 0, 50, 0);
 
-        // create button listeners
+        joinRoomById.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                new JoinRoomDialog(skin, stage, character);
+            }
+        });
+
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -47,8 +60,7 @@ public class RoomListScreen extends AbstractScreen {
         refresh.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("REFRESHED!");
-                game.changeScreen(WBGame.ROOM_LIST);
+                game.changeScreen(WBGame.ROOM_LIST, character);
             }
         });
 
@@ -118,7 +130,7 @@ public class RoomListScreen extends AbstractScreen {
                     WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                             .put("msg", "joinRoom")
                             .put("content", new JSONObject().put("id", id))
-                            .put("character", "Ground")
+                            .put("character", character)
                     );
                 }
             });
