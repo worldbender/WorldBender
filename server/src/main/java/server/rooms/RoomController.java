@@ -35,7 +35,7 @@ public class RoomController {
         for(Room room : rooms){
             if(room.getId() == roomId) {
                 roomExists = true;
-                if(room.checkIfUserCanJoinRoom()) {
+                if(room.canUserJoinRoom()) {
                     room.addUserToRoom(user);
                     clientThread.sendMessage(new JSONObject()
                             .put("msg", "joinedRoom")
