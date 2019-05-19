@@ -29,9 +29,11 @@ public class LogicMapHandler {
     private GameController gameController;
     private static final String ENEMY = "enemy";
     private static final String SPAWN = "spawn";
+    private Properties properties;
 
     public LogicMapHandler(GameController gameController) {
-        String startMap = Properties.loadConfigFile("START_MAP");
+        properties = new Properties();
+        String startMap = properties.loadConfigFile("START_MAP");
         this.map = new TmxMapLoader().load("maps/" + startMap + ".tmx");
         this.eventList = new EventList(gameController);
         this.pickupList = gameController.pickupList;

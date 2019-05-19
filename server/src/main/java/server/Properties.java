@@ -8,7 +8,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Properties {
-    private Properties(){}
+    public Properties() {
+    }
+    
     private static Logger logger = LogManager.getLogger(Properties.class.getName());
     private static final String PATH = "../../config.properties";
     
@@ -16,7 +18,7 @@ public class Properties {
     public static void createConfigFile() {
         java.util.Properties prop = new java.util.Properties();
         try (FileOutputStream output = new FileOutputStream(PATH)) {
-            prop.put("IP","localhost");
+            prop.put("IP", "localhost");
             prop.put("PORT_TCP", "10008");
             prop.put("PORT_UDP", "7331");
             prop.store(output, "");
@@ -24,6 +26,7 @@ public class Properties {
             logger.error(io.toString(), io);
         }
     }
+    
     public static void createConfigFileForTesting() {
         java.util.Properties prop = new java.util.Properties();
         try (FileOutputStream output = new FileOutputStream(PATH)) {
@@ -36,9 +39,9 @@ public class Properties {
         }
     }
     
-
-    public static String loadConfigFile(String inputName) {
-
+    
+    public String loadConfigFile(String inputName) {
+        
         java.util.Properties prop = new java.util.Properties();
         try (FileInputStream input = new FileInputStream(PATH)) {
             prop.load(input);
@@ -47,4 +50,5 @@ public class Properties {
         }
         return prop.getProperty(inputName);
     }
+    
 }

@@ -54,8 +54,10 @@ public class Player {
     private BulletList bulletList;
     private CopyOnWriteArrayList<User> usersInRoom;
     private GameController gameController;
+    private Properties properties;
 
     public Player(User user) {
+        properties = new Properties();
         initPlayerTexturePrameters();
         this.setWidth((int) (PLAYER_TEXTURE_WIDTH * scale));
         this.setHeight((int) (PLAYER_TEXTURE_HEIGHT * scale));
@@ -74,9 +76,9 @@ public class Player {
     }
     
     private void initPlayerTexturePrameters() {
-        this.PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
-        this.PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
-        this.scale = Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
+        this.PLAYER_TEXTURE_WIDTH = Integer.parseInt(properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
+        this.PLAYER_TEXTURE_HEIGHT = Integer.parseInt(properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
+        this.scale = Float.parseFloat(properties.loadConfigFile("PLAYER_SCALE"));
     }
     
 

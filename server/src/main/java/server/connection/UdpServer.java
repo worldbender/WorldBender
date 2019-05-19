@@ -13,13 +13,17 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UdpServer extends Thread {
-    private static Logger logger = LogManager.getLogger(UdpServer.class.getName());
-    private static final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_UDP"));
+    private Properties properties;
+    private static Logger logger;
+    private final int PORT;
     private static final int BUFFER = 1024;
     private static DatagramSocket socket;
     private Map<String, User> existingUsers;
 
     public UdpServer() throws IOException {
+        properties = new Properties();
+        this.logger = LogManager.getLogger(UdpServer.class.getName());
+        this.PORT = Integer.parseInt(properties.loadConfigFile("PORT_UDP"));
         socket = new DatagramSocket(PORT);
         this.existingUsers = ExistingUsers.getInstance();
     }
