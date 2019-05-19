@@ -130,10 +130,12 @@ public class RoomListScreen extends AbstractScreen {
     }
 
     private void initRoomListTable(Table roomList){
-        roomList.add(new Label("Room ID", skin, "white")).left().expandX().fillX();
-        roomList.add(new Label("Room owner", skin, "white")).center().expandX().fillX();
-        roomList.add(new Label("Players in room", skin, "white")).center().expandX().fillX();
-        roomList.add(new Label("Game status", skin, "white")).right().expandX().fillX();
+        Label idLabel = new Label("Room ID", skin, "white");
+        Label ownerLabel = new Label("Room owner", skin, "white");
+        Label playersLabel = new Label("Players in room", skin, "white");
+        Label statusLabel = new Label("Game status", skin, "white");
+
+        addLabelsToTable(roomList, idLabel, ownerLabel, playersLabel, statusLabel);
         roomList.add(new Label("", skin, "white")).expandX().fill();
         roomList.row();
 
@@ -151,16 +153,32 @@ public class RoomListScreen extends AbstractScreen {
                     );
                 }
             });
-            roomList.add(new Label(room.getRoomId(), skin, "medium")).left().expandX().fillX();
-            roomList.add(new Label(room.getRoomOwner(), skin, "medium")).center().expandX().fillX();
-            roomList.add(new Label(room.getPlayersInRoom(), skin, "medium")).center().expandX().fillX();
+
+            idLabel = new Label(room.getRoomId(), skin, "medium");
+            ownerLabel = new Label(room.getRoomOwner(), skin, "medium");
+            playersLabel = new Label(room.getPlayersInRoom(), skin, "medium");
             if(!room.canPlayerJoin()) {
                 joinButton.setDisabled(true);
                 joinButton.setTouchable(Touchable.disabled);
-                roomList.add(new Label(room.getGameStatus(), skin, "medium-red")).right().expandX().fillX();
-            } else roomList.add(new Label(room.getGameStatus(), skin, "medium-green")).right().expandX().fillX();
-            roomList.add(joinButton).top().expandX().fill();
+
+                statusLabel = new Label(room.getGameStatus(), skin, "medium-red");
+            } else statusLabel = new Label(room.getGameStatus(), skin, "medium-green");
+
+            addLabelsToTable(roomList, idLabel, ownerLabel, playersLabel, statusLabel);
+            roomList.add(joinButton).expandX().fill();
             roomList.row();
         }
+    }
+
+    private void addLabelsToTable(Table roomList, Label idLabel, Label ownerLabel, Label playersLabel, Label statusLabel){
+        idLabel.setAlignment(Align.center);
+        ownerLabel.setAlignment(Align.center);
+        playersLabel.setAlignment(Align.center);
+        statusLabel.setAlignment(Align.center);
+
+        roomList.add(idLabel).expandX().fillX();
+        roomList.add(ownerLabel).expandX().fillX();
+        roomList.add(playersLabel).expandX().fillX();
+        roomList.add(statusLabel).expandX().fillX();
     }
 }
