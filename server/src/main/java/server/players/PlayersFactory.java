@@ -14,8 +14,7 @@ public class PlayersFactory {
                 resultPlayer = new Water(user, gameController);
                 break;
             default:
-                resultPlayer = null;
-                break;
+                throw new IllegalArgumentException("There is no such type of the Player!");
         }
         return resultPlayer;
     }

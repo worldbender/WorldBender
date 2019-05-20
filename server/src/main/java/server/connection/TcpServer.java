@@ -12,11 +12,19 @@ import java.util.List;
 import java.util.Map;
 
 public class TcpServer extends Thread{
-    private static Logger logger = LogManager.getLogger(TcpServer.class.getName());
-    private static final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_TCP"));
+    private Properties properties;
+    private Logger logger;
+    private final int PORT;
     private static Thread senderThread;
     private static GameController sender;
-
+    
+    public TcpServer() {
+        properties = new Properties();
+        this.PORT =  Integer.parseInt(properties.loadConfigFile("PORT_TCP"));
+        this.logger = LogManager.getLogger(TcpServer.class.getName());
+        
+    }
+    
     @Override
     public void run()
     {

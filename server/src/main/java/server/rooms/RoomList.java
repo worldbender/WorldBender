@@ -22,7 +22,6 @@ public class RoomList {
         return rooms;
     }
 
-    //TODO: add escape if there is no room with this id
     public static Room getRoom(int id){
         for(Room room : rooms){
             if (room.getId() == id)
