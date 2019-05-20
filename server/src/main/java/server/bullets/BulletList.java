@@ -18,6 +18,9 @@ public class BulletList {
     public List<ABullet> getBullets(){
         return bullets;
     }
+    public ABullet getOneBullet(int index){
+        return bullets.get(index);
+    }
 
     public void addBullet(ABullet bullet){
         bullet.setId(id);
@@ -38,6 +41,10 @@ public class BulletList {
                 .put("content", new JSONObject().put("id", bullet.getId())
                 );
         TcpServer.sendTcpMsgToAllUsersInRoom(obj, this.users);
+    }
+    
+    public int getSize(){
+        return bullets.size();
     }
 
 }
