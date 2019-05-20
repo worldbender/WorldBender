@@ -1,5 +1,6 @@
 package com.my.game.screens;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.my.game.WBGame;
 import com.badlogic.gdx.Gdx;
@@ -12,18 +13,10 @@ import com.my.game.screens.dialogs.JoinRoomDialog;
 import org.json.JSONObject;
 
 public class MenuScreen extends AbstractScreen{
-    private boolean isRoomFull = false;
-    private boolean roomExists = true;
     private boolean inGame = false;
 
     public MenuScreen(WBGame game) {
         super(game);
-    }
-
-    public MenuScreen(WBGame game, boolean isRoomFull, boolean roomExists) {
-        this(game);
-        this.isRoomFull = isRoomFull;
-        this.roomExists = roomExists;
     }
 
     public MenuScreen(WBGame game, boolean inGame) {
@@ -51,7 +44,7 @@ public class MenuScreen extends AbstractScreen{
 
         //create buttons
         TextButton newRoom = new TextButton("Create Room", skin);
-        TextButton joinRoom = new TextButton("Join Room", skin);
+        TextButton roomList = new TextButton("Room List", skin);
         TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
         TextButton resume = new TextButton("Resume", skin);
@@ -66,7 +59,7 @@ public class MenuScreen extends AbstractScreen{
         else {
             table.add(newRoom).fillX().uniformX();
             table.row().pad(10, 0, 0, 0);
-            table.add(joinRoom).fillX().uniformX();
+            table.add(roomList).fillX().uniformX();
             table.row().pad(10, 0, 0, 0);
             table.add(selectCharacter).fillX().uniformX();
             table.row().pad(10, 0, 0, 0);
@@ -89,16 +82,19 @@ public class MenuScreen extends AbstractScreen{
             public void changed(ChangeEvent event, Actor actor) {
                 WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                         .put("msg", "newRoom")
-                        .put("content", new JSONObject().put("port", WBGame.getConnection().getSocket().getLocalPort()))
-                        .put("character", selectCharacter.getSelected().toString()));
+                        .put("content", new JSONObject()
+                                .put("port", WBGame.getConnection().getSocket().getLocalPort())
+                                .put("character", selectCharacter.getSelected().toString())));
 
             }
         });
 
-        joinRoom.addListener(new ChangeListener() {
+        roomList.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                new JoinRoomDialog(skin, stage, selectCharacter.getSelected().toString());
+                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
+                        .put("msg", "getRoomList")
+                        .put("content", new JSONObject().put("character", selectCharacter.getSelected().toString())));
             }
         });
 
@@ -115,24 +111,18 @@ public class MenuScreen extends AbstractScreen{
                 Gdx.app.exit();
             }
         });
-
-        if(isRoomFull && !roomExists){
-            new ErrorDialog(skin, stage, "Room owner left!");
-        }
-
-        if(isRoomFull && roomExists){
-            new ErrorDialog(skin, stage, "Game already started or room is full!");
-        }
-
-        if(!roomExists && !isRoomFull){
-            new ErrorDialog(skin, stage, "Room with this ID doesn't exist!");
-        }
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         drawBackground();
+
+        if(inGame){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                game.changeScreen(WBGame.PLAY);
+            }
+        }
 
         if(!WBGame.connectionStatus){
             this.createConnection();

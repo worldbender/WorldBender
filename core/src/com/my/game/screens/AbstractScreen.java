@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import com.my.game.MyAssetManager;
@@ -22,6 +23,7 @@ public abstract class AbstractScreen implements Screen {
     protected Stage stage;
     protected OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
+    protected Table table;
     protected int screenShiftX = 500;
     protected int screenShiftY = 500;
     protected int mapPositionX = 0;
@@ -96,5 +98,13 @@ public abstract class AbstractScreen implements Screen {
         spriteBatch.begin();
         font.draw(spriteBatch, glyphLayout, fontX, fontY);
         spriteBatch.end();
+    }
+
+    protected void initTable(){
+        table = new Table();
+        table = table.bottom();
+        table.setFillParent(true);
+        table.setDebug(false);
+        stage.addActor(table);
     }
 }

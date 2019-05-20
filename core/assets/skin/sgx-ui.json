@@ -62,6 +62,18 @@ com.badlogic.gdx.graphics.Color: {
 		b: 1
 		a: 1
 	}
+	font-red: {
+		r: 153
+		g: 0
+		b: 0
+		a: 1
+	}
+	font-green: {
+		r: 0
+		g: 153
+		b: 0
+		a: 1
+	}
 	font-text-field: {
 		r: 0.27058825
 		g: 0.3372549
@@ -326,6 +338,14 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	medium-white: {
 		font: medium
 		fontColor: font-over
+	}
+	medium-red: {
+		font: medium
+		fontColor: font-red
+	}
+	medium-green: {
+		font: medium
+		fontColor: font-green
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {

@@ -25,11 +25,7 @@ public class RoomScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        Table table = new Table();
-        table = table.bottom();
-        table.setFillParent(true);
-        table.setDebug(false);
-        stage.addActor(table);
+        initTable();
 
         //create buttons
         TextButton newGame = new TextButton("Start Game", skin);

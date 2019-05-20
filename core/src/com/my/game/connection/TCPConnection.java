@@ -16,6 +16,7 @@ import com.my.game.player.Player;
 import com.my.game.player.PlayerFactory;
 import com.my.game.player.PlayerList;
 import com.my.game.Properties;
+import com.my.game.rooms.Room;
 import com.my.game.screens.GameplayScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,11 +25,12 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class TCPConnection implements Runnable {
     private static Logger logger = LogManager.getLogger(TCPConnection.class.getName());
-
     private WBGame game;
     private final int PORT = Integer.parseInt(Properties.loadConfigFile("PORT_TCP"));
     private String hostname;
@@ -101,21 +103,25 @@ public class TCPConnection implements Runnable {
                 System.out.println("Created room ID: " + contentJSON.getInt("id"));
                 Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_OWNER, contentJSON.getInt("id")));
                 break;
+            case "roomList":
+                System.out.println("Got room list:");
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 0, parseRoomList(contentJSON)));
+                break;
             case "joinedRoom":
                 System.out.println("Joined room ID: " + contentJSON.getInt("id"));
                 Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM, contentJSON.getInt("id")));
                 break;
             case "ownerLeftRoom":
                 System.out.println("Left room ID: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_OWNER_LEFT));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 1, parseRoomList(contentJSON)));
                 break;
             case "fullRoom":
                 System.out.println("Room is full: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_FULL_ROOM));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 2, parseRoomList(contentJSON)));
                 break;
             case "roomDoesNotExist":
                 System.out.println("Room doesn't exist: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.MENU_NO_ROOM));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 3, parseRoomList(contentJSON)));
                 break;
             case "changeLevel":
                 this.changeLevel(contentJSON);
@@ -127,11 +133,7 @@ public class TCPConnection implements Runnable {
     private void startGame(JSONObject contentJSON) {
         Gdx.app.postRunnable(() -> game.changeScreen(WBGame.PLAY));
         JSONArray opponents = contentJSON.getJSONArray("opponents");
-        for (int i = 0; i < opponents.length(); i++) {
-            JSONObject opponent = opponents.getJSONObject(i);
-            AOpponent newOpponent = OpponentFactory.createOpponent(opponent.getString("type"), opponent.getInt("id"));
-            OpponentList.addOpponent(newOpponent);
-        }
+        createOpponents(opponents);
 
         JSONArray playersJSON = contentJSON.getJSONArray("players");
         for (int i = 0; i < playersJSON.length(); i++) {
@@ -148,6 +150,8 @@ public class TCPConnection implements Runnable {
     private void changeLevel(JSONObject contentJSON){
         System.out.println(contentJSON);
         JSONArray opponents = contentJSON.getJSONArray("opponents");
+        createOpponents(opponents);
+
         JSONArray playersFromServer = contentJSON.getJSONArray("players");
 
         for (Player player : players.values()) {
@@ -159,11 +163,29 @@ public class TCPConnection implements Runnable {
             }
         }
 
+        game.getGameplayScreen().changeLevel(contentJSON.getString("map"));
+    }
+
+    private void createOpponents(JSONArray opponents){
         for (int i = 0; i < opponents.length(); i++) {
             JSONObject opponent = opponents.getJSONObject(i);
             AOpponent newOpponent = OpponentFactory.createOpponent(opponent.getString("type"), opponent.getInt("id"));
             OpponentList.addOpponent(newOpponent);
         }
-        game.getGameplayScreen().changeLevel(contentJSON.getString("map"));
+
     }
+
+    private List<Room> parseRoomList(JSONObject contentJSON){
+        List<Room> rooms = new ArrayList<>();
+        System.out.println(contentJSON);
+        JSONArray jsonRooms = contentJSON.getJSONArray("rooms");
+
+        for (int i = 0; i < jsonRooms.length(); i++) {
+            JSONObject room = jsonRooms.getJSONObject(i);
+            rooms.add(new Room(room.getInt("id"), room.getString("owner"), room.getInt("numberOfPlayers"), room.getBoolean("gameStatus")));
+        }
+
+        return rooms;
+    }
+
 }

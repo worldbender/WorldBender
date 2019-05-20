@@ -45,6 +45,8 @@ public class GameplayScreen extends AbstractScreen{
         super(game);
         this.create();
         hud = new Hud(spriteBatch, players);
+        String startMap = Properties.loadConfigFile("START_MAP");
+        changeLevel(startMap);
     }
 
     public void changeLevel(String map){
@@ -64,8 +66,7 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public void show(){
-        String startMap = Properties.loadConfigFile("START_MAP");
-        changeLevel(startMap);
+
     }
 
     public void create() {
@@ -204,7 +205,7 @@ public class GameplayScreen extends AbstractScreen{
     }
 
     private void handleSpecialKeys(){
-        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             game.changeScreen(WBGame.MENU_IN_GAME);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.F11)){

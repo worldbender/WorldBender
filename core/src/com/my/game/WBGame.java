@@ -4,8 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.my.game.connection.Connection;
+import com.my.game.rooms.Room;
 import com.my.game.screens.*;
 import com.my.game.screens.SplashScreen;
+
+import java.util.List;
 
 public class WBGame extends Game {
 
@@ -16,13 +19,11 @@ public class WBGame extends Game {
 
     public static final int SPLASH = 0;
     public static final int MENU = 1;
-    public static final int MENU_FULL_ROOM = 2;
-    public static final int MENU_NO_ROOM = 3;
-    public static final int MENU_IN_GAME = 4;
-    public static final int MENU_OWNER_LEFT = 5;
-    public static final int PLAY = 6;
-    public static final int ROOM = 7;
-    public static final int ROOM_OWNER = 8;
+    public static final int MENU_IN_GAME = 2;
+    public static final int PLAY = 3;
+    public static final int ROOM = 4;
+    public static final int ROOM_OWNER = 5;
+    public static final int ROOM_LIST = 6;
     public static final String SERVER_ADDRESS = Properties.loadConfigFile("IP");
 
     public static final String GAME_NAME = "World Bender";
@@ -65,15 +66,6 @@ public class WBGame extends Game {
             case MENU:
                 this.setScreen(new MenuScreen(this));
                 break;
-            case MENU_FULL_ROOM:
-                this.setScreen(new MenuScreen(this, true, true));
-                break;
-            case MENU_NO_ROOM:
-                this.setScreen(new MenuScreen(this, false, false));
-                break;
-            case MENU_OWNER_LEFT:
-                this.setScreen(new MenuScreen(this, true, false));
-                break;
             case MENU_IN_GAME:
                 this.setScreen(new MenuScreen(this, true));
                 break;
@@ -81,7 +73,6 @@ public class WBGame extends Game {
                 if(gameplayScreen == null) gameplayScreen = new GameplayScreen(this);
                 this.setScreen(gameplayScreen);
                 break;
-            default:
         }
     }
 
@@ -92,6 +83,15 @@ public class WBGame extends Game {
                 break;
             case ROOM:
                 this.setScreen(new RoomScreen(this, roomId));
+                break;
+            default:
+        }
+    }
+
+    public void changeScreen(int screen, String character, int option, List<Room> rooms){
+        switch(screen){
+            case ROOM_LIST:
+                this.setScreen(new RoomListScreen(this, rooms, character, option));
                 break;
             default:
         }

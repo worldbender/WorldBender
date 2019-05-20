@@ -49,6 +49,8 @@ public class JoinRoomDialog extends Dialog {
 
         } catch (NumberFormatException e) {
             new ErrorDialog(skin, stage, "Room ID has to be a number!");
+        } catch (NullPointerException e) {
+
         }
     }
 
