@@ -3,8 +3,9 @@ package server.factories;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import server.Properties;
+import server.User;
 import server.connection.GameController;
+import server.helpers.MockingConfigFileCreation;
 import server.players.Player;
 import server.powers.*;
 
@@ -18,14 +19,16 @@ public class PowerFactoryTest {
 	private Player player;
 	private GameController gameController;
 	private IPower resultPower;
+	private User user;
+	
 	
 	@BeforeEach
 	void setUp() {
 		gameController = mock(GameController.class);
-		Properties.createConfigFileForTesting();
-		player = mock(Player.class);
+		user = mock(User.class);
+		MockingConfigFileCreation.mockingConfigFileCreation(user);
+		player = new Player(user);
 	}
-	
 	
 	@Test
 	void checkIfPowerIsAggroTaker(){

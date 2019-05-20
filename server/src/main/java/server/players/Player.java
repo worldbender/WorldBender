@@ -57,7 +57,7 @@ public class Player {
     private Properties properties;
 
     public Player(User user) {
-        properties = new Properties();
+        this.properties = user.getProperties();
         initPlayerTexturePrameters();
         this.setWidth((int) (PLAYER_TEXTURE_WIDTH * scale));
         this.setHeight((int) (PLAYER_TEXTURE_HEIGHT * scale));

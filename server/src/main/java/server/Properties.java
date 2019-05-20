@@ -27,18 +27,6 @@ public class Properties {
         }
     }
     
-    public static void createConfigFileForTesting() {
-        java.util.Properties prop = new java.util.Properties();
-        try (FileOutputStream output = new FileOutputStream(PATH)) {
-            prop.put("PLAYER_TEXTURE_WIDTH", "31");
-            prop.put("PLAYER_TEXTURE_HEIGHT", "36");
-            prop.put("PLAYER_SCALE", "2");
-            prop.store(output, "");
-        } catch (Exception io) {
-            logger.error(io.toString(), io);
-        }
-    }
-    
     
     public String loadConfigFile(String inputName) {
         

@@ -17,13 +17,16 @@ public class User {
     private String name;
     private String characterType;
     private TcpClientThread thread;
-
+    private Properties properties;
+    
     public User(){
+        this.properties = new Properties();
         this.player = new Player(this);
         this.connection = true;
     }
     
     public User(Player player){
+        this.properties = new Properties();
         this.player = new Player(this);
         this.connection = true;
     }
@@ -103,4 +106,7 @@ public class User {
     public void setCharacterType(String characterType) {
         this.characterType = characterType;
     }
+    
+    public Properties getProperties(){ return this.properties; }
+    
 }
