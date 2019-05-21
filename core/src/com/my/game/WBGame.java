@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.my.game.connection.Connection;
+import com.my.game.music.MusicManager;
 import com.my.game.screens.*;
 import com.my.game.screens.SplashScreen;
 
@@ -12,7 +13,7 @@ public class WBGame extends Game {
     private static Connection connection;
     public static boolean connectionStatus = false;
     private GameplayScreen gameplayScreen;
-
+    private PreferencesScreen preferencesScreen;
 
     public static final int SPLASH = 0;
     public static final int MENU = 1;
@@ -23,6 +24,7 @@ public class WBGame extends Game {
     public static final int PLAY = 6;
     public static final int ROOM = 7;
     public static final int ROOM_OWNER = 8;
+    public static final int PREFERENCES = 9;
     public static final String SERVER_ADDRESS = Properties.loadConfigFile("IP");
 
     public static final String GAME_NAME = "World Bender";
@@ -37,8 +39,17 @@ public class WBGame extends Game {
 
     @Override
     public void create () {
+        Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
+        if (AppPreferences.isFullScreenEnabled())
+            Gdx.graphics.setFullscreenMode(currentMode);
+        else
+            Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
+
         MyAssetManager.loadAllAssets();
         MyAssetManager.manager.finishLoading();
+        MusicManager.initSounds();
+        MusicManager.setMusicVolume(AppPreferences.getMusicVolume());
+        MusicManager.playMenuMusic();
         connection = new Connection(this);
         this.setScreen(new SplashScreen(this));
     }
@@ -80,6 +91,10 @@ public class WBGame extends Game {
             case PLAY:
                 if(gameplayScreen == null) gameplayScreen = new GameplayScreen(this);
                 this.setScreen(gameplayScreen);
+                break;
+            case PREFERENCES:
+                if(preferencesScreen == null) preferencesScreen = new PreferencesScreen(this);
+                this.setScreen(preferencesScreen);
                 break;
             default:
         }

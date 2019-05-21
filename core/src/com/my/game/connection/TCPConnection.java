@@ -5,7 +5,7 @@ import com.my.game.WBGame;
 import com.my.game.bullets.ABullet;
 import com.my.game.bullets.BulletFactory;
 import com.my.game.bullets.BulletList;
-import com.my.game.music.MusicPlayer;
+import com.my.game.music.MusicManager;
 import com.my.game.opponents.AOpponent;
 import com.my.game.opponents.OpponentFactory;
 import com.my.game.opponents.OpponentList;
@@ -95,7 +95,7 @@ public class TCPConnection implements Runnable {
                 break;
             case "deletePickup":
                 PickupList.removePickupById(contentJSON.getInt("id"));
-                MusicPlayer.playHpUpSound();
+                MusicManager.playHpUpSound();
                 break;
             case "createdRoom":
                 System.out.println("Created room ID: " + contentJSON.getInt("id"));

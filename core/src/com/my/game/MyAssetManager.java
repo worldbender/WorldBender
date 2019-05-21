@@ -56,7 +56,7 @@ public class MyAssetManager {
 
     //sounds
     public static final String HP_UP = "sounds/hpup.wav";
-    public static final String MEOW = "sounds/meow.mp3";
+    public static final String DEATH = "sounds/death.ogg";
 
     //fonts
     public static final String FONT = "skin/font-export.fnt";
@@ -106,7 +106,7 @@ public class MyAssetManager {
 
     public static void loadMusic(){
         manager.load(HP_UP, Sound.class);
-        manager.load(MEOW, Sound.class);
+        manager.load(DEATH, Sound.class);
     }
 
 

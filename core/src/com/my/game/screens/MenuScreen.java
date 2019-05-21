@@ -2,7 +2,6 @@ package com.my.game.screens;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.Align;
 import com.my.game.WBGame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -81,9 +80,9 @@ public class MenuScreen extends AbstractScreen{
             buttonsTable.row().pad(10, 0, 0, 0);
             buttonsTable.add(selectCharacter).fillX().uniformX();
             buttonsTable.row().pad(10, 0, 0, 0);
+            buttonsTable.add(preferences).fillX().uniformX();
+            buttonsTable.row().pad(10, 0, 0, 0);
         }
-        buttonsTable.add(preferences).fillX().uniformX();
-        buttonsTable.row().pad(10, 0, 0, 0);
         buttonsTable.add(exit).fillX().uniformX();
         buttonsTable.row();
 
@@ -91,7 +90,7 @@ public class MenuScreen extends AbstractScreen{
         preferences.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                new ErrorDialog(skin, stage, "Preferences not ready yet!");
+                game.changeScreen(WBGame.PREFERENCES);
             }
         });
 
