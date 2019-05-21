@@ -42,9 +42,13 @@ public class RoomScreen extends AbstractScreen {
         //create buttons
         TextButton newGame = new TextButton("Start Game", skin);
         TextButton back = new TextButton("Leave Room", skin);
+        TextButton saveCharacter = new TextButton("Save Character", skin);
+        saveCharacter.align(Align.center);
         Label roomLabel = new Label("Room ID: " + roomId, skin);
 
         //add buttons to table
+//        table.add(saveCharacter).colspan(2).fillX().uniformX().bottom();
+//        table.row().pad(10, 0, 10, 0);
         table.add(roomLabel).fillX().uniformX().bottom();
         table.row().pad(50, 0, 50, 0);
         table.add(newGame).fillX().uniformX().bottom();
@@ -83,6 +87,8 @@ public class RoomScreen extends AbstractScreen {
         playerCards.align(Align.top);
 
         initPlayers();
+
+        playerCards.add(saveCharacter).colspan(4).center();
 
         scrollPane = new ScrollPane(playerCards, skin, "no-bg");
         scrollPane.setBounds(boundRatio - 100, boundRatio/2 - 50, gameWidth - 2*boundRatio + 200, gameHeight - boundRatio);
@@ -129,9 +135,9 @@ public class RoomScreen extends AbstractScreen {
     }
 
     private void initPlayers(){
-        initPlayer("player1", PROF_ROOM);
+        initPlayer("pl1", PROF_ROOM);
         initPlayer("player2", BLOND_ROOM);
-        initPlayer("player3", PROF_ROOM);
+        initPlayer("playerhhgfhfg3", PROF_ROOM);
         initPlayer("player4", BLOND_ROOM);
         playerCards.row();
     }
@@ -143,16 +149,28 @@ public class RoomScreen extends AbstractScreen {
         selectCharacter.setDisabled(true);
 
         Table playerCard = new Table(skin);
+        playerCard.setWidth(240);
         playerCard.setBackground("file-menu-bar");
 
         Label player = new Label(playerx, skin, "title-white");
         player.setFontScale(0.75f);
         player.setAlignment(Align.center);
-        playerCard.add(player).width(200).padTop(10).padBottom(20).expandX().fillX();
+
+        if(playerx.matches("pl1")) {
+            Texture texture = MyAssetManager.manager.get(ROOM_OWNER);
+            Image crown = new Image(texture);
+
+            Table leaderTable = new Table(skin);
+            leaderTable.add(crown).size(40, 40).align(Align.right);
+            player.setAlignment(Align.left);
+            leaderTable.add(player).expandX();
+
+            playerCard.add(leaderTable).pad(10, 10, 20, 10).expandX().fillX();
+        } else playerCard.add(player).pad(10, 10, 20, 10).expandX().fillX();
         playerCard.row().expandX().fillX();
 
         Texture texture = MyAssetManager.manager.get(type);
-        playerCard.add(new Image(texture)).height(230).padBottom(20);
+        playerCard.add(new Image(texture)).width(200).height(230).padBottom(20);
         playerCard.row().expandX().fillX();
 
         Label characterClass = new Label("Character Class:", skin, "default");
