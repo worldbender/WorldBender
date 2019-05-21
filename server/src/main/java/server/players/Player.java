@@ -188,13 +188,11 @@ public class Player {
         speed = (0.4 * this.MAX_SPEED) + this.moveSpeed;
         return speed;
     }
-
-    //TODO test this method
+    
     public void doDamage(int damage) {
         this.setHp(this.getHp() - damage);
     }
 
-    //TODO test this method
     public void setWSAD(JSONObject wsad) {
         this.KEY_W = wsad.getBoolean("w");
         this.KEY_S = wsad.getBoolean("s");
@@ -354,4 +352,6 @@ public class Player {
     public void setPlayerType(String playerType) {
         this.playerType = playerType;
     }
+
+    
 }
