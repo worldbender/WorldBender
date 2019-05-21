@@ -92,7 +92,7 @@ public class Player {
     }
 
     //TODO test this method
-    private void handleMovementKeys(CopyOnWriteArrayList<User> usersInRoom, double deltaTime){
+    public void handleMovementKeys(CopyOnWriteArrayList<User> usersInRoom, double deltaTime){
         double currentShift;
         Rectangle playersNewBoundsRectangle;
         ArrayList<Player> players = new ArrayList<Player>();
@@ -151,7 +151,6 @@ public class Player {
         AttackFactory.createAttack(this, this.bulletList, angle, gameController);
     }
 
-    //TODO test this method
     public boolean canPlayerShoot() {
         boolean result = false;
         Date date = new Date();
@@ -163,7 +162,6 @@ public class Player {
         return result;
     }
 
-    //TODO test this method
     public Rectangle getBounds() {
         return new Rectangle((int)this.x, (int)this.y, this.getWidth(), this.getHeight());
     }
@@ -180,8 +178,7 @@ public class Player {
         return isPlayerCollidesWithMap(rec) ||
                 isRectangleCollidesWithPlayers(rec, players);
     }
-
-    //TODO test this method USE reflection
+    
     private double calculateSpeed(double deltaTime){
         double speed;
         this.moveSpeed = this.moveSpeed + (0.0003 * deltaTime) > (0.6 * this.MAX_SPEED) ? (0.6 * this.MAX_SPEED) : this.moveSpeed + (0.0003 * deltaTime);
@@ -294,7 +291,6 @@ public class Player {
         this.collectedItems = collectedItems;
     }
 
-    //TODO test this method
     public boolean hasPlayerItem(String item){
         boolean result = false;
         for(String colletedItem : this.collectedItems){
@@ -352,6 +348,14 @@ public class Player {
     public void setPlayerType(String playerType) {
         this.playerType = playerType;
     }
-
+    
+    public BulletList getBulletList() {
+        return bulletList;
+    }
+    
+    public void setBulletList(BulletList bulletList) {
+        this.bulletList = bulletList;
+    }
+    
     
 }
