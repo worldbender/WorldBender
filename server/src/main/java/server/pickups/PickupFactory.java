@@ -22,6 +22,9 @@ public class PickupFactory {
             case "Mana":
                 //TODO make mana pickup
                 break;
+            default:
+                throw new IllegalArgumentException("There is no such pickup!");
+                
         }
         return pickup;
     }

@@ -71,15 +71,15 @@ public class TcpClientThread extends Thread{
         switch (json.getString("msg")){
             case "udpPort": newUser(contentJSON.getInt("port")); break;
             case "newRoom":
-                this.user.setCharacterType(json.get("character").toString());
+                this.user.setCharacterType(contentJSON.get("character").toString());
                 this.roomController.newRoom(this.user);
                 break;
-            case "joinRoom":
-                this.user.setCharacterType(json.get("character").toString());
-                this.roomController.joinRoom(this.user, contentJSON.getInt("id"));
-                break;
-            case "leaveRoom":  this.roomController.leaveRoom(this.user); break;
+            case "joinRoom": this.roomController.joinRoom(this.user, contentJSON.getInt("id")); break;
+            case "leaveRoom": this.roomController.leaveRoom(this.user); break;
             case "startGame": this.roomController.startGame(this.user); break;
+            case "getRoomList":
+                this.user.setCharacterType(contentJSON.get("character").toString());
+                this.roomController.getRoomList(this.user); break;
             default:
         }
     }

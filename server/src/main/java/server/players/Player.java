@@ -36,9 +36,9 @@ public class Player {
     private String playerType;
     private ArrayList<String> collectedItems;
     private boolean isMoving = false;
-    public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
-    public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
-    private float scale = Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
+    private int PLAYER_TEXTURE_WIDTH ;
+    private int PLAYER_TEXTURE_HEIGHT;
+    private float scale;
     private User user;
     protected IPower power;
     public boolean KEY_W = false;
@@ -54,21 +54,33 @@ public class Player {
     private BulletList bulletList;
     private CopyOnWriteArrayList<User> usersInRoom;
     private GameController gameController;
+    private Properties properties;
 
     public Player(User user) {
+        this.properties = user.getProperties();
+        initPlayerTexturePrameters();
         this.setWidth((int) (PLAYER_TEXTURE_WIDTH * scale));
         this.setHeight((int) (PLAYER_TEXTURE_HEIGHT * scale));
         this.user = user;
         this.collectedItems = new ArrayList<>();
     }
-
+    
+    
     public Player(User user, GameController gameController){
         this(user);
         this.map = gameController.logicMapHandler;
         this.bulletList = gameController.bulletList;
         this.usersInRoom = gameController.usersInRoom;
         this.gameController = gameController;
+        
     }
+    
+    private void initPlayerTexturePrameters() {
+        this.PLAYER_TEXTURE_WIDTH = Integer.parseInt(properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
+        this.PLAYER_TEXTURE_HEIGHT = Integer.parseInt(properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
+        this.scale = Float.parseFloat(properties.loadConfigFile("PLAYER_SCALE"));
+    }
+    
 
     public void update(CopyOnWriteArrayList<User> usersInRoom, double deltaTime) {
         this.handleMovementKeys(usersInRoom, deltaTime);
@@ -79,6 +91,7 @@ public class Player {
         this.power.act(deltaTime);
     }
 
+    //TODO test this method
     private void handleMovementKeys(CopyOnWriteArrayList<User> usersInRoom, double deltaTime){
         double currentShift;
         Rectangle playersNewBoundsRectangle;
@@ -138,6 +151,7 @@ public class Player {
         AttackFactory.createAttack(this, this.bulletList, angle, gameController);
     }
 
+    //TODO test this method
     public boolean canPlayerShoot() {
         boolean result = false;
         Date date = new Date();
@@ -149,6 +163,7 @@ public class Player {
         return result;
     }
 
+    //TODO test this method
     public Rectangle getBounds() {
         return new Rectangle((int)this.x, (int)this.y, this.getWidth(), this.getHeight());
     }
@@ -166,6 +181,7 @@ public class Player {
                 isRectangleCollidesWithPlayers(rec, players);
     }
 
+    //TODO test this method USE reflection
     private double calculateSpeed(double deltaTime){
         double speed;
         this.moveSpeed = this.moveSpeed + (0.0003 * deltaTime) > (0.6 * this.MAX_SPEED) ? (0.6 * this.MAX_SPEED) : this.moveSpeed + (0.0003 * deltaTime);
@@ -173,10 +189,12 @@ public class Player {
         return speed;
     }
 
+    //TODO test this method
     public void doDamage(int damage) {
         this.setHp(this.getHp() - damage);
     }
 
+    //TODO test this method
     public void setWSAD(JSONObject wsad) {
         this.KEY_W = wsad.getBoolean("w");
         this.KEY_S = wsad.getBoolean("s");
@@ -277,6 +295,8 @@ public class Player {
     public void setCollectedItems(ArrayList<String> collectedItems) {
         this.collectedItems = collectedItems;
     }
+
+    //TODO test this method
     public boolean hasPlayerItem(String item){
         boolean result = false;
         for(String colletedItem : this.collectedItems){

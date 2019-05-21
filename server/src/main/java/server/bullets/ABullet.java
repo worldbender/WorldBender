@@ -178,4 +178,6 @@ public class ABullet {
     public void setHostile(boolean hostile) {
         this.hostile = hostile;
     }
+    
+    public boolean isDead() { return isDead; }
 }

@@ -35,7 +35,7 @@ public class RoomController {
         for(Room room : rooms){
             if(room.getId() == roomId) {
                 roomExists = true;
-                if(room.checkIfUserCanJoinRoom()) {
+                if(room.canUserJoinRoom()) {
                     room.addUserToRoom(user);
                     clientThread.sendMessage(new JSONObject()
                             .put("msg", "joinedRoom")
@@ -47,7 +47,9 @@ public class RoomController {
                     clientThread.sendMessage(new JSONObject()
                             .put("msg", "fullRoom")
                             .put("content", new JSONObject()
-                                    .put("id", room.getId())));
+                                    .put("id", room.getId())
+                                    .put("playerType", user.getCharacterType())
+                                    .put("rooms", RoomList.getRoomsData())));
                 break;
             }
         }
@@ -56,7 +58,9 @@ public class RoomController {
             clientThread.sendMessage(new JSONObject()
                     .put("msg", "roomDoesNotExist")
                     .put("content", new JSONObject()
-                            .put("id", roomId)));
+                            .put("id", roomId)
+                            .put("playerType", user.getCharacterType())
+                            .put("rooms", RoomList.getRoomsData())));
     }
 
     public void leaveRoom(User user){
@@ -69,7 +73,9 @@ public class RoomController {
                 currentUser.getThread().sendMessage(new JSONObject()
                         .put("msg", "ownerLeftRoom")
                         .put("content", new JSONObject()
-                                .put("id", currentRoom.getId())));
+                                .put("id", currentRoom.getId())
+                                .put("playerType", currentUser.getCharacterType())
+                                .put("rooms", RoomList.getRoomsData())));
             }
 
             currentRoom.deleteRoom();
@@ -81,7 +87,8 @@ public class RoomController {
         Room currentRoom = RoomList.getUserRoom(user.getConnectionId());
         initGame(currentRoom);
 
-        JSONObject content = new JSONObject().put("owner", user.getName())
+        JSONObject content = new JSONObject()
+                .put("owner", user.getName())
                 .put("opponents", currentRoom.getGameController().getOpponentsData())
                 .put("players", currentRoom.getGameController().getPlayersInitialData());
 
@@ -100,10 +107,15 @@ public class RoomController {
         currentRoom.getGameController().hasStarted = true;
     }
 
-    //TODO: przejściowa wersja, do ogarnięcia
+    public void getRoomList(User user){
+        clientThread.sendMessage(new JSONObject()
+                .put("msg", "roomList")
+                .put("content", new JSONObject()
+                        .put("playerType", user.getCharacterType())
+                        .put("rooms", RoomList.getRoomsData())));
+    }
+
     public void initGame(Room room){
-        //TODO Here server must know what character user is
-        String USER_TYPE = "Water";
         for(User user : room.getUsersInRoom()){
             user.initializePlayer(room.getGameController(), user.getCharacterType());
         }

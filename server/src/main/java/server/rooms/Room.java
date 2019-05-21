@@ -34,7 +34,7 @@ public class Room {
         return this.usersInRoom;
     }
 
-    public boolean checkIfUserCanJoinRoom(){
+    public boolean canUserJoinRoom(){
         return (this.getUsersInRoom().size() < limitOfPlayers && !this.gameStarted);
     }
 
@@ -83,6 +83,10 @@ public class Room {
 
     public boolean isUserAnOwner(User user){
         return user.getConnectionId().equals(getRoomOwner().getConnectionId());
+    }
+
+    public boolean getGameStarted(){
+        return gameStarted;
     }
 
     public void setGameStarted(boolean gameStarted) {

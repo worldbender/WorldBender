@@ -17,6 +17,7 @@ public class BulletFactory {
                 resultBullet = new FireRing(x, y, angle, hostile, gameController);
                 break;
             default:
+                throw new IllegalArgumentException("There is no such type of a bullet!");
         }
         return resultBullet;
     }
