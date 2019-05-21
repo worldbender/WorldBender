@@ -30,6 +30,7 @@ public class MusicManager {
         if(AppPreferences.isMusicEnabled()) {
             menuMusic.stop();
             menuMusic.play();
+            menuMusic.setLooping(true);
         }
         else{
             menuMusic.stop();
