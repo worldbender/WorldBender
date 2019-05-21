@@ -47,8 +47,6 @@ public class RoomScreen extends AbstractScreen {
         Label roomLabel = new Label("Room ID: " + roomId, skin);
 
         //add buttons to table
-//        table.add(saveCharacter).colspan(2).fillX().uniformX().bottom();
-//        table.row().pad(10, 0, 10, 0);
         table.add(roomLabel).fillX().uniformX().bottom();
         table.row().pad(50, 0, 50, 0);
         table.add(newGame).fillX().uniformX().bottom();
@@ -150,6 +148,7 @@ public class RoomScreen extends AbstractScreen {
 
         Table playerCard = new Table(skin);
         playerCard.setWidth(240);
+        playerCard.pad(20, 10, 20, 10);
         playerCard.setBackground("file-menu-bar");
 
         Label player = new Label(playerx, skin, "title-white");
@@ -165,8 +164,8 @@ public class RoomScreen extends AbstractScreen {
             player.setAlignment(Align.left);
             leaderTable.add(player).expandX();
 
-            playerCard.add(leaderTable).pad(10, 10, 20, 10).expandX().fillX();
-        } else playerCard.add(player).pad(10, 10, 20, 10).expandX().fillX();
+            playerCard.add(leaderTable).padBottom(20).expandX().fillX();
+        } else playerCard.add(player).padBottom(20).expandX().fillX();
         playerCard.row().expandX().fillX();
 
         Texture texture = MyAssetManager.manager.get(type);
@@ -178,7 +177,7 @@ public class RoomScreen extends AbstractScreen {
         playerCard.add(characterClass).padBottom(10).expandX().fillX();
         playerCard.row().expandX().fillX();
 
-        playerCard.add(selectCharacter).width(180).padBottom(20);
+        playerCard.add(selectCharacter).width(180);
         playerCard.row().expandX().fillX();
 
         playerCards.add(playerCard).pad(10);
