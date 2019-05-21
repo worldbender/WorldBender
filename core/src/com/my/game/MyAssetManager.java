@@ -1,5 +1,7 @@
 package com.my.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.assets.AssetManager;
@@ -54,6 +56,13 @@ public class MyAssetManager {
     //screenImages
     public static final String TREE = "screenImages/tree.jpg";
 
+    //musics
+    public static final String MUSIC = "sounds/music1.mp3";
+    public static final String MUSIC2 = "sounds/music2.mp3";
+    public static final String MUSIC3 = "sounds/music3.mp3";
+    public static final String MUSIC4 = "sounds/music4.mp3";
+    public static final String MENU_MUSIC = "sounds/music3.mp3";
+
     //sounds
     public static final String HP_UP = "sounds/hpup.wav";
     public static final String DEATH = "sounds/death.ogg";
@@ -105,6 +114,11 @@ public class MyAssetManager {
     }
 
     public static void loadMusic(){
+        manager.load(MUSIC, Music.class);
+        manager.load(MUSIC2, Music.class);
+        manager.load(MUSIC3, Music.class);
+        manager.load(MUSIC4, Music.class);
+        manager.load(MENU_MUSIC, Music.class);
         manager.load(HP_UP, Sound.class);
         manager.load(DEATH, Sound.class);
     }

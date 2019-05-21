@@ -17,11 +17,11 @@ public class MusicManager {
     private static Sound opponentDieSound;
 
     public static void initSounds(){
-        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music1.mp3"));
-        music2 = Gdx.audio.newMusic(Gdx.files.internal("sounds/music2.mp3"));
-        music3 = Gdx.audio.newMusic(Gdx.files.internal("sounds/music3.mp3"));
-        music4 = Gdx.audio.newMusic(Gdx.files.internal("sounds/music4.mp3"));
-        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/music3.mp3"));
+        music = MyAssetManager.manager.get(MyAssetManager.MUSIC);
+        music2 = MyAssetManager.manager.get(MyAssetManager.MUSIC2);
+        music3 = MyAssetManager.manager.get(MyAssetManager.MUSIC3);
+        music4 = MyAssetManager.manager.get(MyAssetManager.MUSIC4);
+        menuMusic = MyAssetManager.manager.get(MyAssetManager.MENU_MUSIC);
         hpUpSound = MyAssetManager.manager.get(MyAssetManager.HP_UP);
         opponentDieSound = MyAssetManager.manager.get(MyAssetManager.DEATH);
     }
