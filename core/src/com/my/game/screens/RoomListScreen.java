@@ -67,8 +67,8 @@ public class RoomListScreen extends AbstractScreen {
             }
         });
 
-        gameWidth = Gdx.graphics.getWidth();
-        gameHeight = Gdx.graphics.getHeight();
+        gameWidth = WBGame.WIDTH;
+        gameHeight = WBGame.HEIGHT;
 
         Table roomList = new Table();
         roomList.align(Align.top);
@@ -77,7 +77,8 @@ public class RoomListScreen extends AbstractScreen {
 
         scrollPane = new ScrollPane(roomList, skin);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setBounds(boundRatio, boundRatio/2, gameWidth - 2*boundRatio, gameHeight- boundRatio);
+//        scrollPane.setBounds(boundRatio - 50, boundRatio/2, gameWidth - 2*boundRatio + 100, gameHeight - boundRatio);
+        scrollPane.setBounds(boundRatio, boundRatio/2, gameWidth - 2*boundRatio, gameHeight - boundRatio);
         scrollPane.setSmoothScrolling(false);
         scrollPane.setTransform(true);
 
