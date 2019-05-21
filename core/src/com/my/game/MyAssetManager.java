@@ -40,6 +40,10 @@ public class MyAssetManager {
     public static final String PROF_HEADS = "characters/prof.png";
     public static final String BLOND_HEADS = "characters/blondi.png";
 
+    //roomPlayerImages
+    public static final String PROF_ROOM = "characters/profMenu.png";
+    public static final String BLOND_ROOM = "characters/blondMenu.png";
+
     //opponents
     public static final String NIETZSCHE = "opponents/nietzsche.png";
     public static final String POE = "opponents/poe.png";
@@ -85,6 +89,11 @@ public class MyAssetManager {
         manager.load(UP_WALK, Texture.class);
         manager.load(PROF_HEADS, Texture.class);
         manager.load(BLOND_HEADS, Texture.class);
+    }
+
+    public static void loadRoomTexture(){
+        manager.load(PROF_ROOM, Texture.class);
+        manager.load(BLOND_ROOM, Texture.class);
     }
 
     public static void loadOpponents(){
@@ -147,6 +156,7 @@ public class MyAssetManager {
         loadOpponents();
         loadPickups();
         loadPlayerTexture();
+        loadRoomTexture();
         loadSkins();
         loadBars();
         loadScreenImages();

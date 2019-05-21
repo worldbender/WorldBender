@@ -1,17 +1,26 @@
 package com.my.game.screens;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.my.game.MyAssetManager;
 import com.my.game.WBGame;
+import com.my.game.player.Player;
 import org.json.JSONObject;
+
+import static com.my.game.MyAssetManager.*;
 
 public class RoomScreen extends AbstractScreen {
     private boolean isOwner = false;
     private int roomId;
+    private ScrollPane scrollPane;
+    private float gameWidth, gameHeight;
+    private int boundRatio = 400;
 
     public RoomScreen(WBGame game, int roomId) {
         super(game);
@@ -64,6 +73,27 @@ public class RoomScreen extends AbstractScreen {
             newGame.setDisabled(true);
             newGame.setTouchable(Touchable.disabled);
         }
+
+        gameWidth = WBGame.WIDTH;
+        gameHeight = WBGame.HEIGHT;
+
+        Table players = new Table(skin);
+        players.align(Align.top);
+
+        initPlayer(players, "player1", PROF_ROOM);
+        initPlayer(players, "player2", BLOND_ROOM);
+        initPlayer(players, "player3", PROF_ROOM);
+        initPlayer(players, "player4", BLOND_ROOM);
+        players.row();
+
+        scrollPane = new ScrollPane(players, skin, "no-bg");
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setBounds(boundRatio - 100, boundRatio/2, gameWidth - 2*boundRatio + 200, gameHeight - boundRatio);
+//        scrollPane.setBounds(boundRatio, boundRatio/2, gameWidth - 2*boundRatio, gameHeight - boundRatio);
+        scrollPane.setSmoothScrolling(false);
+        scrollPane.setTransform(true);
+
+        stage.addActor(scrollPane);
     }
 
     @Override
@@ -101,5 +131,31 @@ public class RoomScreen extends AbstractScreen {
     public void dispose() {
         // dispose of assets when not needed anymore
         stage.dispose();
+    }
+
+    private void initPlayer(Table players, String player, String type){
+        SelectBox selectCharacter = new SelectBox(skin);
+        selectCharacter.setItems("Ground", "Water");
+
+        Table subtable = new Table(skin);
+        subtable.setBackground("file-menu-bar");
+
+        Label p1 = new Label(player, skin, "white");
+        p1.setAlignment(Align.center);
+        subtable.add(p1).width(200).padTop(10).padBottom(20).expandX().fillX();
+        subtable.row().expandX().fillX();
+        Texture texture = MyAssetManager.manager.get(type);
+        TextureRegion playerHeadTexture = new TextureRegion(Player.headRegion);
+//        subtable.add(new Image(new TextureRegionDrawable(playerHeadTexture))).width(200).height(200);
+        subtable.add(new Image(texture)).width(200).height(230).padBottom(20);
+        subtable.row().expandX().fillX();
+        Label characterClass = new Label("Character Class:", skin, "white");
+        characterClass.setAlignment(Align.center);
+        subtable.add(characterClass).padBottom(10).expandX().fillX();
+        subtable.row().expandX().fillX();
+        subtable.add(selectCharacter).width(180).padBottom(20);
+        subtable.row().expandX().fillX();
+
+        players.add(subtable).pad(10);
     }
 }
