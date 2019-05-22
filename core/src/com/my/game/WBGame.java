@@ -19,6 +19,7 @@ public class WBGame extends Game {
     private GameplayScreen gameplayScreen;
     private PreferencesScreen preferencesScreen;
     public static RoomScreen roomScreen;
+    public static RoomListScreen roomListScreen;
 
     public static final int SPLASH = 0;
     public static final int MENU = 1;
@@ -112,7 +113,8 @@ public class WBGame extends Game {
     public void changeScreen(int screen, int option, List<Room> rooms){
         switch(screen){
             case ROOM_LIST:
-                this.setScreen(new RoomListScreen(this, rooms, option));
+                roomListScreen = new RoomListScreen(this, rooms, option);
+                this.setScreen(roomListScreen);
                 break;
             default:
         }

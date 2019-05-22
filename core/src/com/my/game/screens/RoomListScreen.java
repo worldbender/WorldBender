@@ -17,6 +17,7 @@ import java.util.List;
 public class RoomListScreen extends AbstractScreen {
     private List<Room> rooms;
     private ScrollPane scrollPane;
+    private Table roomList;
     private float gameWidth, gameHeight;
     private int boundRatio = 400;
     private int option;
@@ -25,6 +26,7 @@ public class RoomListScreen extends AbstractScreen {
         super(game);
         this.rooms = rooms;
         this.option = option;
+        roomList = new Table();
     }
 
     @Override
@@ -60,17 +62,19 @@ public class RoomListScreen extends AbstractScreen {
         refresh.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                WBGame.getConnection().getTcp().getRoomList();
+                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
+                        .put("msg", "refreshRoomList")
+                        .put("content", new JSONObject()
+                                .put("empty", "empty")));
             }
         });
 
         gameWidth = WBGame.WIDTH;
         gameHeight = WBGame.HEIGHT;
 
-        Table roomList = new Table();
         roomList.align(Align.top);
 
-        initRoomListTable(roomList);
+        initRoomListTable();
 
         scrollPane = new ScrollPane(roomList, skin);
         scrollPane.setFadeScrollBars(false);
@@ -126,7 +130,7 @@ public class RoomListScreen extends AbstractScreen {
         stage.dispose();
     }
 
-    private void initRoomListTable(Table roomList){
+    private void initRoomListTable(){
         Label idLabel = new Label("Room ID", skin, "white");
         Label ownerLabel = new Label("Room owner", skin, "white");
         Label playersLabel = new Label("Players in room", skin, "white");
@@ -176,5 +180,12 @@ public class RoomListScreen extends AbstractScreen {
         roomList.add(ownerLabel).expandX().fillX();
         roomList.add(playersLabel).expandX().fillX();
         roomList.add(statusLabel).expandX().fillX();
+    }
+
+    public void refreshRoomList(List<Room> updatedRooms){
+        rooms = updatedRooms;
+        roomList.clear();
+
+        initRoomListTable();
     }
 }

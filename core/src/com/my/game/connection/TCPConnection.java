@@ -127,18 +127,14 @@ public class TCPConnection implements Runnable {
             case "refreshRoomData":
                 WBGame.roomScreen.refreshPlayerCards(parsePlayersList(contentJSON));
                 break;
+            case "refreshRoomListData":
+                WBGame.roomListScreen.refreshRoomList(parseRoomList(contentJSON));
+                break;
             case "changeLevel":
                 this.changeLevel(contentJSON);
                 break;
             default:
         }
-    }
-
-    public void getRoomList(){
-        sendMessage(new JSONObject()
-            .put("msg", "getRoomList")
-            .put("content", new JSONObject()
-                    .put("empty", "empty")));
     }
 
     private void startGame(JSONObject contentJSON) {

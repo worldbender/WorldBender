@@ -53,7 +53,6 @@ public class RoomController {
                             .put("msg", "fullRoom")
                             .put("content", new JSONObject()
                                     .put("id", room.getId())
-                                    .put("playerType", user.getCharacterType())
                                     .put("rooms", RoomList.getRoomsData())));
                 break;
             }
@@ -64,7 +63,6 @@ public class RoomController {
                     .put("msg", "roomDoesNotExist")
                     .put("content", new JSONObject()
                             .put("id", roomId)
-                            .put("playerType", user.getCharacterType())
                             .put("rooms", RoomList.getRoomsData())));
     }
 
@@ -79,7 +77,6 @@ public class RoomController {
                         .put("msg", "ownerLeftRoom")
                         .put("content", new JSONObject()
                                 .put("id", currentRoom.getId())
-                                .put("playerType", currentUser.getCharacterType())
                                 .put("rooms", RoomList.getRoomsData())));
             }
 
@@ -125,7 +122,13 @@ public class RoomController {
         clientThread.sendMessage(new JSONObject()
                 .put("msg", "roomList")
                 .put("content", new JSONObject()
-                        .put("playerType", user.getCharacterType())
+                        .put("rooms", RoomList.getRoomsData())));
+    }
+
+    public void refreshRoomList(){
+        clientThread.sendMessage(new JSONObject()
+                .put("msg", "refreshRoomListData")
+                .put("content", new JSONObject()
                         .put("rooms", RoomList.getRoomsData())));
     }
 

@@ -84,6 +84,9 @@ public class TcpClientThread extends Thread{
             case "saveCharacter":
                 this.roomController.saveCharacter(this.user, contentJSON.getString("character"));
                 break;
+            case "refreshRoomList":
+                this.roomController.refreshRoomList();
+                break;
             case "startGame":
                 this.roomController.startGame(this.user);
                 break;
