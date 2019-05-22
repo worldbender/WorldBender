@@ -78,6 +78,7 @@ public class AttackFactory {
                 bulletList.addBullet(newBullet);
                 break;
             default:
+                throw new IllegalArgumentException("There is no such type of a bullet!");
         }
     }
 }
