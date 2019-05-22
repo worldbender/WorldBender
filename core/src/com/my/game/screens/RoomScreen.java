@@ -151,14 +151,14 @@ public class RoomScreen extends AbstractScreen {
         saveCharacter.align(Align.center);
 
         for(PlayerDataWrapper player : players){
-            initPlayer(player);
+            initPlayerCard(player);
         }
 
         playerCards.row();
         playerCards.add(saveCharacter).colspan(4).center();
     }
 
-    private void initPlayer(PlayerDataWrapper player){
+    private void initPlayerCard(PlayerDataWrapper player){
         Table playerCard = new Table(skin);
         playerCard.setWidth(240);
         playerCard.pad(20, 10, 20, 10);
@@ -179,6 +179,7 @@ public class RoomScreen extends AbstractScreen {
 
             playerCard.add(leaderTable).padBottom(20).expandX().fillX();
         } else playerCard.add(playerName).padBottom(20).expandX().fillX();
+
         playerCard.row().expandX().fillX();
 
         Texture texture = null;
@@ -189,7 +190,6 @@ public class RoomScreen extends AbstractScreen {
 
         Label characterClass = new Label("Character Class:", skin, "default");
         characterClass.setAlignment(Align.center);
-
         playerCard.add(characterClass).padBottom(10).expandX().fillX();
         playerCard.row().expandX().fillX();
 
