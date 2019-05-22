@@ -57,8 +57,6 @@ public class MenuScreen extends AbstractScreen{
         TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
         TextButton resume = new TextButton("Resume", skin);
-        SelectBox selectCharacter = new SelectBox(skin);
-        selectCharacter.setItems("Ground", "Water");
         //add buttons to table
         if(inGame){
             buttonsTable.add(resume).fillX().uniformX();
@@ -69,8 +67,6 @@ public class MenuScreen extends AbstractScreen{
             buttonsTable.add(newRoom).fillX().uniformX();
             buttonsTable.row().pad(10, 0, 0, 0);
             buttonsTable.add(roomList).fillX().uniformX();
-            buttonsTable.row().pad(10, 0, 0, 0);
-            buttonsTable.add(selectCharacter).fillX().uniformX();
             buttonsTable.row().pad(10, 0, 0, 0);
             buttonsTable.add(preferences).fillX().uniformX();
             buttonsTable.row().pad(10, 0, 0, 0);
@@ -92,8 +88,7 @@ public class MenuScreen extends AbstractScreen{
                 WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                         .put("msg", "newRoom")
                         .put("content", new JSONObject()
-                                .put("port", WBGame.getConnection().getSocket().getLocalPort())
-                                .put("character", selectCharacter.getSelected().toString())));
+                                .put("port", WBGame.getConnection().getSocket().getLocalPort())));
 
             }
         });
@@ -101,9 +96,7 @@ public class MenuScreen extends AbstractScreen{
         roomList.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
-                        .put("msg", "getRoomList")
-                        .put("content", new JSONObject().put("character", selectCharacter.getSelected().toString())));
+                WBGame.getConnection().getTcp().getRoomList();
             }
         });
 

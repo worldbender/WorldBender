@@ -106,7 +106,7 @@ public class TCPConnection implements Runnable {
                 break;
             case "roomList":
                 System.out.println("Got room list:");
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 0, parseRoomList(contentJSON)));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, 0, parseRoomList(contentJSON)));
                 break;
             case "joinedRoom":
                 System.out.println("Joined room ID: " + contentJSON.getInt("id"));
@@ -114,15 +114,15 @@ public class TCPConnection implements Runnable {
                 break;
             case "ownerLeftRoom":
                 System.out.println("Left room ID: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 1, parseRoomList(contentJSON)));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, 1, parseRoomList(contentJSON)));
                 break;
             case "fullRoom":
                 System.out.println("Room is full: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 2, parseRoomList(contentJSON)));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, 2, parseRoomList(contentJSON)));
                 break;
             case "roomDoesNotExist":
                 System.out.println("Room doesn't exist: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 3, parseRoomList(contentJSON)));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, 3, parseRoomList(contentJSON)));
                 break;
             case "refreshRoomData":
                 WBGame.roomScreen.refreshPlayerCards(parsePlayersList(contentJSON));
@@ -132,6 +132,13 @@ public class TCPConnection implements Runnable {
                 break;
             default:
         }
+    }
+
+    public void getRoomList(){
+        sendMessage(new JSONObject()
+            .put("msg", "getRoomList")
+            .put("content", new JSONObject()
+                    .put("empty", "empty")));
     }
 
     private void startGame(JSONObject contentJSON) {

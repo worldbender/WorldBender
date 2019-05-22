@@ -19,13 +19,11 @@ public class RoomListScreen extends AbstractScreen {
     private ScrollPane scrollPane;
     private float gameWidth, gameHeight;
     private int boundRatio = 400;
-    private String character;
     private int option;
 
-    public RoomListScreen(WBGame game, List<Room> rooms, String character, int option) {
+    public RoomListScreen(WBGame game, List<Room> rooms, int option) {
         super(game);
         this.rooms = rooms;
-        this.character = character;
         this.option = option;
     }
 
@@ -47,7 +45,7 @@ public class RoomListScreen extends AbstractScreen {
         joinRoomById.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                new JoinRoomDialog(skin, stage, character);
+                new JoinRoomDialog(skin, stage);
             }
         });
 
@@ -58,12 +56,11 @@ public class RoomListScreen extends AbstractScreen {
             }
         });
 
+        //TODO: przerobić
         refresh.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
-                        .put("msg", "getRoomList")
-                        .put("content", new JSONObject().put("character", character)));
+                WBGame.getConnection().getTcp().getRoomList();
             }
         });
 
@@ -148,9 +145,8 @@ public class RoomListScreen extends AbstractScreen {
                 public void changed(ChangeEvent event, Actor actor) {
                     WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                             .put("msg", "joinRoom")
-                            .put("content", new JSONObject().put("id", id))
-                            .put("character", character)
-                    );
+                            .put("content", new JSONObject()
+                                    .put("id", id)));
                 }
             });
 

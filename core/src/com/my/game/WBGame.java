@@ -109,10 +109,10 @@ public class WBGame extends Game {
         }
     }
 
-    public void changeScreen(int screen, String character, int option, List<Room> rooms){
+    public void changeScreen(int screen, int option, List<Room> rooms){
         switch(screen){
             case ROOM_LIST:
-                this.setScreen(new RoomListScreen(this, rooms, character, option));
+                this.setScreen(new RoomListScreen(this, rooms, option));
                 break;
             default:
         }
@@ -126,6 +126,7 @@ public class WBGame extends Game {
         else
             Gdx.graphics.setFullscreenMode(currentMode);
     }
+
     public GameplayScreen getGameplayScreen(){
         return this.gameplayScreen;
     }

@@ -73,7 +73,6 @@ public class TcpClientThread extends Thread{
                 newUser(contentJSON.getInt("port"));
                 break;
             case "newRoom":
-                this.user.setCharacterType(contentJSON.get("character").toString());
                 this.roomController.newRoom(this.user);
                 break;
             case "joinRoom":
@@ -89,7 +88,6 @@ public class TcpClientThread extends Thread{
                 this.roomController.startGame(this.user);
                 break;
             case "getRoomList":
-                this.user.setCharacterType(contentJSON.get("character").toString());
                 this.roomController.getRoomList(this.user);
                 break;
             default:
@@ -103,6 +101,7 @@ public class TcpClientThread extends Thread{
         this.user.setUdpPort(udpPort);
         this.user.setConnectionId(id);
         this.user.setName("player"+ existingUsers.size());
+        this.user.setCharacterType("Ground");
 
         existingUsers.put(id, this.user);
         existingUsers.get(user.getConnectionId()).setThread(this);
