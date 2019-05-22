@@ -85,7 +85,10 @@ public class RoomController {
 
             currentRoom.deleteRoom();
         }
-        else currentRoom.deleteUserFromRoom(user);
+        else {
+            currentRoom.deleteUserFromRoom(user);
+            refreshPlayersData(user, currentRoom);
+        }
     }
 
     public void startGame(User user){

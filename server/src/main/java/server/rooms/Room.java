@@ -12,7 +12,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Room {
     private int id;
     private int limitOfPlayers = 4;
-    private String name;
     private List<Room> rooms;
     private CopyOnWriteArrayList<User> usersInRoom;
     private OpponentList opponentList;
