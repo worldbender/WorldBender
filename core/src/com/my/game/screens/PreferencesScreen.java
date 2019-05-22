@@ -165,6 +165,6 @@ public class PreferencesScreen extends AbstractScreen{
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
+        stage.dispose();
     }
 }

@@ -1,6 +1,5 @@
 package com.my.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -19,7 +18,7 @@ public class RoomListScreen extends AbstractScreen {
     private ScrollPane scrollPane;
     private Table roomList;
     private float gameWidth, gameHeight;
-    private int boundRatio = 400;
+    private final static int BOUND_RATIO = 400;
     private int option;
 
     public RoomListScreen(WBGame game, List<Room> rooms, int option) {
@@ -58,7 +57,6 @@ public class RoomListScreen extends AbstractScreen {
             }
         });
 
-        //TODO: przerobić
         refresh.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -78,7 +76,7 @@ public class RoomListScreen extends AbstractScreen {
 
         scrollPane = new ScrollPane(roomList, skin);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setBounds(boundRatio, boundRatio/2, gameWidth - 2*boundRatio, gameHeight - boundRatio);
+        scrollPane.setBounds(BOUND_RATIO, BOUND_RATIO/2, gameWidth - 2*BOUND_RATIO, gameHeight - BOUND_RATIO);
         scrollPane.setSmoothScrolling(false);
         scrollPane.setTransform(true);
 
