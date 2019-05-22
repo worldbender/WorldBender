@@ -124,6 +124,9 @@ public class TCPConnection implements Runnable {
                 System.out.println("Room doesn't exist: " + contentJSON.getInt("id"));
                 Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 3, parseRoomList(contentJSON)));
                 break;
+            case "refreshRoomData":
+                WBGame.roomScreen.refreshPlayerCards(parsePlayersList(contentJSON));
+                break;
             case "changeLevel":
                 this.changeLevel(contentJSON);
                 break;

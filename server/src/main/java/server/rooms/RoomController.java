@@ -46,6 +46,7 @@ public class RoomController {
                                     .put("userId", user.getConnectionId())
                                     .put("id", room.getId())
                                     .put("players", room.getUsersInRoomData())));
+                    refreshPlayersData(user, room);
                 }
                 else
                     clientThread.sendMessage(new JSONObject()
@@ -136,4 +137,13 @@ public class RoomController {
         room.getGameController().spawnAllOpponents();
     }
 
+    private void refreshPlayersData(User user, Room room){
+        for(User currentUser : room.getUsersInRoom()){
+            if(currentUser == user) continue;
+            currentUser.getThread().sendMessage(new JSONObject()
+                    .put("msg", "refreshRoomData")
+                    .put("content", new JSONObject()
+                            .put("players", room.getUsersInRoomData())));
+        }
+    }
 }

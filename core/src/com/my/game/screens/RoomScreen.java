@@ -91,7 +91,6 @@ public class RoomScreen extends AbstractScreen {
 
         initPlayersCards();
 
-
         scrollPane = new ScrollPane(playerCards, skin, "no-bg");
         scrollPane.setFadeScrollBars(false);
         scrollPane.setBounds(0, boundRatio/2 - 50, gameWidth, gameHeight - boundRatio);
@@ -146,11 +145,6 @@ public class RoomScreen extends AbstractScreen {
             initPlayer(player);
         }
 
-//        initPlayer("pl1", PROF_ROOM);
-//        initPlayer("player2player2", BLOND_ROOM);
-//        initPlayer("playerhhgfhfg3", PROF_ROOM);
-//        initPlayer("player4player4", BLOND_ROOM);
-
         playerCards.row();
         playerCards.add(saveCharacter).colspan(4).center();
     }
@@ -192,7 +186,7 @@ public class RoomScreen extends AbstractScreen {
 
         if(player.getUserId().matches(userId)){
             selectPlayerCharacter.setSelected(player.getCharacter());
-            
+
             playerCard.add(selectPlayerCharacter).width(180);
             playerCard.row().expandX().fillX();
         } else{
@@ -206,5 +200,11 @@ public class RoomScreen extends AbstractScreen {
         }
 
         playerCards.add(playerCard).pad(10);
+    }
+
+    public void refreshPlayerCards(List<PlayerDataWrapper> updatedPlayers){
+        players = updatedPlayers;
+        playerCards.clear();
+        initPlayersCards();
     }
 }

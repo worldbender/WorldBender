@@ -18,6 +18,7 @@ public class WBGame extends Game {
     public static boolean connectionStatus = false;
     private GameplayScreen gameplayScreen;
     private PreferencesScreen preferencesScreen;
+    public static RoomScreen roomScreen;
 
     public static final int SPLASH = 0;
     public static final int MENU = 1;
@@ -27,7 +28,6 @@ public class WBGame extends Game {
     public static final int ROOM_OWNER = 5;
     public static final int ROOM_LIST = 6;
     public static final int PREFERENCES = 7;
-
 
     public static final String SERVER_ADDRESS = Properties.loadConfigFile("IP");
 
@@ -98,10 +98,12 @@ public class WBGame extends Game {
     public void changeScreen(int screen, int roomId, String userId, List<PlayerDataWrapper> players){
         switch(screen){
             case ROOM_OWNER:
-                this.setScreen(new RoomScreen(this, true, roomId, userId, players));
+                roomScreen = new RoomScreen(this, true, roomId, userId, players);
+                this.setScreen(roomScreen);
                 break;
             case ROOM:
-                this.setScreen(new RoomScreen(this, roomId, userId, players));
+                roomScreen = new RoomScreen(this, roomId, userId, players);
+                this.setScreen(roomScreen);
                 break;
             default:
         }
