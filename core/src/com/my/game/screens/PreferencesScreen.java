@@ -16,9 +16,7 @@ import com.my.game.MyAssetManager;
 import com.my.game.WBGame;
 import com.my.game.music.MusicManager;
 
-public class PreferencesScreen implements Screen {
-    private WBGame parent;
-    private Stage stage;
+public class PreferencesScreen extends AbstractScreen{
     private Label titleLabel;
     private Label volumeMusicLabel;
     private Label volumeSoundLabel;
@@ -28,8 +26,7 @@ public class PreferencesScreen implements Screen {
 
 
     public PreferencesScreen(WBGame wbgame){
-        parent = wbgame;
-        stage = new Stage(new ScreenViewport());
+        super(wbgame);
     }
 
     @Override
@@ -103,7 +100,7 @@ public class PreferencesScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                parent.changeScreen(WBGame.MENU);
+                game.changeScreen(WBGame.MENU);
 
             }
         });
@@ -143,10 +140,11 @@ public class PreferencesScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        super.render(delta);
 
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        drawBackground();
+
+        stage.act();
         stage.draw();
     }
 
