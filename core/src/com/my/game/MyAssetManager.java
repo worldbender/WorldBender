@@ -1,5 +1,7 @@
 package com.my.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.assets.AssetManager;
@@ -15,8 +17,6 @@ import com.my.game.player.Player;
 import com.my.game.player.Water;
 
 public class MyAssetManager {
-    private MyAssetManager(){}
-
     public static final AssetManager manager = new AssetManager();
     public static final int PLAYER_TEXTURE_WIDTH = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_WIDTH"));
     public static final int PLAYER_TEXTURE_HEIGHT = Integer.parseInt(Properties.loadConfigFile("PLAYER_TEXTURE_HEIGHT"));
@@ -56,9 +56,16 @@ public class MyAssetManager {
     //screenImages
     public static final String TREE = "screenImages/tree.jpg";
 
+    //musics
+    public static final String MUSIC = "sounds/music1.mp3";
+    public static final String MUSIC2 = "sounds/music2.mp3";
+    public static final String MUSIC3 = "sounds/music3.mp3";
+    public static final String MUSIC4 = "sounds/music4.mp3";
+    public static final String MENU_MUSIC = "sounds/music3.mp3";
+
     //sounds
     public static final String HP_UP = "sounds/hpup.wav";
-    public static final String MEOW = "sounds/meow.mp3";
+    public static final String DEATH = "sounds/death.ogg";
 
     //fonts
     public static final String FONT = "skin/font-export.fnt";
@@ -70,6 +77,10 @@ public class MyAssetManager {
     public static final String SGX_UI_ATLAS = "skin/sgx-ui.atlas";
     public static final String SGX_UI_JSON = "skin/sgx-ui.json";
     public static final String SGX_UI_PNG = "skin/sgx-ui.png";
+
+    public static final String GAME_NAME = "screenImages/gameName.png";
+
+    private MyAssetManager(){}
 
 
     public static void loadBullets(){
@@ -103,8 +114,13 @@ public class MyAssetManager {
     }
 
     public static void loadMusic(){
+        manager.load(MUSIC, Music.class);
+        manager.load(MUSIC2, Music.class);
+        manager.load(MUSIC3, Music.class);
+        manager.load(MUSIC4, Music.class);
+        manager.load(MENU_MUSIC, Music.class);
         manager.load(HP_UP, Sound.class);
-        manager.load(MEOW, Sound.class);
+        manager.load(DEATH, Sound.class);
     }
 
 
@@ -139,6 +155,7 @@ public class MyAssetManager {
 
     public static void loadScreenImages(){
         manager.load(TREE, Texture.class);
+        manager.load(GAME_NAME, Texture.class);
     }
 
     public static void loadAllAssets(){
