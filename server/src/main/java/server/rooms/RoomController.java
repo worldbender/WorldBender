@@ -46,7 +46,7 @@ public class RoomController {
                                     .put("userId", user.getConnectionId())
                                     .put("id", room.getId())
                                     .put("players", room.getUsersInRoomData())));
-                    refreshPlayersData(user, room);
+                    refreshPlayersData(user, room, false);
                 }
                 else
                     clientThread.sendMessage(new JSONObject()
@@ -87,7 +87,7 @@ public class RoomController {
         }
         else {
             currentRoom.deleteUserFromRoom(user);
-            refreshPlayersData(user, currentRoom);
+            refreshPlayersData(user, currentRoom, false);
         }
     }
 
@@ -115,21 +115,18 @@ public class RoomController {
         currentRoom.getGameController().hasStarted = true;
     }
 
+    public void saveCharacter(User user, String character){
+        Room currentRoom = RoomList.getUserRoom(user.getConnectionId());
+        user.setCharacterType(character);
+        refreshPlayersData(user, currentRoom, true);
+    }
+
     public void getRoomList(User user){
         clientThread.sendMessage(new JSONObject()
                 .put("msg", "roomList")
                 .put("content", new JSONObject()
                         .put("playerType", user.getCharacterType())
                         .put("rooms", RoomList.getRoomsData())));
-    }
-
-    public void getPlayersInRoomList(User user){
-        Room currentRoom = RoomList.getUserRoom(user.getConnectionId());
-
-        clientThread.sendMessage(new JSONObject()
-                .put("msg", "playersInRoomList")
-                .put("content", new JSONObject()
-                        .put("players", currentRoom.getUsersInRoom())));
     }
 
     public void initGame(Room room){
@@ -140,9 +137,9 @@ public class RoomController {
         room.getGameController().spawnAllOpponents();
     }
 
-    private void refreshPlayersData(User user, Room room){
+    private void refreshPlayersData(User user, Room room, boolean sendToAll){
         for(User currentUser : room.getUsersInRoom()){
-            if(currentUser == user) continue;
+            if(!sendToAll && currentUser == user) continue;
             currentUser.getThread().sendMessage(new JSONObject()
                     .put("msg", "refreshRoomData")
                     .put("content", new JSONObject()

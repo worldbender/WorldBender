@@ -139,6 +139,15 @@ public class RoomScreen extends AbstractScreen {
 
     private void initPlayersCards(){
         TextButton saveCharacter = new TextButton("Save Character", skin);
+        saveCharacter.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
+                        .put("msg", "saveCharacter")
+                        .put("content", new JSONObject()
+                                .put("character", selectPlayerCharacter.getSelected())));
+            }
+        });
         saveCharacter.align(Align.center);
 
         for(PlayerDataWrapper player : players){
