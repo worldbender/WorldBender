@@ -8,13 +8,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.my.game.MyAssetManager;
 import com.my.game.WBGame;
+import com.my.game.player.PlayerDataWrapper;
 import org.json.JSONObject;
+import java.util.List;
 
 import static com.my.game.MyAssetManager.*;
 
 public class RoomScreen extends AbstractScreen {
     private boolean isOwner = false;
     private int roomId;
+    private String userId;
+    private List<PlayerDataWrapper> players;
     private ScrollPane scrollPane;
     private Table playerCards;
     private float gameWidth, gameHeight;
@@ -22,16 +26,18 @@ public class RoomScreen extends AbstractScreen {
     private SelectBox selectPlayerCharacter;
 
 
-    public RoomScreen(WBGame game, int roomId) {
+    public RoomScreen(WBGame game, int roomId, String userId, List<PlayerDataWrapper> players) {
         super(game);
         this.roomId = roomId;
+        this.userId = userId;
+        this.players = players;
         playerCards = new Table(skin);
         selectPlayerCharacter = new SelectBox(skin);
         selectPlayerCharacter.setItems("Ground", "Water");
     }
 
-    public RoomScreen(WBGame game, boolean isOwner, int roomId) {
-        this(game, roomId);
+    public RoomScreen(WBGame game, boolean isOwner, int roomId, String userId, List<PlayerDataWrapper> players) {
+        this(game, roomId, userId, players);
         this.isOwner = isOwner;
     }
 
@@ -42,16 +48,15 @@ public class RoomScreen extends AbstractScreen {
         //create buttons
         TextButton newGame = new TextButton("Start Game", skin);
         TextButton back = new TextButton("Leave Room", skin);
-        TextButton saveCharacter = new TextButton("Save Character", skin);
-        saveCharacter.align(Align.center);
         Label roomLabel = new Label("Room ID: " + roomId, skin);
+        roomLabel.setAlignment(Align.center);
 
         //add buttons to table
-        table.add(roomLabel).fillX().uniformX().bottom();
-        table.row().pad(50, 0, 50, 0);
-        table.add(newGame).fillX().uniformX().bottom();
-        table.add(back).fillX().uniformX().bottom();
-        table.row().pad(50, 0, 50, 0);
+        table.add(roomLabel).colspan(2).padBottom(10).fillX().bottom();
+        table.row();
+        table.add(newGame).padBottom(50).fillX().bottom();
+        table.add(back).padBottom(50).fillX().bottom();
+        table.row();
 
         // create button listeners
         back.addListener(new ChangeListener() {
@@ -84,12 +89,13 @@ public class RoomScreen extends AbstractScreen {
 
         playerCards.align(Align.top);
 
-        initPlayers();
+        initPlayersCards();
 
-        playerCards.add(saveCharacter).colspan(4).center();
 
         scrollPane = new ScrollPane(playerCards, skin, "no-bg");
-        scrollPane.setBounds(boundRatio - 100, boundRatio/2 - 50, gameWidth - 2*boundRatio + 200, gameHeight - boundRatio);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setBounds(0, boundRatio/2 - 50, gameWidth, gameHeight - boundRatio);
+        scrollPane.setSmoothScrolling(false);
         scrollPane.setTransform(true);
 
         stage.addActor(scrollPane);
@@ -132,53 +138,72 @@ public class RoomScreen extends AbstractScreen {
         stage.dispose();
     }
 
-    private void initPlayers(){
-        initPlayer("pl1", PROF_ROOM);
-        initPlayer("player2", BLOND_ROOM);
-        initPlayer("playerhhgfhfg3", PROF_ROOM);
-        initPlayer("player4", BLOND_ROOM);
+    private void initPlayersCards(){
+        TextButton saveCharacter = new TextButton("Save Character", skin);
+        saveCharacter.align(Align.center);
+
+        for(PlayerDataWrapper player : players){
+            initPlayer(player);
+        }
+
+//        initPlayer("pl1", PROF_ROOM);
+//        initPlayer("player2player2", BLOND_ROOM);
+//        initPlayer("playerhhgfhfg3", PROF_ROOM);
+//        initPlayer("player4player4", BLOND_ROOM);
+
         playerCards.row();
+        playerCards.add(saveCharacter).colspan(4).center();
     }
 
-    private void initPlayer(String playerx, String type){
-        SelectBox selectCharacter = new SelectBox(skin);
-        selectCharacter.setItems("Ground", "Water");
-        selectCharacter.setSelected("Water");
-        selectCharacter.setDisabled(true);
-
+    private void initPlayer(PlayerDataWrapper player){
         Table playerCard = new Table(skin);
         playerCard.setWidth(240);
         playerCard.pad(20, 10, 20, 10);
         playerCard.setBackground("file-menu-bar");
 
-        Label player = new Label(playerx, skin, "title-white");
-        player.setFontScale(0.75f);
-        player.setAlignment(Align.center);
+        Label playerName = new Label(player.getName(), skin, "title-white");
+        playerName.setFontScale(0.75f);
+        playerName.setAlignment(Align.center);
 
-        if(playerx.matches("pl1")) {
+        if(player.isOwner()) {
             Texture texture = MyAssetManager.manager.get(ROOM_OWNER);
             Image crown = new Image(texture);
 
             Table leaderTable = new Table(skin);
             leaderTable.add(crown).size(40, 40).align(Align.right);
-            player.setAlignment(Align.left);
-            leaderTable.add(player).expandX();
+            playerName.setAlignment(Align.left);
+            leaderTable.add(playerName).expandX();
 
             playerCard.add(leaderTable).padBottom(20).expandX().fillX();
-        } else playerCard.add(player).padBottom(20).expandX().fillX();
+        } else playerCard.add(playerName).padBottom(20).expandX().fillX();
         playerCard.row().expandX().fillX();
 
-        Texture texture = MyAssetManager.manager.get(type);
+        Texture texture = null;
+        if(player.getCharacter().matches("Ground")) texture = MyAssetManager.manager.get(PROF_ROOM);
+        else if(player.getCharacter().matches("Water")) texture = MyAssetManager.manager.get(BLOND_ROOM);
         playerCard.add(new Image(texture)).width(200).height(230).padBottom(20);
         playerCard.row().expandX().fillX();
 
         Label characterClass = new Label("Character Class:", skin, "default");
         characterClass.setAlignment(Align.center);
+
         playerCard.add(characterClass).padBottom(10).expandX().fillX();
         playerCard.row().expandX().fillX();
 
-        playerCard.add(selectCharacter).width(180);
-        playerCard.row().expandX().fillX();
+        if(player.getUserId().matches(userId)){
+            selectPlayerCharacter.setSelected(player.getCharacter());
+            
+            playerCard.add(selectPlayerCharacter).width(180);
+            playerCard.row().expandX().fillX();
+        } else{
+            SelectBox selectCharacter = new SelectBox(skin);
+            selectCharacter.setItems("Ground", "Water");
+            selectCharacter.setSelected(player.getCharacter());
+            selectCharacter.setDisabled(true);
+
+            playerCard.add(selectCharacter).width(180);
+            playerCard.row().expandX().fillX();
+        }
 
         playerCards.add(playerCard).pad(10);
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.my.game.connection.Connection;
 import com.my.game.music.MusicManager;
+import com.my.game.player.PlayerDataWrapper;
 import com.my.game.rooms.Room;
 import com.my.game.screens.*;
 import com.my.game.screens.SplashScreen;
@@ -94,13 +95,13 @@ public class WBGame extends Game {
         }
     }
 
-    public void changeScreen(int screen, int roomId){
+    public void changeScreen(int screen, int roomId, String userId, List<PlayerDataWrapper> players){
         switch(screen){
             case ROOM_OWNER:
-                this.setScreen(new RoomScreen(this, true, roomId));
+                this.setScreen(new RoomScreen(this, true, roomId, userId, players));
                 break;
             case ROOM:
-                this.setScreen(new RoomScreen(this, roomId));
+                this.setScreen(new RoomScreen(this, roomId, userId, players));
                 break;
             default:
         }

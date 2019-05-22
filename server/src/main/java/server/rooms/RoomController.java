@@ -27,7 +27,9 @@ public class RoomController {
                 .put("msg", "createdRoom")
                 .put("content", new JSONObject()
                         .put("name", user.getName())
-                        .put("id", room.getId())));
+                        .put("userId", user.getConnectionId())
+                        .put("id", room.getId())
+                        .put("players", room.getUsersInRoomData())));
     }
 
     public void joinRoom(User user, int roomId){
@@ -41,7 +43,9 @@ public class RoomController {
                             .put("msg", "joinedRoom")
                             .put("content", new JSONObject()
                                     .put("name", user.getName())
-                                    .put("id", room.getId())));
+                                    .put("userId", user.getConnectionId())
+                                    .put("id", room.getId())
+                                    .put("players", room.getUsersInRoomData())));
                 }
                 else
                     clientThread.sendMessage(new JSONObject()
@@ -113,6 +117,15 @@ public class RoomController {
                 .put("content", new JSONObject()
                         .put("playerType", user.getCharacterType())
                         .put("rooms", RoomList.getRoomsData())));
+    }
+
+    public void getPlayersInRoomList(User user){
+        Room currentRoom = RoomList.getUserRoom(user.getConnectionId());
+
+        clientThread.sendMessage(new JSONObject()
+                .put("msg", "playersInRoomList")
+                .put("content", new JSONObject()
+                        .put("players", currentRoom.getUsersInRoom())));
     }
 
     public void initGame(Room room){

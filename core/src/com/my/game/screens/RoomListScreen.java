@@ -77,7 +77,6 @@ public class RoomListScreen extends AbstractScreen {
 
         scrollPane = new ScrollPane(roomList, skin);
         scrollPane.setFadeScrollBars(false);
-//        scrollPane.setBounds(boundRatio - 50, boundRatio/2, gameWidth - 2*boundRatio + 100, gameHeight - boundRatio);
         scrollPane.setBounds(boundRatio, boundRatio/2, gameWidth - 2*boundRatio, gameHeight - boundRatio);
         scrollPane.setSmoothScrolling(false);
         scrollPane.setTransform(true);

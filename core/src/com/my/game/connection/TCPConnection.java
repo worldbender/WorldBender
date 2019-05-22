@@ -13,6 +13,7 @@ import com.my.game.pickups.APickup;
 import com.my.game.pickups.PickupFactory;
 import com.my.game.pickups.PickupList;
 import com.my.game.player.Player;
+import com.my.game.player.PlayerDataWrapper;
 import com.my.game.player.PlayerFactory;
 import com.my.game.player.PlayerList;
 import com.my.game.Properties;
@@ -101,7 +102,7 @@ public class TCPConnection implements Runnable {
                 break;
             case "createdRoom":
                 System.out.println("Created room ID: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_OWNER, contentJSON.getInt("id")));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_OWNER, contentJSON.getInt("id"), contentJSON.getString("userId"), parsePlayersList(contentJSON)));
                 break;
             case "roomList":
                 System.out.println("Got room list:");
@@ -109,7 +110,7 @@ public class TCPConnection implements Runnable {
                 break;
             case "joinedRoom":
                 System.out.println("Joined room ID: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM, contentJSON.getInt("id")));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM, contentJSON.getInt("id"), contentJSON.getString("userId"), parsePlayersList(contentJSON)));
                 break;
             case "ownerLeftRoom":
                 System.out.println("Left room ID: " + contentJSON.getInt("id"));
@@ -188,4 +189,16 @@ public class TCPConnection implements Runnable {
         return rooms;
     }
 
+    private List<PlayerDataWrapper> parsePlayersList(JSONObject contentJSON){
+        List<PlayerDataWrapper> players = new ArrayList<>();
+        System.out.println(contentJSON);
+        JSONArray jsonPlayers = contentJSON.getJSONArray("players");
+
+        for (int i = 0; i < jsonPlayers.length(); i++) {
+            JSONObject player = jsonPlayers.getJSONObject(i);
+            players.add(new PlayerDataWrapper(player.getString("name"), player.getString("userId"), player.getString("character"), player.getBoolean("owner")));
+        }
+
+        return players;
+    }
 }

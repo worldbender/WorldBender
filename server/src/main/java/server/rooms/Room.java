@@ -1,5 +1,7 @@
 package server.rooms;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import server.User;
 import server.bullets.BulletList;
 import server.connection.GameController;
@@ -110,4 +112,19 @@ public class Room {
         }
     }
 
+    public JSONArray getUsersInRoomData(){
+        JSONArray userList = new JSONArray();
+
+        for (User user : usersInRoom) {
+            JSONObject userData = new JSONObject()
+                    .put("name", user.getName())
+                    .put("userId", user.getConnectionId())
+                    .put("character", user.getCharacterType())
+                    .put("owner", isUserAnOwner(user));
+
+            userList.put(userData);
+        }
+
+        return userList;
+    }
 }
