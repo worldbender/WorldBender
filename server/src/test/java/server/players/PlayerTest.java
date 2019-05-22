@@ -29,7 +29,7 @@ public class PlayerTest{
 		int before = player.getHp();
 		player.doDamage(10);
 		int after  = player.getHp();
-		assertThat(after+10).isEqualTo(before);
+		assertThat(after).isEqualTo(before-10);
 	}
 	
 	
