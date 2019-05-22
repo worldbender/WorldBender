@@ -13,7 +13,7 @@ import com.my.game.pickups.*;
 import com.my.game.player.Player;
 import com.my.game.player.PlayerList;
 import com.my.game.WBGame;
-import com.my.game.music.MusicPlayer;
+import com.my.game.music.MusicManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -71,9 +71,8 @@ public class GameplayScreen extends AbstractScreen{
 
     public void create() {
         this.init();
-        MusicPlayer.initSounds();
         if(!Boolean.parseBoolean(Properties.loadConfigFile("DEBUG_MODE"))){
-            MusicPlayer.playBackgroundMusic();
+            MusicManager.playBackgroundMusic();
         }
     }
 
@@ -212,7 +211,7 @@ public class GameplayScreen extends AbstractScreen{
             game.switchScreenMode();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.M)){
-            MusicPlayer.playOpponentDieSound();
+            MusicManager.playOpponentDieSound();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             currentPlayer.KEY_SPACE = true;

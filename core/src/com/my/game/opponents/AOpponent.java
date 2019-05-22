@@ -1,9 +1,9 @@
 package com.my.game.opponents;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.my.game.music.MusicManager;
 import com.my.game.utilitysingletons.ShapeDrawer;
 import com.my.game.utilitysingletons.StringDrawer;
-import com.my.game.music.MusicPlayer;
 
 public abstract class AOpponent{
     public String name = "Monster";
@@ -22,7 +22,7 @@ public abstract class AOpponent{
     public abstract void draw(SpriteBatch spriteBatch);
 
     public void die(){
-        MusicPlayer.playOpponentDieSound();
+        MusicManager.playOpponentDieSound();
     }
 
     protected void drawHp(SpriteBatch batch, int textureHeight){
