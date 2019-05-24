@@ -1,6 +1,5 @@
 package com.my.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -56,6 +55,11 @@ public class MyAssetManager {
     //screenImages
     public static final String TREE = "screenImages/tree.jpg";
 
+    //roomImages
+    public static final String PROF_ROOM = "roomImages/profMenu.png";
+    public static final String BLOND_ROOM = "roomImages/blondMenu.png";
+    public static final String ROOM_OWNER = "roomImages/leader.png";
+
     //musics
     public static final String MUSIC = "sounds/music1.mp3";
     public static final String MUSIC2 = "sounds/music2.mp3";
@@ -82,7 +86,6 @@ public class MyAssetManager {
 
     private MyAssetManager(){}
 
-
     public static void loadBullets(){
         manager.load(GRENADE, Texture.class);
         manager.load(SPECTRAL_TEAR, Texture.class);
@@ -96,6 +99,12 @@ public class MyAssetManager {
         manager.load(UP_WALK, Texture.class);
         manager.load(PROF_HEADS, Texture.class);
         manager.load(BLOND_HEADS, Texture.class);
+    }
+
+    public static void loadRoomImages(){
+        manager.load(PROF_ROOM, Texture.class);
+        manager.load(BLOND_ROOM, Texture.class);
+        manager.load(ROOM_OWNER, Texture.class);
     }
 
     public static void loadOpponents(){
@@ -122,7 +131,6 @@ public class MyAssetManager {
         manager.load(HP_UP, Sound.class);
         manager.load(DEATH, Sound.class);
     }
-
 
     public static void loadBars(){
         manager.load(HEALTH_BAR, Texture.class);
@@ -164,6 +172,7 @@ public class MyAssetManager {
         loadOpponents();
         loadPickups();
         loadPlayerTexture();
+        loadRoomImages();
         loadSkins();
         loadBars();
         loadScreenImages();

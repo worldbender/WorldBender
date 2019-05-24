@@ -11,11 +11,9 @@ import org.json.JSONObject;
 public class JoinRoomDialog extends Dialog {
     private Skin skin;
     private Stage stage;
-    private String character;
 
-    public JoinRoomDialog(Skin skin, Stage stage, String character){
+    public JoinRoomDialog(Skin skin, Stage stage){
         super("Join Room", skin);
-        this.character = character;
         this.skin = skin;
         this.stage = stage;
 
@@ -42,9 +40,8 @@ public class JoinRoomDialog extends Dialog {
             id = Integer.parseInt(newTf.getText());
             WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                     .put("msg", "joinRoom")
-                    .put("content", new JSONObject().put("id", id))
-                    .put("character", this.character)
-                    );
+                    .put("content", new JSONObject()
+                            .put("id", id)));
 
 
         } catch (NumberFormatException e) {

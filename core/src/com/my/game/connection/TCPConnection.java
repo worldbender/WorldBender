@@ -13,6 +13,7 @@ import com.my.game.pickups.APickup;
 import com.my.game.pickups.PickupFactory;
 import com.my.game.pickups.PickupList;
 import com.my.game.player.Player;
+import com.my.game.player.PlayerDataWrapper;
 import com.my.game.player.PlayerFactory;
 import com.my.game.player.PlayerList;
 import com.my.game.Properties;
@@ -101,27 +102,33 @@ public class TCPConnection implements Runnable {
                 break;
             case "createdRoom":
                 System.out.println("Created room ID: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_OWNER, contentJSON.getInt("id")));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_OWNER, contentJSON.getInt("id"), contentJSON.getString("userId"), parsePlayersList(contentJSON)));
                 break;
             case "roomList":
                 System.out.println("Got room list:");
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 0, parseRoomList(contentJSON)));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, 0, parseRoomList(contentJSON)));
                 break;
             case "joinedRoom":
                 System.out.println("Joined room ID: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM, contentJSON.getInt("id")));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM, contentJSON.getInt("id"), contentJSON.getString("userId"), parsePlayersList(contentJSON)));
                 break;
             case "ownerLeftRoom":
                 System.out.println("Left room ID: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 1, parseRoomList(contentJSON)));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, 1, parseRoomList(contentJSON)));
                 break;
             case "fullRoom":
                 System.out.println("Room is full: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 2, parseRoomList(contentJSON)));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, 2, parseRoomList(contentJSON)));
                 break;
             case "roomDoesNotExist":
                 System.out.println("Room doesn't exist: " + contentJSON.getInt("id"));
-                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, contentJSON.getString("playerType"), 3, parseRoomList(contentJSON)));
+                Gdx.app.postRunnable(() -> game.changeScreen(WBGame.ROOM_LIST, 3, parseRoomList(contentJSON)));
+                break;
+            case "refreshRoomData":
+                WBGame.roomScreen.refreshPlayerCards(parsePlayersList(contentJSON));
+                break;
+            case "refreshRoomListData":
+                WBGame.roomListScreen.refreshRoomList(parseRoomList(contentJSON));
                 break;
             case "changeLevel":
                 this.changeLevel(contentJSON);
@@ -188,4 +195,16 @@ public class TCPConnection implements Runnable {
         return rooms;
     }
 
+    private List<PlayerDataWrapper> parsePlayersList(JSONObject contentJSON){
+        List<PlayerDataWrapper> players = new ArrayList<>();
+        System.out.println(contentJSON);
+        JSONArray jsonPlayers = contentJSON.getJSONArray("players");
+
+        for (int i = 0; i < jsonPlayers.length(); i++) {
+            JSONObject player = jsonPlayers.getJSONObject(i);
+            players.add(new PlayerDataWrapper(player.getString("name"), player.getString("userId"), player.getString("character"), player.getBoolean("owner")));
+        }
+
+        return players;
+    }
 }

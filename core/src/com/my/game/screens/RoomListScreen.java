@@ -1,6 +1,5 @@
 package com.my.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -17,16 +16,16 @@ import java.util.List;
 public class RoomListScreen extends AbstractScreen {
     private List<Room> rooms;
     private ScrollPane scrollPane;
+    private Table roomList;
     private float gameWidth, gameHeight;
-    private int boundRatio = 400;
-    private String character;
+    private final static int BOUND_RATIO = 400;
     private int option;
 
-    public RoomListScreen(WBGame game, List<Room> rooms, String character, int option) {
+    public RoomListScreen(WBGame game, List<Room> rooms, int option) {
         super(game);
         this.rooms = rooms;
-        this.character = character;
         this.option = option;
+        roomList = new Table();
     }
 
     @Override
@@ -47,7 +46,7 @@ public class RoomListScreen extends AbstractScreen {
         joinRoomById.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                new JoinRoomDialog(skin, stage, character);
+                new JoinRoomDialog(skin, stage);
             }
         });
 
@@ -62,22 +61,22 @@ public class RoomListScreen extends AbstractScreen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 WBGame.getConnection().getTcp().sendMessage(new JSONObject()
-                        .put("msg", "getRoomList")
-                        .put("content", new JSONObject().put("character", character)));
+                        .put("msg", "refreshRoomList")
+                        .put("content", new JSONObject()
+                                .put("empty", "empty")));
             }
         });
 
-        gameWidth = Gdx.graphics.getWidth();
-        gameHeight = Gdx.graphics.getHeight();
+        gameWidth = WBGame.WIDTH;
+        gameHeight = WBGame.HEIGHT;
 
-        Table roomList = new Table();
         roomList.align(Align.top);
 
-        initRoomListTable(roomList);
+        initRoomListTable();
 
         scrollPane = new ScrollPane(roomList, skin);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setBounds(boundRatio, boundRatio/2, gameWidth - 2*boundRatio, gameHeight- boundRatio);
+        scrollPane.setBounds(BOUND_RATIO, BOUND_RATIO/2, gameWidth - 2*BOUND_RATIO, gameHeight - BOUND_RATIO);
         scrollPane.setSmoothScrolling(false);
         scrollPane.setTransform(true);
 
@@ -129,7 +128,7 @@ public class RoomListScreen extends AbstractScreen {
         stage.dispose();
     }
 
-    private void initRoomListTable(Table roomList){
+    private void initRoomListTable(){
         Label idLabel = new Label("Room ID", skin, "white");
         Label ownerLabel = new Label("Room owner", skin, "white");
         Label playersLabel = new Label("Players in room", skin, "white");
@@ -148,9 +147,8 @@ public class RoomListScreen extends AbstractScreen {
                 public void changed(ChangeEvent event, Actor actor) {
                     WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                             .put("msg", "joinRoom")
-                            .put("content", new JSONObject().put("id", id))
-                            .put("character", character)
-                    );
+                            .put("content", new JSONObject()
+                                    .put("id", id)));
                 }
             });
 
@@ -180,5 +178,12 @@ public class RoomListScreen extends AbstractScreen {
         roomList.add(ownerLabel).expandX().fillX();
         roomList.add(playersLabel).expandX().fillX();
         roomList.add(statusLabel).expandX().fillX();
+    }
+
+    public void refreshRoomList(List<Room> updatedRooms){
+        rooms = updatedRooms;
+        roomList.clear();
+
+        initRoomListTable();
     }
 }

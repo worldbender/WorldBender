@@ -69,17 +69,30 @@ public class TcpClientThread extends Thread{
         JSONObject contentJSON = (JSONObject) json.get("content");
 
         switch (json.getString("msg")){
-            case "udpPort": newUser(contentJSON.getInt("port")); break;
+            case "udpPort":
+                newUser(contentJSON.getInt("port"));
+                break;
             case "newRoom":
-                this.user.setCharacterType(contentJSON.get("character").toString());
                 this.roomController.newRoom(this.user);
                 break;
-            case "joinRoom": this.roomController.joinRoom(this.user, contentJSON.getInt("id")); break;
-            case "leaveRoom": this.roomController.leaveRoom(this.user); break;
-            case "startGame": this.roomController.startGame(this.user); break;
+            case "joinRoom":
+                this.roomController.joinRoom(this.user, contentJSON.getInt("id"));
+                break;
+            case "leaveRoom":
+                this.roomController.leaveRoom(this.user);
+                break;
+            case "saveCharacter":
+                this.roomController.saveCharacter(this.user, contentJSON.getString("character"));
+                break;
+            case "refreshRoomList":
+                this.roomController.refreshRoomList();
+                break;
+            case "startGame":
+                this.roomController.startGame(this.user);
+                break;
             case "getRoomList":
-                this.user.setCharacterType(contentJSON.get("character").toString());
-                this.roomController.getRoomList(this.user); break;
+                this.roomController.getRoomList(this.user);
+                break;
             default:
         }
     }
@@ -91,6 +104,7 @@ public class TcpClientThread extends Thread{
         this.user.setUdpPort(udpPort);
         this.user.setConnectionId(id);
         this.user.setName("player"+ existingUsers.size());
+        this.user.setCharacterType("Ground");
 
         existingUsers.put(id, this.user);
         existingUsers.get(user.getConnectionId()).setThread(this);

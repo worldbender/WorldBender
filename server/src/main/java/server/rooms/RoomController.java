@@ -27,7 +27,9 @@ public class RoomController {
                 .put("msg", "createdRoom")
                 .put("content", new JSONObject()
                         .put("name", user.getName())
-                        .put("id", room.getId())));
+                        .put("userId", user.getConnectionId())
+                        .put("id", room.getId())
+                        .put("players", room.getUsersInRoomData())));
     }
 
     public void joinRoom(User user, int roomId){
@@ -41,14 +43,16 @@ public class RoomController {
                             .put("msg", "joinedRoom")
                             .put("content", new JSONObject()
                                     .put("name", user.getName())
-                                    .put("id", room.getId())));
+                                    .put("userId", user.getConnectionId())
+                                    .put("id", room.getId())
+                                    .put("players", room.getUsersInRoomData())));
+                    refreshPlayersData(user, room, false);
                 }
                 else
                     clientThread.sendMessage(new JSONObject()
                             .put("msg", "fullRoom")
                             .put("content", new JSONObject()
                                     .put("id", room.getId())
-                                    .put("playerType", user.getCharacterType())
                                     .put("rooms", RoomList.getRoomsData())));
                 break;
             }
@@ -59,7 +63,6 @@ public class RoomController {
                     .put("msg", "roomDoesNotExist")
                     .put("content", new JSONObject()
                             .put("id", roomId)
-                            .put("playerType", user.getCharacterType())
                             .put("rooms", RoomList.getRoomsData())));
     }
 
@@ -74,13 +77,15 @@ public class RoomController {
                         .put("msg", "ownerLeftRoom")
                         .put("content", new JSONObject()
                                 .put("id", currentRoom.getId())
-                                .put("playerType", currentUser.getCharacterType())
                                 .put("rooms", RoomList.getRoomsData())));
             }
 
             currentRoom.deleteRoom();
         }
-        else currentRoom.deleteUserFromRoom(user);
+        else {
+            currentRoom.deleteUserFromRoom(user);
+            refreshPlayersData(user, currentRoom, false);
+        }
     }
 
     public void startGame(User user){
@@ -107,11 +112,23 @@ public class RoomController {
         currentRoom.getGameController().hasStarted = true;
     }
 
+    public void saveCharacter(User user, String character){
+        Room currentRoom = RoomList.getUserRoom(user.getConnectionId());
+        user.setCharacterType(character);
+        refreshPlayersData(user, currentRoom, true);
+    }
+
     public void getRoomList(User user){
         clientThread.sendMessage(new JSONObject()
                 .put("msg", "roomList")
                 .put("content", new JSONObject()
-                        .put("playerType", user.getCharacterType())
+                        .put("rooms", RoomList.getRoomsData())));
+    }
+
+    public void refreshRoomList(){
+        clientThread.sendMessage(new JSONObject()
+                .put("msg", "refreshRoomListData")
+                .put("content", new JSONObject()
                         .put("rooms", RoomList.getRoomsData())));
     }
 
@@ -123,4 +140,13 @@ public class RoomController {
         room.getGameController().spawnAllOpponents();
     }
 
+    private void refreshPlayersData(User user, Room room, boolean sendToAll){
+        for(User currentUser : room.getUsersInRoom()){
+            if(!sendToAll && currentUser == user) continue;
+            currentUser.getThread().sendMessage(new JSONObject()
+                    .put("msg", "refreshRoomData")
+                    .put("content", new JSONObject()
+                            .put("players", room.getUsersInRoomData())));
+        }
+    }
 }

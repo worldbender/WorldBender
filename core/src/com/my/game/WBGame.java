@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.my.game.connection.Connection;
 import com.my.game.music.MusicManager;
+import com.my.game.player.PlayerDataWrapper;
 import com.my.game.rooms.Room;
 import com.my.game.screens.*;
 import com.my.game.screens.SplashScreen;
@@ -17,6 +18,8 @@ public class WBGame extends Game {
     public static boolean connectionStatus = false;
     private GameplayScreen gameplayScreen;
     private PreferencesScreen preferencesScreen;
+    public static RoomScreen roomScreen;
+    public static RoomListScreen roomListScreen;
 
     public static final int SPLASH = 0;
     public static final int MENU = 1;
@@ -26,7 +29,6 @@ public class WBGame extends Game {
     public static final int ROOM_OWNER = 5;
     public static final int ROOM_LIST = 6;
     public static final int PREFERENCES = 7;
-
 
     public static final String SERVER_ADDRESS = Properties.loadConfigFile("IP");
 
@@ -94,22 +96,25 @@ public class WBGame extends Game {
         }
     }
 
-    public void changeScreen(int screen, int roomId){
+    public void changeScreen(int screen, int roomId, String userId, List<PlayerDataWrapper> players){
         switch(screen){
             case ROOM_OWNER:
-                this.setScreen(new RoomScreen(this, true, roomId));
+                roomScreen = new RoomScreen(this, true, roomId, userId, players);
+                this.setScreen(roomScreen);
                 break;
             case ROOM:
-                this.setScreen(new RoomScreen(this, roomId));
+                roomScreen = new RoomScreen(this, roomId, userId, players);
+                this.setScreen(roomScreen);
                 break;
             default:
         }
     }
 
-    public void changeScreen(int screen, String character, int option, List<Room> rooms){
+    public void changeScreen(int screen, int option, List<Room> rooms){
         switch(screen){
             case ROOM_LIST:
-                this.setScreen(new RoomListScreen(this, rooms, character, option));
+                roomListScreen = new RoomListScreen(this, rooms, option);
+                this.setScreen(roomListScreen);
                 break;
             default:
         }
@@ -123,6 +128,7 @@ public class WBGame extends Game {
         else
             Gdx.graphics.setFullscreenMode(currentMode);
     }
+
     public GameplayScreen getGameplayScreen(){
         return this.gameplayScreen;
     }
