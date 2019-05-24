@@ -22,6 +22,8 @@ public class PlayerDataWrapper {
     }
 
     public String getCharacter() {
+        if(character.matches("Ground")) return "Tank";
+        else if(character.matches("Water")) return "Healer";
         return character;
     }
 

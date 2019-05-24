@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.my.game.MyAssetManager;
 import com.my.game.WBGame;
+import com.my.game.player.Player;
 import com.my.game.player.PlayerDataWrapper;
 import org.json.JSONObject;
 import java.util.List;
@@ -33,7 +34,7 @@ public class RoomScreen extends AbstractScreen {
         this.players = players;
         playerCards = new Table(skin);
         selectPlayerCharacter = new SelectBox(skin);
-        selectPlayerCharacter.setItems("Ground", "Water");
+        selectPlayerCharacter.setItems("Tank", "Healer");
     }
 
     public RoomScreen(WBGame game, boolean isOwner, int roomId, String userId, List<PlayerDataWrapper> players) {
@@ -142,10 +143,16 @@ public class RoomScreen extends AbstractScreen {
         saveCharacter.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
-                        .put("msg", "saveCharacter")
-                        .put("content", new JSONObject()
-                                .put("character", selectPlayerCharacter.getSelected())));
+                if(selectPlayerCharacter.getSelected().toString().matches("Tank"))
+                    WBGame.getConnection().getTcp().sendMessage(new JSONObject()
+                            .put("msg", "saveCharacter")
+                            .put("content", new JSONObject()
+                                    .put("character", "Ground")));
+                else if(selectPlayerCharacter.getSelected().toString().matches("Healer"))
+                    WBGame.getConnection().getTcp().sendMessage(new JSONObject()
+                            .put("msg", "saveCharacter")
+                            .put("content", new JSONObject()
+                                    .put("character", "Water")));
             }
         });
         saveCharacter.align(Align.center);
@@ -164,6 +171,13 @@ public class RoomScreen extends AbstractScreen {
         playerCard.pad(20, 10, 20, 10);
         playerCard.setBackground("file-menu-bar");
 
+        initPlayerNickname(player, playerCard);
+        initPlayerCharacterClass(player, playerCard);
+
+        playerCards.add(playerCard).pad(10);
+    }
+
+    private void initPlayerNickname(PlayerDataWrapper player, Table playerCard){
         Label playerName = new Label(player.getName(), skin, "title-white");
         playerName.setFontScale(0.75f);
         playerName.setAlignment(Align.center);
@@ -181,13 +195,22 @@ public class RoomScreen extends AbstractScreen {
         } else playerCard.add(playerName).padBottom(20).expandX().fillX();
 
         playerCard.row().expandX().fillX();
+    }
 
+    private void initPlayerCharacterClass(PlayerDataWrapper player, Table playerCard){
+        initPlayerCharacterImage(player, playerCard);
+        initPlayerCharacterClassSelect(player, playerCard);
+    }
+
+    private void initPlayerCharacterImage(PlayerDataWrapper player, Table playerCard){
         Texture texture = null;
-        if(player.getCharacter().matches("Ground")) texture = MyAssetManager.manager.get(PROF_ROOM);
-        else if(player.getCharacter().matches("Water")) texture = MyAssetManager.manager.get(BLOND_ROOM);
+        if(player.getCharacter().matches("Tank")) texture = MyAssetManager.manager.get(PROF_ROOM);
+        else if(player.getCharacter().matches("Healer")) texture = MyAssetManager.manager.get(BLOND_ROOM);
         playerCard.add(new Image(texture)).width(200).height(230).padBottom(20);
         playerCard.row().expandX().fillX();
+    }
 
+    private void initPlayerCharacterClassSelect(PlayerDataWrapper player, Table playerCard){
         Label characterClass = new Label("Character Class:", skin, "default");
         characterClass.setAlignment(Align.center);
         playerCard.add(characterClass).padBottom(10).expandX().fillX();
@@ -200,15 +223,13 @@ public class RoomScreen extends AbstractScreen {
             playerCard.row().expandX().fillX();
         } else{
             SelectBox selectCharacter = new SelectBox(skin);
-            selectCharacter.setItems("Ground", "Water");
+            selectCharacter.setItems("Tank", "Healer");
             selectCharacter.setSelected(player.getCharacter());
             selectCharacter.setDisabled(true);
 
             playerCard.add(selectCharacter).width(180);
             playerCard.row().expandX().fillX();
         }
-
-        playerCards.add(playerCard).pad(10);
     }
 
     public void refreshPlayerCards(List<PlayerDataWrapper> updatedPlayers){
