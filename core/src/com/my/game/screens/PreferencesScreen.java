@@ -11,6 +11,7 @@ import com.my.game.MyAssetManager;
 import com.my.game.WBGame;
 import com.my.game.connection.TCPConnection;
 import com.my.game.music.MusicManager;
+import com.my.game.screens.dialogs.ErrorDialog;
 import org.json.JSONObject;
 
 public class PreferencesScreen extends AbstractScreen{
@@ -110,12 +111,17 @@ public class PreferencesScreen extends AbstractScreen{
         saveButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                AppPreferences.setName(nameField.getText().trim());
-                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
-                        .put("msg", "saveName")
-                        .put("content", new JSONObject()
-                                .put("name", nameField.getText().trim())));
-
+                if(nameField.getText().isEmpty()){
+                    new ErrorDialog(skin, stage, "Name can not be empty!");
+                    nameField.setText(AppPreferences.getName());
+                }
+                else{
+                    AppPreferences.setName(nameField.getText().trim());
+                    WBGame.getConnection().getTcp().sendMessage(new JSONObject()
+                            .put("msg", "saveName")
+                            .put("content", new JSONObject()
+                                    .put("name", nameField.getText().trim())));
+                }
             }
         });
 

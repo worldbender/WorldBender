@@ -119,8 +119,7 @@ public class RoomController {
     }
 
     public void saveName(User user, String name){
-        if(!name.equals(""))
-            user.setName(name);
+        user.setName(name);
     }
 
     public void getRoomList(User user){
