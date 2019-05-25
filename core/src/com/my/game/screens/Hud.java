@@ -74,6 +74,7 @@ public class Hud implements Disposable {
         stack.setWidth(healthBarTexture.getWidth());
         stack.setHeight(healthBarTexture.getHeight());
 
+        playerHeadTexture = new TextureRegion(player.getHeadRegion());
         Image characterIconBackground = new Image(new TextureRegionDrawable(new TextureRegion(healthBarTexture, 0, 0, healthBarTexture.getHeight(), healthBarTexture.getHeight())));
         Image playerIcon = new Image(new TextureRegionDrawable(playerHeadTexture));
         playerIcon.setScale(.75f, .75f);
@@ -98,7 +99,6 @@ public class Hud implements Disposable {
         labelStyle.font = font;
         labelStyle.fontColor = Color.BLACK;
         healthBarTexture = MyAssetManager.manager.get(MyAssetManager.HEALTH_BAR);
-        playerHeadTexture = new TextureRegion(Player.headRegion);
         healthBarStyle = new ProgressBarStyle();
         healthBarStyle.background = new TextureRegionDrawable(new TextureRegion(healthBarTexture, healthBarTexture.getHeight(), 0, healthBarTexture.getWidth() - healthBarTexture.getHeight() - 5, healthBarTexture.getHeight()));
         healthBarStyle.knob = getUtils(0, 100, Color.BLACK);

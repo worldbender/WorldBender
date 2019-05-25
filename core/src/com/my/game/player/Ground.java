@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Ground extends Player {
     public static Animation<TextureRegion> heads;
+    public static TextureRegion headRegion;
     public Ground(String name) {
         super(name);
     }
@@ -15,5 +16,9 @@ public class Ground extends Player {
     @Override
     protected Animation<TextureRegion> getHeads() {
         return heads;
+    }
+
+    public TextureRegion getHeadRegion(){
+        return headRegion;
     }
 }

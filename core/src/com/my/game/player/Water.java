@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Water extends Player {
     public static Animation<TextureRegion> heads;
+    public static TextureRegion headRegion;
     public Water(String name) {
         super(name);
     }
@@ -16,5 +17,9 @@ public class Water extends Player {
     @Override
     protected Animation<TextureRegion> getHeads() {
         return heads;
+    }
+
+    public TextureRegion getHeadRegion(){
+        return headRegion;
     }
 }

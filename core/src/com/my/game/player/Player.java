@@ -16,7 +16,6 @@ public abstract class Player extends APlayer {
     public static Animation<TextureRegion> leftWalkAnimation;
     private String activeMovementKey = "DOWN";
     private String headDirection = "DOWN";
-    public static TextureRegion headRegion;
     private boolean isMoving = false;
     public boolean KEY_W = false;
     public boolean KEY_S = true;
@@ -191,4 +190,6 @@ public abstract class Player extends APlayer {
     }
 
     protected abstract Animation<TextureRegion> getHeads();
+
+    public abstract TextureRegion getHeadRegion();
 }
