@@ -34,7 +34,7 @@ public class UdpPacketReceiver implements Runnable {
         for (Player player : players.values()) {
             for(int i = 0 ; i < received.length() ; i++){
                 JSONObject receivedPlayer = received.getJSONObject(i);
-                if (player.getName().equals(receivedPlayer.getString("name"))) {
+                if (player.getId().equals(receivedPlayer.getString("id"))) {
                     player.setPosition(receivedPlayer.getInt("x"), receivedPlayer.getInt("y"));
                     player.setHp(receivedPlayer.getInt("hp"));
                     player.setActiveMovementKey(receivedPlayer.getString("activeMovementKey"));

@@ -109,11 +109,11 @@ public class PreferencesScreen extends AbstractScreen{
         saveButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                AppPreferences.setName(nameField.getText());
+                AppPreferences.setName(nameField.getText().trim());
                 WBGame.getConnection().getTcp().sendMessage(new JSONObject()
                         .put("msg", "saveName")
                         .put("content", new JSONObject()
-                                .put("name", nameField.getText())));
+                                .put("name", nameField.getText().trim())));
 
             }
         });

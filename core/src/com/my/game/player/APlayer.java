@@ -3,6 +3,7 @@ package com.my.game.player;
 import java.awt.*;
 
 public abstract class APlayer extends Rectangle {
+    protected String id;
     protected String name;
     protected boolean currentPlayer = false;
     private int hp;

@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Ground extends Player {
     public static Animation<TextureRegion> heads;
     public static TextureRegion headRegion;
-    public Ground(String name) {
-        super(name);
+    public Ground(String name, String id) {
+        super(name, id);
     }
-    public Ground(String name, int x, int y) {
-        super(name, x, y);
+    public Ground(String name, int x, int y, String id) {
+        super(name, x, y, id);
     }
 
     @Override

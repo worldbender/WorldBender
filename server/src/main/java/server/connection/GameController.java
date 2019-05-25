@@ -179,6 +179,7 @@ public class GameController implements Runnable {
 
         for (User user : usersInRoom) {
             JSONObject playerData = new JSONObject()
+                    .put("id", user.getConnectionId())
                     .put("name", user.getName())
                     .put("x", user.getPlayer().getX())
                     .put("y", user.getPlayer().getY())
@@ -197,6 +198,7 @@ public class GameController implements Runnable {
 
         for (User user : usersInRoom) {
             JSONObject playerData = new JSONObject()
+                    .put("id", user.getConnectionId())
                     .put("name", user.getName())
                     .put("playerType", user.getPlayer().getPlayerType());
 

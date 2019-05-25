@@ -31,13 +31,14 @@ public abstract class Player extends APlayer {
     private static final String UP = "UP";
     private static final String DOWN = "DOWN";
 
-    public Player(String name) {
-        this(name, 0, 0);
+    public Player(String name, String id) {
+        this(name, 0, 0, id);
     }
 
-    public Player(String name, int x, int y) {
+    public Player(String name, int x, int y, String id) {
         super();
         this.name = name;
+        this.id = id;
         float scale = java.lang.Float.parseFloat(Properties.loadConfigFile("PLAYER_SCALE"));
         this.setSize((int) (GameplayScreen.PLAYER_TEXTURE_WIDTH * scale), (int) (GameplayScreen.PLAYER_TEXTURE_HEIGHT * scale));
         this.setPosition(x, y);
@@ -154,6 +155,10 @@ public abstract class Player extends APlayer {
 
     public String getName() {
         return name;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getActiveMovementKey() {

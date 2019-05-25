@@ -102,7 +102,7 @@ public class RoomController {
 
 
         for(User currentUser : currentRoom.getUsersInRoom()){
-            content.put("current",currentUser.getName());
+            content.put("current",currentUser.getConnectionId());
             content.put("playerType", currentUser.getCharacterType());
             msg.put("content", content);
             currentUser.getThread().sendMessage(msg);
