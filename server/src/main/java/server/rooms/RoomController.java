@@ -119,8 +119,8 @@ public class RoomController {
     }
 
     public void saveName(User user, String name){
-        Room currentRoom = RoomList.getUserRoom(user.getConnectionId());
-        user.setName(name);
+        if(!name.equals(""))
+            user.setName(name);
     }
 
     public void getRoomList(User user){
