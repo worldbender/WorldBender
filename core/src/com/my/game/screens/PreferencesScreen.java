@@ -95,6 +95,7 @@ public class PreferencesScreen extends AbstractScreen{
 
         final TextField nameField = new TextField(null, skin);
         nameField.setText(AppPreferences.getName());
+        nameField.setMaxLength(15);
 
         final TextButton backButton = new TextButton("Back", skin, "small");
         backButton.addListener(new ChangeListener() {
