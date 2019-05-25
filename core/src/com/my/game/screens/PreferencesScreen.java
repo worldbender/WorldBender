@@ -9,16 +9,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.my.game.MyAssetManager;
 import com.my.game.WBGame;
+import com.my.game.connection.TCPConnection;
 import com.my.game.music.MusicManager;
+import org.json.JSONObject;
 
 public class PreferencesScreen extends AbstractScreen{
     private Label titleLabel;
+    private Label nameLabel;
     private Label volumeMusicLabel;
     private Label volumeSoundLabel;
     private Label musicOnOffLabel;
     private Label soundOnOffLabel;
     private Label fullscreenOnOffLabel;
-
 
     public PreferencesScreen(WBGame wbgame){
         super(wbgame);
@@ -91,6 +93,9 @@ public class PreferencesScreen extends AbstractScreen{
             }
         });
 
+        final TextField nameField = new TextField(null, skin);
+        nameField.setText(AppPreferences.getName());
+
         final TextButton backButton = new TextButton("Back", skin, "small");
         backButton.addListener(new ChangeListener() {
             @Override
@@ -100,7 +105,21 @@ public class PreferencesScreen extends AbstractScreen{
             }
         });
 
+        final TextButton saveButton = new TextButton("Save Name", skin, "small");
+        saveButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                AppPreferences.setName(nameField.getText());
+                WBGame.getConnection().getTcp().sendMessage(new JSONObject()
+                        .put("msg", "saveName")
+                        .put("content", new JSONObject()
+                                .put("name", nameField.getText())));
+
+            }
+        });
+
         titleLabel = new Label( "Preferences", skin );
+        nameLabel = new Label( "Name", skin );
         volumeMusicLabel = new Label( "Music Volume", skin );
         volumeSoundLabel = new Label( "Sound Volume", skin );
         musicOnOffLabel = new Label( "Music ON/OFF", skin );
@@ -109,6 +128,10 @@ public class PreferencesScreen extends AbstractScreen{
 
         table.add(titleLabel).colspan(2);
         table.row().pad(20,0,0,10);
+
+        table.add(nameLabel).left();
+        table.add(nameField);
+        table.row().pad(10,0,0,10);
 
         table.add(fullscreenOnOffLabel).left();
         table.add(fullscreenCheckbox);
@@ -130,7 +153,8 @@ public class PreferencesScreen extends AbstractScreen{
         table.add(soundMusicSlider);
         table.row().pad(10,0,0,10);
 
-        table.add(backButton).colspan(2);
+        table.add(backButton);
+        table.add(saveButton);
     }
 
     @Override

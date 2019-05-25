@@ -11,6 +11,7 @@ public class AppPreferences {
     private static final String PREF_SOUND_VOL = "sound";
     private static final String PREFS_NAME = "wbgame";
     private static final String PREF_FULLSCREEN_ENABLED = "fullscreen.enabled";
+    private static final String PREF_NAME = "name";
 
 
     protected static Preferences getPrefs() {
@@ -60,5 +61,14 @@ public class AppPreferences {
     public static void setFullscreenEnabled(boolean enabled) {
         getPrefs().putBoolean(PREF_FULLSCREEN_ENABLED, enabled);
         getPrefs().flush();
+    }
+
+    public static void setName(String name) {
+        getPrefs().putString(PREF_NAME, name);
+        getPrefs().flush();
+    }
+
+    public static String getName(){
+        return getPrefs().getString(PREF_NAME);
     }
 }
