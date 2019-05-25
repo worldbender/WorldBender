@@ -1,6 +1,7 @@
 package com.my.game.connection;
 
 import com.my.game.WBGame;
+import com.my.game.screens.AppPreferences;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -41,6 +42,15 @@ public class Connection {
                         .put("msg", "udpPort")
                         .put("content", new JSONObject().put("port", socket.getLocalPort()))
         );
+
+        if(AppPreferences.getName()!=null){
+            tcp.sendMessage(
+                    new JSONObject()
+                            .put("msg", "saveName")
+                            .put("content", new JSONObject().put("name",AppPreferences.getName()))
+            );
+        }
+
     }
 
 

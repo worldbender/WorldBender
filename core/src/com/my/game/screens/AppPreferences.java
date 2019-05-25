@@ -69,6 +69,6 @@ public class AppPreferences {
     }
 
     public static String getName(){
-        return getPrefs().getString(PREF_NAME);
+        return getPrefs().getString(PREF_NAME, null);
     }
 }

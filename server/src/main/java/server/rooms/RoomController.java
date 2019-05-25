@@ -121,7 +121,6 @@ public class RoomController {
     public void saveName(User user, String name){
         Room currentRoom = RoomList.getUserRoom(user.getConnectionId());
         user.setName(name);
-        refreshPlayersData(user, currentRoom, true);
     }
 
     public void getRoomList(User user){

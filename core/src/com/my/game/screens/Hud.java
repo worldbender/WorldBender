@@ -58,6 +58,11 @@ public class Hud implements Disposable {
 
     public void createPlayerRow(Player player){
         Label playerNameLabel = new Label(player.getName(), labelStyle);
+        Pixmap labelColor = new Pixmap((int)playerNameLabel.getWidth(), (int)playerNameLabel.getHeight(), Pixmap.Format.RGBA8888);
+        labelColor.setColor(Color.WHITE);
+        labelColor.fill();
+
+        playerNameLabel.getStyle().background = new Image(new Texture(labelColor)).getDrawable();
         table.add(playerNameLabel).colspan(2).padTop(10);
         table.row();
 
