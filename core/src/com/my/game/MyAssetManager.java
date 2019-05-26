@@ -25,6 +25,7 @@ public class MyAssetManager {
 
     //bars
     public static final String HEALTH_BAR = "bars/healthBar.png";
+    public static final String NAME_BAR = "bars/nameBar.png";
 
     //bullets
     public static final String GRENADE = "bullets/granat.png";
@@ -134,6 +135,7 @@ public class MyAssetManager {
 
     public static void loadBars(){
         manager.load(HEALTH_BAR, Texture.class);
+        manager.load(NAME_BAR, Texture.class);
     }
 
     public static void loadSkins(){
