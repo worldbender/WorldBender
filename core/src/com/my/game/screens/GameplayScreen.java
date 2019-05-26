@@ -108,7 +108,7 @@ public class GameplayScreen extends AbstractScreen{
     private void drawAllMovableObjects(SpriteBatch spriteBatch, float stateTime){
         for(Player player : players.values()){
             player.draw(spriteBatch, stateTime);
-            hud.setHealthBarValue(player.getName(), player.getHp());
+            hud.setHealthBarValue(player.getId(), player.getHp());
         }
         for(ABullet bullet : BulletList.getBullets()){
             bullet.draw(spriteBatch, stateTime);

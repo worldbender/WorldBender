@@ -37,7 +37,7 @@ public class AggroTaker extends APower {
                         (double)(Math.abs(opponent.getCenterX() - player.getCenterX()) * (Math.abs(opponent.getCenterX() - player.getCenterX()))));
                 if(distance < 2000){
                     opponent.setOpponentAI("Chaser");
-                    opponent.setIdOfChasedPlayer(player.getUser().getName());
+                    opponent.setIdOfChasedPlayer(player.getUser().getConnectionId());
                     opponent.getOpponentAI().setAdditionalFlag(true);
                 }
             }

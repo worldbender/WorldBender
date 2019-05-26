@@ -102,7 +102,7 @@ public class RoomController {
 
 
         for(User currentUser : currentRoom.getUsersInRoom()){
-            content.put("current",currentUser.getName());
+            content.put("current",currentUser.getConnectionId());
             content.put("playerType", currentUser.getCharacterType());
             msg.put("content", content);
             currentUser.getThread().sendMessage(msg);
@@ -116,6 +116,10 @@ public class RoomController {
         Room currentRoom = RoomList.getUserRoom(user.getConnectionId());
         user.setCharacterType(character);
         refreshPlayersData(user, currentRoom, true);
+    }
+
+    public void saveName(User user, String name){
+        user.setName(name);
     }
 
     public void getRoomList(User user){

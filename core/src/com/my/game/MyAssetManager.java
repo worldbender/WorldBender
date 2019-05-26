@@ -25,6 +25,7 @@ public class MyAssetManager {
 
     //bars
     public static final String HEALTH_BAR = "bars/healthBar.png";
+    public static final String NAME_BAR = "bars/nameBar.png";
 
     //bullets
     public static final String GRENADE = "bullets/granat.png";
@@ -134,6 +135,7 @@ public class MyAssetManager {
 
     public static void loadBars(){
         manager.load(HEALTH_BAR, Texture.class);
+        manager.load(NAME_BAR, Texture.class);
     }
 
     public static void loadSkins(){
@@ -158,7 +160,8 @@ public class MyAssetManager {
         Water.heads = getAnimationFrom1DPicture(manager.get(BLOND_HEADS), PLAYER_TEXTURE_WIDTH, PLAYER_TEXTURE_HEIGHT, 4);
         Warp.warpAnimation = getAnimationFrom1DPicture(manager.get(WARP_ANIMATION), 64, 64, 9);
         InvisibleWarp.openDoorsAnimation = getAnimationFrom1DPicture(manager.get(OPEN_DOOR_ANIMATION), 64, 64, 4);
-        Player.headRegion = new TextureRegion(new Texture(PROF_HEADS), 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
+        Ground.headRegion = new TextureRegion(new Texture(PROF_HEADS), 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
+        Water.headRegion = new TextureRegion(new Texture(BLOND_HEADS), 0, 0, PLAYER_HEAD_WIDTH, PLAYER_HEAD_HEIGHT);
     }
 
     public static void loadScreenImages(){

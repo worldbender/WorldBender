@@ -57,8 +57,13 @@ public class Hud implements Disposable {
     }
 
     public void createPlayerRow(Player player){
-        Label playerNameLabel = new Label(player.getName(), labelStyle);
-        table.add(playerNameLabel).colspan(2).padTop(10);
+        Label playerNameLabel = new Label("         "+player.getName(), labelStyle);
+        Texture texture = MyAssetManager.manager.get(MyAssetManager.NAME_BAR);
+        playerNameLabel.getStyle().background = new Image(texture).getDrawable();
+        playerNameLabel.setColor(Color.WHITE);
+
+        Stack s = new Stack();
+        table.add(playerNameLabel).colspan(2).padTop(10).padBottom(-25).fillX();
         table.row();
 
         ProgressBar healthBar = new ProgressBar(0f, 100f, 1f, false, healthBarStyle);
@@ -69,6 +74,7 @@ public class Hud implements Disposable {
         stack.setWidth(healthBarTexture.getWidth());
         stack.setHeight(healthBarTexture.getHeight());
 
+        playerHeadTexture = new TextureRegion(player.getHeadRegion());
         Image characterIconBackground = new Image(new TextureRegionDrawable(new TextureRegion(healthBarTexture, 0, 0, healthBarTexture.getHeight(), healthBarTexture.getHeight())));
         Image playerIcon = new Image(new TextureRegionDrawable(playerHeadTexture));
         playerIcon.setScale(.75f, .75f);
@@ -83,7 +89,7 @@ public class Hud implements Disposable {
         table.add(healthBar).width((float)healthBarTexture.getWidth()- healthBarTexture.getHeight()).height(healthBarTexture.getHeight());
 
         table.row();
-        healthBars.put(player.getName(), healthBar);
+        healthBars.put(player.getId(), healthBar);
     }
 
     private void initHudTextures(){
@@ -91,11 +97,10 @@ public class Hud implements Disposable {
         BitmapFont font = skin.getFont("small");
         labelStyle = new LabelStyle();
         labelStyle.font = font;
-        labelStyle.fontColor = Color.BLACK;
+        labelStyle.fontColor = Color.WHITE;
         healthBarTexture = MyAssetManager.manager.get(MyAssetManager.HEALTH_BAR);
-        playerHeadTexture = new TextureRegion(Player.headRegion);
         healthBarStyle = new ProgressBarStyle();
-        healthBarStyle.background = new TextureRegionDrawable(new TextureRegion(healthBarTexture, healthBarTexture.getHeight(), 0, healthBarTexture.getWidth() - healthBarTexture.getHeight() - 5, healthBarTexture.getHeight()));
+        healthBarStyle.background = new TextureRegionDrawable(new TextureRegion(healthBarTexture, healthBarTexture.getHeight(), 0, healthBarTexture.getWidth() - healthBarTexture.getHeight(), healthBarTexture.getHeight()));
         healthBarStyle.knob = getUtils(0, 100, Color.BLACK);
         healthBarStyle.knobBefore = getUtils(healthBarTexture.getWidth() - 5, PROGRESS_BAR_HEIGHT, new Color(0xad0810ff));
     }

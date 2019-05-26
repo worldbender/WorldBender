@@ -5,15 +5,20 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Ground extends Player {
     public static Animation<TextureRegion> heads;
-    public Ground(String name) {
-        super(name);
+    public static TextureRegion headRegion;
+    public Ground(String name, String id) {
+        super(name, id);
     }
-    public Ground(String name, int x, int y) {
-        super(name, x, y);
+    public Ground(String name, int x, int y, String id) {
+        super(name, x, y, id);
     }
 
     @Override
     protected Animation<TextureRegion> getHeads() {
         return heads;
+    }
+
+    public TextureRegion getHeadRegion(){
+        return headRegion;
     }
 }

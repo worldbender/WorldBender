@@ -145,12 +145,12 @@ public class TCPConnection implements Runnable {
         JSONArray playersJSON = contentJSON.getJSONArray("players");
         for (int i = 0; i < playersJSON.length(); i++) {
             JSONObject player = playersJSON.getJSONObject(i);
-            Player newPlayer = PlayerFactory.createPlayer(player.getString("playerType"), player.getString("name"));
-            if (player.getString("name").equals(contentJSON.getString("current"))) {
+            Player newPlayer = PlayerFactory.createPlayer(player.getString("playerType"), player.getString("name"), player.getString("id"));
+            if (player.getString("id").equals(contentJSON.getString("current"))) {
                 newPlayer.setCurrentPlayer(true);
                 GameplayScreen.currentPlayer = newPlayer;
             }
-            players.put(player.getString("name"), newPlayer);
+            players.put(player.getString("id"), newPlayer);
         }
     }
 
@@ -164,7 +164,7 @@ public class TCPConnection implements Runnable {
         for (Player player : players.values()) {
             for (int i = 0; i < playersFromServer.length(); i++) {
                 JSONObject receivedPlayer = playersFromServer.getJSONObject(i);
-                if (player.getName().equals(receivedPlayer.getString("name"))) {
+                if (player.getId().equals(receivedPlayer.getString("id"))) {
                     player.setPosition(receivedPlayer.getInt("x"), receivedPlayer.getInt("y"));
                 }
             }
